@@ -1,8 +1,13 @@
 @startuml
-App -> v8 : Compile
-v8 -> ScriptCompiler : Compile
-ScriptCompiler -> ScriptCompiler : CompileUnboundInternal
-ScriptCompiler -> internal_Compiler : GetSharedFunctionInfoForScript
+participant App
+participant "v8::Script" as v8_script
+participant "v8::ScriptCompiler" as v8_scriptCompiler
+participant "v8::internal::Compiler" as internal_Compiler
+participant "v8::internal" as internal
+App -> v8_script : Compile
+v8_script -> v8_scriptCompiler : Compile
+v8_scriptCompiler -> v8_scriptCompiler : CompileUnboundInternal
+v8_scriptCompiler -> internal_Compiler : GetSharedFunctionInfoForScript
 internal_Compiler -> internal : GetSharedFunctionInfoForScriptImpl
 internal -> internal : CompileScriptOnMainThread
 @enduml
