@@ -1,0 +1,8 @@
+@startuml
+App -> v8 : Compile
+v8 -> ScriptCompiler : Compile
+ScriptCompiler -> ScriptCompiler : CompileUnboundInternal
+ScriptCompiler -> internal_Compiler : GetSharedFunctionInfoForScript
+internal_Compiler -> internal : GetSharedFunctionInfoForScriptImpl
+internal -> internal : CompileScriptOnMainThread
+@enduml
