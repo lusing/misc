@@ -1,10 +1,10 @@
 @startuml
-participant App
-participant "v8::Script" as v8_script
-participant "v8::ScriptCompiler" as v8_scriptCompiler
-participant "v8::internal::Compiler" as internal_Compiler
-participant "v8::internal" as internal
-participant "v8::parsing" as parsing
+participant App #ffc53d
+participant "v8::Script" as v8_script #b7eb8f
+participant "v8::ScriptCompiler" as v8_scriptCompiler #95de64
+participant "v8::internal::Compiler" as internal_Compiler #eb2f96
+participant "v8::internal" as internal #36cfc9
+participant "v8::parsing" as parsing #f759ab
 App -> v8_script : Compile
 v8_script -> v8_scriptCompiler : Compile
 v8_scriptCompiler -> v8_scriptCompiler : CompileUnboundInternal
