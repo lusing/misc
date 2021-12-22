@@ -1,10 +1,12 @@
 @startuml
 participant App #ffc53d
-participant "v8::Script" as v8_script #b7eb8f
-participant "v8::ScriptCompiler" as v8_scriptCompiler #95de64
-participant "v8::internal::Compiler" as internal_Compiler #eb2f96
-participant "v8::internal" as internal #36cfc9
-participant "v8::parsing" as parsing #f759ab
+participant "Script" as v8_script #b7eb8f
+participant "ScriptCompiler" as v8_scriptCompiler #95de64
+participant "Compiler" as internal_Compiler #eb2f96
+participant "internal" as internal #36cfc9
+participant "UnoptimizedCompilationJob" as job1 #73d13d
+participant "InterpreterCompilationJob" as job2 #ff7a45
+participant "BytecodeGenerator" as gen #ff7875
 App -> v8_script : Compile
 v8_script -> v8_scriptCompiler : Compile
 v8_scriptCompiler -> v8_scriptCompiler : CompileUnboundInternal
@@ -13,6 +15,9 @@ internal_Compiler -> internal : GetSharedFunctionInfoForScriptImpl
 internal -> internal : CompileScriptOnMainThread
 internal -> internal_Compiler : CompileToplevel
 internal_Compiler -> internal : CompileToplevel
-internal -> parsing : ParseProgram
 internal -> internal : IterativelyExecuteAndFinalizeUnoptimizedCompilationJobs
+internal -> internal : ExecuteSingleUnoptimizedCompilationJob
+internal -> job1 : ExecuteJob
+job1 -> job2 : ExecuteJobImpl
+job2 -> gen : GenerateBytecode
 @enduml
