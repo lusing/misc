@@ -1,12 +1,12 @@
-# 如何使用机器学习自动修复bug: 原理与细节
+# 如何使用机器学习自动修复bug: 数据处理和模型搭建
 
 上一篇《如何使用机器学习自动修复bug: 上手指南》我们介绍了使用CodeBERT自动修复bug的操作方法。
-
-这一篇我们进一步介绍其中的原理。
+估计对于很多想了解原理的同学来说，只知道训练的推理的命令太不过瘾了，根本不了解原理，而且也不知道如何去做改进。
+这一篇我们开始介绍其中的细节。
 
 ## 将源代码转成特征
 
-上一节我们学习了训练的命令：
+上一篇我们学习了训练的命令：
 ```
 cd code
 export pretrained_model=microsoft/codebert-base
@@ -166,6 +166,7 @@ return features
 ```
 
 InputFeatures类也是个简单的封装：
+
 ```python
 class InputFeatures(object):
     """A single training/test features for a example."""
@@ -184,7 +185,7 @@ class InputFeatures(object):
         self.target_mask = target_mask       
 ```
 
-下面回到训练的主函数，将 ID 和 MASK 都转换成 PYTORCH 的向量：
+下面回到训练的主函数，将 id 和 mask 都转换成 PyTorch 的向量：
 
 ```
 all_source_ids = torch.tensor([f.source_ids for f in train_features], dtype=torch.long)
@@ -194,11 +195,29 @@ all_target_mask = torch.tensor([f.target_mask for f in train_features], dtype=to
 train_data = TensorDataset(all_source_ids,all_source_mask,all_target_ids,all_target_mask)
 ```
 
+好，数据这部分基本上大功告成了，下面我们看模型部分。
+
 ## 模型
 
+模型上我们采用和机器翻译差不多的Seq2Seq模型，按照惯例我们也采用编码器-解码器的结构。
+
+编码器我们采用的就是微软的CodeBERT预训练模型，这是在命令行参数时我们指定的：
 ```python
 #budild model
-encoder = model_class.from_pretrained(args.model_name_or_path,config=config)    
+encoder = model_class.from_pretrained(args.model_name_or_path,config=config)
+```
+
+还记得命令行里我们用的model_name_or_path 参数吧：
+
+```
+--model_name_or_path microsoft/codebert-base
+```
+
+我们尝试别的编码器的时候，就把这个参数替换掉就好了。
+
+然后解码器我们选择一个6层的 TransformerDecoder 解码器：
+
+```python 
 decoder_layer = nn.TransformerDecoderLayer(d_model=config.hidden_size, nhead=config.num_attention_heads)
 decoder = nn.TransformerDecoder(decoder_layer, num_layers=6)
 model=Seq2Seq(encoder=encoder,decoder=decoder,config=config,
@@ -206,10 +225,17 @@ model=Seq2Seq(encoder=encoder,decoder=decoder,config=config,
               sos_id=tokenizer.cls_token_id,eos_id=tokenizer.sep_token_id)
 ```
 
+编码器这部分负责有bug的代码的处理，这部分不管是训练还是推理部分都是一样的。输入给encoder的参数是源代码的id和mask: 
+
 ```python
 def forward(self, source_ids=None,source_mask=None,target_ids=None,target_mask=None,args=None):   
     outputs = self.encoder(source_ids, attention_mask=source_mask)
     encoder_output = outputs[0].permute([1,0,2]).contiguous()
+```
+
+针对训练的情况，解码器部分使用的不是BERT模型，而是普通的Transformer层，处理起来稍微复杂一点：
+
+```python
     if target_ids is not None:  
         attn_mask=-1e4 *(1-self.bias[:target_ids.shape[1],:target_ids.shape[1]])
         tgt_embeddings = self.encoder.embeddings(target_ids).permute([1,0,2]).contiguous()
@@ -228,6 +254,9 @@ def forward(self, source_ids=None,source_mask=None,target_ids=None,target_mask=N
         outputs = loss,loss*active_loss.sum(),active_loss.sum()
         return outputs
 ```
+
+下面是推理的部分，按照惯例要进行BeamSearch，这部分的逻辑封装在Beam类中。
+
 
 ```python
 else:
