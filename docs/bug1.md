@@ -4,7 +4,7 @@
 
 这一篇我们进一步介绍其中的原理。
 
-## 将源代码转成训练特征
+## 将源代码转成特征
 
 上一节我们学习了训练的命令：
 ```
@@ -194,7 +194,17 @@ all_target_mask = torch.tensor([f.target_mask for f in train_features], dtype=to
 train_data = TensorDataset(all_source_ids,all_source_mask,all_target_ids,all_target_mask)
 ```
 
-## Seq2Seq模型
+## 模型
+
+```python
+#budild model
+encoder = model_class.from_pretrained(args.model_name_or_path,config=config)    
+decoder_layer = nn.TransformerDecoderLayer(d_model=config.hidden_size, nhead=config.num_attention_heads)
+decoder = nn.TransformerDecoder(decoder_layer, num_layers=6)
+model=Seq2Seq(encoder=encoder,decoder=decoder,config=config,
+              beam_size=args.beam_size,max_length=args.max_target_length,
+              sos_id=tokenizer.cls_token_id,eos_id=tokenizer.sep_token_id)
+```
 
 ```python
 def forward(self, source_ids=None,source_mask=None,target_ids=None,target_mask=None,args=None):   
