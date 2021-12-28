@@ -338,6 +338,32 @@ var f1 = function f1() {
 };
 ```
 
+如果将上面的代码用Node运行，会报错：
+```js
+  var obj1 = _defineProperty({}, Symbol.iterator, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                                                               ^
+ReferenceError: regeneratorRuntime is not defined
+```
+
+因为运行库没有被引入进来，我们还得加个库，先install:
+``` 
+npm install --save @babel/polyfill
+```
+
+然后把库引进来：
+
+```js 
+require("@babel/polyfill");
+...
+var f1 = function f1() {
+    var obj1 = {
+        [Symbol.iterator]() {
+            return /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+...
+```
+
+这增加了多少代码量，就留给读者自己去算吧。
+
 ### 类
 
 虽然说class本质上跟Function的语法糖也差不多，但是，Babel转码生成出来的代码，可能比大多数同学想象的多。
@@ -370,7 +396,40 @@ var Code = /*#__PURE__*/_createClass(function Code(source) {
 code1 = new Code("test1.js");
 ```
 
+### 依赖polyfill和runtime的内置对象
+
+我们知道，ES6新增了不少对象还有原有对象的新属性。
+
+比如你使用新增加的Set，Map，WeakSet，WeakMap等对象，或者是`Number.isNaN`这样的新方法，Babel并没有帮我们转码成ES5的语句。
+那么，这些语句在老的游览器是如何支持的呢？
+答案大家可能已经猜到了，就是我们之前Generator时用到的`@babel/polyfill`库。
+
+Babel polyfill库实际上是基于两个开源的库：
+- 一个是facebook的regenerator库，目前运行时是一个700多行的文件：[regenerator runtime](https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js) .
+- 另一个是core-js库，大部分的内置对象的支持都靠它。
+
+我们代码写成这样：
+```js 
+Array.from(new Set([1, 2, 3, 2, 1]));
+[1, [2, 3], [4, [5]]].flat(2);
+Promise.resolve(32).then(x => console.log(x));
+```
+
+实际上Babel/runtime执行的是这样的：
+```js 
+import from from 'core-js-pure/stable/array/from';
+import flat from 'core-js-pure/stable/array/flat';
+import Set from 'core-js-pure/stable/set';
+import Promise from 'core-js-pure/stable/promise';
+
+from(new Set([1, 2, 3, 2, 1]));
+flat([1, [2, 3], [4, [5]]], 2);
+Promise.resolve(32).then(x => console.log(x));
+```
+
 ## 转码效果更好
+
+凡事皆有特例，从某些功能来讲，也许转码实现更好。
 
 ### 解构赋值
 
@@ -629,4 +688,5 @@ Constant pool (size = 2)
 ## 小结
 
 从前面的案例中，我们可以看到，除了像解构引入了迭代这样的结构会变得复杂以外，大部分情况下，从源代码和字节码两个方面看，如果可以不转码，更有利于v8提升性能。
+尤其是不是简单转码就可以，还需要依赖于polyfill运行时的功能，无论是从代码库大小和运行速度上都不划算。
 至少对于近几年的中高端机型上，值得我们使用新武器去取得更优的效果。
