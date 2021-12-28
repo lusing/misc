@@ -1,3 +1,4 @@
+require("@babel/polyfill");
 "use strict";
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -29,17 +30,4 @@ var f1 = function f1() {
 };
 
 f1();
-"use strict";
 
-let f2 = () => {
-  let obj1 = {
-    *[Symbol.iterator]() {
-      yield 1;
-      yield 2;
-      yield 3;
-    }
-
-  };
-};
-
-f2();
