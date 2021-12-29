@@ -977,6 +977,23 @@ function after(n, func) {
   `function once(func) {
     return before(2, func)
   }`,
+  `function orderBy(collection, iteratees, orders) {
+    if (collection == null) {
+      return []
+    }
+    if (!Array.isArray(iteratees)) {
+      iteratees = iteratees == null ? [] : [iteratees]
+    }
+    if (!Array.isArray(orders)) {
+      orders = orders == null ? [] : [orders]
+    }
+    return baseOrderBy(collection, iteratees, orders)
+  }`,
+  `function over(iteratees) {
+    return function(...args) {
+      return map(iteratees, (iteratee) => iteratee.apply(this, args))
+    }
+  }`,
 ];
 
 for (let code1 of codes) {
