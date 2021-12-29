@@ -1,4 +1,5 @@
 const babel = require("@babel/core");
+const generate = require("@babel/generator");
 
 function generate_codes(code) {
     let result3 = babel.transformSync(code, {
@@ -17,10 +18,14 @@ function generate_codes(code) {
     });
 
     let str2 = result2.code.replace(/[\n\t]/g, '');
-    console.log(str2);
+    //console.log(str2);
 
-    //let str0 = code.replace(/[\n\t]/g,'');
-    //console.log(str0);
+    ast0 = babel.transformSync(code, { ast: true });
+    //console.log(ast0.code);
+
+    //let c2 = generate.default(ast0,{});
+    let str0 = ast0.code.replace(/[\n\t]/g,'');
+    console.log(str0);
 
     console.log('------------------');
 }
@@ -514,6 +519,34 @@ function after(n, func) {
   `function get(object, path, defaultValue) {
     const result = object == null ? undefined : baseGet(object, path)
     return result === undefined ? defaultValue : result
+  }`,
+  `function groupBy(collection, iteratee) {
+    return reduce(collection, (result, value, key) => {
+      key = iteratee(value)
+      if (hasOwnProperty.call(result, key)) {
+        result[key].push(value)
+      } else {
+        baseAssignValue(result, key, [value])
+      }
+      return result
+    }, {})
+  }`,
+  `function gt(value, other) {
+    if (!(typeof value === 'string' && typeof other === 'string')) {
+      value = +value
+      other = +other
+    }
+    return value > other
+  }`,
+  `function gte(value, other) {
+    if (!(typeof value === 'string' && typeof other === 'string')) {
+      value = +value
+      other = +other
+    }
+    return value >= other
+  }`,
+  `function has(object, key) {
+    return object != null && hasOwnProperty.call(object, key)
   }`,
 ];
 
