@@ -1,30 +1,4 @@
-const babel = require("@babel/core");
-const generate = require("@babel/generator");
-
-function generate_codes(code) {
-    let result3 = babel.transformSync(code, {
-        targets: "iOS 9",
-        sourceMaps: true,
-        presets: ["@babel/preset-env"]
-    });
-    let str1 = result3.code.replace(/[\n\t]/g, '');
-    console.log(str1);
-    //console.log(result3.map);
-
-    let result2 = babel.transformSync(code, {
-        targets: "iOS 15",
-        sourceMaps: true,
-        presets: ["@babel/preset-env"]
-    });
-
-    let str2 = result2.code.replace(/[\n\t]/g, '');
-
-    ast0 = babel.transformSync(code, { ast: true });
-    let str0 = ast0.code.replace(/[\n\t]/g, '');
-    console.log(str0);
-
-    console.log('------------------');
-}
+const coder = require('./gencode');
 
 const codes = [
     `
@@ -855,7 +829,7 @@ function after(n, func) {
     const length = array == null ? 0 : array.length
     return length ? array[length - 1] : undefined
   }`,
-  `function lastIndexOf(array, value, fromIndex) {
+    `function lastIndexOf(array, value, fromIndex) {
     const length = array == null ? 0 : array.length
     if (!length) {
       return -1
@@ -869,20 +843,20 @@ function after(n, func) {
       ? strictLastIndexOf(array, value, index)
       : baseFindIndex(array, baseIsNaN, index, true)
   }`,
-  `const lowerCase = (string) => (
+    `const lowerCase = (string) => (
     words(toString(string).replace(reQuotes, '')).reduce((result, word, index) => (
       result + (index ? ' ' : '') + word.toLowerCase()
     ), '')
   )`,
-  `const lowerFirst = createCaseFirst('toLowerCase')`,
-  `function lt(value, other) {
+    `const lowerFirst = createCaseFirst('toLowerCase')`,
+    `function lt(value, other) {
     if (!(typeof value === 'string' && typeof other === 'string')) {
       value = +value
       other = +other
     }
     return value < other
   }`,
-  `function lte(value, other) {
+    `function lte(value, other) {
     if (!(typeof value === 'string' && typeof other === 'string')) {
       value = +value
       other = +other
@@ -890,7 +864,7 @@ function after(n, func) {
     return value <= other
   }
   `,
-  `function map(array, iteratee) {
+    `function map(array, iteratee) {
     let index = -1
     const length = array == null ? 0 : array.length
     const result = new Array(length)
@@ -901,7 +875,7 @@ function after(n, func) {
     return result
   }
   `,
-  `function mapKey(object, iteratee) {
+    `function mapKey(object, iteratee) {
     object = Object(object)
     const result = {}
   
@@ -911,7 +885,7 @@ function after(n, func) {
     })
     return result
   }`,
-  `function mapObject(object, iteratee) {
+    `function mapObject(object, iteratee) {
     const props = Object.keys(object)
     const result = new Array(props.length)
   
@@ -920,7 +894,7 @@ function after(n, func) {
     })
     return result
   }`,
-  `function mapValue(object, iteratee) {
+    `function mapValue(object, iteratee) {
     object = Object(object)
     const result = {}
   
@@ -929,8 +903,82 @@ function after(n, func) {
     })
     return result
   }`,
+    `import baseAt from './.internal/baseAt.js'
+  import baseFlatten from './.internal/baseFlatten.js'
+  
+  const at = (object, ...paths) => baseAt(object, baseFlatten(paths, 1))
+  
+  export default at`,
+    `function matches(source) {
+  return baseMatches(baseClone(source, CLONE_DEEP_FLAG))
+}`,
+    `function matchesProperty(path, srcValue) {
+        return baseMatchesProperty(path, baseClone(srcValue, CLONE_DEEP_FLAG))
+      }`,
+`function maxBy(array, iteratee) {
+    let result
+    if (array == null) {
+      return result
+    }
+    let computed
+    for (const value of array) {
+      const current = iteratee(value)
+  
+      if (current != null && (computed === undefined
+        ? (current === current && !isSymbol(current))
+        : (current > computed)
+      )) {
+        computed = current
+        result = value
+      }
+    }
+    return result
+  }`,
+  `function mean(array) {
+    return baseMean(array, (value) => value)
+  }`,
+  `function meanBy(array, iteratee) {
+    const length = array == null ? 0 : array.length
+    return length ? (baseSum(array, iteratee) / length) : NAN
+  }`,
+  `function memoize(func, resolver) {
+    if (typeof func !== 'function' || (resolver != null && typeof resolver !== 'function')) {
+      throw new TypeError('Expected a function')
+    }
+    const memoized = function(...args) {
+      const key = resolver ? resolver.apply(this, args) : args[0]
+      const cache = memoized.cache
+  
+      if (cache.has(key)) {
+        return cache.get(key)
+      }
+      const result = func.apply(this, args)
+      memoized.cache = cache.set(key, result) || cache
+      return result
+    }
+    memoized.cache = new (memoize.Cache || Map)
+    return memoized
+  }`,
+  `const merge = createAssigner((object, source, srcIndex) => {
+    baseMerge(object, source, srcIndex)
+  })
+  `,
+  `function method(path, args) {
+    return (object) => invoke(object, path, args)
+  }`,
+  `function nth(array, n) {
+    const length = array == null ? 0 : array.length
+    if (!length) {
+      return
+    }
+    n += n < 0 ? length : 0
+    return isIndex(n, length) ? array[n] : undefined
+  }`,
+  `function once(func) {
+    return before(2, func)
+  }`,
 ];
 
 for (let code1 of codes) {
-    generate_codes(code1);
+    coder.generate_codes(code1);
 }
