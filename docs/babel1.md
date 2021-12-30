@@ -685,6 +685,84 @@ Constant pool (size = 2)
            1: 0x0b7508202aa1 <String[3]: #pow>
 ```
 
+## JSX
+
+有一种情况下是没法用原生的代码而必须要转码的，这就是React JSX的情部况。
+
+虽然要转码，但是不同的目标带来的代码量也是有显著不同的。
+
+比如下面的代码，这是典型的React Hooks用法：
+
+```jsx 
+import React, { useState } from 'react';
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+我们按iOS 9来转码：
+```js 
+const babel = require("@babel/core");
+const generate = require("@babel/generator");
+
+    let result3 = babel.transformSync(code, {
+        targets: "iOS 9",
+        sourceMaps: true,
+        presets: ["@babel/preset-env", "@babel/preset-react"]
+    });
+    let str1 = result3.code;
+    console.log(str1);
+```
+
+转码后的结果如下：
+```js 
+...
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function Example() {
+  var _useState = (0, _react.useState)(0),
+      _useState2 = _slicedToArray(_useState, 2),
+      count = _useState2[0],
+      setCount = _useState2[1];
+
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("p", null, "You clicked ", count, " times"), /*#__PURE__*/_react.default.createElement("button", {
+    onClick: function onClick() {
+      return setCount(count + 1);
+    }
+  }, "Click me"));
+}
+```
+
+而按iOS 15为目标来转码，因为支持解构，就不用生成那么多js代码了：
+```js 
+function Example() {
+    const [count, setCount] = (0, _react.useState)(0);
+    return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("p", null, "You clicked ", count, " times"), /*#__PURE__*/_react.default.createElement("button", {
+        onClick: () => setCount(count + 1)
+    }, "Click me"));
+}
+```
+
 ## 小结
 
 从前面的案例中，我们可以看到，除了像解构引入了迭代这样的结构会变得复杂以外，大部分情况下，从源代码和字节码两个方面看，如果可以不转码，更有利于v8提升性能。

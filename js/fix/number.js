@@ -4,6 +4,7 @@ const t = require('@babel/types');
 const traverse = require("@babel/traverse");
 const generate = require("@babel/generator");
 const babelTemplate = require("@babel/template");
+const fs = require("fs");
 
 let args = process.argv;
 
@@ -17,22 +18,19 @@ if (args.length !== 3) {
 
 function fix(code) {
     const isNaNTemplate = babelTemplate.default(`Number.isNaN(ARG);`);
-    const ast = babelParser.parse(code, {})
-    traverse.default(ast, {
+    const ast0 = babel.transformSync(code, { ast: true })?.ast;
+    traverse.default(ast0, {
         enter(path) {
             if (t.isCallExpression(path) && path.node.callee.name === 'isNaN') {
-                console.log(path.node);
                 let arg1 = path.node.arguments;
                 const node2 = isNaNTemplate({
                     ARG: arg1,
                 });
-                console.log(node2);
                 path.replaceWith(node2);
             }
         }
     });
 
-    const c2 = generate.default(ast, {});
+    const c2 = generate.default(ast0, {});
     console.log(c2.code);
 }
-
