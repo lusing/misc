@@ -13,7 +13,17 @@ for step in bar:
     loss,_,_ = model(source_ids=source_ids,source_mask=source_mask,target_ids=target_ids,target_mask=target_mask)
 ```
 
-进入正题之前，我们先补充一点点PyTorch向量的基本操作的知识。
+上文中我们介绍了作为编码器的BERT模型，而解码器是用的TransformerDecoder。相比更容易的BERT，其基础Transformer还是值得花一点时间了解一下的。
+
+## Transformer模型基础
+
+
+Transformer的基本结构如下：
+
+![](https://gw.alicdn.com/imgextra/i2/O1CN01z2lAsX1LYTyaKmXSJ_!!6000000001311-2-tps-946-1086.png)
+
+![](https://gw.alicdn.com/imgextra/i2/O1CN01zUggNb1x62meJJX12_!!6000000006393-2-tps-1094-608.png)
+
 
 ## 一点点PyTorch向量操作基础知识
 
@@ -280,4 +290,13 @@ tensor([[    -0., -10000., -10000.,  ..., -10000., -10000., -10000.],
 
 ```python
 tgt_embeddings = self.encoder.embeddings(target_ids).permute([1,0,2]).contiguous()
+```
+
+下面我们将目标嵌入的结果调用解码器。
+
+解码器的结构我们复习下，是一个TransformerDecoder：
+
+```python
+decoder_layer = nn.TransformerDecoderLayer(d_model=config.hidden_size, nhead=config.num_attention_heads)
+decoder = nn.TransformerDecoder(decoder_layer, num_layers=6)
 ```
