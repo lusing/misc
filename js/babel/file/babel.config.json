@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": "iOS 9",
+        "useBuiltIns": "usage",
+        "corejs": "3.6.5"
+      }
+    ]
+  ],
+  "sourceMaps": true
+}
