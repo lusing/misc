@@ -78,6 +78,19 @@ To the best of our knowledge, however, the Transformer is the first transduction
 
 然而，就我们所知，Transformer是第一个完全依赖于自我关注来计算其输入和输出表示的转换模型，而不使用序列对齐的RNNs或卷积。在接下来的部分中，我们将描述Transformer，激发self-attention，并讨论它相对于[17,18]和[9]等模型的优点。
 
+## 3 Model Architecture
+
+Most competitive neural sequence transduction models have an encoder-decoder structure [5, 2, 35]. Here, the encoder maps an input sequence of symbol representations $(x_1,...,x_n)$ to a sequence of continuous representations $z=(z_1,...,z_n)$. Given z, the decoder then generates an output sequence $(y_1,...,y_m)$ of symbols one element at a time. At each step the model is auto-regressive [10], consuming the previously generated symbols as additional input when generating the next.
+
+The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.
+
 ![](https://gw.alicdn.com/imgextra/i2/O1CN01z2lAsX1LYTyaKmXSJ_!!6000000001311-2-tps-946-1086.png)
 
+### 3.1 Encoder and Decoder Stacks
+
+- Encoder: The encoder is composed of a stack of N = 6 identical layers. Each layer has two sub-layers. The first is a multi-head self-attention mechanism, and the second is a simple, positionwise fully connected feed-forward network. We employ a residual connection [11] around each of the two sub-layers, followed by layer normalization [1]. That is, the output of each sub-layer is LayerNorm(x + Sublayer(x)), where Sublayer(x) is the function implemented by the sub-layer itself. To facilitate these residual connections, all sub-layers in the model, as well as the embedding layers, produce outputs of dimension $d_{model} = 512$.
+
+- Decoder: The decoder is also composed of a stack of N = 6 identical layers. In addition to the two sub-layers in each encoder layer, the decoder inserts a third sub-layer, which performs multi-head attention over the output of the encoder stack. Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.
+
 ![](https://gw.alicdn.com/imgextra/i2/O1CN01zUggNb1x62meJJX12_!!6000000006393-2-tps-1094-608.png)
+
