@@ -3746,4 +3746,3112 @@ var buildIteratee = arguments.length > 1 && arguments[1] !== undefined ? argumen
 ==========
 "use strict";
 
-var writeNode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : writeProperty(next);
+var writeNode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : writeProperty(next);var _createMathOperation = _interopRequireDefault(require("./.internal/createMathOperation.js"));
+==========
+"use strict";
+
+var _createMathOperation = _interopRequireDefault(require("./.internal/createMathOperation.js"));/**
+ * Adds two numbers.
+ *
+ * @since 3.4.0
+ * @category Math
+ * @param {number} augend The first number in an addition.
+ * @param {number} addend The second number in an addition.
+ * @returns {number} Returns the total.
+ * @example
+ *
+ * add(6, 4)
+ * // => 10
+ */
+const add = (0, _createMathOperation.default)((augend, addend) => augend + addend, 0);
+==========
+"use strict";
+
+/**
+ * Adds two numbers.
+ *
+ * @since 3.4.0
+ * @category Math
+ * @param {number} augend The first number in an addition.
+ * @param {number} addend The second number in an addition.
+ * @returns {number} Returns the total.
+ * @example
+ *
+ * add(6, 4)
+ * // => 10
+ */
+var add = (0, _createMathOperation.default)(function (augend, addend) {
+  return augend + addend;
+}, 0);var _default = add;
+==========
+"use strict";
+
+var _default = add;var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;
+==========
+"use strict";
+
+var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;var _default = after;
+==========
+"use strict";
+
+var _default = after;/**
+ * The opposite of `before`. This method creates a function that invokes
+ * `func` once it's called `n` or more times.
+ *
+ * @since 0.1.0
+ * @category Function
+ * @param {number} n The number of calls before `func` is invoked.
+ * @param {Function} func The function to restrict.
+ * @returns {Function} Returns the new restricted function.
+ * @example
+ *
+ * const saves = ['profile', 'settings']
+ * const done = after(saves.length, () => console.log('done saving!'))
+ *
+ * forEach(saves, type => asyncSave({ 'type': type, 'complete': done }))
+ * // => Logs 'done saving!' after the two async saves have completed.
+ */
+function after(n, func) {
+  if (typeof func !== 'function') {
+    throw new TypeError('Expected a function');
+  }
+
+  n = n || 0;
+  return function () {
+    if (--n < 1) {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return func.apply(this, args);
+    }
+  };
+}
+==========
+"use strict";
+
+/**
+ * The opposite of `before`. This method creates a function that invokes
+ * `func` once it's called `n` or more times.
+ *
+ * @since 0.1.0
+ * @category Function
+ * @param {number} n The number of calls before `func` is invoked.
+ * @param {Function} func The function to restrict.
+ * @returns {Function} Returns the new restricted function.
+ * @example
+ *
+ * const saves = ['profile', 'settings']
+ * const done = after(saves.length, () => console.log('done saving!'))
+ *
+ * forEach(saves, type => asyncSave({ 'type': type, 'complete': done }))
+ * // => Logs 'done saving!' after the two async saves have completed.
+ */
+function after(n, func) {
+  if (typeof func !== 'function') {
+    throw new TypeError('Expected a function');
+  }
+
+  n = n || 0;
+  return function () {
+    if (--n < 1) {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return func.apply(this, args);
+    }
+  };
+}var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;
+==========
+"use strict";
+
+var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;var _default = after;
+==========
+"use strict";
+
+var _default = after;var _baseAt = _interopRequireDefault(require("./.internal/baseAt.js"));
+==========
+"use strict";
+
+var _baseAt = _interopRequireDefault(require("./.internal/baseAt.js"));var _baseFlatten = _interopRequireDefault(require("./.internal/baseFlatten.js"));
+==========
+"use strict";
+
+var _baseFlatten = _interopRequireDefault(require("./.internal/baseFlatten.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Creates an array of values corresponding to `paths` of `object`.
+ *
+ * @since 1.0.0
+ * @category Object
+ * @param {Object} object The object to iterate over.
+ * @param {...(string|string[])} [paths] The property paths to pick.
+ * @returns {Array} Returns the picked values.
+ * @example
+ *
+ * const object = { 'a': [{ 'b': { 'c': 3 } }, 4] }
+ *
+ * at(object, ['a[0].b.c', 'a[1]'])
+ * // => [3, 4]
+ */
+const at = function (object) {
+  for (var _len = arguments.length, paths = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    paths[_key - 1] = arguments[_key];
+  }
+
+  return (0, _baseAt.default)(object, (0, _baseFlatten.default)(paths, 1));
+};
+==========
+"use strict";
+
+/**
+ * Creates an array of values corresponding to `paths` of `object`.
+ *
+ * @since 1.0.0
+ * @category Object
+ * @param {Object} object The object to iterate over.
+ * @param {...(string|string[])} [paths] The property paths to pick.
+ * @returns {Array} Returns the picked values.
+ * @example
+ *
+ * const object = { 'a': [{ 'b': { 'c': 3 } }, 4] }
+ *
+ * at(object, ['a[0].b.c', 'a[1]'])
+ * // => [3, 4]
+ */
+var at = function at(object) {
+  for (var _len = arguments.length, paths = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    paths[_key - 1] = arguments[_key];
+  }
+
+  return (0, _baseAt.default)(object, (0, _baseFlatten.default)(paths, 1));
+};var _len = arguments.length,
+    paths = new Array(_len > 1 ? _len - 1 : 0),
+    _key = 1;
+==========
+"use strict";
+
+var _len = arguments.length,
+    paths = new Array(_len > 1 ? _len - 1 : 0),
+    _key = 1;var _default = at;
+==========
+"use strict";
+
+var _default = at;var _isError = _interopRequireDefault(require("./isError.js"));
+==========
+"use strict";
+
+var _isError = _interopRequireDefault(require("./isError.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Attempts to invoke `func`, returning either the result or the caught error
+ * object. Any additional arguments are provided to `func` when it's invoked.
+ *
+ * @since 3.0.0
+ * @category Util
+ * @param {Function} func The function to attempt.
+ * @param {...*} [args] The arguments to invoke `func` with.
+ * @returns {*} Returns the `func` result or error object.
+ * @example
+ *
+ * // Avoid throwing errors for invalid selectors.
+ * const elements = attempt(selector =>
+ *   document.querySelectorAll(selector), '>_>')
+ *
+ * if (isError(elements)) {
+ *   elements = []
+ * }
+ */
+function attempt(func) {
+  try {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return func(...args);
+  } catch (e) {
+    return (0, _isError.default)(e) ? e : new Error(e);
+  }
+}
+==========
+"use strict";
+
+/**
+ * Attempts to invoke `func`, returning either the result or the caught error
+ * object. Any additional arguments are provided to `func` when it's invoked.
+ *
+ * @since 3.0.0
+ * @category Util
+ * @param {Function} func The function to attempt.
+ * @param {...*} [args] The arguments to invoke `func` with.
+ * @returns {*} Returns the `func` result or error object.
+ * @example
+ *
+ * // Avoid throwing errors for invalid selectors.
+ * const elements = attempt(selector =>
+ *   document.querySelectorAll(selector), '>_>')
+ *
+ * if (isError(elements)) {
+ *   elements = []
+ * }
+ */
+function attempt(func) {
+  try {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return func.apply(void 0, args);
+  } catch (e) {
+    return (0, _isError.default)(e) ? e : new Error(e);
+  }
+}var _len = arguments.length,
+    args = new Array(_len > 1 ? _len - 1 : 0),
+    _key = 1;
+==========
+"use strict";
+
+var _len = arguments.length,
+    args = new Array(_len > 1 ? _len - 1 : 0),
+    _key = 1;var _default = attempt;
+==========
+"use strict";
+
+var _default = attempt;/**
+ * Creates a function that invokes `func`, with the `this` binding and arguments
+ * of the created function, while it's called less than `n` times. Subsequent
+ * calls to the created function return the result of the last `func` invocation.
+ *
+ * @since 3.0.0
+ * @category Function
+ * @param {number} n The number of calls at which `func` is no longer invoked.
+ * @param {Function} func The function to restrict.
+ * @returns {Function} Returns the new restricted function.
+ * @example
+ *
+ * jQuery(element).on('click', before(5, addContactToList))
+ * // => Allows adding up to 4 contacts to the list.
+ */
+function before(n, func) {
+  let result;
+
+  if (typeof func !== 'function') {
+    throw new TypeError('Expected a function');
+  }
+
+  return function () {
+    if (--n > 0) {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      result = func.apply(this, args);
+    }
+
+    if (n <= 1) {
+      func = undefined;
+    }
+
+    return result;
+  };
+}
+==========
+"use strict";
+
+/**
+ * Creates a function that invokes `func`, with the `this` binding and arguments
+ * of the created function, while it's called less than `n` times. Subsequent
+ * calls to the created function return the result of the last `func` invocation.
+ *
+ * @since 3.0.0
+ * @category Function
+ * @param {number} n The number of calls at which `func` is no longer invoked.
+ * @param {Function} func The function to restrict.
+ * @returns {Function} Returns the new restricted function.
+ * @example
+ *
+ * jQuery(element).on('click', before(5, addContactToList))
+ * // => Allows adding up to 4 contacts to the list.
+ */
+function before(n, func) {
+  var result;
+
+  if (typeof func !== 'function') {
+    throw new TypeError('Expected a function');
+  }
+
+  return function () {
+    if (--n > 0) {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      result = func.apply(this, args);
+    }
+
+    if (n <= 1) {
+      func = undefined;
+    }
+
+    return result;
+  };
+}let result;
+==========
+"use strict";
+
+var result;var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;
+==========
+"use strict";
+
+var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;var _default = before;
+==========
+"use strict";
+
+var _default = before;var _upperFirst = _interopRequireDefault(require("./upperFirst.js"));
+==========
+"use strict";
+
+var _upperFirst = _interopRequireDefault(require("./upperFirst.js"));var _words = _interopRequireDefault(require("./words.js"));
+==========
+"use strict";
+
+var _words = _interopRequireDefault(require("./words.js"));var _toString = _interopRequireDefault(require("./toString.js"));
+==========
+"use strict";
+
+var _toString = _interopRequireDefault(require("./toString.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Converts `string` to [camel case](https://en.wikipedia.org/wiki/CamelCase).
+ *
+ * @since 3.0.0
+ * @category String
+ * @param {string} [string=''] The string to convert.
+ * @returns {string} Returns the camel cased string.
+ * @see lowerCase, kebabCase, snakeCase, startCase, upperCase, upperFirst
+ * @example
+ *
+ * camelCase('Foo Bar')
+ * // => 'fooBar'
+ *
+ * camelCase('--foo-bar--')
+ * // => 'fooBar'
+ *
+ * camelCase('__FOO_BAR__')
+ * // => 'fooBar'
+ */
+const camelCase = string => (0, _words.default)((0, _toString.default)(string).replace(/['\u2019]/g, '')).reduce((result, word, index) => {
+  word = word.toLowerCase();
+  return result + (index ? (0, _upperFirst.default)(word) : word);
+}, '');
+==========
+"use strict";
+
+/**
+ * Converts `string` to [camel case](https://en.wikipedia.org/wiki/CamelCase).
+ *
+ * @since 3.0.0
+ * @category String
+ * @param {string} [string=''] The string to convert.
+ * @returns {string} Returns the camel cased string.
+ * @see lowerCase, kebabCase, snakeCase, startCase, upperCase, upperFirst
+ * @example
+ *
+ * camelCase('Foo Bar')
+ * // => 'fooBar'
+ *
+ * camelCase('--foo-bar--')
+ * // => 'fooBar'
+ *
+ * camelCase('__FOO_BAR__')
+ * // => 'fooBar'
+ */
+var camelCase = function camelCase(string) {
+  return (0, _words.default)((0, _toString.default)(string).replace(/['\u2019]/g, '')).reduce(function (result, word, index) {
+    word = word.toLowerCase();
+    return result + (index ? (0, _upperFirst.default)(word) : word);
+  }, '');
+};var _default = camelCase;
+==========
+"use strict";
+
+var _default = camelCase;var _upperFirst = _interopRequireDefault(require("./upperFirst.js"));
+==========
+"use strict";
+
+var _upperFirst = _interopRequireDefault(require("./upperFirst.js"));var _toString = _interopRequireDefault(require("./toString.js"));
+==========
+"use strict";
+
+var _toString = _interopRequireDefault(require("./toString.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Converts the first character of `string` to upper case and the remaining
+ * to lower case.
+ *
+ * @since 3.0.0
+ * @category String
+ * @param {string} [string=''] The string to capitalize.
+ * @returns {string} Returns the capitalized string.
+ * @example
+ *
+ * capitalize('FRED')
+ * // => 'Fred'
+ */
+const capitalize = string => (0, _upperFirst.default)((0, _toString.default)(string).toLowerCase());
+==========
+"use strict";
+
+/**
+ * Converts the first character of `string` to upper case and the remaining
+ * to lower case.
+ *
+ * @since 3.0.0
+ * @category String
+ * @param {string} [string=''] The string to capitalize.
+ * @returns {string} Returns the capitalized string.
+ * @example
+ *
+ * capitalize('FRED')
+ * // => 'Fred'
+ */
+var capitalize = function capitalize(string) {
+  return (0, _upperFirst.default)((0, _toString.default)(string).toLowerCase());
+};var _default = capitalize;
+==========
+"use strict";
+
+var _default = capitalize;/**
+ * Casts `value` as an array if it's not one.
+ *
+ * @since 4.4.0
+ * @category Lang
+ * @param {*} value The value to inspect.
+ * @returns {Array} Returns the cast array.
+ * @example
+ *
+ * castArray(1)
+ * // => [1]
+ *
+ * castArray({ 'a': 1 })
+ * // => [{ 'a': 1 }]
+ *
+ * castArray('abc')
+ * // => ['abc']
+ *
+ * castArray(null)
+ * // => [null]
+ *
+ * castArray(undefined)
+ * // => [undefined]
+ *
+ * castArray()
+ * // => []
+ *
+ * const array = [1, 2, 3]
+ * console.log(castArray(array) === array)
+ * // => true
+ */
+function castArray() {
+  if (!arguments.length) {
+    return [];
+  }
+
+  const value = arguments.length <= 0 ? undefined : arguments[0];
+  return Array.isArray(value) ? value : [value];
+}
+==========
+"use strict";
+
+/**
+ * Casts `value` as an array if it's not one.
+ *
+ * @since 4.4.0
+ * @category Lang
+ * @param {*} value The value to inspect.
+ * @returns {Array} Returns the cast array.
+ * @example
+ *
+ * castArray(1)
+ * // => [1]
+ *
+ * castArray({ 'a': 1 })
+ * // => [{ 'a': 1 }]
+ *
+ * castArray('abc')
+ * // => ['abc']
+ *
+ * castArray(null)
+ * // => [null]
+ *
+ * castArray(undefined)
+ * // => [undefined]
+ *
+ * castArray()
+ * // => []
+ *
+ * const array = [1, 2, 3]
+ * console.log(castArray(array) === array)
+ * // => true
+ */
+function castArray() {
+  if (!arguments.length) {
+    return [];
+  }
+
+  var value = arguments.length <= 0 ? undefined : arguments[0];
+  return Array.isArray(value) ? value : [value];
+}const value = arguments.length <= 0 ? undefined : arguments[0];
+==========
+"use strict";
+
+var value = arguments.length <= 0 ? undefined : arguments[0];var _default = castArray;
+==========
+"use strict";
+
+var _default = castArray;var _createRound = _interopRequireDefault(require("./.internal/createRound.js"));
+==========
+"use strict";
+
+var _createRound = _interopRequireDefault(require("./.internal/createRound.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Computes `number` rounded up to `precision`. (Round up: the smallest integer greater than or equal to a given number.)
+ *
+ * @since 3.10.0
+ * @category Math
+ * @param {number} number The number to round up.
+ * @param {number} [precision=0] The precision to round up to.
+ * @returns {number} Returns the rounded up number.
+ * @example
+ *
+ * ceil(4.006)
+ * // => 5
+ *
+ * ceil(6.004, 2)
+ * // => 6.01
+ *
+ * ceil(6040, -2)
+ * // => 6100
+ */
+const ceil = (0, _createRound.default)('ceil');
+==========
+"use strict";
+
+/**
+ * Computes `number` rounded up to `precision`. (Round up: the smallest integer greater than or equal to a given number.)
+ *
+ * @since 3.10.0
+ * @category Math
+ * @param {number} number The number to round up.
+ * @param {number} [precision=0] The precision to round up to.
+ * @returns {number} Returns the rounded up number.
+ * @example
+ *
+ * ceil(4.006)
+ * // => 5
+ *
+ * ceil(6.004, 2)
+ * // => 6.01
+ *
+ * ceil(6040, -2)
+ * // => 6100
+ */
+var ceil = (0, _createRound.default)('ceil');var _default = ceil;
+==========
+"use strict";
+
+var _default = ceil;var _slice = _interopRequireDefault(require("./slice.js"));
+==========
+"use strict";
+
+var _slice = _interopRequireDefault(require("./slice.js"));var _toInteger = _interopRequireDefault(require("./toInteger.js"));
+==========
+"use strict";
+
+var _toInteger = _interopRequireDefault(require("./toInteger.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Creates an array of elements split into groups the length of `size`.
+ * If `array` can't be split evenly, the final chunk will be the remaining
+ * elements.
+ *
+ * @since 3.0.0
+ * @category Array
+ * @param {Array} array The array to process.
+ * @param {number} [size=1] The length of each chunk
+ * @returns {Array} Returns the new array of chunks.
+ * @example
+ *
+ * chunk(['a', 'b', 'c', 'd'], 2)
+ * // => [['a', 'b'], ['c', 'd']]
+ *
+ * chunk(['a', 'b', 'c', 'd'], 3)
+ * // => [['a', 'b', 'c'], ['d']]
+ */
+function chunk(array) {
+  let size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  size = Math.max((0, _toInteger.default)(size), 0);
+  const length = array == null ? 0 : array.length;
+
+  if (!length || size < 1) {
+    return [];
+  }
+
+  let index = 0;
+  let resIndex = 0;
+  const result = new Array(Math.ceil(length / size));
+
+  while (index < length) {
+    result[resIndex++] = (0, _slice.default)(array, index, index += size);
+  }
+
+  return result;
+}
+==========
+"use strict";
+
+/**
+ * Creates an array of elements split into groups the length of `size`.
+ * If `array` can't be split evenly, the final chunk will be the remaining
+ * elements.
+ *
+ * @since 3.0.0
+ * @category Array
+ * @param {Array} array The array to process.
+ * @param {number} [size=1] The length of each chunk
+ * @returns {Array} Returns the new array of chunks.
+ * @example
+ *
+ * chunk(['a', 'b', 'c', 'd'], 2)
+ * // => [['a', 'b'], ['c', 'd']]
+ *
+ * chunk(['a', 'b', 'c', 'd'], 3)
+ * // => [['a', 'b', 'c'], ['d']]
+ */
+function chunk(array) {
+  var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  size = Math.max((0, _toInteger.default)(size), 0);
+  var length = array == null ? 0 : array.length;
+
+  if (!length || size < 1) {
+    return [];
+  }
+
+  var index = 0;
+  var resIndex = 0;
+  var result = new Array(Math.ceil(length / size));
+
+  while (index < length) {
+    result[resIndex++] = (0, _slice.default)(array, index, index += size);
+  }
+
+  return result;
+}let size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+==========
+"use strict";
+
+var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;const length = array == null ? 0 : array.length;
+==========
+"use strict";
+
+var length = array == null ? 0 : array.length;let index = 0;
+==========
+"use strict";
+
+var index = 0;let resIndex = 0;
+==========
+"use strict";
+
+var resIndex = 0;const result = new Array(Math.ceil(length / size));
+==========
+"use strict";
+
+var result = new Array(Math.ceil(length / size));var _default = chunk;
+==========
+"use strict";
+
+var _default = chunk;/**
+ * Clamps `number` within the inclusive `lower` and `upper` bounds.
+ *
+ * @since 4.0.0
+ * @category Number
+ * @param {number} number The number to clamp.
+ * @param {number} lower The lower bound.
+ * @param {number} upper The upper bound.
+ * @returns {number} Returns the clamped number.
+ * @example
+ *
+ * clamp(-10, -5, 5)
+ * // => -5
+ *
+ * clamp(10, -5, 5)
+ * // => 5
+ */
+function clamp(number, lower, upper) {
+  number = +number;
+  lower = +lower;
+  upper = +upper;
+  lower = lower === lower ? lower : 0;
+  upper = upper === upper ? upper : 0;
+
+  if (number === number) {
+    number = number <= upper ? number : upper;
+    number = number >= lower ? number : lower;
+  }
+
+  return number;
+}
+==========
+"use strict";
+
+/**
+ * Clamps `number` within the inclusive `lower` and `upper` bounds.
+ *
+ * @since 4.0.0
+ * @category Number
+ * @param {number} number The number to clamp.
+ * @param {number} lower The lower bound.
+ * @param {number} upper The upper bound.
+ * @returns {number} Returns the clamped number.
+ * @example
+ *
+ * clamp(-10, -5, 5)
+ * // => -5
+ *
+ * clamp(10, -5, 5)
+ * // => 5
+ */
+function clamp(number, lower, upper) {
+  number = +number;
+  lower = +lower;
+  upper = +upper;
+  lower = lower === lower ? lower : 0;
+  upper = upper === upper ? upper : 0;
+
+  if (number === number) {
+    number = number <= upper ? number : upper;
+    number = number >= lower ? number : lower;
+  }
+
+  return number;
+}var _default = clamp;
+==========
+"use strict";
+
+var _default = clamp;var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));
+==========
+"use strict";
+
+var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/** Used to compose bitmasks for cloning. */
+const CLONE_SYMBOLS_FLAG = 4;
+/**
+ * Creates a shallow clone of `value`.
+ *
+ * **Note:** This method is loosely based on the
+ * [structured clone algorithm](https://mdn.io/Structured_clone_algorithm)
+ * and supports cloning arrays, array buffers, booleans, date objects, maps,
+ * numbers, `Object` objects, regexes, sets, strings, symbols, and typed
+ * arrays. The own enumerable properties of `arguments` objects are cloned
+ * as plain objects. Object inheritance is preserved. An empty object is
+ * returned for uncloneable values such as error objects, functions, DOM nodes,
+ * and WeakMaps.
+ *
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @returns {*} Returns the cloned value.
+ * @see cloneDeep
+ * @example
+ *
+ * const objects = [{ 'a': 1 }, { 'b': 2 }]
+ *
+ * const shallow = clone(objects)
+ * console.log(shallow[0] === objects[0])
+ * // => true
+ */
+==========
+"use strict";
+
+/** Used to compose bitmasks for cloning. */
+var CLONE_SYMBOLS_FLAG = 4;
+/**
+ * Creates a shallow clone of `value`.
+ *
+ * **Note:** This method is loosely based on the
+ * [structured clone algorithm](https://mdn.io/Structured_clone_algorithm)
+ * and supports cloning arrays, array buffers, booleans, date objects, maps,
+ * numbers, `Object` objects, regexes, sets, strings, symbols, and typed
+ * arrays. The own enumerable properties of `arguments` objects are cloned
+ * as plain objects. Object inheritance is preserved. An empty object is
+ * returned for uncloneable values such as error objects, functions, DOM nodes,
+ * and WeakMaps.
+ *
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @returns {*} Returns the cloned value.
+ * @see cloneDeep
+ * @example
+ *
+ * const objects = [{ 'a': 1 }, { 'b': 2 }]
+ *
+ * const shallow = clone(objects)
+ * console.log(shallow[0] === objects[0])
+ * // => true
+ *//**
+ * Creates a shallow clone of `value`.
+ *
+ * **Note:** This method is loosely based on the
+ * [structured clone algorithm](https://mdn.io/Structured_clone_algorithm)
+ * and supports cloning arrays, array buffers, booleans, date objects, maps,
+ * numbers, `Object` objects, regexes, sets, strings, symbols, and typed
+ * arrays. The own enumerable properties of `arguments` objects are cloned
+ * as plain objects. Object inheritance is preserved. An empty object is
+ * returned for uncloneable values such as error objects, functions, DOM nodes,
+ * and WeakMaps.
+ *
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @returns {*} Returns the cloned value.
+ * @see cloneDeep
+ * @example
+ *
+ * const objects = [{ 'a': 1 }, { 'b': 2 }]
+ *
+ * const shallow = clone(objects)
+ * console.log(shallow[0] === objects[0])
+ * // => true
+ */
+function clone(value) {
+  return (0, _baseClone.default)(value, CLONE_SYMBOLS_FLAG);
+}
+==========
+"use strict";
+
+/**
+ * Creates a shallow clone of `value`.
+ *
+ * **Note:** This method is loosely based on the
+ * [structured clone algorithm](https://mdn.io/Structured_clone_algorithm)
+ * and supports cloning arrays, array buffers, booleans, date objects, maps,
+ * numbers, `Object` objects, regexes, sets, strings, symbols, and typed
+ * arrays. The own enumerable properties of `arguments` objects are cloned
+ * as plain objects. Object inheritance is preserved. An empty object is
+ * returned for uncloneable values such as error objects, functions, DOM nodes,
+ * and WeakMaps.
+ *
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @returns {*} Returns the cloned value.
+ * @see cloneDeep
+ * @example
+ *
+ * const objects = [{ 'a': 1 }, { 'b': 2 }]
+ *
+ * const shallow = clone(objects)
+ * console.log(shallow[0] === objects[0])
+ * // => true
+ */
+function clone(value) {
+  return (0, _baseClone.default)(value, CLONE_SYMBOLS_FLAG);
+}var _default = clone;
+==========
+"use strict";
+
+var _default = clone;var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));
+==========
+"use strict";
+
+var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/** Used to compose bitmasks for cloning. */
+const CLONE_DEEP_FLAG = 1;
+==========
+"use strict";
+
+/** Used to compose bitmasks for cloning. */
+var CLONE_DEEP_FLAG = 1;const CLONE_SYMBOLS_FLAG = 4;
+/**
+ * This method is like `clone` except that it recursively clones `value`.
+ * Object inheritance is preserved.
+ *
+ * @since 1.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @returns {*} Returns the deep cloned value.
+ * @see clone
+ * @example
+ *
+ * const objects = [{ 'a': 1 }, { 'b': 2 }]
+ *
+ * const deep = cloneDeep(objects)
+ * console.log(deep[0] === objects[0])
+ * // => false
+ */
+==========
+"use strict";
+
+var CLONE_SYMBOLS_FLAG = 4;
+/**
+ * This method is like `clone` except that it recursively clones `value`.
+ * Object inheritance is preserved.
+ *
+ * @since 1.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @returns {*} Returns the deep cloned value.
+ * @see clone
+ * @example
+ *
+ * const objects = [{ 'a': 1 }, { 'b': 2 }]
+ *
+ * const deep = cloneDeep(objects)
+ * console.log(deep[0] === objects[0])
+ * // => false
+ *//**
+ * This method is like `clone` except that it recursively clones `value`.
+ * Object inheritance is preserved.
+ *
+ * @since 1.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @returns {*} Returns the deep cloned value.
+ * @see clone
+ * @example
+ *
+ * const objects = [{ 'a': 1 }, { 'b': 2 }]
+ *
+ * const deep = cloneDeep(objects)
+ * console.log(deep[0] === objects[0])
+ * // => false
+ */
+function cloneDeep(value) {
+  return (0, _baseClone.default)(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
+}
+==========
+"use strict";
+
+/**
+ * This method is like `clone` except that it recursively clones `value`.
+ * Object inheritance is preserved.
+ *
+ * @since 1.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @returns {*} Returns the deep cloned value.
+ * @see clone
+ * @example
+ *
+ * const objects = [{ 'a': 1 }, { 'b': 2 }]
+ *
+ * const deep = cloneDeep(objects)
+ * console.log(deep[0] === objects[0])
+ * // => false
+ */
+function cloneDeep(value) {
+  return (0, _baseClone.default)(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
+}var _default = cloneDeep;
+==========
+"use strict";
+
+var _default = cloneDeep;var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));
+==========
+"use strict";
+
+var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/** Used to compose bitmasks for cloning. */
+const CLONE_DEEP_FLAG = 1;
+==========
+"use strict";
+
+/** Used to compose bitmasks for cloning. */
+var CLONE_DEEP_FLAG = 1;const CLONE_SYMBOLS_FLAG = 4;
+/**
+ * This method is like `cloneWith` except that it recursively clones `value`.
+ * The customizer is invoked with up to four arguments
+ * (value [, index|key, object, stack]).
+ *
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @returns {*} Returns the deep cloned value.
+ * @see cloneWith
+ * @example
+ *
+ * function customizer(value) {
+ *   if (isElement(value)) {
+ *     return value.cloneNode(true)
+ *   }
+ * }
+ *
+ * const el = cloneDeepWith(document.body, customizer)
+ *
+ * console.log(el === document.body)
+ * // => false
+ * console.log(el.nodeName)
+ * // => 'BODY'
+ * console.log(el.childNodes.length)
+ * // => 20
+ */
+==========
+"use strict";
+
+var CLONE_SYMBOLS_FLAG = 4;
+/**
+ * This method is like `cloneWith` except that it recursively clones `value`.
+ * The customizer is invoked with up to four arguments
+ * (value [, index|key, object, stack]).
+ *
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @returns {*} Returns the deep cloned value.
+ * @see cloneWith
+ * @example
+ *
+ * function customizer(value) {
+ *   if (isElement(value)) {
+ *     return value.cloneNode(true)
+ *   }
+ * }
+ *
+ * const el = cloneDeepWith(document.body, customizer)
+ *
+ * console.log(el === document.body)
+ * // => false
+ * console.log(el.nodeName)
+ * // => 'BODY'
+ * console.log(el.childNodes.length)
+ * // => 20
+ *//**
+ * This method is like `cloneWith` except that it recursively clones `value`.
+ * The customizer is invoked with up to four arguments
+ * (value [, index|key, object, stack]).
+ *
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @returns {*} Returns the deep cloned value.
+ * @see cloneWith
+ * @example
+ *
+ * function customizer(value) {
+ *   if (isElement(value)) {
+ *     return value.cloneNode(true)
+ *   }
+ * }
+ *
+ * const el = cloneDeepWith(document.body, customizer)
+ *
+ * console.log(el === document.body)
+ * // => false
+ * console.log(el.nodeName)
+ * // => 'BODY'
+ * console.log(el.childNodes.length)
+ * // => 20
+ */
+function cloneDeepWith(value, customizer) {
+  customizer = typeof customizer === 'function' ? customizer : undefined;
+  return (0, _baseClone.default)(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG, customizer);
+}
+==========
+"use strict";
+
+/**
+ * This method is like `cloneWith` except that it recursively clones `value`.
+ * The customizer is invoked with up to four arguments
+ * (value [, index|key, object, stack]).
+ *
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @returns {*} Returns the deep cloned value.
+ * @see cloneWith
+ * @example
+ *
+ * function customizer(value) {
+ *   if (isElement(value)) {
+ *     return value.cloneNode(true)
+ *   }
+ * }
+ *
+ * const el = cloneDeepWith(document.body, customizer)
+ *
+ * console.log(el === document.body)
+ * // => false
+ * console.log(el.nodeName)
+ * // => 'BODY'
+ * console.log(el.childNodes.length)
+ * // => 20
+ */
+function cloneDeepWith(value, customizer) {
+  customizer = typeof customizer === 'function' ? customizer : undefined;
+  return (0, _baseClone.default)(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG, customizer);
+}var _default = cloneDeepWith;
+==========
+"use strict";
+
+var _default = cloneDeepWith;var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));
+==========
+"use strict";
+
+var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/** Used to compose bitmasks for cloning. */
+const CLONE_SYMBOLS_FLAG = 4;
+/**
+ * This method is like `clone` except that it accepts `customizer` which
+ * is invoked to produce the cloned value. If `customizer` returns `undefined`,
+ * cloning is handled by the method instead. The `customizer` is invoked with
+ * one argument (value).
+ *
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @returns {*} Returns the cloned value.
+ * @see cloneDeepWith
+ * @example
+ *
+ * function customizer(value) {
+ *   if (isElement(value)) {
+ *     return value.cloneNode(false)
+ *   }
+ * }
+ *
+ * const el = cloneWith(document.body, customizer)
+ *
+ * console.log(el === document.body)
+ * // => false
+ * console.log(el.nodeName)
+ * // => 'BODY'
+ * console.log(el.childNodes.length)
+ * // => 0
+ */
+==========
+"use strict";
+
+/** Used to compose bitmasks for cloning. */
+var CLONE_SYMBOLS_FLAG = 4;
+/**
+ * This method is like `clone` except that it accepts `customizer` which
+ * is invoked to produce the cloned value. If `customizer` returns `undefined`,
+ * cloning is handled by the method instead. The `customizer` is invoked with
+ * one argument (value).
+ *
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @returns {*} Returns the cloned value.
+ * @see cloneDeepWith
+ * @example
+ *
+ * function customizer(value) {
+ *   if (isElement(value)) {
+ *     return value.cloneNode(false)
+ *   }
+ * }
+ *
+ * const el = cloneWith(document.body, customizer)
+ *
+ * console.log(el === document.body)
+ * // => false
+ * console.log(el.nodeName)
+ * // => 'BODY'
+ * console.log(el.childNodes.length)
+ * // => 0
+ *//**
+ * This method is like `clone` except that it accepts `customizer` which
+ * is invoked to produce the cloned value. If `customizer` returns `undefined`,
+ * cloning is handled by the method instead. The `customizer` is invoked with
+ * one argument (value).
+ *
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @returns {*} Returns the cloned value.
+ * @see cloneDeepWith
+ * @example
+ *
+ * function customizer(value) {
+ *   if (isElement(value)) {
+ *     return value.cloneNode(false)
+ *   }
+ * }
+ *
+ * const el = cloneWith(document.body, customizer)
+ *
+ * console.log(el === document.body)
+ * // => false
+ * console.log(el.nodeName)
+ * // => 'BODY'
+ * console.log(el.childNodes.length)
+ * // => 0
+ */
+function cloneWith(value, customizer) {
+  customizer = typeof customizer === 'function' ? customizer : undefined;
+  return (0, _baseClone.default)(value, CLONE_SYMBOLS_FLAG, customizer);
+}
+==========
+"use strict";
+
+/**
+ * This method is like `clone` except that it accepts `customizer` which
+ * is invoked to produce the cloned value. If `customizer` returns `undefined`,
+ * cloning is handled by the method instead. The `customizer` is invoked with
+ * one argument (value).
+ *
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to clone.
+ * @param {Function} [customizer] The function to customize cloning.
+ * @returns {*} Returns the cloned value.
+ * @see cloneDeepWith
+ * @example
+ *
+ * function customizer(value) {
+ *   if (isElement(value)) {
+ *     return value.cloneNode(false)
+ *   }
+ * }
+ *
+ * const el = cloneWith(document.body, customizer)
+ *
+ * console.log(el === document.body)
+ * // => false
+ * console.log(el.nodeName)
+ * // => 'BODY'
+ * console.log(el.childNodes.length)
+ * // => 0
+ */
+function cloneWith(value, customizer) {
+  customizer = typeof customizer === 'function' ? customizer : undefined;
+  return (0, _baseClone.default)(value, CLONE_SYMBOLS_FLAG, customizer);
+}var _default = cloneWith;
+==========
+"use strict";
+
+var _default = cloneWith;/**
+ * Creates an array with all falsey values removed. The values `false`, `null`,
+ * `0`, `""`, `undefined`, and `NaN` are falsey.
+ *
+ * @since 0.1.0
+ * @category Array
+ * @param {Array} array The array to compact.
+ * @returns {Array} Returns the new array of filtered values.
+ * @example
+ *
+ * compact([0, 1, false, 2, '', 3])
+ * // => [1, 2, 3]
+ */
+function compact(array) {
+  let resIndex = 0;
+  const result = [];
+
+  if (array == null) {
+    return result;
+  }
+
+  for (const value of array) {
+    if (value) {
+      result[resIndex++] = value;
+    }
+  }
+
+  return result;
+}
+==========
+"use strict";
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+/**
+ * Creates an array with all falsey values removed. The values `false`, `null`,
+ * `0`, `""`, `undefined`, and `NaN` are falsey.
+ *
+ * @since 0.1.0
+ * @category Array
+ * @param {Array} array The array to compact.
+ * @returns {Array} Returns the new array of filtered values.
+ * @example
+ *
+ * compact([0, 1, false, 2, '', 3])
+ * // => [1, 2, 3]
+ */
+function compact(array) {
+  var resIndex = 0;
+  var result = [];
+
+  if (array == null) {
+    return result;
+  }
+
+  var _iterator = _createForOfIteratorHelper(array),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var value = _step.value;
+
+      if (value) {
+        result[resIndex++] = value;
+      }
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return result;
+}let resIndex = 0;
+==========
+"use strict";
+
+var resIndex = 0;const result = [];
+==========
+"use strict";
+
+var result = [];const value;
+==========
+var _map = _interopRequireDefault(require("./map.js"));
+==========
+"use strict";
+
+var _map = _interopRequireDefault(require("./map.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Creates a function that iterates over `pairs` and invokes the corresponding
+ * function of the first predicate to return truthy. The predicate-function
+ * pairs are invoked with the `this` binding and arguments of the created
+ * function.
+ *
+ * @since 4.0.0
+ * @category Util
+ * @param {Array} pairs The predicate-function pairs.
+ * @returns {Function} Returns the new composite function.
+ * @example
+ *
+ * const func = cond([
+ *   [matches({ 'a': 1 }),         () => 'matches A'],
+ *   [conforms({ 'b': isNumber }), () => 'matches B'],
+ *   [() => true,                  () => 'no match']
+ * ])
+ *
+ * func({ 'a': 1, 'b': 2 })
+ * // => 'matches A'
+ *
+ * func({ 'a': 0, 'b': 1 })
+ * // => 'matches B'
+ *
+ * func({ 'a': '1', 'b': '2' })
+ * // => 'no match'
+ */
+function cond(pairs) {
+  var _this = this;
+
+  const length = pairs == null ? 0 : pairs.length;
+  pairs = !length ? [] : (0, _map.default)(pairs, pair => {
+    if (typeof pair[1] !== 'function') {
+      throw new TypeError('Expected a function');
+    }
+
+    return [pair[0], pair[1]];
+  });
+  return function () {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    for (const pair of pairs) {
+      if (pair[0].apply(_this, args)) {
+        return pair[1].apply(_this, args);
+      }
+    }
+  };
+}
+==========
+"use strict";
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+/**
+ * Creates a function that iterates over `pairs` and invokes the corresponding
+ * function of the first predicate to return truthy. The predicate-function
+ * pairs are invoked with the `this` binding and arguments of the created
+ * function.
+ *
+ * @since 4.0.0
+ * @category Util
+ * @param {Array} pairs The predicate-function pairs.
+ * @returns {Function} Returns the new composite function.
+ * @example
+ *
+ * const func = cond([
+ *   [matches({ 'a': 1 }),         () => 'matches A'],
+ *   [conforms({ 'b': isNumber }), () => 'matches B'],
+ *   [() => true,                  () => 'no match']
+ * ])
+ *
+ * func({ 'a': 1, 'b': 2 })
+ * // => 'matches A'
+ *
+ * func({ 'a': 0, 'b': 1 })
+ * // => 'matches B'
+ *
+ * func({ 'a': '1', 'b': '2' })
+ * // => 'no match'
+ */
+function cond(pairs) {
+  var _this = this;
+
+  var length = pairs == null ? 0 : pairs.length;
+  pairs = !length ? [] : (0, _map.default)(pairs, function (pair) {
+    if (typeof pair[1] !== 'function') {
+      throw new TypeError('Expected a function');
+    }
+
+    return [pair[0], pair[1]];
+  });
+  return function () {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var _iterator = _createForOfIteratorHelper(pairs),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var pair = _step.value;
+
+        if (pair[0].apply(_this, args)) {
+          return pair[1].apply(_this, args);
+        }
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  };
+}var _this = this;
+==========
+"use strict";
+
+var _this = void 0;const length = pairs == null ? 0 : pairs.length;
+==========
+"use strict";
+
+var length = pairs == null ? 0 : pairs.length;var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;
+==========
+"use strict";
+
+var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;const pair;
+==========
+var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));
+==========
+"use strict";
+
+var _baseClone = _interopRequireDefault(require("./.internal/baseClone.js"));var _baseConforms = _interopRequireDefault(require("./.internal/baseConforms.js"));
+==========
+"use strict";
+
+var _baseConforms = _interopRequireDefault(require("./.internal/baseConforms.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/** Used to compose bitmasks for cloning. */
+const CLONE_DEEP_FLAG = 1;
+/**
+ * Creates a function that invokes the predicate properties of `source` with
+ * the corresponding property values of a given object, returning `true` if
+ * all predicates return truthy, else `false`.
+ *
+ * **Note:** The created function is equivalent to `conformsTo` with
+ * `source` partially applied.
+ *
+ * @since 4.0.0
+ * @category Util
+ * @param {Object} source The object of property predicates to conform to.
+ * @returns {Function} Returns the new spec function.
+ * @example
+ *
+ * const objects = [
+ *   { 'a': 2, 'b': 1 },
+ *   { 'a': 1, 'b': 2 }
+ * ]
+ *
+ * filter(objects, conforms({ 'b': function(n) { return n > 1 } }))
+ * // => [{ 'a': 1, 'b': 2 }]
+ */
+==========
+"use strict";
+
+/** Used to compose bitmasks for cloning. */
+var CLONE_DEEP_FLAG = 1;
+/**
+ * Creates a function that invokes the predicate properties of `source` with
+ * the corresponding property values of a given object, returning `true` if
+ * all predicates return truthy, else `false`.
+ *
+ * **Note:** The created function is equivalent to `conformsTo` with
+ * `source` partially applied.
+ *
+ * @since 4.0.0
+ * @category Util
+ * @param {Object} source The object of property predicates to conform to.
+ * @returns {Function} Returns the new spec function.
+ * @example
+ *
+ * const objects = [
+ *   { 'a': 2, 'b': 1 },
+ *   { 'a': 1, 'b': 2 }
+ * ]
+ *
+ * filter(objects, conforms({ 'b': function(n) { return n > 1 } }))
+ * // => [{ 'a': 1, 'b': 2 }]
+ *//**
+ * Creates a function that invokes the predicate properties of `source` with
+ * the corresponding property values of a given object, returning `true` if
+ * all predicates return truthy, else `false`.
+ *
+ * **Note:** The created function is equivalent to `conformsTo` with
+ * `source` partially applied.
+ *
+ * @since 4.0.0
+ * @category Util
+ * @param {Object} source The object of property predicates to conform to.
+ * @returns {Function} Returns the new spec function.
+ * @example
+ *
+ * const objects = [
+ *   { 'a': 2, 'b': 1 },
+ *   { 'a': 1, 'b': 2 }
+ * ]
+ *
+ * filter(objects, conforms({ 'b': function(n) { return n > 1 } }))
+ * // => [{ 'a': 1, 'b': 2 }]
+ */
+function conforms(source) {
+  return (0, _baseConforms.default)((0, _baseClone.default)(source, CLONE_DEEP_FLAG));
+}
+==========
+"use strict";
+
+/**
+ * Creates a function that invokes the predicate properties of `source` with
+ * the corresponding property values of a given object, returning `true` if
+ * all predicates return truthy, else `false`.
+ *
+ * **Note:** The created function is equivalent to `conformsTo` with
+ * `source` partially applied.
+ *
+ * @since 4.0.0
+ * @category Util
+ * @param {Object} source The object of property predicates to conform to.
+ * @returns {Function} Returns the new spec function.
+ * @example
+ *
+ * const objects = [
+ *   { 'a': 2, 'b': 1 },
+ *   { 'a': 1, 'b': 2 }
+ * ]
+ *
+ * filter(objects, conforms({ 'b': function(n) { return n > 1 } }))
+ * // => [{ 'a': 1, 'b': 2 }]
+ */
+function conforms(source) {
+  return (0, _baseConforms.default)((0, _baseClone.default)(source, CLONE_DEEP_FLAG));
+}var _default = conforms;
+==========
+"use strict";
+
+var _default = conforms;var _baseConformsTo = _interopRequireDefault(require("./.internal/baseConformsTo.js"));
+==========
+"use strict";
+
+var _baseConformsTo = _interopRequireDefault(require("./.internal/baseConformsTo.js"));var _keys = _interopRequireDefault(require("./keys.js"));
+==========
+"use strict";
+
+var _keys = _interopRequireDefault(require("./keys.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Checks if `object` conforms to `source` by invoking the predicate
+ * properties of `source` with the corresponding property values of `object`.
+ *
+ * **Note:** This method is equivalent to `conforms` when `source` is
+ * partially applied.
+ *
+ * @since 4.14.0
+ * @category Lang
+ * @param {Object} object The object to inspect.
+ * @param {Object} source The object of property predicates to conform to.
+ * @returns {boolean} Returns `true` if `object` conforms, else `false`.
+ * @example
+ *
+ * const object = { 'a': 1, 'b': 2 }
+ *
+ * conformsTo(object, { 'b': function(n) { return n > 1 } })
+ * // => true
+ *
+ * conformsTo(object, { 'b': function(n) { return n > 2 } })
+ * // => false
+ */
+function conformsTo(object, source) {
+  return source == null || (0, _baseConformsTo.default)(object, source, (0, _keys.default)(source));
+}
+==========
+"use strict";
+
+/**
+ * Checks if `object` conforms to `source` by invoking the predicate
+ * properties of `source` with the corresponding property values of `object`.
+ *
+ * **Note:** This method is equivalent to `conforms` when `source` is
+ * partially applied.
+ *
+ * @since 4.14.0
+ * @category Lang
+ * @param {Object} object The object to inspect.
+ * @param {Object} source The object of property predicates to conform to.
+ * @returns {boolean} Returns `true` if `object` conforms, else `false`.
+ * @example
+ *
+ * const object = { 'a': 1, 'b': 2 }
+ *
+ * conformsTo(object, { 'b': function(n) { return n > 1 } })
+ * // => true
+ *
+ * conformsTo(object, { 'b': function(n) { return n > 2 } })
+ * // => false
+ */
+function conformsTo(object, source) {
+  return source == null || (0, _baseConformsTo.default)(object, source, (0, _keys.default)(source));
+}var _default = conformsTo;
+==========
+"use strict";
+
+var _default = conformsTo;var _baseAssignValue = _interopRequireDefault(require("./.internal/baseAssignValue.js"));
+==========
+"use strict";
+
+var _baseAssignValue = _interopRequireDefault(require("./.internal/baseAssignValue.js"));var _reduce = _interopRequireDefault(require("./reduce.js"));
+==========
+"use strict";
+
+var _reduce = _interopRequireDefault(require("./reduce.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/** Used to check objects for own properties. */
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+/**
+ * Creates an object composed of keys generated from the results of running
+ * each element of `collection` thru `iteratee`. The corresponding value of
+ * each key is the number of times the key was returned by `iteratee`. The
+ * iteratee is invoked with one argument: (value).
+ *
+ * @since 0.5.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The iteratee to transform keys.
+ * @returns {Object} Returns the composed aggregate object.
+ * @example
+ *
+ * const users = [
+ *   { 'user': 'barney', 'active': true },
+ *   { 'user': 'betty', 'active': true },
+ *   { 'user': 'fred', 'active': false }
+ * ]
+ *
+ * countBy(users, value => value.active);
+ * // => { 'true': 2, 'false': 1 }
+ */
+==========
+"use strict";
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+/**
+ * Creates an object composed of keys generated from the results of running
+ * each element of `collection` thru `iteratee`. The corresponding value of
+ * each key is the number of times the key was returned by `iteratee`. The
+ * iteratee is invoked with one argument: (value).
+ *
+ * @since 0.5.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The iteratee to transform keys.
+ * @returns {Object} Returns the composed aggregate object.
+ * @example
+ *
+ * const users = [
+ *   { 'user': 'barney', 'active': true },
+ *   { 'user': 'betty', 'active': true },
+ *   { 'user': 'fred', 'active': false }
+ * ]
+ *
+ * countBy(users, value => value.active);
+ * // => { 'true': 2, 'false': 1 }
+ *//**
+ * Creates an object composed of keys generated from the results of running
+ * each element of `collection` thru `iteratee`. The corresponding value of
+ * each key is the number of times the key was returned by `iteratee`. The
+ * iteratee is invoked with one argument: (value).
+ *
+ * @since 0.5.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The iteratee to transform keys.
+ * @returns {Object} Returns the composed aggregate object.
+ * @example
+ *
+ * const users = [
+ *   { 'user': 'barney', 'active': true },
+ *   { 'user': 'betty', 'active': true },
+ *   { 'user': 'fred', 'active': false }
+ * ]
+ *
+ * countBy(users, value => value.active);
+ * // => { 'true': 2, 'false': 1 }
+ */
+function countBy(collection, iteratee) {
+  return (0, _reduce.default)(collection, (result, value, key) => {
+    key = iteratee(value);
+
+    if (hasOwnProperty.call(result, key)) {
+      ++result[key];
+    } else {
+      (0, _baseAssignValue.default)(result, key, 1);
+    }
+
+    return result;
+  }, {});
+}
+==========
+"use strict";
+
+/**
+ * Creates an object composed of keys generated from the results of running
+ * each element of `collection` thru `iteratee`. The corresponding value of
+ * each key is the number of times the key was returned by `iteratee`. The
+ * iteratee is invoked with one argument: (value).
+ *
+ * @since 0.5.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The iteratee to transform keys.
+ * @returns {Object} Returns the composed aggregate object.
+ * @example
+ *
+ * const users = [
+ *   { 'user': 'barney', 'active': true },
+ *   { 'user': 'betty', 'active': true },
+ *   { 'user': 'fred', 'active': false }
+ * ]
+ *
+ * countBy(users, value => value.active);
+ * // => { 'true': 2, 'false': 1 }
+ */
+function countBy(collection, iteratee) {
+  return (0, _reduce.default)(collection, function (result, value, key) {
+    key = iteratee(value);
+
+    if (hasOwnProperty.call(result, key)) {
+      ++result[key];
+    } else {
+      (0, _baseAssignValue.default)(result, key, 1);
+    }
+
+    return result;
+  }, {});
+}var _default = countBy;
+==========
+"use strict";
+
+var _default = countBy;/**
+ * Creates an object that inherits from the `prototype` object. If a
+ * `properties` object is given, its own enumerable string keyed properties
+ * are assigned to the created object.
+ *
+ * @since 2.3.0
+ * @category Object
+ * @param {Object} prototype The object to inherit from.
+ * @param {Object} [properties] The properties to assign to the object.
+ * @returns {Object} Returns the new object.
+ * @example
+ *
+ * function Shape() {
+ *   this.x = 0
+ *   this.y = 0
+ * }
+ *
+ * function Circle() {
+ *   Shape.call(this)
+ * }
+ *
+ * Circle.prototype = create(Shape.prototype, {
+ *   'constructor': Circle
+ * })
+ *
+ * const circle = new Circle
+ * circle instanceof Circle
+ * // => true
+ *
+ * circle instanceof Shape
+ * // => true
+ */
+function create(prototype, properties) {
+  prototype = prototype === null ? null : Object(prototype);
+  const result = Object.create(prototype);
+  return properties == null ? result : Object.assign(result, properties);
+}
+==========
+"use strict";
+
+/**
+ * Creates an object that inherits from the `prototype` object. If a
+ * `properties` object is given, its own enumerable string keyed properties
+ * are assigned to the created object.
+ *
+ * @since 2.3.0
+ * @category Object
+ * @param {Object} prototype The object to inherit from.
+ * @param {Object} [properties] The properties to assign to the object.
+ * @returns {Object} Returns the new object.
+ * @example
+ *
+ * function Shape() {
+ *   this.x = 0
+ *   this.y = 0
+ * }
+ *
+ * function Circle() {
+ *   Shape.call(this)
+ * }
+ *
+ * Circle.prototype = create(Shape.prototype, {
+ *   'constructor': Circle
+ * })
+ *
+ * const circle = new Circle
+ * circle instanceof Circle
+ * // => true
+ *
+ * circle instanceof Shape
+ * // => true
+ */
+function create(prototype, properties) {
+  prototype = prototype === null ? null : Object(prototype);
+  var result = Object.create(prototype);
+  return properties == null ? result : Object.assign(result, properties);
+}const result = Object.create(prototype);
+==========
+"use strict";
+
+var result = Object.create(prototype);var _default = create;
+==========
+"use strict";
+
+var _default = create;var _isObject = _interopRequireDefault(require("./isObject.js"));
+==========
+"use strict";
+
+var _isObject = _interopRequireDefault(require("./isObject.js"));var _root = _interopRequireDefault(require("./.internal/root.js"));
+==========
+"use strict";
+
+var _root = _interopRequireDefault(require("./.internal/root.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked, or until the next browser frame is drawn. The debounced function
+ * comes with a `cancel` method to cancel delayed `func` invocations and a
+ * `flush` method to immediately invoke them. Provide `options` to indicate
+ * whether `func` should be invoked on the leading and/or trailing edge of the
+ * `wait` timeout. The `func` is invoked with the last arguments provided to the
+ * debounced function. Subsequent calls to the debounced function return the
+ * result of the last `func` invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * If `wait` is omitted in an environment with `requestAnimationFrame`, `func`
+ * invocation will be deferred until the next frame is drawn (typically about
+ * 16ms).
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `debounce` and `throttle`.
+ *
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0]
+ *  The number of milliseconds to delay; if omitted, `requestAnimationFrame` is
+ *  used (if available).
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', debounce(calculateLayout, 150))
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }))
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * const debounced = debounce(batchLog, 250, { 'maxWait': 1000 })
+ * const source = new EventSource('/stream')
+ * jQuery(source).on('message', debounced)
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel)
+ *
+ * // Check for pending invocations.
+ * const status = debounced.pending() ? "Pending..." : "Ready"
+ */
+function debounce(func, wait, options) {
+  let lastArgs, lastThis, maxWait, result, timerId, lastCallTime;
+  let lastInvokeTime = 0;
+  let leading = false;
+  let maxing = false;
+  let trailing = true; // Bypass `requestAnimationFrame` by explicitly setting `wait=0`.
+
+  const useRAF = !wait && wait !== 0 && typeof _root.default.requestAnimationFrame === 'function';
+
+  if (typeof func !== 'function') {
+    throw new TypeError('Expected a function');
+  }
+
+  wait = +wait || 0;
+
+  if ((0, _isObject.default)(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? Math.max(+options.maxWait || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    const args = lastArgs;
+    const thisArg = lastThis;
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function startTimer(pendingFunc, wait) {
+    if (useRAF) {
+      _root.default.cancelAnimationFrame(timerId);
+
+      return _root.default.requestAnimationFrame(pendingFunc);
+    }
+
+    return setTimeout(pendingFunc, wait);
+  }
+
+  function cancelTimer(id) {
+    if (useRAF) {
+      return _root.default.cancelAnimationFrame(id);
+    }
+
+    clearTimeout(id);
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time; // Start the timer for the trailing edge.
+
+    timerId = startTimer(timerExpired, wait); // Invoke the leading edge.
+
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    const timeSinceLastCall = time - lastCallTime;
+    const timeSinceLastInvoke = time - lastInvokeTime;
+    const timeWaiting = wait - timeSinceLastCall;
+    return maxing ? Math.min(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
+  }
+
+  function shouldInvoke(time) {
+    const timeSinceLastCall = time - lastCallTime;
+    const timeSinceLastInvoke = time - lastInvokeTime; // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+
+    return lastCallTime === undefined || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
+  }
+
+  function timerExpired() {
+    const time = Date.now();
+
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    } // Restart the timer.
+
+
+    timerId = startTimer(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined; // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      cancelTimer(timerId);
+    }
+
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(Date.now());
+  }
+
+  function pending() {
+    return timerId !== undefined;
+  }
+
+  function debounced() {
+    const time = Date.now();
+    const isInvoking = shouldInvoke(time);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    lastArgs = args;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        timerId = startTimer(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+
+    if (timerId === undefined) {
+      timerId = startTimer(timerExpired, wait);
+    }
+
+    return result;
+  }
+
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  debounced.pending = pending;
+  return debounced;
+}
+==========
+"use strict";
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked, or until the next browser frame is drawn. The debounced function
+ * comes with a `cancel` method to cancel delayed `func` invocations and a
+ * `flush` method to immediately invoke them. Provide `options` to indicate
+ * whether `func` should be invoked on the leading and/or trailing edge of the
+ * `wait` timeout. The `func` is invoked with the last arguments provided to the
+ * debounced function. Subsequent calls to the debounced function return the
+ * result of the last `func` invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * If `wait` is omitted in an environment with `requestAnimationFrame`, `func`
+ * invocation will be deferred until the next frame is drawn (typically about
+ * 16ms).
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `debounce` and `throttle`.
+ *
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0]
+ *  The number of milliseconds to delay; if omitted, `requestAnimationFrame` is
+ *  used (if available).
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', debounce(calculateLayout, 150))
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }))
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * const debounced = debounce(batchLog, 250, { 'maxWait': 1000 })
+ * const source = new EventSource('/stream')
+ * jQuery(source).on('message', debounced)
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel)
+ *
+ * // Check for pending invocations.
+ * const status = debounced.pending() ? "Pending..." : "Ready"
+ */
+function debounce(func, wait, options) {
+  var lastArgs, lastThis, maxWait, result, timerId, lastCallTime;
+  var lastInvokeTime = 0;
+  var leading = false;
+  var maxing = false;
+  var trailing = true; // Bypass `requestAnimationFrame` by explicitly setting `wait=0`.
+
+  var useRAF = !wait && wait !== 0 && typeof _root.default.requestAnimationFrame === 'function';
+
+  if (typeof func !== 'function') {
+    throw new TypeError('Expected a function');
+  }
+
+  wait = +wait || 0;
+
+  if ((0, _isObject.default)(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? Math.max(+options.maxWait || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    var args = lastArgs;
+    var thisArg = lastThis;
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function startTimer(pendingFunc, wait) {
+    if (useRAF) {
+      _root.default.cancelAnimationFrame(timerId);
+
+      return _root.default.requestAnimationFrame(pendingFunc);
+    }
+
+    return setTimeout(pendingFunc, wait);
+  }
+
+  function cancelTimer(id) {
+    if (useRAF) {
+      return _root.default.cancelAnimationFrame(id);
+    }
+
+    clearTimeout(id);
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time; // Start the timer for the trailing edge.
+
+    timerId = startTimer(timerExpired, wait); // Invoke the leading edge.
+
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    var timeSinceLastCall = time - lastCallTime;
+    var timeSinceLastInvoke = time - lastInvokeTime;
+    var timeWaiting = wait - timeSinceLastCall;
+    return maxing ? Math.min(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
+  }
+
+  function shouldInvoke(time) {
+    var timeSinceLastCall = time - lastCallTime;
+    var timeSinceLastInvoke = time - lastInvokeTime; // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+
+    return lastCallTime === undefined || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
+  }
+
+  function timerExpired() {
+    var time = Date.now();
+
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    } // Restart the timer.
+
+
+    timerId = startTimer(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined; // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      cancelTimer(timerId);
+    }
+
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(Date.now());
+  }
+
+  function pending() {
+    return timerId !== undefined;
+  }
+
+  function debounced() {
+    var time = Date.now();
+    var isInvoking = shouldInvoke(time);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    lastArgs = args;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        timerId = startTimer(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+
+    if (timerId === undefined) {
+      timerId = startTimer(timerExpired, wait);
+    }
+
+    return result;
+  }
+
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  debounced.pending = pending;
+  return debounced;
+}let lastArgs, lastThis, maxWait, result, timerId, lastCallTime;
+==========
+"use strict";
+
+var lastArgs, lastThis, maxWait, result, timerId, lastCallTime;let lastInvokeTime = 0;
+==========
+"use strict";
+
+var lastInvokeTime = 0;let leading = false;
+==========
+"use strict";
+
+var leading = false;let maxing = false;
+==========
+"use strict";
+
+var maxing = false;let trailing = true; // Bypass `requestAnimationFrame` by explicitly setting `wait=0`.
+==========
+"use strict";
+
+var trailing = true; // Bypass `requestAnimationFrame` by explicitly setting `wait=0`.// Bypass `requestAnimationFrame` by explicitly setting `wait=0`.
+const useRAF = !wait && wait !== 0 && typeof _root.default.requestAnimationFrame === 'function';
+==========
+"use strict";
+
+// Bypass `requestAnimationFrame` by explicitly setting `wait=0`.
+var useRAF = !wait && wait !== 0 && typeof _root.default.requestAnimationFrame === 'function';function invokeFunc(time) {
+  const args = lastArgs;
+  const thisArg = lastThis;
+  lastArgs = lastThis = undefined;
+  lastInvokeTime = time;
+  result = func.apply(thisArg, args);
+  return result;
+}
+==========
+"use strict";
+
+function invokeFunc(time) {
+  var args = lastArgs;
+  var thisArg = lastThis;
+  lastArgs = lastThis = undefined;
+  lastInvokeTime = time;
+  result = func.apply(thisArg, args);
+  return result;
+}const args = lastArgs;
+==========
+"use strict";
+
+var args = lastArgs;const thisArg = lastThis;
+==========
+"use strict";
+
+var thisArg = lastThis;function startTimer(pendingFunc, wait) {
+  if (useRAF) {
+    _root.default.cancelAnimationFrame(timerId);
+
+    return _root.default.requestAnimationFrame(pendingFunc);
+  }
+
+  return setTimeout(pendingFunc, wait);
+}
+==========
+"use strict";
+
+function startTimer(pendingFunc, wait) {
+  if (useRAF) {
+    _root.default.cancelAnimationFrame(timerId);
+
+    return _root.default.requestAnimationFrame(pendingFunc);
+  }
+
+  return setTimeout(pendingFunc, wait);
+}function cancelTimer(id) {
+  if (useRAF) {
+    return _root.default.cancelAnimationFrame(id);
+  }
+
+  clearTimeout(id);
+}
+==========
+"use strict";
+
+function cancelTimer(id) {
+  if (useRAF) {
+    return _root.default.cancelAnimationFrame(id);
+  }
+
+  clearTimeout(id);
+}function leadingEdge(time) {
+  // Reset any `maxWait` timer.
+  lastInvokeTime = time; // Start the timer for the trailing edge.
+
+  timerId = startTimer(timerExpired, wait); // Invoke the leading edge.
+
+  return leading ? invokeFunc(time) : result;
+}
+==========
+"use strict";
+
+function leadingEdge(time) {
+  // Reset any `maxWait` timer.
+  lastInvokeTime = time; // Start the timer for the trailing edge.
+
+  timerId = startTimer(timerExpired, wait); // Invoke the leading edge.
+
+  return leading ? invokeFunc(time) : result;
+}function remainingWait(time) {
+  const timeSinceLastCall = time - lastCallTime;
+  const timeSinceLastInvoke = time - lastInvokeTime;
+  const timeWaiting = wait - timeSinceLastCall;
+  return maxing ? Math.min(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
+}
+==========
+"use strict";
+
+function remainingWait(time) {
+  var timeSinceLastCall = time - lastCallTime;
+  var timeSinceLastInvoke = time - lastInvokeTime;
+  var timeWaiting = wait - timeSinceLastCall;
+  return maxing ? Math.min(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
+}const timeSinceLastCall = time - lastCallTime;
+==========
+"use strict";
+
+var timeSinceLastCall = time - lastCallTime;const timeSinceLastInvoke = time - lastInvokeTime;
+==========
+"use strict";
+
+var timeSinceLastInvoke = time - lastInvokeTime;const timeWaiting = wait - timeSinceLastCall;
+==========
+"use strict";
+
+var timeWaiting = wait - timeSinceLastCall;function shouldInvoke(time) {
+  const timeSinceLastCall = time - lastCallTime;
+  const timeSinceLastInvoke = time - lastInvokeTime; // Either this is the first call, activity has stopped and we're at the
+  // trailing edge, the system time has gone backwards and we're treating
+  // it as the trailing edge, or we've hit the `maxWait` limit.
+
+  return lastCallTime === undefined || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
+}
+==========
+"use strict";
+
+function shouldInvoke(time) {
+  var timeSinceLastCall = time - lastCallTime;
+  var timeSinceLastInvoke = time - lastInvokeTime; // Either this is the first call, activity has stopped and we're at the
+  // trailing edge, the system time has gone backwards and we're treating
+  // it as the trailing edge, or we've hit the `maxWait` limit.
+
+  return lastCallTime === undefined || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
+}const timeSinceLastCall = time - lastCallTime;
+==========
+"use strict";
+
+var timeSinceLastCall = time - lastCallTime;const timeSinceLastInvoke = time - lastInvokeTime; // Either this is the first call, activity has stopped and we're at the
+// trailing edge, the system time has gone backwards and we're treating
+// it as the trailing edge, or we've hit the `maxWait` limit.
+==========
+"use strict";
+
+var timeSinceLastInvoke = time - lastInvokeTime; // Either this is the first call, activity has stopped and we're at the
+// trailing edge, the system time has gone backwards and we're treating
+// it as the trailing edge, or we've hit the `maxWait` limit.function timerExpired() {
+  const time = Date.now();
+
+  if (shouldInvoke(time)) {
+    return trailingEdge(time);
+  } // Restart the timer.
+
+
+  timerId = startTimer(timerExpired, remainingWait(time));
+}
+==========
+"use strict";
+
+function timerExpired() {
+  var time = Date.now();
+
+  if (shouldInvoke(time)) {
+    return trailingEdge(time);
+  } // Restart the timer.
+
+
+  timerId = startTimer(timerExpired, remainingWait(time));
+}const time = Date.now();
+==========
+"use strict";
+
+var time = Date.now();function trailingEdge(time) {
+  timerId = undefined; // Only invoke if we have `lastArgs` which means `func` has been
+  // debounced at least once.
+
+  if (trailing && lastArgs) {
+    return invokeFunc(time);
+  }
+
+  lastArgs = lastThis = undefined;
+  return result;
+}
+==========
+"use strict";
+
+function trailingEdge(time) {
+  timerId = undefined; // Only invoke if we have `lastArgs` which means `func` has been
+  // debounced at least once.
+
+  if (trailing && lastArgs) {
+    return invokeFunc(time);
+  }
+
+  lastArgs = lastThis = undefined;
+  return result;
+}function cancel() {
+  if (timerId !== undefined) {
+    cancelTimer(timerId);
+  }
+
+  lastInvokeTime = 0;
+  lastArgs = lastCallTime = lastThis = timerId = undefined;
+}
+==========
+"use strict";
+
+function cancel() {
+  if (timerId !== undefined) {
+    cancelTimer(timerId);
+  }
+
+  lastInvokeTime = 0;
+  lastArgs = lastCallTime = lastThis = timerId = undefined;
+}function flush() {
+  return timerId === undefined ? result : trailingEdge(Date.now());
+}
+==========
+"use strict";
+
+function flush() {
+  return timerId === undefined ? result : trailingEdge(Date.now());
+}function pending() {
+  return timerId !== undefined;
+}
+==========
+"use strict";
+
+function pending() {
+  return timerId !== undefined;
+}function debounced() {
+  const time = Date.now();
+  const isInvoking = shouldInvoke(time);
+
+  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  lastArgs = args;
+  lastThis = this;
+  lastCallTime = time;
+
+  if (isInvoking) {
+    if (timerId === undefined) {
+      return leadingEdge(lastCallTime);
+    }
+
+    if (maxing) {
+      // Handle invocations in a tight loop.
+      timerId = startTimer(timerExpired, wait);
+      return invokeFunc(lastCallTime);
+    }
+  }
+
+  if (timerId === undefined) {
+    timerId = startTimer(timerExpired, wait);
+  }
+
+  return result;
+}
+==========
+"use strict";
+
+function debounced() {
+  var time = Date.now();
+  var isInvoking = shouldInvoke(time);
+
+  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  lastArgs = args;
+  lastThis = this;
+  lastCallTime = time;
+
+  if (isInvoking) {
+    if (timerId === undefined) {
+      return leadingEdge(lastCallTime);
+    }
+
+    if (maxing) {
+      // Handle invocations in a tight loop.
+      timerId = startTimer(timerExpired, wait);
+      return invokeFunc(lastCallTime);
+    }
+  }
+
+  if (timerId === undefined) {
+    timerId = startTimer(timerExpired, wait);
+  }
+
+  return result;
+}const time = Date.now();
+==========
+"use strict";
+
+var time = Date.now();const isInvoking = shouldInvoke(time);
+==========
+"use strict";
+
+var isInvoking = shouldInvoke(time);var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;
+==========
+"use strict";
+
+var _len = arguments.length,
+    args = new Array(_len),
+    _key = 0;var _default = debounce;
+==========
+"use strict";
+
+var _default = debounce;var _deburrLetter = _interopRequireDefault(require("./.internal/deburrLetter.js"));
+==========
+"use strict";
+
+var _deburrLetter = _interopRequireDefault(require("./.internal/deburrLetter.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/** Used to match Latin Unicode letters (excluding mathematical operators). */
+const reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
+/** Used to compose unicode character classes. */
+==========
+"use strict";
+
+/** Used to match Latin Unicode letters (excluding mathematical operators). */
+var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
+/** Used to compose unicode character classes. *//** Used to compose unicode character classes. */
+const rsComboMarksRange = '\\u0300-\\u036f';
+==========
+"use strict";
+
+/** Used to compose unicode character classes. */
+var rsComboMarksRange = '\\u0300-\\u036f';const reComboHalfMarksRange = '\\ufe20-\\ufe2f';
+==========
+"use strict";
+
+var reComboHalfMarksRange = '\\ufe20-\\ufe2f';const rsComboSymbolsRange = '\\u20d0-\\u20ff';
+==========
+"use strict";
+
+var rsComboSymbolsRange = '\\u20d0-\\u20ff';const rsComboMarksExtendedRange = '\\u1ab0-\\u1aff';
+==========
+"use strict";
+
+var rsComboMarksExtendedRange = '\\u1ab0-\\u1aff';const rsComboMarksSupplementRange = '\\u1dc0-\\u1dff';
+==========
+"use strict";
+
+var rsComboMarksSupplementRange = '\\u1dc0-\\u1dff';const rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange + rsComboMarksExtendedRange + rsComboMarksSupplementRange;
+/** Used to compose unicode capture groups. */
+==========
+"use strict";
+
+var rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange + rsComboMarksExtendedRange + rsComboMarksSupplementRange;
+/** Used to compose unicode capture groups. *//** Used to compose unicode capture groups. */
+const rsCombo = `[${rsComboRange}]`;
+/**
+ * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
+ * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
+ */
+==========
+"use strict";
+
+/** Used to compose unicode capture groups. */
+var rsCombo = "[".concat(rsComboRange, "]");
+/**
+ * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
+ * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
+ *//**
+ * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
+ * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
+ */
+const reComboMark = RegExp(rsCombo, 'g');
+/**
+ * Deburrs `string` by converting
+ * [Latin-1 Supplement](https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table)
+ * and [Latin Extended-A](https://en.wikipedia.org/wiki/Latin_Extended-A)
+ * letters to basic Latin letters and removing
+ * [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks).
+ *
+ * @since 3.0.0
+ * @category String
+ * @param {string} [string=''] The string to deburr.
+ * @returns {string} Returns the deburred string.
+ * @example
+ *
+ * deburr('déjà vu')
+ * // => 'deja vu'
+ */
+==========
+"use strict";
+
+/**
+ * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
+ * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
+ */
+var reComboMark = RegExp(rsCombo, 'g');
+/**
+ * Deburrs `string` by converting
+ * [Latin-1 Supplement](https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table)
+ * and [Latin Extended-A](https://en.wikipedia.org/wiki/Latin_Extended-A)
+ * letters to basic Latin letters and removing
+ * [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks).
+ *
+ * @since 3.0.0
+ * @category String
+ * @param {string} [string=''] The string to deburr.
+ * @returns {string} Returns the deburred string.
+ * @example
+ *
+ * deburr('déjà vu')
+ * // => 'deja vu'
+ *//**
+ * Deburrs `string` by converting
+ * [Latin-1 Supplement](https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table)
+ * and [Latin Extended-A](https://en.wikipedia.org/wiki/Latin_Extended-A)
+ * letters to basic Latin letters and removing
+ * [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks).
+ *
+ * @since 3.0.0
+ * @category String
+ * @param {string} [string=''] The string to deburr.
+ * @returns {string} Returns the deburred string.
+ * @example
+ *
+ * deburr('déjà vu')
+ * // => 'deja vu'
+ */
+function deburr(string) {
+  return string && string.replace(reLatin, _deburrLetter.default).replace(reComboMark, '');
+}
+==========
+"use strict";
+
+/**
+ * Deburrs `string` by converting
+ * [Latin-1 Supplement](https://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)#Character_table)
+ * and [Latin Extended-A](https://en.wikipedia.org/wiki/Latin_Extended-A)
+ * letters to basic Latin letters and removing
+ * [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks).
+ *
+ * @since 3.0.0
+ * @category String
+ * @param {string} [string=''] The string to deburr.
+ * @returns {string} Returns the deburred string.
+ * @example
+ *
+ * deburr('déjà vu')
+ * // => 'deja vu'
+ */
+function deburr(string) {
+  return string && string.replace(reLatin, _deburrLetter.default).replace(reComboMark, '');
+}var _default = deburr;
+==========
+"use strict";
+
+var _default = deburr;/**
+ * Checks `value` to determine whether a default value should be returned in
+ * its place. The `defaultValue` is returned if `value` is `NaN`, `null`,
+ * or `undefined`.
+ *
+ * @since 4.14.0
+ * @category Util
+ * @param {*} value The value to check.
+ * @param {*} defaultValue The default value.
+ * @returns {*} Returns the resolved value.
+ * @example
+ *
+ * defaultTo(1, 10)
+ * // => 1
+ *
+ * defaultTo(undefined, 10)
+ * // => 10
+ */
+function defaultTo(value, defaultValue) {
+  return value == null || value !== value ? defaultValue : value;
+}
+==========
+"use strict";
+
+/**
+ * Checks `value` to determine whether a default value should be returned in
+ * its place. The `defaultValue` is returned if `value` is `NaN`, `null`,
+ * or `undefined`.
+ *
+ * @since 4.14.0
+ * @category Util
+ * @param {*} value The value to check.
+ * @param {*} defaultValue The default value.
+ * @returns {*} Returns the resolved value.
+ * @example
+ *
+ * defaultTo(1, 10)
+ * // => 1
+ *
+ * defaultTo(undefined, 10)
+ * // => 10
+ */
+function defaultTo(value, defaultValue) {
+  return value == null || value !== value ? defaultValue : value;
+}var _default = defaultTo;
+==========
+"use strict";
+
+var _default = defaultTo;var _arrayReduce = _interopRequireDefault(require("./.internal/arrayReduce.js"));
+==========
+"use strict";
+
+var _arrayReduce = _interopRequireDefault(require("./.internal/arrayReduce.js"));var _defaultTo = _interopRequireDefault(require("./defaultTo.js"));
+==========
+"use strict";
+
+var _defaultTo = _interopRequireDefault(require("./defaultTo.js"));function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}/**
+ * This method is like `defaultTo` except that it accepts multiple default values and returns the first one that is not
+ * `NaN`, `null`, or `undefined`.
+ *
+ * @since 5.0.0
+ * @category Util
+ * @param {*} value The value to check.
+ * @param {...*} defaultValues The default values.
+ * @returns {*} Returns the resolved value.
+ * @see _.defaultTo
+ * @example
+ *
+ * defaultToAny(1, 10, 20)
+ * // => 1
+ *
+ * defaultToAny(undefined, 10, 20)
+ * // => 10
+ *
+ * defaultToAny(undefined, null, 20)
+ * // => 20
+ *
+ * defaultToAny(undefined, null, NaN)
+ * // => NaN
+ */
+function defaultToAny(value) {
+  for (var _len = arguments.length, defaultValues = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    defaultValues[_key - 1] = arguments[_key];
+  }
+
+  return (0, _arrayReduce.default)(defaultValues, _defaultTo.default, value);
+}
+==========
+"use strict";
+
+/**
+ * This method is like `defaultTo` except that it accepts multiple default values and returns the first one that is not
+ * `NaN`, `null`, or `undefined`.
+ *
+ * @since 5.0.0
+ * @category Util
+ * @param {*} value The value to check.
+ * @param {...*} defaultValues The default values.
+ * @returns {*} Returns the resolved value.
+ * @see _.defaultTo
+ * @example
+ *
+ * defaultToAny(1, 10, 20)
+ * // => 1
+ *
+ * defaultToAny(undefined, 10, 20)
+ * // => 10
+ *
+ * defaultToAny(undefined, null, 20)
+ * // => 20
+ *
+ * defaultToAny(undefined, null, NaN)
+ * // => NaN
+ */
+function defaultToAny(value) {
+  for (var _len = arguments.length, defaultValues = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    defaultValues[_key - 1] = arguments[_key];
+  }
+
+  return (0, _arrayReduce.default)(defaultValues, _defaultTo.default, value);
+}var _len = arguments.length,
+    defaultValues = new Array(_len > 1 ? _len - 1 : 0),
+    _key = 1;
+==========
+"use strict";
+
+var _len = arguments.length,
+    defaultValues = new Array(_len > 1 ? _len - 1 : 0),
+    _key = 1;var _default = defaultToAny;
+==========
+"use strict";
+
+var _default = defaultToAny;function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+==========
+"use strict";
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}
