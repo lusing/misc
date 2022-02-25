@@ -1,0 +1,11 @@
+(module
+    (func (result i32)
+        (i32.const 666)
+    )
+    (func (result i64) 
+        (i64.const 100000)
+        (i64.const 200000)
+        (i64.add)
+    )
+    (export "func1" (func 0))
+)
