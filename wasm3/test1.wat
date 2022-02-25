@@ -7,5 +7,6 @@
         (i64.const 200000)
         (i64.add)
     )
-    (export "func1" (func 0))
+    (export "i32_const" (func 0))
+    (export "i64_add" (func 1))
 )
