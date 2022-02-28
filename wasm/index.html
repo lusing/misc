@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <head>
+    <script type="text/javascript">
+      function fetchAndInstantiate(url) {
+        return fetch(url)
+          .then((response) => response.arrayBuffer())
+          .then((bytes) => WebAssembly.instantiate(bytes))
+          .then((results) => results.instance);
+      }
+
+      function test001() {
+        fetchAndInstantiate("./test001.wasm").then((instance) => {
+          alert(instance.exports.const_i32());
+        });
+      }
+    </script>
+  </head>
+  <body onload="test001()">
+    <p> WebAssembly测试页</p>
+  </body>
+</html>
