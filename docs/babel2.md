@@ -176,7 +176,7 @@ function process_code(code) {
 }
 ```
 
-### 立即数
+### 字面量
 
 对于立即数，它只有一个值，没有更复杂的结构，比如0:
 ```js
@@ -226,5 +226,72 @@ Node {
   },
   extra: { rawValue: '123', raw: '123n' },
   value: '123'
+}
+```
+
+### 一元表达式UnaryExpression
+
+比如`-0.0`在AST中是以一元表达式的方式出现的：
+```json
+Node {
+  type: 'UnaryExpression',
+  start: 18,
+  end: 22,
+  loc: SourceLocation {
+    start: Position { line: 4, column: 0 },
+    end: Position { line: 4, column: 4 },
+    filename: undefined,
+    identifierName: undefined
+  },
+  operator: '-',
+  prefix: true,
+  argument: Node {
+    type: 'NumericLiteral',
+    start: 19,
+    end: 22,
+    loc: SourceLocation {
+      start: [Position],
+      end: [Position],
+      filename: undefined,
+      identifierName: undefined
+    },
+    extra: { rawValue: 0, raw: '0.0' },
+    value: 0
+  }
+}
+```
+
+一元表达式主要有三项内容：
+- 运算符:本例中是"-"
+- 是否前缀：本例中为真
+- 参数：一元表达式中存储的内容
+
+请注意，++和--不是UnaryExpression，而是有专门的UpdateExpression，但是格式仍然是operator, prefix和argument. 
+
+```json
+Node {
+  type: 'UpdateExpression',
+  start: 24,
+  end: 27,
+  loc: SourceLocation {
+    start: Position { line: 5, column: 0 },
+    end: Position { line: 5, column: 3 },
+    filename: undefined,
+    identifierName: undefined
+  },
+  operator: '++',
+  prefix: false,
+  argument: Node {
+    type: 'Identifier',
+    start: 24,
+    end: 25,
+    loc: SourceLocation {
+      start: [Position],
+      end: [Position],
+      filename: undefined,
+      identifierName: 'i'
+    },
+    name: 'i'
+  }
 }
 ```
