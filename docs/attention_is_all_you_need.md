@@ -90,7 +90,16 @@ The Transformer follows this overall architecture using stacked self-attention a
 
 - Encoder: The encoder is composed of a stack of N = 6 identical layers. Each layer has two sub-layers. The first is a multi-head self-attention mechanism, and the second is a simple, positionwise fully connected feed-forward network. We employ a residual connection [11] around each of the two sub-layers, followed by layer normalization [1]. That is, the output of each sub-layer is LayerNorm(x + Sublayer(x)), where Sublayer(x) is the function implemented by the sub-layer itself. To facilitate these residual connections, all sub-layers in the model, as well as the embedding layers, produce outputs of dimension $d_{model} = 512$.
 
+- 编码器：编码器由 N = 6 个相同层的堆栈组成。 每层有两个子层。 第一个是多头自注意力机制，第二个是简单的、位置全连接的前馈网络。 我们在两个子层的每一个周围都使用了一个残差连接 [11]，然后是层归一化 [1]。 即每个子层的输出是LayerNorm(x + Sublayer(x))，其中Sublayer(x)是子层自己实现的函数。 为了促进这些残差连接，模型中的所有子层以及嵌入层产生维度为 $d_{model} = 512$ 的输出。
+
 - Decoder: The decoder is also composed of a stack of N = 6 identical layers. In addition to the two sub-layers in each encoder layer, the decoder inserts a third sub-layer, which performs multi-head attention over the output of the encoder stack. Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.
 
-![](https://gw.alicdn.com/imgextra/i2/O1CN01zUggNb1x62meJJX12_!!6000000006393-2-tps-1094-608.png)
+- 解码器：解码器也由 N = 6 个相同层的堆栈组成。 除了每个编码器层中的两个子层之外，解码器还插入了第三个子层，该子层对编码器堆栈的输出执行多头注意。 与编码器类似，我们在每个子层周围使用残差连接，然后进行层归一化。 我们还修改了解码器堆栈中的自注意子层，以防止位置关注后续位置。 这种掩蔽与输出嵌入偏移一个位置的事实相结合，确保位置 i 的预测只能依赖于小于 i 位置的已知输出。
 
+### 3.2 Attention
+
+An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.
+
+注意力函数可以描述为将一个查询和一组键值对映射到一个输出，其中查询、键、值和输出都是向量。 输出计算为值的加权总和，其中分配给每个值的权重由查询与相应键的兼容性函数计算。
+
+![](https://gw.alicdn.com/imgextra/i2/O1CN01zUggNb1x62meJJX12_!!6000000006393-2-tps-1094-608.png)

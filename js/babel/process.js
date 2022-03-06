@@ -28,8 +28,10 @@ function process_code(code) {
     traverse.default(ast0.ast, {
         enter(path) {
             //if(t.isFunctionDeclaration(path.node) || t.isArrowFunctionExpression(path.node)){
-            if(t.isVariableDeclaration(path.node)){
-                let f1 = generate.default(path.node, {});
+            if(t.isFunctionDeclaration(path.node)){
+                //console.log(path.node);
+                path.node.leadingComments=[];
+                let f1 = generate.default(path.node, {targets:"iOS 15" ,presets: ["@babel/preset-env"]});
                 console.log(f1.code);
                 let code_6 = f1.code.replace(/[\n\t]/g, '');
                 fs.appendFileSync(file_6,code_6);fs.appendFileSync(file_6,'\n');

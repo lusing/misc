@@ -1,0 +1,10 @@
+(module
+    (memory 1)
+    (export "memory" (memory 0))
+    (func (result i32)
+        (i32.const 404)
+    )
+    (export "helloWorld" (func 0))
+    (func $main (export "_start")
+    )
+)
