@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test WebGPU</title>
+</head>
+
+<body>
+    <canvas id="webgpu" width="500" height="500" style="background-color: blue"></canvas>
+    <script>
+        async function testGPU() {
+            const canvas = document.getElementById('webgpu');
+            const gpuContext = canvas.getContext('webgpu');
+            console.log(gpuContext);
+
+            const adapter = await navigator.gpu.requestAdapter();
+            const device = await adapter.requestDevice();
+
+            console.log(adapter);
+            console.log(device);
+
+            presentationFormat = gpuContext.getPreferredFormat(adapter);
+
+            console.log(presentationFormat);
+
+            gpuContext.configure({
+                device,
+                format: presentationFormat, // 不同的设备支持的纹理格式不同
+                //size: presentationSize, // 这里一般就是Canvas的大小
+            });
+
+            const triangleVertWGSL = `
+            @stage(vertex)
+            fn main(@builtin(vertex_index) VertexIndex : u32)
+             -> @builtin(position) vec4<f32> {
+                var pos = array<vec2<f32>, 3>(
+                vec2<f32>(0.0, 0.5),
+                vec2<f32>(-0.5, -0.5),
+                vec2<f32>(0.5, -0.5));
+
+                return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
+            }
+            `;
+
+            const redFragWGSL = `
+            @stage(fragment)
+                fn main() -> @location(0) vec4<f32> {
+                return vec4<f32>(1.0, 0.0, 0.0, 1.0);
+            }
+            `
+
+            const commandEncoder = device.createCommandEncoder();
+            const textureView = gpuContext.getCurrentTexture().createView();
+
+            console.log(commandEncoder);
+
+            const pipeline = device.createRenderPipeline({
+                vertex: {
+                    module: device.createShaderModule({
+                        code: triangleVertWGSL,
+                    }),
+                    entryPoint: 'main',
+                },
+                fragment: {
+                    module: device.createShaderModule({
+                        code: redFragWGSL,
+                    }),
+                    entryPoint: 'main',
+                    targets: [
+                        {
+                            format: presentationFormat,
+                        },
+                    ],
+                },
+                primitive: {
+                    topology: 'triangle-list',
+                },
+            });
+
+            const renderPassDescriptor = {
+                colorAttachments: [
+                    {
+                        view: textureView, // 将颜色缓冲区与上述的画布绑定
+                        loadValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 }, // 对应于WebGL中的gl.clearColor命令
+                        storeOp: 'store',
+                    },
+                ],
+            };
+            const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+            passEncoder.setPipeline(pipeline);
+            passEncoder.draw(3, 1, 0, 0);
+            passEncoder.end();
+
+            device.queue.submit([commandEncoder.finish()]);
+        }
+
+        testGPU();
+
+    </script>
+
+</body>
+
+</html>

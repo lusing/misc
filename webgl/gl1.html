@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test OpenGL for a point</title>
+</head>
+<body>
+    <canvas id="webgl" width="500" height="500" style="background-color: blue"></canvas>
+    <script>
+        const canvas=document.getElementById('webgl');
+        const gl=canvas.getContext('webgl');
+
+        //顶点着色器源码
+        const vertexShaderSource = `
+           void main(){
+           //给内置变量gl_PointSize赋值像素大小
+              gl_PointSize=20.0;
+           //顶点位置,位于坐标原点
+              gl_Position =vec4(0.0,0.0,0.0,1.0);
+           }`;
+
+        const fragShaderSource = `void main(){
+            gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+        }
+        `;
+        const program = initShader(gl,vertexShaderSource,fragShaderSource);
+
+        gl.drawArrays(gl.POINTS,0,1);
+
+        function initShader(gl,vertexShaderSource,fragmentShaderSource){
+            const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+            const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+            gl.shaderSource(vertexShader,vertexShaderSource);
+            gl.shaderSource(fragmentShader,fragmentShaderSource);
+
+            gl.compileShader(vertexShader);
+            gl.compileShader(fragmentShader);
+
+            const program = gl.createProgram();
+            gl.attachShader(program,vertexShader);
+            gl.attachShader(program,fragmentShader);
+            gl.linkProgram(program);
+
+            gl.useProgram(program);
+            return program;
+        }
+    </script>
+
+</body>
+</html>
