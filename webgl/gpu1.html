@@ -26,8 +26,7 @@
 
             gpuContext.configure({
                 device,
-                format: presentationFormat, // 不同的设备支持的纹理格式不同
-                //size: presentationSize, // 这里一般就是Canvas的大小
+                format: presentationFormat
             });
 
             const triangleVertWGSL = `
@@ -81,8 +80,8 @@
             const renderPassDescriptor = {
                 colorAttachments: [
                     {
-                        view: textureView, // 将颜色缓冲区与上述的画布绑定
-                        loadValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 }, // 对应于WebGL中的gl.clearColor命令
+                        view: textureView,
+                        loadValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 }, 
                         storeOp: 'store',
                     },
                 ],

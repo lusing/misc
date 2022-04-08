@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+</head>
+<body>
+    <canvas id="webcanvas" width="500" height="500" style="background-color: #eee"></canvas>
+    <script>
+        const canvas=document.getElementById('webcanvas');
+        const ctx=canvas.getContext('2d');
+
+        ctx.beginPath();
+        ctx.moveTo(75,50);
+        ctx.lineTo(100,75);
+        ctx.lineTo(100,25);
+        ctx.fill();
+    </script>
+</body>
