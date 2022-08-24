@@ -4,6 +4,19 @@
 
 git clone https://git.openjdk.java.net/jdk/
 
+https://github.com/JetBrains/kotlin
+
+https://github.com/JetBrains/intellij-community
+
+https://github.com/JetBrains/android
+
+https://github.com/apache/netbeans
+https://github.com/apache/maven
+https://github.com/apache/openoffice
+https://github.com/apache/lucene
+
+https://github.com/elastic/elasticsearch
+
 ## Lisp
 
 ### Steel Bank CL
@@ -111,19 +124,9 @@ git://git.sv.gnu.org/emacs.git
 
 [GitHub - dlang/dmd: dmd D Programming Language compiler](https://github.com/dlang/dmd)
 
-https://github.com/JetBrains/kotlin
-
-https://github.com/JetBrains/intellij-community
-
-https://github.com/JetBrains/android
 
 https://github.com/microsoft/vscode
 https://github.com/microsoft/STL
 https://github.com/microsoft/PowerToys
 https://github.com/microsoft/TypeScript
-
-https://github.com/apache/netbeans
-https://github.com/apache/maven
-https://github.com/apache/openoffice
-https://github.com/apache/lucene
 
