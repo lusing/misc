@@ -8,7 +8,7 @@ model = A2C('MlpPolicy', env, verbose=1)
 model.learn(total_timesteps=50000)
 
 obs = env.reset()
-for i in range(1000):
+for i in range(500):
     action, _state = model.predict(obs, deterministic=True)
     obs, reward, done, info = env.step(action)
     env.render()
