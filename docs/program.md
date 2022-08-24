@@ -3,6 +3,7 @@
 ## Java 
 
 git clone https://git.openjdk.java.net/jdk/
+https://github.com/openjdk/jdk/
 
 https://github.com/JetBrains/kotlin
 
@@ -16,6 +17,12 @@ https://github.com/apache/openoffice
 https://github.com/apache/lucene
 
 https://github.com/elastic/elasticsearch
+https://github.com/ReactiveX/RxJava
+https://github.com/square/okhttp
+https://github.com/jenkinsci/jenkins
+https://github.com/google/flatbuffers
+https://github.com/mybatis/mybatis-3
+
 
 ## Lisp
 
