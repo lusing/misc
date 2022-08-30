@@ -72,8 +72,13 @@ game = 'ALE/Pooyan-v5' # 猪小弟, good
 
 
 #env = gym.make('Pong-v0')
-#env = gym.make(game,render_mode="human")
-env = gym.make(game,render_mode="rgb_array")
+
+eval = True
+
+if eval:
+    env = gym.make(game,render_mode="human")
+else:
+    env = gym.make(game,render_mode="rgb_array")
 
 #save_file = 'dqn_pong';
 save_file = 'dqn_'+game;
@@ -82,11 +87,14 @@ print(env.action_space)
 print(env.get_action_meanings())
 
 #model = DQN(MlpPolicy, env, verbose=1)
-model = DQN(CnnPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)
-# model = DQN.load(save_file)
-model.set_env(env)
-model.learn(total_timesteps=100000, log_interval=10)
-model.save(save_file)
+if eval:
+    model = DQN.load(save_file)
+    model.set_env(env)
+else:
+    model = DQN(CnnPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)
+    model.set_env(env)
+    model.learn(total_timesteps=1000000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
+    model.save(save_file)
 
 obs = env.reset()
 
