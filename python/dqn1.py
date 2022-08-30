@@ -31,49 +31,49 @@ from stable_baselines3.dqn import CnnPolicy
 # game = 'ALE/Defender-v5' # 射击类
 # game = 'ALE/DemonAttack-v5' # 射击类
 # game = 'ALE/DoubleDunk-v5' # 篮球
-game = 'ALE/ElevatorAction-v5' # 0
+#game = 'ALE/ElevatorAction-v5' # 0
 #game = 'ALE/Enduro-v5' # 赛车
-# game = 'ALE/FishingDerby-ram-v5' # 钓鱼
-# game = 'ALE/Freeway-ram-v5'
-# game = 'ALE/Frostbite-ram-v5'
-# game = 'ALE/Gopher-ram-v0'
-# game = 'ALE/Gravitar-ram-v0' # 0
-# game = 'ALE/Hero-ram-v0' # 0
-# game = 'ALE/IceHockey-ram-v0' # 球类
-# game = 'ALE/Jamesbond-ram-v0' #
-# game = 'ALE/JourneyEscape-ram-v0'
-# game = 'ALE/Kangaroo-ram-v0'
-# game = 'ALE/Krull-ram-v0'
-# game = 'ALE/KungFuMaster-ram-v0' # 对打
-# game = 'ALE/MontezumaRevenge-ram-v0' # 上楼过关
-# game = 'ALE/MsPacman-ram-v0'
-# game = 'ALE/NameThisGame-ram-v0'
-# game = 'ALE/Phoenix-ram-v0' # 射击
-# game = 'ALE/Pitfall-ram-v0' # 过关
-# game = 'ALE/Pooyan-ram-v0'
-# game = 'ALE/PrivateEye-ram-v0'
-# game = 'ALE/Qbert-ram-v0'
-# game = 'ALE/Riverraid-ram-v0'
-# game = 'ALE/RoadRunner-ram-v0'
-# game = 'ALE/Robotank-ram-v0' # 高级射击
-# game = 'ALE/Seaquest-ram-v0' # 水下攻击
-# game = 'ALE/Skiing-ram-v0' # 滑雪
-# game = 'ALE/Solaris-ram-v0'
-# game = 'ALE/StarGunner-ram-v0'
-#game = 'ALE/Tennis-v5' # 网球
-# game = 'ALE/TimePilot-ram-v0'
-# game = 'ALE/Tutankham-ram-v0' # 探索
-# game = 'ALE/UpNDown-ram-v0'
-# game = 'ALE/Venture-ram-v0'
-game = 'ALE/VideoPinball-v5' # 弹珠台
+#game = 'ALE/FishingDerby-v5' # 钓鱼
+#game = 'ALE/Freeway-v5' # 过马路？
+#game = 'ALE/Frostbite-v5' # 跳格子
+#game = 'ALE/Gopher-v5' # 打地mouse
+#game = 'ALE/Gravitar-v5' # shoot
+#game = 'ALE/Hero-v5' # 过关类
+#game = 'ALE/IceHockey-v5' # 球类
+# game = 'ALE/Jamesbond-ram-v5' #
+# game = 'ALE/JourneyEscape-ram-v5'
+# game = 'ALE/Kangaroo-ram-v5'
+# game = 'ALE/Krull-ram-v5'
+# game = 'ALE/KungFuMaster-ram-v5' # 对打
+# game = 'ALE/MontezumaRevenge-ram-v5' # 上楼过关
+# game = 'ALE/MsPacman-ram-v5'
+# game = 'ALE/NameThisGame-ram-v5'
+# game = 'ALE/Phoenix-ram-v5' # 射击
+# game = 'ALE/Pitfall-ram-v5' # 过关
+# game = 'ALE/Pooyan-ram-v5'
+# game = 'ALE/PrivateEye-ram-v5'
+# game = 'ALE/Qbert-ram-v5'
+# game = 'ALE/Riverraid-ram-v5'
+# game = 'ALE/RoadRunner-ram-v5'
+# game = 'ALE/Robotank-ram-v5' # 高级射击
+# game = 'ALE/Seaquest-ram-v5' # 水下攻击
+# game = 'ALE/Skiing-ram-v5' # 滑雪
+# game = 'ALE/Solaris-ram-v5'
+#game = 'ALE/StarGunner-v5' # 射击类
+game = 'ALE/Tennis-v5' # 网球
+#game = 'ALE/TimePilot-v5' # 飞机射击类
+#game = 'ALE/Tutankham-v5' # 探索
+#game = 'ALE/UpNDown-v5' #赛车类
+#game = 'ALE/Venture-v5' # 迷宫类
+#game = 'ALE/VideoPinball-v5' # 弹珠台
 #game = 'ALE/WizardOfWor-v5' # 迷宫射击
 #game = 'ALE/YarsRevenge-v5' # 射击
 #game = 'ALE/Zaxxon-v5' # 高级射击
 
 
 #env = gym.make('Pong-v0')
-env = gym.make(game,render_mode="human")
-#env = gym.make(game,render_mode="rgb_array")
+#env = gym.make(game,render_mode="human")
+env = gym.make(game,render_mode="rgb_array")
 
 #save_file = 'dqn_pong';
 save_file = 'dqn_'+game;
@@ -85,7 +85,7 @@ print(env.get_action_meanings())
 model = DQN(CnnPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)
 # model = DQN.load(save_file)
 model.set_env(env)
-model.learn(total_timesteps=5000, log_interval=10)
+model.learn(total_timesteps=100000, log_interval=10)
 model.save(save_file)
 
 obs = env.reset()
