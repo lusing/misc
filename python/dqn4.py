@@ -74,7 +74,7 @@ game = 'ALE/Pong-v5'
 #env = gym.make('Pong-v0')
 
 eval = True
-eval = False
+#eval = False
 
 cont = True
 #cont = False
