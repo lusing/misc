@@ -1,15 +1,17 @@
 
 import gym
 import numpy as np
+import time
+from datetime import datetime 
+
 
 from stable_baselines3 import DQN
-from stable_baselines3.dqn import MlpPolicy
 from stable_baselines3.dqn import CnnPolicy
 
 
 #game = 'ALE/Adventure-v5'
 # game = 'Adventure-ram-v0' # 探险类
-#game = 'ALE/Pong-v5'
+game = 'ALE/Pong-v5'
 #game = 'ALE/AirRaid-v5' # 也是大密蜂类
 # game = 'ALE/Alien-v5' # 探险类
 #game = 'ALE/Amidar-v5' # 迷宫类
@@ -60,7 +62,7 @@ from stable_baselines3.dqn import CnnPolicy
 #game = 'ALE/Skiing-v5' # 滑雪
 #game = 'ALE/Solaris-v5' # shoot
 #game = 'ALE/StarGunner-v5' # 射击类
-game = 'ALE/Tennis-v5' # 网球
+#game = 'ALE/Tennis-v5' # 网球
 #game = 'ALE/TimePilot-v5' # 飞机射击类
 #game = 'ALE/Tutankham-v5' # 探索
 #game = 'ALE/UpNDown-v5' #赛车类
@@ -69,7 +71,7 @@ game = 'ALE/Tennis-v5' # 网球
 #game = 'ALE/WizardOfWor-v5' # 迷宫射击
 #game = 'ALE/YarsRevenge-v5' # 射击
 #game = 'ALE/Zaxxon-v5' # 高级射击
-game = 'ALE/SpaceInvaders-v5'
+#game = 'ALE/SpaceInvaders-v5'
 
 #env = gym.make('Pong-v0')
 
@@ -77,6 +79,12 @@ eval = True
 eval = False
 
 cont = True
+#cont = False
+
+print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+
+start_time = time.time()
+start_date = datetime.now()
 
 if eval:
     env = gym.make(game,render_mode="human")
@@ -99,7 +107,7 @@ else:
     else:
         model = DQN(CnnPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)    
     model.set_env(env)
-    model.learn(total_timesteps=100000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
+    model.learn(total_timesteps=1000000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
     model.save(save_file)
 
 obs = env.reset()
@@ -122,3 +130,9 @@ while True:
         print('finished', score)
         print('reward sum=', rewards_sum)
         break
+
+duration = time.time() - start_time
+print('duration=', duration)
+
+time_cost = datetime.now() - start_date
+print('time cost=', time_cost)
