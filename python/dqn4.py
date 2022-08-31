@@ -2,6 +2,9 @@
 import gym
 import numpy as np
 
+import time
+from datetime import datetime 
+
 from stable_baselines3 import DQN
 from stable_baselines3.dqn import MlpPolicy
 from stable_baselines3.dqn import CnnPolicy
@@ -79,6 +82,11 @@ eval = True
 cont = True
 #cont = False
 
+print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+
+start_time = time.time()
+start_date = datetime.now()
+
 if eval:
     env = gym.make(game,render_mode="human")
 else:
@@ -123,3 +131,9 @@ while True:
         print('finished', score)
         print('reward sum=', rewards_sum)
         break
+
+duration = time.time() - start_time
+print('duration=', duration)
+
+time_cost = datetime.now() - start_date
+print('time cost=', time_cost)
