@@ -77,7 +77,7 @@ game = 'ALE/Pong-v5'
 #env = gym.make('Pong-v0')
 
 eval = True
-#eval = False
+eval = False
 
 cont = True
 #cont = False
@@ -108,7 +108,7 @@ else:
     else:
         model = DQN(CnnPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)    
     model.set_env(env)
-    model.learn(total_timesteps=500000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
+    model.learn(total_timesteps=4000000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
     model.save(save_file)
 
 obs = env.reset()

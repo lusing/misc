@@ -3,13 +3,12 @@ import gym
 import numpy as np
 
 from stable_baselines3 import DQN
-from stable_baselines3.dqn import MlpPolicy
 from stable_baselines3.dqn import CnnPolicy
 
 
 #game = 'ALE/Adventure-v5'
 # game = 'Adventure-ram-v0' # 探险类
-#game = 'ALE/Pong-v5'
+game = 'ALE/Pong-v5'
 #game = 'ALE/AirRaid-v5' # 也是大密蜂类
 # game = 'ALE/Alien-v5' # 探险类
 #game = 'ALE/Amidar-v5' # 迷宫类
@@ -50,7 +49,7 @@ from stable_baselines3.dqn import CnnPolicy
 #game = 'ALE/NameThisGame-v5' # 水下射击
 #game = 'ALE/Phoenix-v5' # 射击，try
 #game = 'ALE/Pitfall-v5' # 过关, 倒计时
-game = 'ALE/Pooyan-v5' # 猪小弟, good
+#game = 'ALE/Pooyan-v5' # 猪小弟, good
 #game = 'ALE/PrivateEye-v5' # 倒计时
 #game = 'ALE/Qbert-v5' # 跳格子
 #game = 'ALE/Riverraid-v5' # 射击
@@ -71,9 +70,8 @@ game = 'ALE/Pooyan-v5' # 猪小弟, good
 #game = 'ALE/Zaxxon-v5' # 高级射击
 
 
-#env = gym.make('Pong-v0')
-
 eval = True
+eval = False
 
 if eval:
     env = gym.make(game,render_mode="human")
