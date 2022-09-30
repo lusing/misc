@@ -46,3 +46,45 @@ Character类型，9个字节
 
 空合并运算符 ??
 
+## 流程控制
+
+for in循环
+
+while循环
+
+repeat while循环
+
+if else
+
+switch case
+
+continue
+
+break
+
+fallthough
+
+return
+
+throw
+
+guard
+
+```swift
+func fib(number n: Int64) -> Int64{
+    guard (n>0) else{
+        return 0
+    }
+    guard n != 1 && n != 2 else{
+        return 1
+    }
+    return fib(number: n-Int64(1))+fib(number: n-Int64(2))
+}
+```
+
+do...catch处理异常
+
+try?将异常转化为Optional
+
+defer
+
