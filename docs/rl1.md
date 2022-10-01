@@ -2,9 +2,29 @@
 
 ## 表格法
 
+### 蒙特卡洛法
+
+#### 蒙特卡洛预测
+
 ### 时序差分法
 
+#### TD(0)预测
+
+#### TD(0)控制: Sarsa(0)算法
+
+#### n步时序差分预测
+
+#### n步时序差分控制: n步Sarsa算法
+
 ### 异策略学习概述
+
+#### 重要性采样
+
+#### 每次访问与异策略学习
+
+#### 异策略蒙特卡洛控制
+
+#### 异策略时序差分控制：Q-Learning
 
 ## 近似求解法
 
@@ -199,7 +219,97 @@ $Q(s,a)\leftarrow Q(s,a)+\alpha\left[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\right]$
 
 DQN算法会将一段时间的数据作为一个批次进行集中训练，这一批数据集合称为经验Experience，而这与Q-Learning算法每次使用单个样本进行学习的过程有所不同。经验回放过程具体是指专门使用一块内存区域D存储一段时间内的(s,a,r,s')样本集，然后对该样本集做进一步的随机采样，进而得到一个用于值函数网络参数训练的小批量Mini-Batch的样本集。随机采样的过程打破了相邻样本的高度相关性，进一步提高了强化学习的稳定性。
 
+我们来具体看下DQN算法的求解步骤。根据$\epsilon-greedy$策略执行动作a，然后把一段时间的经验数据存储到内存$\mathcal D$中，再从D中随机抽取单个样本(s,a,r,s')。在DQN算法中，我们会建立两个结构一模一样的值函数近似网络，其中Q目标网络的参数$w^-$会在一次批量训练中进行固定，并用于生成目标Q值，以作为标签数据。Q在线网络则用来评估策略，其网络参数w在每次迭代中都会更新。采用均方误差计算Q网络训练的损失函数为
+$L(w)=\mathbb E[(R+\gamma\max_{a'}Q(s',a';w-)-Q(s,a;w))^2]$
+
+值得注意的是，Q目标网络的参数并不是一直不变的。在Q在线网络获得一定次数的更新后，其最新的网络权重参数会直接用于更新Q目标网络，以作为下一轮目标网络的固定参数，循环以往。
+
+训练过程：
+- 随机行动并存储记忆
+- 随机抽取批量样本
+- 计算误差
+- 更新在线网络
+- 更新目标网络
+
+DQN算法 Expericence Replay
+
+输入：目标网络$\hat Q(s,a;w^-)和在线网络Q(s,a;w)$
+输出：在线网络Q(s,a;w)
+1. 初始化用于存储经验数据的内存D，其容量大小为N;
+2. 初始化在线网络参数w;
+3. 初始化目标网络参数$w^-\leftarrow w$
+for episode = 1 : M do
+    初始化状态$S_1$
+    for t=1 : T do
+        按照$\epsilon-greedy$策略选择一个行动A
+        智能体执行行动$A_t$并观察到奖励$R_t$，以及新的状态$S_{t+1}$
+        将$(S_t,A_t,R_t,S_{t+1})$存储到内存D中
+        从内存D中随机采样一个小样本集$(S_j,A_j,R_j,S_{j+1})$
+        设置
+        $
+        y_j=
+        \begin{cases}
+            R_j, S_{j+1}是终止态；\\
+            R_j + \gamma\max_{a'}\hat Q(S_{j+1},a';w^-), S_{j+1}不是终止态；
+        \end{cases}
+        $
+
+        针对$(y_j-Q(S_j,A_j;w))^2$使用mini-batch梯度下降法更新参数w
+
+        每C轮参数更新后重设$\hat Q\leftarrow Q$，即$w^- \leftarrow w$
+return w
+
+DQN算法的经验回放机制让智能体反复与环境进行互动，以此积累经验数据。直到数据存储到一定的量，如达到数量N，就开始从D中进行随机采样并进行小批次的梯度下降计算Mini-Batch Gradient Descent。值得注意的是，在DQN算法中，强化学习部分Q-Learning算法和深度学习部分的随机梯度下降法是同步进行的，其中通过Q-Learning算法获取无限量的训练样本，然后对神经网络进行梯度下降训练。
+
+综上所述，DQN算法利用经验回放机制增加了数据的利用率，同时也打破了经验数据之间的相关性，从而降低了模型参数方差，避免了过拟合。除此之外，DQN算法通过设定一个固定Q目标网络，解决了使用神经网络作为近似函数训练不收敛的问题。
+
 #### DDPG算法
+
+DDPG Deep Deterministic Policy Gradient算法引入了DQN的经验回放和固定目标网络这两个技巧来延续非线性值函数近似学习的稳定性和鲁棒性，并与策略梯度法中最简单的Actor-Critic算法结构相结合，旨在解决连续高维动作空间下的强化学习问题。
+
+相对于策略梯度算法中使用随机性策略以确保探索的可能性，确定性策略的DDPG算法则通过异策略机制确保智能体能探索到潜在高回报动作，即根据随机策略$\mu'$(通过Ornstein-Uhlenbeck过程添噪声样本到确定性策略$\mu$上实现随机策略)选择行动以确保足够的探索，然后学习一个确定性策略$\mu$。
+
+下面给出DDPG算法的过程：
+- 基于确定性策略$\mu$的状态-行动值函数$Q^{\mu}(S_t,A_t)$
+$Q^{\mu}(S_t,A_t) = \mathbb E[r(S_t,A_t) + \gamma Q^{\mu}(S_{t+1},\mu(S_{t+1}))]$
+- 通过对Actor遵循的确定性策略$\mu$添加来自Ornstein-Uhlenbeck过程N的噪声样本，实现探索随机$\mu'$，其中$\mu'(S_t|\theta_t^\mu)$为关于参数$\theta_t^\mu$的策略近似函数网络。
+- 针对Critic在线网络进行参数$\theta_t^Q$的链式求导，并基于策略梯度定理计算$\nabla_{\theta^\mu} J(\theta_t^\mu)$以用于学习Actor确定性策略。
+
+$\nabla_{\theta^\mu} J(\theta_t^\mu) \approx \mathbb E_{S_t}[\nabla_{\theta^\mu} S(s,a|\theta^Q)|_{s=S_t,a=\mu(S_t|\theta^\mu)}] \approx \mathbb E_{S_t}[\nabla_a Q(s,a|\theta^Q)|_{s=S_t,a=\mu(S_t)}\nabla_{\theta^\mu}\mu(s|\theta^\mu)|_{s=S_t}]$
+
+$\theta^\mu = \theta^\mu + \alpha\nabla_{\theta^\mu} J$
+
+DDPG算法
+
+- 随机初始化Critic值函数网络$Q(S,A|\theta^Q)$和Actor策略网络$\mu(S|\theta^\mu)$，以及目标网络$\theta^Q$和$\theta^\mu$
+- 初始化目标网络Q'和$\mu'$参数：$\theta^{Q'} \leftarrow \theta^{Q},\theta^{\mu'}
+ \leftarrow \theta^\mu$;
+- 初始化经验回放内存D;
+for episode = 1 : M do
+    初始化一个随机噪声过程$\mathcal N$;
+    初台化状态$s1$;
+    for t=1 : T do
+        按照当前Actor策略并添加噪声样本$\mathcal N_t$选择一个行动 $A_t = \mu(s_t|\theta^\mu) + \mathcal N_t$
+        智能体执行行动A_t，并观测到下一个状态$s_{t+1}$和奖励$R_t$
+        将(s_t,A_t,R_t,s_{t+1})存入经验回放内存D;
+        从经验回放内存D中随机采样一个mini-batch;
+        计算目标值$y_i = R_i + \gamma Q(s_{i+1},\mu'(s_{i+1}|\theta^{\mu'})|\theta^{Q'})$
+        更新Critic网络$Q$的参数$\theta^Q$：$min_{\theta^Q} \sum_{i=1}^N (y_i - Q(s_i,a_i|\theta^Q))^2$
+        更新Actor网络$\mu$的参数$\theta^\mu$：$min_{\theta^\mu} \sum_{i=1}^N Q(s_i,\mu(s_i|\theta^\mu)|\theta^Q)$
+        更新目标网络$Q'$和$\mu'$的参数：$\theta^{Q'} \leftarrow \tau \theta^{Q} + (1-\tau)\theta^{Q'},\theta^{\mu'} \leftarrow \tau \theta^\mu + (1-\tau)\theta^{\mu'}$
+        基于经验采样策略梯度法更新Actor网络$\mu$的参数$\theta^\mu$：$min_{\theta^\mu} \sum_{i=1}^N Q(s_i,\mu(s_i|\theta^\mu)|\theta^Q)$
+        更新目标网络参数Q'和$\mu'$：
+        $\theta^{Q'} \leftarrow \tau \theta^{Q} + (1-\tau)\theta^{Q'},\theta^{\mu'} \leftarrow \tau \theta^\mu + (1-\tau)\theta^{\mu'}$
+
+
+训练过程：
+- 初始化环境
+- 按照Actor策略并添加噪声样本来选择行动
+- 参与者执行行动产生交互序列，并存储到经验池
+- 从经验池中随机采样一个mini-batch
+- 计算Critic和Actor的Loss
+- 更新Critic和Actor网络
+- 软更新两个目标网络
 
 ---
 
