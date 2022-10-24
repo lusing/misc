@@ -678,7 +678,6 @@ Validate Scope
 - 进度绩效指数 SPI - Schedule Performance Index。SPI=EV/PV
 - 成本绩效指数 CPI - Cost Performance Index。CPI=EV/AC
 
-He was eighteen and a half minutes late 
 
 6. 预测
 7. 完工尚需绩效指数 TCPI - To Complete Performance Index
