@@ -107,3 +107,6 @@ package-lock.json
 js/babel/package-lock.json
 
 *.zip
+
+rust/target
+.idea 
