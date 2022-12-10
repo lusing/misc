@@ -110,3 +110,5 @@ js/babel/package-lock.json
 
 rust/target
 .idea 
+
+*.beam
