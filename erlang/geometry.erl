@@ -1,5 +1,5 @@
 -module(geometry).
 -export([area/1]).
 
-area({circle,R}) -> pi*R*R;
-area({rectangle,W,H}) -> W*H.
+area({circle, R}) -> 3.14159 * R * R;
+area({rectangle, W, H}) -> W * H.
