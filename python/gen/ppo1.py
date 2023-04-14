@@ -1,13 +1,15 @@
 # 导入必要的库
 import gymnasium as gym
 from stable_baselines3 import PPO
-from stable_baselines3.common.atari_wrappers import AtariWrapper
-from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3.common.env_util import make_vec_env
 
-test = False
+test = False # 修改为True以训练模型
+test = True # 修改为True以训练模型
 
 # 创建一个Atari游戏环境，例如Pong
-env = gym.make("PongNoFrameskip-v4",render_mode="human")
+#env = gym.make("PongNoFrameskip-v4",render_mode="human")
+
+env = make_vec_env("PongNoFrameskip-v4",n_envs=4)
 
 # 应用Atari预处理包装器
 #env = AtariWrapper(env)
@@ -33,16 +35,20 @@ if test:
     )
 
     # 训练模型
-    model.learn(total_timesteps=50000)
+    model.learn(total_timesteps=100000)
 
 # 保存模型
     model.save("ppo_pong")
 
+env = gym.make("PongNoFrameskip-v4",render_mode="human")
+
 # 加载模型并在环境中运行
 model = PPO.load("ppo_pong")
-obs, _states = env.reset()
+done = False
+obs, states = env.reset()
 terminated = False # 修改done为terminated
-while not terminated: # 修改循环条件为terminated
+while not done: # 修改循环条件为terminated
     action, _states = model.predict(obs)
-    obs, reward, terminated, truncated, info = env.step(action) # 修改返回值为terminated和truncated
+    obs, reward, done ,done2, info = env.step(action) # 修改返回值为terminated和truncated
     env.render()
+    #print(reward)
