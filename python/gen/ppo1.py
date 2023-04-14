@@ -4,8 +4,10 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.atari_wrappers import AtariWrapper
 from stable_baselines3.common.vec_env import DummyVecEnv
 
+test = False
+
 # 创建一个Atari游戏环境，例如Pong
-env = gym.make("PongNoFrameskip-v4")
+env = gym.make("PongNoFrameskip-v4",render_mode="human")
 
 # 应用Atari预处理包装器
 #env = AtariWrapper(env)
@@ -13,8 +15,10 @@ env = gym.make("PongNoFrameskip-v4")
 # 如果需要并行环境，可以使用VecEnv，例如：DummyVecEnv或SubprocVecEnv
 #env = DummyVecEnv([lambda: env])
 
-# 选择一个算法，例如PPO，并设置其参数
-model = PPO(
+if test:
+
+    # 选择一个算法，例如PPO，并设置其参数
+    model = PPO(
     "CnnPolicy",
     env,
     verbose=1,
@@ -26,17 +30,17 @@ model = PPO(
     ent_coef=0.01,
     clip_range=0.1,
     clip_range_vf=1,
-)
+    )
 
-# 训练模型
-model.learn(total_timesteps=1_000_000)
+    # 训练模型
+    model.learn(total_timesteps=50000)
 
 # 保存模型
-model.save("ppo_pong")
+    model.save("ppo_pong")
 
 # 加载模型并在环境中运行
 model = PPO.load("ppo_pong")
-obs = env.reset()
+obs, _states = env.reset()
 terminated = False # 修改done为terminated
 while not terminated: # 修改循环条件为terminated
     action, _states = model.predict(obs)
