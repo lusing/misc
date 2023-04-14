@@ -1,4 +1,4 @@
-import Gymnasium as gym
+import gymnasium as gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.atari_wrappers import AtariWrapper
 from stable_baselines3.common.vec_env import DummyVecEnv
@@ -9,10 +9,10 @@ def make_env():
     return env
 
 # 创建Atari游戏环境，例如Pong
-env = make_env()
+#env = make_env()
 
 # 如果需要并行环境，可以使用VecEnv，例如：DummyVecEnv或SubprocVecEnv
-env = DummyVecEnv([lambda: env])
+#env = DummyVecEnv([lambda: env])
 
 # 选择一个算法，例如PPO，并设置其参数
 model = PPO(
@@ -30,7 +30,7 @@ model = PPO(
 )
 
 # 训练模型
-model.learn(total_timesteps=1_000_000)
+model.learn(total_timesteps=10000)
 
 # 保存模型
 model.save("ppo_pong")
