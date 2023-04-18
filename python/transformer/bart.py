@@ -20,4 +20,4 @@ inputs = tokenizer([ARTICLE_TO_SUMMARIZE],
 summary_ids = model.generate(
     inputs["input_ids"], num_beams=2, min_length=0, max_length=100)
 print(tokenizer.batch_decode(summary_ids, skip_special_tokens=True,
-      clean_up_tokenization_spaces=False)[0])
+                             clean_up_tokenization_spaces=False)[0])
