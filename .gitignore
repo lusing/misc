@@ -109,6 +109,7 @@ js/babel/package-lock.json
 *.zip
 
 /target/debug/
-.idea 
+.idea
+.fleet
 
 *.beam
