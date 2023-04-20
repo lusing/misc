@@ -108,7 +108,7 @@ js/babel/package-lock.json
 
 *.zip
 
-rust/target
+/target/debug/
 .idea 
 
 *.beam
