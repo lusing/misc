@@ -1,15 +1,17 @@
-# 2023年的深度学习入门指南(6) - 大模型优化原理
+# 2023年的深度学习入门指南(6) - 剪枝和量化
 
-从第三篇开始，我们讲解了几种本地实现大模型的方法。大家应该也有能力体会到模型太大而GPU放不下的问题。这一节我们开始讲优化方法。
+从这一节开始，我们要准备一些技术专项了。因为目前大模型技术还在快速更新迭代中，各种库和实现每天都在不停出现。因为变化快，所以难免会遇到一些问题。对于细节有一定的把握能力起码可以做到出问题不慌，大致知道从哪方面入手。
+
+我们首先从如何优化大模型的大小，使其能够在更少计算资源的情况下运行起来。
 
 针对模型太大，比较显而易见的是有三种思路：
 1. 有损或无损地对模型进行压缩：比如将不重要的网络节点和边去掉，这叫作剪枝；再如将16位浮点数运算变成8位整数运算，这叫作量化。
 2. 采用更有效的学习算法。比如不是从原始数据中学习，而是跟大模型学，这叫做蒸馏。
 3. 改进网络的结构，更有效发挥硬件能力等等。
 
-## 模型压缩
+我们这一节先说模型压缩方法：剪枝和量化。
 
-### 剪枝
+## 剪枝
 
 以全连接网络为例，网络都是节点和连接节点的边组成的。我们想要压缩网络的大小，就可以通过计算，将一些不重要的节点从图中删除掉，如下图所示：
 
@@ -226,14 +228,432 @@ tensor([[ 1.8203e-01, -0.0000e+00, -1.8870e-01, -2.0959e-01, -1.4791e-01,
 
 大家看到那一列整齐的正0和负0了么。当然，这一维全0了，仍然不够50%，其他维还是要再出一些名额的。
 
-### 量化
+## 量化
 
 在ARM处理器大核都要把32位计算模块砍掉的情况下，64位计算已经成为了哪怕是手机上的主流。最不济也可以使用32位的指令。在深度学习的计算中，我们主要使用也是32位精度的浮点计算。
 
 当模型变大后，如果我们可以将32位浮点运算变成8位整数运算，甚至极端情况下搞成4位整数运算，则不管是在存储还是计算上都节省大量的资源。
 
 量化的算法很容易想到，压缩时就是把一个区间的值都映射到一个离散值上。还原时就想办法恢复成之前的值。
+最极端的情况下就是二值量化，这就退化成符号函数或者是激活函数了。
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/quantized_value.png)
 
-最极端的情况下就是二值量化，这就退化成激活函数了。
+对照上图，量化要做的事情，就是尽可能有效地利用有限的量化后的存储空间，让原始数据的损失最小。
+如果这么说比较抽象的话，我们边写代码，边举例子说明。
+
+## 固定大小量化方法
+
+在PyTorch中，量化函数quantize_per_tensor主要需要三个参数：缩放因子，零点和量化类型。
+类型我们取8位无符号数。
+
+缩放因子的公式：scale = (max_val - min_val) / (qmax - qmin)
+零点的计算公式：zero_point = qmin - round(min_val / scale)
+
+对于8位无符号数的话，qmax = 256, qmin = 0。
+
+我们先随便写一个找找感觉：
+
+```python
+import torch
+x = torch.rand(2, 3, dtype=torch.float32)
+print(x)
+
+xq = torch.quantize_per_tensor(x, scale=0.5, zero_point=0, dtype=torch.quint8)
+print(xq)
+```
+
+如果想看到量化之后的整数表示，我们可以通过int_repr方法来查看。
+```python
+xq.int_repr()
+```
+
+最后，我们可以用dequantize来解量化：
+```python
+xd = xq.dequantize()
+print(xd)
+```
+
+torch.rand是取0到1之间的浮点数，那么max_val为1.0，min_val为0.0. 
+scale就是1/256. 
+
+我们把上面的串在一起：
+```python
+import torch
+x = torch.rand(2, 3, dtype=torch.float32)
+print(x)
+
+xq = torch.quantize_per_tensor(x, scale=1/256, zero_point=0, dtype=torch.quint8)
+print(xq)
+
+# 看整数的表示：
+print(xq.int_repr())
+
+# 解量化
+xd = xq.dequantize()
+print(xd)
+```
+
+随机生成的值是这样的：
+```
+tensor([[0.8779, 0.2919, 0.6965],
+        [0.8018, 0.2809, 0.0910]])
+```
+
+量化之后的值为整数值为：
+```
+tensor([[225,  75, 178],
+        [205,  72,  23]], dtype=torch.uint8)
+```
+
+解量化之后的结果为：
+```
+tensor([[0.8789, 0.2930, 0.6953],
+        [0.8008, 0.2812, 0.0898]])
+```
+基本上还是可以保证小数点之后两位左右的准确率。
+
+如果我们还想省得更多，采用4位做量化会是什么样的结果呢？
+
+4位的话，scale就变成1/16了：
+
+```python
+import torch
+
+x = torch.tensor([[0.8779, 0.2919, 0.6965],
+        [0.8018, 0.2809, 0.0910]])
+print(x)
+
+xq = torch.quantize_per_tensor(x, scale=1/16, zero_point=0, dtype=torch.quint8)
+print(xq)
+
+# 看整数的表示：
+print(xq.int_repr())
+
+# 解量化
+xd = xq.dequantize()
+print(xd)
+```
+
+输出结果如下：
+```
+tensor([[0.8779, 0.2919, 0.6965],
+        [0.8018, 0.2809, 0.0910]])
+tensor([[0.8750, 0.3125, 0.6875],
+        [0.8125, 0.2500, 0.0625]], size=(2, 3), dtype=torch.quint8,
+       quantization_scheme=torch.per_tensor_affine, scale=0.0625, zero_point=0)
+tensor([[14,  5, 11],
+        [13,  4,  1]], dtype=torch.uint8)
+tensor([[0.8750, 0.3125, 0.6875],
+        [0.8125, 0.2500, 0.0625]])
+```
+
+可以看到，当只有4位量化的时候，只能做到1位小数差不多了。
+
+### 自动调整区间的量化
+
+不过，观察上面的量化结果，我们发现，我们取的max_val和min_val都偏保守。
+
+以上面4位量化为例：
+```
+tensor([[14,  5, 11],
+        [13,  4,  1]], dtype=torch.uint8)
+```
+我们上没有用到15，下没有用到0，明显是浪费了一点精度。
+
+为了更充分发挥潜力，我们可以计算更精确一些。
+当然，这事情不需要手工搞，PyTorch为我们准备好了torch.quantization.MinMaxObserver，我们只要设定好范围，就可以调用calculate_qparams方法来自动计算缩放因子和零点位置：
+
+```python
+observer = torch.quantization.MinMaxObserver(quant_min=0,quant_max=15)
+observer(x)
+
+scale, zero_point = observer.calculate_qparams()
+print(scale, zero_point)
+```
+
+跟上面的例子组合一下：
+```
+import torch
+
+x = torch.tensor([[0.8779, 0.2919, 0.6965],
+        [0.8018, 0.2809, 0.0910]])
+print(x)
+
+observer = torch.quantization.MinMaxObserver(quant_min=0,quant_max=15)
+observer(x)
+
+scale, zero_point = observer.calculate_qparams()
+print(scale, zero_point)
+
+xq = torch.quantize_per_tensor(x, scale=scale, zero_point=zero_point, dtype=torch.quint8)
+print(xq)
+
+# 看整数的表示：
+print(xq.int_repr())
+
+# 解量化
+xd = xq.dequantize()
+print(xd)
+```
+
+我们看一下结果：
+```
+tensor([[0.8779, 0.2919, 0.6965],
+        [0.8018, 0.2809, 0.0910]])
+tensor([0.0585]) tensor([0], dtype=torch.int32)
+tensor([[0.8779, 0.2926, 0.7023],
+        [0.8194, 0.2926, 0.1171]], size=(2, 3), dtype=torch.quint8,
+       quantization_scheme=torch.per_tensor_affine, scale=0.058526668697595596,
+       zero_point=0)
+tensor([[15,  5, 12],
+        [14,  5,  2]], dtype=torch.uint8)
+tensor([[0.8779, 0.2926, 0.7023],
+        [0.8194, 0.2926, 0.1171]])
+```
+
+scale从0.0625降低到了0.058526668697595596，能提升6%吧。
+
+更主要的是，随着可以使用动态监控，我们以后不管针对什么样的数据分布，都可以用更加符合大小的值来进行量化。
+
+对了，在2023年4月20日这个时间点，PyTorch的量化功能还处于beta阶段。后面正式发布了我再更新。
+
+### 量化的硬件支持
+
+经过上面的学习，我们对量化的原理和编程已经有了一个比较清晰的了解。
+
+不过，在实际应用中并没有这么简单。在实际硬件中，如果是只有CPU的情况下，我们使用FBGEMM库来实现加速。
+
+```python
+import torch
+
+# define a floating point model where some layers could be statically quantized
+class M(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        # QuantStub converts tensors from floating point to quantized
+        self.quant = torch.ao.quantization.QuantStub()
+        self.conv = torch.nn.Conv2d(1, 1, 1)
+        self.relu = torch.nn.ReLU()
+        # DeQuantStub converts tensors from quantized to floating point
+        self.dequant = torch.ao.quantization.DeQuantStub()
+
+    def forward(self, x):
+        # manually specify where tensors will be converted from floating
+        # point to quantized in the quantized model
+        x = self.quant(x)
+        x = self.conv(x)
+        x = self.relu(x)
+        # manually specify where tensors will be converted from quantized
+        # to floating point in the quantized model
+        x = self.dequant(x)
+        return x
+
+# create a model instance
+model_fp32 = M()
+
+# model must be set to eval mode for static quantization logic to work
+model_fp32.eval()
+
+# attach a global qconfig, which contains information about what kind
+# of observers to attach. Use 'x86' for server inference and 'qnnpack'
+# for mobile inference. Other quantization configurations such as selecting
+# symmetric or asymmetric quantization and MinMax or L2Norm calibration techniques
+# can be specified here.
+# Note: the old 'fbgemm' is still available but 'x86' is the recommended default
+# for server inference.
+# model_fp32.qconfig = torch.ao.quantization.get_default_qconfig('fbgemm')
+model_fp32.qconfig = torch.ao.quantization.get_default_qconfig('x86')
+
+# Fuse the activations to preceding layers, where applicable.
+# This needs to be done manually depending on the model architecture.
+# Common fusions include `conv + relu` and `conv + batchnorm + relu`
+model_fp32_fused = torch.ao.quantization.fuse_modules(model_fp32, [['conv', 'relu']])
+
+# Prepare the model for static quantization. This inserts observers in
+# the model that will observe activation tensors during calibration.
+model_fp32_prepared = torch.ao.quantization.prepare(model_fp32_fused)
+
+# calibrate the prepared model to determine quantization parameters for activations
+# in a real world setting, the calibration would be done with a representative dataset
+input_fp32 = torch.randn(4, 1, 4, 4)
+model_fp32_prepared(input_fp32)
+
+# Convert the observed model to a quantized model. This does several things:
+# quantizes the weights, computes and stores the scale and bias value to be
+# used with each activation tensor, and replaces key operators with quantized
+# implementations.
+model_int8 = torch.ao.quantization.convert(model_fp32_prepared)
+
+# run the model, relevant calculations will happen in int8
+res = model_int8(input_fp32)
+print(res)
+```
+
+如果是在手机上运行，就要使用qnnpack库来替换掉x86或者fbgemm：
+```python
+model_fp32.qconfig = torch.ao.quantization.get_default_qconfig('qnnpack')
+```
+
+FBGEMM和qnnpack都是矩阵计算的加速库。
+
+### fbgemm库
+
+FBGEMM (Facebook's Gemm Library) 是一个高性能、低精度矩阵乘法库，适用于服务器端的 x86 架构。它广泛应用于深度学习、推荐系统等领域。
+
+我们来写个例子理解FBGEMM是什么。
+先下载FBGEMM的代码：
+
+```
+git clone https://github.com/pytorch/FBGEMM.git
+cd FBGEMM
+mkdir build && cd build
+cmake ..
+make
+make install
+```
+
+编译成功之后，我们写个调用fbgemm进行矩阵计算的例子：
+
+```cpp
+#include <iostream>
+#include "fbgemm/Fbgemm.h"
+
+int main() {
+  // 定义矩阵维度
+  int M = 3;
+  int N = 2;
+  int K = 4;
+
+  // 定义矩阵 A 和 B
+  float A[M * K] = {1, 2, 3, 4,
+                    5, 6, 7, 8,
+                    9, 10, 11, 12};
+
+  float B[K * N] = {1, 2,
+                    3, 4,
+                    5, 6,
+                    7, 8};
+
+  // 初始化 C 矩阵
+  float C[M * N] = {0};
+
+  // 定义 FBGEMM 参数
+  fbgemm::matrix_op_t A_op = fbgemm::matrix_op_t::NoTranspose;
+  fbgemm::matrix_op_t B_op = fbgemm::matrix_op_t::NoTranspose;
+
+  // 执行矩阵乘法运算
+  fbgemm::cblas_sgemm_ref(M, N, K, A, K, A_op, B, N, B_op, C, N);
+
+  // 打印结果矩阵 C
+  std::cout << "矩阵 C: " << std::endl;
+  for (int i = 0; i < M; ++i) {
+    for (int j = 0; j < N; ++j) {
+      std::cout << C[i * N + j] << " ";
+    }
+    std::cout << std::endl;
+  }
+
+  return 0;
+}
+```
+
+编译运行：
+
+```
+g++ -std=c++11 -I/path/to/FBGEMM/include -L/path/to/FBGEMM/lib fbgemm_example.cpp -o fbgemm_example -lfbgemm
+```
+
+QNNPACK (Quantized Neural Network PACKage) 是一个针对移动设备优化的量化神经网络库。它可以加速量化模型的推理过程，包括整数和低精度浮点数。
+
+```
+git clone https://github.com/pytorch/QNNPACK.git
+cd QNNPACK
+mkdir build && cd build
+cmake ..
+make
+make install
+```
+
+```cpp
+#include <iostream>
+#include <vector>
+#include "qnnpack.h"
+
+int main() {
+  // 初始化 QNNPACK
+  qnnp_initialize();
+
+  // 定义输入输出尺寸
+  const size_t input_channels = 4;
+  const size_t output_channels = 3;
+  const size_t batch_size = 2;
+
+  // 定义输入、权重和输出数据
+  std::vector<uint8_t> input(batch_size * input_channels, 0);
+  std::vector<uint8_t> kernel(output_channels * input_channels, 0);
+  std::vector<uint8_t> output(batch_size * output_channels, 0);
+
+  // 初始化输入和权重数据
+  for (size_t i = 0; i < input.size(); ++i) {
+    input[i] = i % 256;
+  }
+  for (size_t i = 0; i < kernel.size(); ++i) {
+    kernel[i] = (i * 2) % 256;
+  }
+
+  // 创建全连接操作
+  qnnp_operator_t fully_connected_op = nullptr;
+  qnnp_status status = qnnp_create_fully_connected_nc_q8(
+      input_channels, output_channels,
+      0, 255,  // 输入值范围
+      0, 255,  // 输出值范围
+      kernel.data(), nullptr,
+      0, 1,  // 偏置量化参数
+      nullptr,
+      &fully_connected_op);
+
+  if (status != qnnp_status_success) {
+    std::cerr << "创建全连接操作失败" << std::endl;
+    return -1;
+  }
+
+  // 设置全连接操作
+  status = qnnp_setup_fully_connected_nc_q8(
+      fully_connected_op,
+      batch_size,
+      input.data(),
+      output.data(),
+      nullptr /* thread pool */);
+
+  if (status != qnnp_status_success) {
+    std::cerr << "设置全连接操作失败" << std::endl;
+    return -1;
+  }
+
+  // 运行全连接操作
+  status = qnnp_run_operator(fully_connected_op, nullptr /* thread pool */);
+  if (status != qnnp_status_success) {
+    std::cerr << "运行全连接操作失败" << std::endl;
+    return -1;
+  }
+
+  // 输出结果
+  std::cout << "输出结果:" << std::endl;
+  for (size_t i = 0; i < batch_size; ++i) {
+    for (size_t j = 0; j < output_channels; ++j) {
+      std::cout << static_cast<int>(output[i * output_channels + j]) << " ";
+    }
+    std::cout << std::endl;
+  }
+
+  // 释放全连接操作资源
+  qnnp_delete_operator(fully_connected_op);
+
+  // 关闭 QNNPACK
+  qnnp_deinitialize();
+
+  return 0;
+}
+```
+
