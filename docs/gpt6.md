@@ -505,13 +505,15 @@ FBGEMM (Facebook's Gemm Library) 是一个高性能、低精度矩阵乘法库�
 先下载FBGEMM的代码：
 
 ```
-git clone https://github.com/pytorch/FBGEMM.git
+git clone --recursive https://github.com/pytorch/FBGEMM.git
 cd FBGEMM
 mkdir build && cd build
 cmake ..
 make
 make install
 ```
+
+为了可以编译成功，我们还需要一个BLAS库，比如使用Intel的MKL库，或者是OpenBLAS库。后面我们会详细介绍这些支持并行开发的库。
 
 编译成功之后，我们写个调用fbgemm进行矩阵计算的例子：
 
@@ -564,96 +566,11 @@ int main() {
 g++ -std=c++11 -I/path/to/FBGEMM/include -L/path/to/FBGEMM/lib fbgemm_example.cpp -o fbgemm_example -lfbgemm
 ```
 
-QNNPACK (Quantized Neural Network PACKage) 是一个针对移动设备优化的量化神经网络库。它可以加速量化模型的推理过程，包括整数和低精度浮点数。
+qnnpack库现在已经是PyTorch的一部分，我们就不多做介绍了。
 
-```
-git clone https://github.com/pytorch/QNNPACK.git
-cd QNNPACK
-mkdir build && cd build
-cmake ..
-make
-make install
-```
+## 小结
 
-```cpp
-#include <iostream>
-#include <vector>
-#include "qnnpack.h"
+本节我们介绍了模型压缩的两种主要方法：剪枝和量化。
 
-int main() {
-  // 初始化 QNNPACK
-  qnnp_initialize();
-
-  // 定义输入输出尺寸
-  const size_t input_channels = 4;
-  const size_t output_channels = 3;
-  const size_t batch_size = 2;
-
-  // 定义输入、权重和输出数据
-  std::vector<uint8_t> input(batch_size * input_channels, 0);
-  std::vector<uint8_t> kernel(output_channels * input_channels, 0);
-  std::vector<uint8_t> output(batch_size * output_channels, 0);
-
-  // 初始化输入和权重数据
-  for (size_t i = 0; i < input.size(); ++i) {
-    input[i] = i % 256;
-  }
-  for (size_t i = 0; i < kernel.size(); ++i) {
-    kernel[i] = (i * 2) % 256;
-  }
-
-  // 创建全连接操作
-  qnnp_operator_t fully_connected_op = nullptr;
-  qnnp_status status = qnnp_create_fully_connected_nc_q8(
-      input_channels, output_channels,
-      0, 255,  // 输入值范围
-      0, 255,  // 输出值范围
-      kernel.data(), nullptr,
-      0, 1,  // 偏置量化参数
-      nullptr,
-      &fully_connected_op);
-
-  if (status != qnnp_status_success) {
-    std::cerr << "创建全连接操作失败" << std::endl;
-    return -1;
-  }
-
-  // 设置全连接操作
-  status = qnnp_setup_fully_connected_nc_q8(
-      fully_connected_op,
-      batch_size,
-      input.data(),
-      output.data(),
-      nullptr /* thread pool */);
-
-  if (status != qnnp_status_success) {
-    std::cerr << "设置全连接操作失败" << std::endl;
-    return -1;
-  }
-
-  // 运行全连接操作
-  status = qnnp_run_operator(fully_connected_op, nullptr /* thread pool */);
-  if (status != qnnp_status_success) {
-    std::cerr << "运行全连接操作失败" << std::endl;
-    return -1;
-  }
-
-  // 输出结果
-  std::cout << "输出结果:" << std::endl;
-  for (size_t i = 0; i < batch_size; ++i) {
-    for (size_t j = 0; j < output_channels; ++j) {
-      std::cout << static_cast<int>(output[i * output_channels + j]) << " ";
-    }
-    std::cout << std::endl;
-  }
-
-  // 释放全连接操作资源
-  qnnp_delete_operator(fully_connected_op);
-
-  // 关闭 QNNPACK
-  qnnp_deinitialize();
-
-  return 0;
-}
-```
+通过量化，我们揭开了硬件优化的一角，后面还要全面展开。
 
