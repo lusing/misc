@@ -2,11 +2,21 @@
 #include <thread>
 
 // 矩阵维度
-int width = 4;
+const int width = 4;
 
 // 矩阵
-int A[width][width] = {/* 初始化 */};
-int B[width][width] = {/* 初始化 */};
+int A[width][width] = {
+    {1, 2, 3, 4},
+    {5, 6, 7, 8},
+    {9, 10, 11, 12},
+    {13, 14, 15, 16}
+};
+int B[width][width] = {
+    {1, 0, 0, 0},
+    {0, 1, 0, 0},
+    {0, 0, 1, 0},
+    {0, 0, 0, 1}
+};
 int C[width][width] = {0};
 
 // 互斥锁
