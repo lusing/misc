@@ -113,3 +113,14 @@ js/babel/package-lock.json
 .fleet
 
 *.beam
+
+/build
+
+/rust/**/target
+
+/cpp/**/build
+/cpp/**/out
+/cpp/**/.vs
+/cpp/**/x64
+
+.vscode
