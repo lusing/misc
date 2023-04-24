@@ -91,7 +91,7 @@ if eval:
 else:
     model = DQN(CnnPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)
     model.set_env(env)
-    model.learn(total_timesteps=1000000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
+    model.learn(total_timesteps=1000000, log_interval=10)
     model.save(save_file)
 
 obs = env.reset()
