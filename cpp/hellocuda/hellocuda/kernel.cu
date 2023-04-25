@@ -12,15 +12,23 @@ using namespace std;
 #define MAX(a, b) (a > b ? a : b)
 #endif
 
-__global__ void testKernel(int val) {
-    printf("[%d, %d]:\t\tValue is:%d\n", blockIdx.y * gridDim.x + blockIdx.x,
+__global__ void testKernel(float val) {
+    printf("[%d, %d]:\t\tValue is:%f\n", blockIdx.y * gridDim.x + blockIdx.x,
         threadIdx.z * blockDim.x * blockDim.y + threadIdx.y * blockDim.x +
         threadIdx.x,
-        val);
+        __sinf(val* threadIdx.z * blockDim.x * blockDim.y + threadIdx.y * blockDim.x +
+            threadIdx.x));
+}
+
+__global__ void sqrtKernel(float* in, float* out, int n) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i < n) {
+        out[i] = sqrtf(in[i]);
+        printf("[%d, %d]:\t\tValue is:%f\n", blockIdx.x, threadIdx.x, out[i]);
+    }
 }
 
 int main(int argc, char** argv) {
-    int devID;
     cudaDeviceProp props;
 
     int deviceCount;
@@ -45,15 +53,58 @@ int main(int argc, char** argv) {
             cout << "内存总线宽度(位)" << props.memoryBusWidth << endl;
             cout << "一个块的每个维度的最大尺寸:" << props.maxThreadsDim[0] << ","<< props.maxThreadsDim[1] << "," << props.maxThreadsDim[2] << endl;
             cout << "一个网格的每个维度的最大尺寸:" << props.maxGridSize[0] << "," << props.maxGridSize[1] << "," << props.maxGridSize[2] <<endl;
+            //props.block
         }
     }
 
     // Kernel configuration, where a two-dimensional grid and
     // three-dimensional blocks are configured.
     dim3 dimGrid(2, 2);
-    dim3 dimBlock(2, 2, 2);
-    testKernel << <dimGrid, dimBlock >> > (10);
+    dim3 dimBlock(2, 2, 3);
+    testKernel << <dimGrid, dimBlock >> > (0.5);
     cudaDeviceSynchronize();
+
+    const int n = 1024;
+    size_t size = n * sizeof(float);
+    float* h_in = (float*)malloc(size);
+    float* h_out = (float*)malloc(size);
+    float* d_in, * d_out;
+
+    // Initialize input array
+    for (int i = 0; i < n; ++i) {
+        h_in[i] = (float)i;
+    }
+
+    // Allocate device memory
+    cudaMalloc(&d_in, size);
+    cudaMalloc(&d_out, size);
+
+    // Copy input data to device
+    cudaMemcpy(d_in, h_in, size, cudaMemcpyHostToDevice);
+
+    // Launch kernel
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (n + threadsPerBlock - 1) / threadsPerBlock;
+    cout << blocksPerGrid << " " << threadsPerBlock << endl;
+    sqrtKernel << <blocksPerGrid, threadsPerBlock >> > (d_in, d_out, n);
+
+    // Copy output data to host
+    cudaMemcpy(h_out, d_out, size, cudaMemcpyDeviceToHost);
+
+    // Verify results
+    for (int i = 0; i < n; ++i) {
+        if (fabsf(h_out[i] - sqrtf(h_in[i])) > 1e-5) {
+            printf("Error: h_out[%d] = %f, sqrtf(h_in[%d]) = %f\n", i, h_out[i], i, sqrtf(h_in[i]));
+        }
+    }
+
+    printf("Success!\n");
+
+    // Free memory
+    free(h_in);
+    free(h_out);
+    cudaFree(d_in);
+    cudaFree(d_out);
 
     return EXIT_SUCCESS;
 }
