@@ -1,0 +1,79 @@
+{
+    "root": {
+        "data": {
+            "id": "csg8ubhnak00",
+            "created": 1683482786551,
+            "text": " 项目管理"
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "csg8uodjht40",
+                    "created": 1683482814601,
+                    "text": "项目整合管理"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "csg8uwjw3680",
+                            "created": 1683482832399,
+                            "text": "制定项目章程"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "csg8v2e9s8g0",
+                            "created": 1683482845120,
+                            "text": "制订项目管理计划"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "csg8v7v4eow0",
+                            "created": 1683482857023,
+                            "text": "指导与管理项目工作"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "csg8vbj11ps0",
+                            "created": 1683482864999,
+                            "text": "管理项目知识"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "csg8veehm1s0",
+                            "created": 1683482871255,
+                            "text": "监控项目工作"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "csg8vinu4a00",
+                            "created": 1683482880527,
+                            "text": "实施整体变更控制"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "csg8vmvfq8w0",
+                            "created": 1683482889694,
+                            "text": "结束项目或阶段"
+                        },
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    },
+    "template": "default",
+    "theme": "fresh-blue",
+    "version": "1.4.43"
+}
