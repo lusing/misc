@@ -1,4 +1,4 @@
-# 2023年的深度学习入门指南(12) - 参数高效微调PEFT
+# 2023年的深度学习入门指南(12) - PEFT与LoRA
 
 大家都知道，大模型的训练需要海量的算力。其实，即使是只对大模型做微调训练，也是需要大量的计算资源的。
 
@@ -8,7 +8,7 @@
 
 我们先学习如何使用，然后我们再学习其背后的原理。
 
-## 用Huggingface PEFT库进行适配
+## 用Huggingface PEFT库进行低秩适配
 
 首先我们先安装相关的库，主要有量化用的bitsandbytes库，低秩适配器loralib库，以及加速库accelerate。
 另外，PEFT库和transformers库都用最新的版本。
@@ -113,8 +113,6 @@ I'm not sure about the universe either.
 
 ## LoRA的原理
 
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/LowRank.png)
-
 LoRA的思想是将原始的权重矩阵分解为两个低秩矩阵的乘积，这样就可以大大减少参数量。其本质思想还是将复杂的问题拆解为简单的问题的组合。
 LoRA通过注入优化后的秩分解矩阵，将预训练模型参数冻结，减少了下游任务的可训练参数数量，使得训练更加高效。并且在使用适应性优化器时，降低了硬件进入门槛。
 因为我们不需要计算大多数参数的梯度或维护优化器状态，而是仅优化注入的、远小于原参数量的秩分解矩阵。
@@ -153,3 +151,52 @@ trainable params: 8388608 || all params: 6666862592 || trainable%: 0.12582542214
 
 所以这也就是为什么我们经常看到有6b,7b，还有13b参数的大模型了。因为这个量级的模型，刚好可以在一张40G或者80G的A100显卡上训练。甚至在24G的3090上也能训练。
 
+下面我们来解释一下低秩更新的原理。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/LowRank.png)
+
+如图所示，输入为x，x是d维的向量，输出是h。
+
+我们将参数分为冻结的权重$W_0$和可以训练的参数$\Delta W$。然后我们把$\Delta W$分解成A和B两个可训练参数的矩阵，其中A矩阵取随机值，而B矩阵全取0.
+
+$h=W_0 x+\Delta W x=W_0 x+B A x$
+
+其中，$W_0$是一个d乘以r维的矩阵，$W_0 \in \mathbb{R}^{d \times k}$
+
+为了让B乘以A的结果为输入是d维而输出为k维，B矩阵我们取d行r列，而A矩阵为r行k列，这样一相乘就是d行k列：
+$B \in \mathbb{R}^{d \times r}, A \in \mathbb{R}^{r \times k}$
+
+为了让低秩后的效果更好，r要取一个远小于d和k的值。
+
+为了减少更换r给训练带来的影响，我们再引入一个缩放参数$\alpha$。我们给$\Delta W x$乘以 $\frac{\alpha}{r}$。当使用Adam优化时，如果我们适当地缩放初始化，调整α就大致相当于调整学习率。因此，我们简单地将α设置为我们尝试的第一个r，并不对其进行调整。这种缩放有助于减少在改变r时重新调整超参数的需要。
+
+我们来参照一下前面配置的LoRA config:
+```python
+from peft import LoraConfig, get_peft_model
+
+config = LoraConfig(
+    r=16, lora_alpha=32, target_modules=["q_proj", "v_proj"], lora_dropout=0.05, bias="none", task_type="CAUSAL_LM"
+)
+
+model = get_peft_model(model, config)
+```
+
+我们可以看到，r选择的是16，而alpha为32。说明最开始是用32作为r来进行尝试的。后面我们再调参数的时候，就改r而不调整alpha了。
+
+那么，我们为什么只选择了q和v两个参数进行LoRA呢？
+
+我们来看论文中的数据：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/paras.png)
+
+取q和k两组参数的效果，还不如只取v一个的效果好。而把q,k,v,o全都训练了，也没有明显的优势。所以就取相对最有效率的q,v两组。
+
+当然，这也不是金科玉律，大家可以在实践中去探索更好的LoRA策略。
+
+## 小结
+
+LoRA的一个例子就是alpaca-lora项目，其网址为：https://github.com/tloen/alpaca-lora
+
+alpaca-lora是一个使用LoRA技术对Alpaca模型进行轻量化的项目。Alpaca模型是一个基于LLaMA 7B模型的聊天机器人，使用了Instruct数据集进行微调。alpaca-lora的优点是可以在低成本和低资源的情况下，获得与Alpaca模型相当的效果，并且可以在MacBook、Google Colab、Raspberry Pi等设备上运行。alpaca-lora使用了Hugging Face的PEFT和bitsandbytes来加速微调过程，并提供了一个脚本来下载和推理基础模型和LoRA模型。
+
+现在，PEFT和LoRA对我们来说，已经不再陌生了。
