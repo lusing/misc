@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>智能问答系统 Powered by chatgpt</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="p-6 bg-gray-200">
+    <h1 class="text-3xl mb-4">Chat Interface</h1>
+    <input type="text" id="message" placeholder="Type your message here" class="px-4 py-2 mb-4 w-full border-2 border-gray-300 rounded">
+    <button id="send" class="px-4 py-2 bg-blue-500 text-white rounded">Send</button>
+    <div id="response" class="mt-4 p-4 border-2 border-gray-300 rounded"></div>
+
+    <script>
+        document.querySelector("#send").addEventListener('click', async () => {
+            const message = document.querySelector("#message").value;
+            try {
+                const response = await fetch('api/v1/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+                const data = await response.text();
+                document.querySelector("#response").textContent = data;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

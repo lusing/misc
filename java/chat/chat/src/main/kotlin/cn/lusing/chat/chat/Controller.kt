@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity
 
 @RestController
 class MainController{
-    @RequestMapping("/api/v1/chat")
-    fun hello() : String {
-        return "Hello,Chat!"    
+    @RequestMapping("/api/v1/chat/{message}")
+    fun hello(@PathVariable(name="message") message : String) : String {
+        return "Hello,Chat!$message";
     }
 }
