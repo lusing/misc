@@ -1,0 +1,36 @@
+<opml version=\"2.0\">
+  <head>
+    <title>李尔王</title>
+  </head>
+  <body>
+    <outline text=\"作者\">
+      <outline text=\"威廉·莎士比亚\" />
+    </outline>
+    <outline text=\"类型\">
+      <outline text=\"悲剧\" />
+    </outline>
+    <outline text=\"主要角色\">
+      <outline text=\"李尔王\" />
+      <outline text=\"葛洛斯特\" />
+      <outline text=\"肯特\" />
+      <outline text=\"埃德加\" />
+      <outline text=\"埃德蒙\" />
+      <outline text=\"雷根\" />
+      <outline text=\"冈瑞尔\" />
+      <outline text=\"科尔迪利亚\" />
+    </outline>
+    <outline text=\"背景\">
+      <outline text=\"古英格兰\" />
+    </outline>
+    <outline text=\"简介\">
+      <outline text=\"李尔王是一部讲述了英国古代传说中的李尔国王在晚年分封王国给三个女儿后，因其女儿们的虚伪与背叛而导致家族悲剧的故事。\" />
+    </outline>
+    <outline text=\"剧情梗概\">
+      <outline text=\"第一幕：李尔王决定将王国分给三个女儿，要求她们表达对他的爱。雷根和冈瑞尔虚伪地表达爱意，而最小的科尔迪利亚因不愿言过其实而被遣送。\" />
+      <outline text=\"第二幕：李尔王开始遭受前两个女儿的虐待，他的忠诚臣服肯特被流放。葛洛斯特的儿子埃德蒙谋害其兄弟埃德加，使其被迫流亡。\" />
+      <outline text=\"第三幕：李尔王在雷根和冈瑞尔的背叛下被逐出宫殿，独自在暴风雨中流浪。同时，肯特和埃德加分别化身为庄严的仆人和疯子，继续保护李尔王。\" />
+      <outline text=\"第四幕：李尔王逐渐失去理智，但在庄严和疯子的陪伴下开始反思自己的错误。科尔迪利亚回到英国，与法国军队一起试图拯救父亲。\" />
+      <outline text=\"第五幕：李尔王被科尔迪利亚和法国军队救出，但她们最终被捕。李尔王在狱中与科尔迪利亚重逢，但她被暗杀。李尔王悲痛欲绝，最终死去。\" />
+    </outline>
+  </body>
+</opml>

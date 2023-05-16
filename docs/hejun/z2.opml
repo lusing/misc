@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+    <head>
+        <title>组织行为学（第14版）</title>
+    </head>
+    <body>
+        <outline text="组织行为学（第14版）">
+            <outline text="作者：斯蒂芬·P·罗宾斯等" />
+            <outline text="出版社：中国人民大学出版社" />
+            <outline text="出版年：2012" />
+            <outline text="第一部分：组织行为学的基础">
+                <outline text="第1章：组织行为学的研究" />
+                <outline text="第2章：全球化与多元文化环境" />
+            </outline>
+            <outline text="第二部分：个体在组织中">
+                <outline text="第3章：个体差异、价值观与个性" />
+                <outline text="第4章：知觉、归因与判断" />
+                <outline text="第5章：工作态度与满意度" />
+                <outline text="第6章：动机理论" />
+                <outline text="第7章：应用动机理论于组织" />
+            </outline>
+            <outline text="第三部分：团队在组织中">
+                <outline text="第8章：团队基础" />
+                <outline text="第9章：团队激励与沟通" />
+                <outline text="第10章：决策与团队冲突" />
+                <outline text="第11章：领导与领导风格" />
+                <outline text="第12章：权力、政治与组织正义" />
+            </outline>
+            <outline text="第四部分：组织系统">
+                <outline text="第13章：组织结构" />
+                <outline text="第14章：组织文化与变革" />
+                <outline text="第15章：组织创新与应对压力" />
+                <outline text="第16章：人力资源政策与实践" />
+            </outline>
+        </outline>
+    </body>
+</opml>
