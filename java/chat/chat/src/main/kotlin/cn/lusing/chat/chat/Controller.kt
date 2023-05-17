@@ -17,7 +17,7 @@ class MainController{
     fun hello2(@RequestBody json: String): String {
         val jsonNode = objectMapper.readTree(json)
         val message = jsonNode.get("message")?.asText()
-        val apiKey = "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"
+        val apiKey = ""
         return chatWithOpenAI(apiKey, "$message");
     }
 }
