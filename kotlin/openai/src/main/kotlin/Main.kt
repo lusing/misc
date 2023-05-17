@@ -39,7 +39,7 @@ fun chatWithOpenAI(apiKey: String, message: String): String {
 }
 
 fun main() {
-    val apiKey = "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"
+    val apiKey = ""
     val message = "生成一段用emacs lisp写的快速排序"
     val response = chatWithOpenAI(apiKey, message)
     println(response)
