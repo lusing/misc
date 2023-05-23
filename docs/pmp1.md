@@ -48,4 +48,28 @@
 
 项目8大绩效域：
 - Stakeholder: 干系人绩效域
-- 
+- Team: 团队绩效域
+- Development Approach and lifecycle: 开发方法和生命周期绩效域
+- Planning：规划绩效域
+- Project Work: 项目工作绩效域
+- Delivery: 交付绩效域
+- Measurement: 度量绩效域
+- Uncertainty: 不确定性绩效域
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/PMBOK%207.png)
+
+有了上面的感性认识，我们再回来看新旧两版PMBOK内容在第4版教材中的位置：
+- Integration：项目整合管理 第8章
+- Scope：项目范围管理 第9章
+- Schedule：项目进度管理 第10章
+- Cost: 项目成本管理 第11章
+- Quality: 项目质量管理 第12章
+- Resource: 项目资源管理 第13章
+- Communications: 项目沟通管理 第14章
+- Risk: 项目风险管理 第15章
+- Procurement: 项目采购管理 第16章
+- Stakeholder: 项目干系人管理 第17章
+- 项目的12个管理原则：第6章第4节第1小节
+- 项目8大绩效域：第18章
+
+我们千万不能因为12个管理原则只是一个小节，8大绩效域只占一个18章就忽视它们的重要性。
