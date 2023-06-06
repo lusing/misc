@@ -4,6 +4,4 @@ digraph G{
 
     project_charter [label="项目章程"];
     project_plan [label="项目计划"];
-    
-    
 }
