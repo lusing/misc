@@ -9,9 +9,10 @@ from stable_baselines3 import DQN
 from stable_baselines3.dqn import CnnPolicy
 
 
-#game = 'ALE/Adventure-v5'
+# game = 'Pong-v4'
+game = 'ALE/Adventure-v5'
 # game = 'Adventure-ram-v0' # 探险类
-game = 'ALE/Pong-v5'
+#game = 'ALE/Pong-v5'
 #game = 'ALE/AirRaid-v5' # 也是大密蜂类
 # game = 'ALE/Alien-v5' # 探险类
 #game = 'ALE/Amidar-v5' # 迷宫类
@@ -79,7 +80,7 @@ eval = True
 eval = False
 
 cont = True
-#cont = False
+cont = False
 
 print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
@@ -105,9 +106,9 @@ else:
     if cont:
         model = DQN.load(save_file)
     else:
-        model = DQN(CnnPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)    
+        model = DQN(MlpPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)    
     model.set_env(env)
-    model.learn(total_timesteps=1000000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
+    model.learn(total_timesteps=10000, log_interval=10)
     model.save(save_file)
 
 obs = env.reset()

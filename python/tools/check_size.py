@@ -1,6 +1,7 @@
 import os
 
-path1 = 'H:\\ps3'
+#path1 = 'H:\\ps3'
+path1 = 'f:\\games'
 
 for root, dirs, files in os.walk(path1):
     #print("root:", root)

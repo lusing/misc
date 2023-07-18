@@ -11,7 +11,7 @@ from stable_baselines3.ppo import CnnPolicy
 
 #game = 'ALE/Adventure-v5'
 # game = 'Adventure-ram-v0' # 探险类
-game = 'ALE/Pong-v5'
+# game = 'ALE/Pong-v5'
 #game = 'ALE/AirRaid-v5' # 也是大密蜂类
 # game = 'ALE/Alien-v5' # 探险类
 #game = 'ALE/Amidar-v5' # 迷宫类
@@ -52,7 +52,7 @@ game = 'ALE/Pong-v5'
 #game = 'ALE/NameThisGame-v5' # 水下射击
 #game = 'ALE/Phoenix-v5' # 射击，try
 #game = 'ALE/Pitfall-v5' # 过关, 倒计时
-#game = 'ALE/Pooyan-v5' # 猪小弟, good
+game = 'ALE/Pooyan-v5' # 猪小弟, good
 #game = 'ALE/PrivateEye-v5' # 倒计时
 #game = 'ALE/Qbert-v5' # 跳格子
 #game = 'ALE/Riverraid-v5' # 射击
@@ -79,7 +79,7 @@ eval = True
 eval = False
 
 cont = True
-#cont = False
+cont = False
 
 print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
@@ -91,7 +91,6 @@ if eval:
 else:
     env = gym.make(game,render_mode="rgb_array")
 
-#save_file = 'dqn_pong';
 save_file = 'ppo_'+game;
 
 print(env.action_space)
@@ -105,9 +104,10 @@ else:
     if cont:
         model = PPO.load(save_file)
     else:
-        model = PPO(CnnPolicy, env, verbose=1,learning_rate=2.5e-4,clip_range=0.1,vf_coef=0.5,ent_coef=0.01,n_steps=128)    
+        # model = PPO(MlpPolicy, env, verbose=1,learning_rate=2.5e-4,clip_range=0.1,vf_coef=0.5,ent_coef=0.01,n_steps=128)    
+        model = PPO(CnnPolicy, env, verbose=1)
     model.set_env(env)
-    model.learn(total_timesteps=100000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
+    model.learn(total_timesteps=10000, log_interval=10)
     model.save(save_file)
 
 obs = env.reset()
