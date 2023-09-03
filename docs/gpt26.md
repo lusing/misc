@@ -117,6 +117,36 @@ SiLU 函数的特点如下：
 
 下面我们将RMSNorm，QWenAttention和QWenMLP三者搭建成QWenBlock，就类似于LLaMA中的TransformerBlock：
 
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant F as QWenBlock
+    participant LN1 as RMSNorm 1
+    participant A as QWenAttention 
+    participant LN2 as RMSNorm 2
+    participant M as QWenMLP
+    C->>F: forward(hidden_states, ...)
+    F->>LN1: ln_1(hidden_states)
+    LN1-->>F: Return layernorm_output
+    F->>A: attn(layernorm_output, ...)
+    A-->>F: Return attn_outputs
+    Note over F: Split attn_output and other outputs
+    F->>F: Calculate layernorm_input
+    F->>LN2: ln_2(layernorm_input)
+    LN2-->>F: Return layernorm_output
+    F->>M: mlp(layernorm_output)
+    M-->>F: Return mlp_output
+    Note over F: Calculate hidden_states
+    alt use_cache is True
+        F->>F: Prepare outputs with cache
+    else use_cache is False
+        F->>F: Prepare outputs without cache
+    end
+    F-->>C: Return outputs
+```
+
+
+
 ```python
 class QWenBlock(nn.Module):
     def __init__(self, config):
@@ -181,6 +211,8 @@ class QWenBlock(nn.Module):
 
         return outputs
 ```
+
+
 
 这一模块主要就是将一些参数传递给上节我们介绍过的QWenAttention:
 - hidden_states：一个可选的元组，包含了上一层的输出张量，形状为(batch_size, sequence_length, hidden_size)。
@@ -845,7 +877,12 @@ class QWenLMHeadModel(QWenPreTrainedModel):
         )
 ```
 
+其时序图如下：
+![生成时序图](https://showme.redstarplugin.com/d/d:oEiWM2Oq)
+
 ## 聊天功能封装
+
+最后将接口封装成适合聊天调用的方式。
 
 ```python
     def chat(
@@ -907,6 +944,35 @@ class QWenLMHeadModel(QWenPreTrainedModel):
             history.append((query, response))
 
         return response, history
+```
+
+其主要流程如下：
+
+```mermaid
+graph TD
+
+A["Start"] --> B["Define chat function with parameters"]
+B --> C{Check if stream is _SENTINEL}
+C -->|True| D{Check if generation_config.chat_format equals 'chatml'}
+D -->|True| E{Check if history is None}
+E -->|True| F[Assign empty list to history]
+E -->|False| G[Proceed with existing history]
+F --> G
+G --> H{Check if stop_words_ids is None}
+H -->|True| I[Assign empty list to stop_words_ids]
+H -->|False| J[Proceed with existing stop_words_ids]
+I --> J
+J --> K[Calculate max_window_size]
+K --> L[Call make_context function]
+L --> M[Extend stop_words_ids]
+M --> N[Convert context_tokens to tensor]
+N --> O[Call generate function]
+O --> P[Call decode_tokens function]
+P --> Q{Check if append_history is True}
+Q -->|True| R[Append query and response to history]
+Q -->|False| S[Do not modify history]
+R --> S
+S --> T["End"]
 ```
 
 ## 流式聊天封装
@@ -991,3 +1057,5 @@ class QWenLMHeadModel(QWenPreTrainedModel):
 ## 小结
 
 这节我们终于介绍完了千问7b的模型的代码。凡是讲源码的肯定会遇到大量细节，这些细节也未必是值得花太多精力去抠的，但是原汁原味的代码还是能更精确地表达功能的真实含义。
+后面我们还会将模型实现抽象一下，做更系统化的讲解便于初学者理解。对于从业的同学，因为你们面对的就是这些细节，所以先熟悉起来吧。
+
