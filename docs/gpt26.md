@@ -69,6 +69,144 @@ int main() {
 
 下面我们继续讲解通义千问7B的源代码。
 
+首先我们先看一下通义千问7b的类图：
+
+```mermaid
+classDiagram
+class QWenAttention {
+  - masked_bias: Tensor
+  - seq_length: int
+  - hidden_size: int
+  - split_size: int 
+  - num_heads: int
+  - head_dim: int
+  - use_flash_attn: bool
+  - scale_attn_weights: bool
+  - projection_size: int
+  - hidden_size_per_attention_head: int
+  - c_attn: Linear
+  - c_proj: Linear
+  - is_fp32: bool
+  - core_attention_flash: FlashSelfAttention
+  - use_dynamic_ntk: bool
+  - use_logn_attn: bool
+  - logn_tensor: Tensor
+  - attn_dropout: Dropout
+
+  + forward()
+  + _attn()
+  + _upcast_and_reordered_attn()
+  + _split_heads() 
+  + _merge_heads()  
+}
+
+class FlashSelfAttention {
+  - causal: bool
+  - softmax_scale: float
+  - dropout_p: float
+  
+  + forward(q, k, v)
+}
+
+class QWenModel{
+  - vocab_size : int
+  - num_hidden_layers : int
+  - embed_dim : int
+  - gradient_checkpointing : bool
+  - use_dynamic_ntk : bool 
+  - seq_length : int
+  
+  - wte : Embedding 
+  - drop : Dropout
+  - rotary_emb : RotaryEmbedding
+  - use_flash_attn : bool
+  - is_fp32 : bool
+  - registered_causal_mask : Tensor
+  - h : ModuleList
+  - ln_f : RMSNorm
+
+  + get_input_embeddings()
+  + set_input_embeddings()  
+  + forward()
+}
+
+class QWenBlock {
+  - ln_1: RMSNorm
+  - attn: QWenAttention
+  - ln_2: RMSNorm 
+  - mlp: QWenMLP
+  
+  + forward(...)
+}
+
+class RotaryEmbedding {
+  - dim: int 
+  - base: int
+  - inv_freq: Tensor
+  
+  + __init__(dim, base)  
+  + update_rotary_pos_emb_cache(max_seq_len, offset, ntk_alpha)
+  + forward(max_seq_len, offset, ntk_alpha)
+  
+  - _rotary_pos_emb_cache: List[Tensor]
+  - _seq_len_cached: int
+  - _ntk_alpha_cached: float
+}
+
+class RMSNorm {
+  - dim: int
+  - eps: float
+  - weight: Parameter
+  
+  + __init__(dim, eps)
+  + _norm(x)
+  + forward(x)
+}
+
+class QWenMLP {
+  - w1: Linear
+  - w2: Linear
+  - c_proj: Linear
+  
+  + forward(hidden_states) 
+}
+
+class QWenPreTrainedModel{
+  + __init__()
+  + _init_weights()
+  + _set_gradient_checkpointing()
+}
+
+class QWenLMHeadModel {
+  + prepare_inputs_for_generation() 
+  + forward()
+  + _reorder_cache()
+  + chat()
+  + chat_stream()
+  + generate()
+  
+  - transformer: QWenModel
+  - lm_head: Linear
+  
+  + get_output_embeddings()
+  + set_output_embeddings()
+}
+
+QWenLMHeadModel ..> QWenPreTrainedModel
+QWenLMHeadModel ..> QWenModel
+QWenAttention ..|> QWenPreTrainedModel
+QWenLMHeadModel --> QWenModel
+QWenBlock --> QWenMLP
+QWenBlock --> QWenAttention
+QWenBlock --> RMSNorm
+QWenModel --> QWenBlock
+QWenModel --> RotaryEmbedding
+QWenModel --> RMSNorm
+QWenAttention --> FlashSelfAttention
+```
+
+我们下面开始分别讲解。
+
 ## 通义千问7b的全连接网络
 
 除了使用了silu激活函数之外，其他就是基本的全连接网络了。
@@ -1058,4 +1196,3 @@ S --> T["End"]
 
 这节我们终于介绍完了千问7b的模型的代码。凡是讲源码的肯定会遇到大量细节，这些细节也未必是值得花太多精力去抠的，但是原汁原味的代码还是能更精确地表达功能的真实含义。
 后面我们还会将模型实现抽象一下，做更系统化的讲解便于初学者理解。对于从业的同学，因为你们面对的就是这些细节，所以先熟悉起来吧。
-
