@@ -1,0 +1,111 @@
+<opml version="1.0">
+    <head>
+        <title>项目管理标准</title>
+    </head>
+    <body>
+        <outline text="项目管理标准">
+            <outline text="价值交付系统">
+                <outline text="创造价值">
+                    <outline text="价值交付组件"/>
+                    <outline text="信息流"/>
+                </outline>
+                <outline text="组织治理系统"/>
+                <outline text="与项目有关的职能">
+                    <outline text="提供监督和协调"/>
+                    <outline text="提出目标和反馈"/>
+                    <outline text="引导和支持"/>
+                    <outline text="开展工作并贡献洞察"/>
+                    <outline text="运用专业知识"/>
+                    <outline text="提供业务方向和洞察"/>
+                    <outline text="提供资源和方向"/>
+                    <outline text="维持治理"/>
+                </outline>
+                <outline text="项目环境">
+                    <outline text="内部环境"/>
+                    <outline text="外部环境"/>
+                </outline>
+                <outline text="产品管理考虑因素"/>
+            </outline>
+            <outline text="项目管理原则">
+                <outline text="管家式管理 stewardship">
+                    <outline text="关键点"/>
+                    <outline text="工作内容"/>
+                    <outline text="职责">
+                        <outline text="诚信"/>
+                        <outline text="关心"/>
+                        <outline text="可信"/>
+                        <outline text="合规"/>
+                    </outline>
+                </outline>
+                <outline text="团队 team">
+                    <outline text="关键点"/>
+                    <outline text="协作的项目团队涉及的因素">
+                        <outline text="团队共识"/>
+                        <outline text="组织结构"/>
+                        <outline text="过程"/>
+                    </outline>
+                    <outline text="协作的项目团队文化">
+                        <outline text="职权"/>
+                        <outline text="担责"/>
+                        <outline text="职责"/>
+                    </outline>
+                </outline>
+                <outline text="干系人 stakeholders">
+                    <outline text="关键点"/>
+                    <outline text="干系人参与的重要性"/>
+                    <outline text="有效果且有效率地参与和沟通"/>
+                </outline>
+                <outline text="价值 value">
+                    <outline text="关键点"/>
+                    <outline text="项目价值"/>
+                    <outline text="关注预期成果"/>
+                </outline>
+                <outline text="系统思考 system thinking">
+                    <outline text="关键点"/>
+                    <outline text="将系统整体性思维应用于项目"/>
+                    <outline text="将系统整体性思维应用于项目团队"/>
+                    <outline text="识别、评估和响应系统交互带来的收益"/>
+                </outline>
+                <outline text="领导力 leadership">
+                    <outline text="关键点"/>
+                    <outline text="有效领导力"/>
+                    <outline text="领导力风格"/>
+                    <outline text="领导力技能的培养"/>
+                </outline>
+                <outline text="裁剪 tailoring">
+                    <outline text="关键点"/>
+                    <outline text="裁剪的重要性"/>
+                    <outline text="裁剪的收益"/>
+                </outline>
+                <outline text="质量 quality">
+                    <outline text="关键点"/>
+                    <outline text="质量的内容"/>
+                    <outline text="质量的测量"/>
+                    <outline text="质量的收益"/>
+                </outline>
+                <outline text="复杂性 complexity">
+                    <outline text="关键点"/>
+                    <outline text="复杂性的来源">
+                        <outline text="人类行为"/>
+                        <outline text="系统行为"/>
+                        <outline text="不确定性和模糊性"/>
+                        <outline text="技术创新"/>
+                    </outline>
+                </outline>
+                <outline text="风险 risk">
+                    <outline text="关键点"/>
+                    <outline text="风险及应对方法"/>
+                </outline>
+                <outline text="适应性和韧性 adaptability and resiliency">
+                    <outline text="关键点"/>
+                    <outline text="适应性和韧性"/>
+                    <outline text="提升项目团队的适应性和韧性的能力"/>
+                </outline>
+                <outline text="变革 change">
+                    <outline text="关键点"/>
+                    <outline text="积极驱动变革"/>
+                </outline>
+            </outline>
+        </outline>
+    </body>
+</opml>
