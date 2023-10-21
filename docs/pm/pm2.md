@@ -1,4 +1,4 @@
-PMP的智慧(2) - 
+PMP的智慧() - 
 
 数据收集 Data gathering
 

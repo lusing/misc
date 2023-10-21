@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+  <head>
+    <title>Mindmap</title>
+  </head>
+  <body>
+    <outline text="识别、评估和响应系统交互">
+      <outline text="关键点">
+        <outline text="项目是由多个相互依赖且相互作用的活动域组成的一个系统"/>
+        <outline text="需要从系统角度进行思考,整体了解项目的各个部分如何相互作用,以及如何与外部进行交互"/>
+        <outline text="系统不断变化,需要始终关注内外部环境"/>
+        <outline text="对系统交互作出响应,可以使项目团队充分利用积极的成果"/>
+      </outline>
+      <outline text="将系统整体性思维应用于项目"/>
+      <outline text="将系统整体性思维应用于项目团队"/>
+      <outline text="对商业领域具有同理心"/>
+      <outline text="关注大局的批判性思维"/>
+      <outline text="勇于挑战假设和思维模式"/>
+      <outline text="寻求外部审查和建议"/>
+      <outline text="使用整合的方法、工作和实践,对项目工作、可交付物和成果达成共识"/>
+      <outline text="使用建模和情景假设等方法,对系统动力学互动和反应进行假设"/>
+      <outline text="主动管理整合,支持商业成果实现"/>
+      <outline text="识别、评估和响应系统交互带来的收益"/>
+      <outline text="尽早考虑项目中的不确定性和风险,寻找替代方案并预见后果"/>
+      <outline text="具有在整个项目生命周期内调整假设和计划的能力"/>
+      <outline text="可持续提供信息和执行情况"/>
+      <outline text="与干系人及时沟通项目计划、进展情况,并对项目未来进行预测"/>
+      <outline text="使项目目标与客户的目标和愿景保持一致"/>
+      <outline text="能够适应不断变化的需要,通过协同获得收益"/>
+      <outline text="能够利用潜在的机会并发现面临的危胁"/>
+      <outline text="有利于整个组织决定"/>
+    </outline>
+  </body>
+</opml>

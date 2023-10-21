@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+  <head>
+    <title>Mindmap</title>
+  </head>  
+  <body>
+    <outline text="复杂性 complexity">
+      <outline text="关键点"> 
+        <outline text="复杂性是同人类行为、系统交互、不确定性和模糊性造成的"/>
+        <outline text="复杂性可能在项目生命周期的任何时间出现"/>
+        <outline text="影响价值、范围、沟通、干系人、风险和技术创新的因素可能造成复杂性"/>
+        <outline text="在识别复杂性时,项目团队需要保持警惕,应用各种方法来降低复杂性的数量及其对项目的影响"/>
+      </outline>
+      <outline text="复杂性的来源">
+        <outline text="人类行为"/>
+        <outline text="系统行为"/> 
+        <outline text="不确定性和模糊性"/>
+        <outline text="技术创新"/>
+      </outline>
+    </outline>
+  </body>
+</opml>
