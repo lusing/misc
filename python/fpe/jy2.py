@@ -58,7 +58,7 @@ print('魔法2: ', magic2)
 
 # 3D
 
-write_short(0x3c6, 0x1d)
+write_short(0x3c6, 0x3d)
 magic3 = read_byte(0x3c6)
 print('魔法3: ', magic3)
 
