@@ -1,0 +1,23 @@
+graph TD
+A["Start"] --> B["Define chat function with parameters"]
+B --> C{Check if stream is _SENTINEL}
+C -->|True| D{Check if generation_config.chat_format equals 'chatml'}
+D -->|True| E{Check if history is None}
+E -->|True| F[Assign empty list to history]
+E -->|False| G[Proceed with existing history]
+F --> G
+G --> H{Check if stop_words_ids is None}
+H -->|True| I[Assign empty list to stop_words_ids]
+H -->|False| J[Proceed with existing stop_words_ids]
+I --> J
+J --> K[Calculate max_window_size]
+K --> L[Call make_context function]
+L --> M[Extend stop_words_ids]
+M --> N[Convert context_tokens to tensor]
+N --> O[Call generate function]
+O --> P[Call decode_tokens function]
+P --> Q{Check if append_history is True}
+Q -->|True| R[Append query and response to history]
+Q -->|False| S[Do not modify history]
+R --> S
+S --> T["End"]

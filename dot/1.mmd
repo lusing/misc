@@ -1,0 +1,24 @@
+graph TD
+    A[Start] --> B[Define chat() function]
+    B --> C{history is None?}
+    C -- Yes --> D[history = empty list]
+    C -- No --> E[Use passed history]
+    D --> F{stop_words_ids is None?}
+    F -- Yes --> G[stop_words_ids = empty list]
+    F -- No --> H[Use passed stop_words_ids]
+    G --> I
+    H --> I{max_window_size is None?}
+    I -- Yes --> J[max_window_size = config max] 
+    I -- No --> K[Use passed max_window_size]
+    J --> L
+    K --> L[Call make_context()]
+    L --> M[Extend stop_words_ids]
+    M --> N[Create input tensor]
+    N --> O[Call generate()]
+    O --> P[Call decode_tokens()]
+    P --> Q{append_history?}
+    Q -- Yes --> R[Append query & response to history]
+    Q -- No --> S
+    R --> S[Return response and updated history]
+    S --> T[End]
+    

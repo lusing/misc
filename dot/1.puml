@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant C as Client
+    participant F as Function generate
+    participant P as PreTrainedModel (super)
+    C->>F: generate(inputs, generation_config, ...)
+    Note over F: generation_config = generation_config if generation_config is not None else self.generation_config
+    Note over F: Stop words IDs processing
+    F->>F: Extract stop_words_ids from kwargs
+    alt stop_words_ids is None
+        F->>F: Get stop_words_ids from generation_config
+    end
+    alt stop_words_ids is not None
+        F->>F: Create StopWordsLogitsProcessor
+        F->>F: Append to logits_processor
+    end
+    F->>P: super().generate(inputs, generation_config, ...)
+    P-->>F: Return result
+    F-->>C: Return result
