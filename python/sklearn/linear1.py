@@ -1,21 +1,23 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-X = np.array([[6],[8],[10],[14],[18]]).reshape(-1,1)
-y = [7,9,13,17.5,18]
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+X = np.array([[20240102],[20240103],[20240104],[20240105],[20240108],[20240109]]).reshape(-1,1)
+y = [2962.28,2967.25,2954.35,2929.18,2887.54,2893.25]
 
 plt.figure()
-plt.title('Pizza price plotted against diameter')
-plt.xlabel('Diameter in inches')
-plt.ylabel('Price in dollars')
-plt.plot(X,y,'k.')
-plt.axis([0,25,0,25])
+plt.title('2024年1月上证指数走势图')
+plt.xlabel('日期')
+plt.ylabel('收盘价')
+plt.plot(X,y,'ro')
 plt.grid(True)
 plt.show()
 
 from sklearn.linear_model import LinearRegression
 model = LinearRegression()
 model.fit(X,y)
-test_pizza = np.array([[12]])
-predicted_price = model.predict(test_pizza)[0]
-print('A 12" pizza should cost: $%.2f' % predicted_price)
+date1 = np.array([[20240110]])
+predicted_price = model.predict(date1)[0]
+print('20240110收盘价: %.2f' % predicted_price)

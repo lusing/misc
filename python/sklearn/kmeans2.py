@@ -17,6 +17,9 @@ X_filtered = np.vstack(
 y_filtered = [0] * 500 + [1] * 100 + [2] * 10
 
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
 
 fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 12))
 
