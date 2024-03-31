@@ -1,5 +1,6 @@
 
-import gym
+#import gym
+import gymnasium as gym
 import numpy as np
 
 from stable_baselines3 import DQN
@@ -8,7 +9,7 @@ from stable_baselines3.dqn import CnnPolicy
 
 #game = 'ALE/Adventure-v5'
 # game = 'Adventure-ram-v0' # 探险类
-game = 'ALE/Pong-v5'
+#game = 'ALE/Pong-v5'
 #game = 'ALE/AirRaid-v5' # 也是大密蜂类
 # game = 'ALE/Alien-v5' # 探险类
 #game = 'ALE/Amidar-v5' # 迷宫类
@@ -69,6 +70,8 @@ game = 'ALE/Pong-v5'
 #game = 'ALE/YarsRevenge-v5' # 射击
 #game = 'ALE/Zaxxon-v5' # 高级射击
 
+game = 'Pong'
+
 
 eval = True
 eval = False
@@ -92,9 +95,10 @@ else:
     model = DQN(CnnPolicy, env, verbose=1,exploration_final_eps=0.01,exploration_fraction=0.1,gradient_steps=1,learning_rate=0.0001,buffer_size=10000)
     model.set_env(env)
     model.learn(total_timesteps=1000000, log_interval=10)
+    #model.learn(total_timesteps=100000, log_interval=10)
     model.save(save_file)
 
-obs = env.reset()
+obs,info = env.reset()
 
 score = 0
 rewards_sum = 0
@@ -102,14 +106,15 @@ rewards_sum = 0
 while True:
     # print(score)
     action, _states = model.predict(obs, deterministic=True)
-    obs, reward, done, info = env.step(action)
+    #obs, reward, done, info = env.step(action)
+    obs, reward, terminated, truncated, info = env.step(action)
     #env.render()
     score = score + 1
     rewards_sum += reward
     if reward > 0:
         print('win!!!', reward)
 
-    if done:
+    if terminated or truncated:
         # obs = env.reset()
         print('finished', score)
         print('reward sum=', rewards_sum)

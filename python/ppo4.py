@@ -1,5 +1,6 @@
 
-import gym
+import gymnasium as gym
+from gymnasium.wrappers import RecordVideo
 import numpy as np
 
 import time
@@ -8,10 +9,9 @@ from datetime import datetime
 from stable_baselines3 import PPO
 from stable_baselines3.ppo import CnnPolicy
 
-
 #game = 'ALE/Adventure-v5'
 # game = 'Adventure-ram-v0' # 探险类
-# game = 'ALE/Pong-v5'
+#game = 'ALE/Pong-v5'
 #game = 'ALE/AirRaid-v5' # 也是大密蜂类
 # game = 'ALE/Alien-v5' # 探险类
 #game = 'ALE/Amidar-v5' # 迷宫类
@@ -76,10 +76,10 @@ game = 'ALE/Pooyan-v5' # 猪小弟, good
 #env = gym.make('Pong-v0')
 
 eval = True
-eval = False
+#eval = False
 
 cont = True
-cont = False
+#cont = False
 
 print (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
@@ -90,6 +90,9 @@ if eval:
     env = gym.make(game,render_mode="human")
 else:
     env = gym.make(game,render_mode="rgb_array")
+
+env = gym.make(game,render_mode="rgb_array")
+env = RecordVideo(env, './video')
 
 save_file = 'ppo_'+game;
 
@@ -107,10 +110,10 @@ else:
         # model = PPO(MlpPolicy, env, verbose=1,learning_rate=2.5e-4,clip_range=0.1,vf_coef=0.5,ent_coef=0.01,n_steps=128)    
         model = PPO(CnnPolicy, env, verbose=1)
     model.set_env(env)
-    model.learn(total_timesteps=10000, log_interval=10)
+    model.learn(total_timesteps=1000000, log_interval=10)
     model.save(save_file)
 
-obs = env.reset()
+obs,info = env.reset()
 
 score = 0
 rewards_sum = 0
@@ -118,14 +121,17 @@ rewards_sum = 0
 while True:
     # print(score)
     action, _states = model.predict(obs)
-    obs, reward, done, info = env.step(action)
-    #env.render()
+    #obs, reward, done, info = env.step(action)
+    obs, reward, terminated, truncated, info = env.step(action)
+    if eval:
+        env.render()
+
     score = score + 1
     rewards_sum += reward
     if reward > 0:
         print('win!!!', reward)
 
-    if done:
+    if terminated or truncated:
         # obs = env.reset()
         print('finished', score)
         print('reward sum=', rewards_sum)

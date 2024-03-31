@@ -1,4 +1,4 @@
-import gym
+import gymnasium as gym
 
 from stable_baselines3 import PPO
 
@@ -67,14 +67,23 @@ game = 'ALE/Pooyan-v5' # 猪小弟, good
 
 #env = gym.make('CartPole-v1')
 #env = gym.make('ALE/Pong-v5',render_mode='human')
+
 env = gym.make(game,render_mode='rgb_array')
 
-model = PPO('MlpPolicy', env, verbose=1)
+eval = True
+#eval = False
+
+if eval:
+    env = gym.make(game,render_mode="human")
+else:
+    env = gym.make(game,render_mode="rgb_array")
+
+model = PPO('CnnPolicy', env, verbose=1)
 #model = PPO.load("ppo_pong")
-model.learn(total_timesteps=10000,eval_log_path=game)
+model.learn(total_timesteps=10000)
 model.save("ppo_pong")
 
-obs = env.reset()
+obs,info = env.reset()
 
 score = 0
 rewards_sum = 0
@@ -82,14 +91,14 @@ rewards_sum = 0
 while True:
     # print(score)
     action, _states = model.predict(obs)
-    obs, reward, done, info = env.step(action)
-    #env.render()
+    obs, reward, terminated, truncated, info = env.step(action)
+    env.render()
     score = score + 1
     rewards_sum += reward
     if reward > 0:
         print('win!!!', reward)
 
-    if done:
+    if terminated or truncated:
         # obs = env.reset()
         print('finished', score)
         print('reward sum=', rewards_sum)

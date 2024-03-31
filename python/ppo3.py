@@ -1,5 +1,5 @@
 
-import gym
+import gymnasium as gym
 import numpy as np
 
 from stable_baselines3 import PPO
@@ -92,7 +92,7 @@ if eval:
     model = PPO.load(save_file)
     model.set_env(env)
 else:
-    model = PPO("MlpPolicy", env, verbose=1)
+    model = PPO("CnnPolicy", env, verbose=1)
     model.set_env(env)
     model.learn(total_timesteps=1000000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
     model.save(save_file)
@@ -105,14 +105,14 @@ rewards_sum = 0
 while True:
     # print(score)
     action, _states = model.predict(obs, deterministic=True)
-    obs, reward, done, info = env.step(action)
+    obs, reward, terminated, truncated, info = env.step(action)
     #env.render()
     score = score + 1
     rewards_sum += reward
     if reward > 0:
         print('win!!!', reward)
 
-    if done:
+    if terminated or truncated:
         # obs = env.reset()
         print('finished', score)
         print('reward sum=', rewards_sum)

@@ -1,5 +1,5 @@
 
-import gym
+import gymnasium as gym
 import numpy as np
 
 import time
@@ -111,7 +111,7 @@ else:
     model.learn(total_timesteps=4000000, log_interval=10,eval_log_path='logs/'+save_file+'_eval')
     model.save(save_file)
 
-obs = env.reset()
+obs,info = env.reset()
 
 score = 0
 rewards_sum = 0
