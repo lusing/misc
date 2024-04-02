@@ -75,8 +75,8 @@ game = 'ALE/Pooyan-v5' # 猪小弟, good
 
 #env = gym.make('Pong-v0')
 
-eval = True
-#eval = False
+#eval = True
+eval = False
 
 cont = True
 #cont = False
@@ -88,11 +88,10 @@ start_date = datetime.now()
 
 if eval:
     env = gym.make(game,render_mode="human")
+    #env = gym.make(game,render_mode="rgb_array")
+    #env = RecordVideo(env, './video')
 else:
     env = gym.make(game,render_mode="rgb_array")
-
-env = gym.make(game,render_mode="rgb_array")
-env = RecordVideo(env, './video')
 
 save_file = 'ppo_'+game;
 
