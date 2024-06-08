@@ -168,73 +168,217 @@
 在机器学习被广泛接受之前，相关技术一般在数据挖掘课程中教授。
 数据挖掘利用大量的机器学习技术和数据管理技术，从数据中发现隐藏的模式、关联和趋势，以帮助人们做出决策、预测未来趋势、发现商业机会等。而同样，机器学习中也要进行大量的数据挖掘工作，包括数据清洗、特征工程等。
 
-n. 什么是联邦学习？联邦学习要解决什么机器学习问题？
+3. 什么是深度学习？深度学习与机器学习的区别是什么？ 
+
+深度学习（Deep Learning）是机器学习（Machine Learning）的一个子领域，主要关注使用多层神经网络来进行数据处理和模式识别。深度学习模型，特别是深度神经网络（DNN），由许多层（通常称为“隐藏层”）组成，这些层能够自动地从数据中提取特征和表示。
+
+深度学习的关键特点包括：
+
+- 多层结构：深度学习模型通常具有多个隐藏层，这些层能够逐步提取数据的抽象特征。
+- 自动特征提取：传统的机器学习方法通常需要手动提取特征，而深度学习模型能够自动从原始数据中学习到有用的特征。
+- 大数据和高计算能力：深度学习模型通常需要大量的数据和强大的计算资源（如GPU）来进行训练。
+
+4. 什么是图神经网络？
+
+图神经网络（Graph Neural Network，简称 GNN）是一类专门处理图结构数据的神经网络。传统的神经网络（如卷积神经网络和循环神经网络）通常处理的是欧几里得数据（如图像和序列），而图神经网络则适用于非欧几里得数据，即图数据。
+
+5. 什么是可解释的机器学习？
+
+可解释的机器学习（Explainable Machine Learning，简称XAI）是指开发和应用能够提供透明性、解释性和可理解性的机器学习模型和方法。随着机器学习和深度学习模型在各种领域中的应用越来越广泛，模型的复杂性也随之增加，这使得它们常常成为“黑箱”，即虽然模型能够给出高准确度的预测，但其内部工作机制对人类来说是难以理解的。
+
+可解释机器学习的方法可以分为两大类：模型内在可解释性（Intrinsic Interpretability）和模型后处理可解释性（Post-hoc Interpretability）。
+- 模型内在可解释性: 这些模型在设计时就考虑了可解释性，通常结构简单且易于理解，如：
+
+    - 线性回归（Linear Regression）：输出是输入特征的线性组合，权重表示特征的重要性。
+
+    - 决策树（Decision Tree）：通过一系列的决策规则进行预测，每个节点的分裂条件都是明确的。
+
+    - 朴素贝叶斯（Naive Bayes）：基于简单的概率模型，假设特征之间相互独立。
+    
+- 模型后处理可解释性:这些方法应用于复杂的“黑箱”模型，如深度神经网络和集成模型，通过分析模型的输出和行为来提供解释，如：
+
+    - 局部解释模型（LIME, Local Interpretable Model-agnostic Explanations）：通过构建局部线性模型来解释复杂模型的单个预测。
+    - SHAP值（SHapley Additive exPlanations）：基于博弈论的方法，分配每个特征对预测结果的贡献。
+    - 特征重要性（Feature Importance）：评估每个特征对模型预测的整体影响，可以通过置换特征值或计算导数等方法实现。
+    - 部分依赖图（Partial Dependence Plot）：展示单个或多个特征如何影响预测结果。
+    - 注意力机制（Attention Mechanism）：在某些深度学习模型中，通过展示模型在决策过程中关注的输入部分来提供解释。
+
+6. 什么是联邦学习？联邦学习要解决什么机器学习问题？
 
 联邦学习的设计目标是在保障大数据交换时的信息安全、保护终端数据和个人数据隐私、保证合法合规的前提下，在多参与方或多计算节点之间开展高效率的机器学习。
 联邦学习的主要问题是如何在不共享原始数据的情况下，实现多个参与方之间的模型训练和参数更新。传统的机器学习方法通常需要将数据集中到一个中心化的数据中心进行训练，但这种方式可能涉及到数据隐私和安全等法律问题，因此在某些情况下难以实施。而联邦学习通过在参与方之间共享模型的参数而不是原始数据，实现了在保护数据隐私的前提下进行模型训练的目标。
 
+7. 什么是因果推断？
+
+因果推断（Causal Inference）是统计学和数据科学中的一个分支，旨在理解和确定变量之间的因果关系，即一个变量（原因）如何影响另一个变量（结果）。与传统的相关性分析不同，因果推断试图揭示变量之间的因果链，而不仅仅是它们之间的关联。
+
+8. 什么是 TensorFlow 框架？
+
+TensorFlow 是一个开源的端到端机器学习框架，由 Google Brain 团队开发和维护。它最初于 2015 年发布，旨在简化和加速机器学习和深度学习模型的开发、训练和部署。TensorFlow 提供了丰富的工具和库，支持从研究到生产环境的各个环节。
+
+TensorFlow 的主要特点
+- 灵活性和可扩展性：
+    - 支持从移动设备到分布式计算集群的多种平台。
+    - 可以处理从研究实验到大规模生产环境的多种需求。
+- 丰富的 API：
+    - 高层 API，如 Keras，简化了模型的构建和训练。
+    - 低层 API，提供了对张量操作和计算图的细粒度控制，适合自定义模型和操作。
+- 计算图（Computation Graph）：
+    - 将计算表示为一个有向图，其中节点表示操作，边表示数据张量。
+    - 支持静态图和动态图执行模式，兼顾性能和灵活性。
+- 多平台支持：
+    - 可以在 CPU、GPU 和 TPU 上运行，利用硬件加速提升性能。
+    - 支持多种编程语言，包括 Python、C++、Java、JavaScript 等。
+- 模型部署：
+    - TensorFlow Serving：用于生产环境中的模型部署和服务。
+    - TensorFlow Lite：针对移动和嵌入式设备的轻量级版本。
+    - TensorFlow.js：在浏览器中运行 TensorFlow 模型。
+- 社区和生态系统：
+    - 拥有庞大的开发者社区和丰富的第三方库。
+    - 提供了 TensorFlow Hub、TensorFlow Model Garden 等资源，方便重用和分享模型。
+
+9. 什么是 PyTorch 框架？
+
+PyTorch 是一个开源的深度学习框架，由 Facebook 的人工智能研究团队（FAIR）开发和维护。自 2016 年发布以来，PyTorch 迅速成为研究和工业界广泛使用的深度学习工具之一。它以其动态计算图、灵活性和易用性而著称，特别受到学术研究和快速原型设计的青睐。
+
+PyTorch 的主要特点
+- 动态计算图（Dynamic Computation Graph）：
+    - PyTorch 使用动态计算图，这意味着计算图在运行时构建和修改，这使得调试和开发更加直观和灵活。
+    - 相比静态图，动态图允许更加灵活和复杂的模型设计。
+- 简单的接口和强大的功能：
+    - PyTorch 提供了简洁易用的 Python API，适合快速原型开发。
+    - 支持复杂的张量操作和自动梯度计算（autograd），简化了模型训练过程。
+- 广泛的硬件支持：
+    - 原生支持 CPU 和 GPU 加速，通过 CUDA 提供高效的 GPU 计算。
+    - 兼容多种硬件加速器和深度学习优化库。
+- 模块化设计：
+    - PyTorch 的模块化设计使得模型构建、训练和扩展变得更加容易。
+    - torch.nn 模块提供了丰富的预定义层和损失函数。
+- 丰富的生态系统：
+    - 拥有丰富的第三方库和工具，如 torchvision（计算机视觉）、torchaudio（音频处理）、torchtext（自然语言处理）等。
+    - PyTorch Lightning 和 Fastai 等高层库进一步简化了复杂模型的训练和管理。
+- 社区和支持：
+    - 由于其易用性和灵活性，PyTorch 拥有活跃的开发者社区。
+    - 广泛的文档和教程资源，帮助新手快速上手。
+
+10. 什么是 Scikit-learn 框架？
+
+Scikit-learn（简称 sklearn）是一个用于机器学习的开源库，构建在 Python 语言之上。它基于 SciPy（Scientific Python）生态系统，提供了一系列简单而高效的工具，用于数据挖掘和数据分析。Scikit-learn 以其易用性、可扩展性和丰富的算法实现，成为数据科学和机器学习领域的流行选择。
+
+Scikit-learn 的主要特点
+- 丰富的算法库：
+    - 提供了多种机器学习算法，包括分类、回归、聚类、降维、模型选择和预处理等。
+    - 支持诸如线性回归、逻辑回归、支持向量机（SVM）、决策树、随机森林、K-means 聚类、PCA（主成分分析）等常用算法。
+- 简洁的 API：
+    - 设计简洁一致的 API，使得学习和使用变得简单直观。
+    - 各种算法和工具都遵循相似的接口设计，便于互换和组合使用。
+- 良好的文档和社区支持：
+    - 拥有详尽的文档和丰富的教程，帮助用户快速上手。
+    - 活跃的社区和大量的第三方资源，方便获取帮助和共享知识。
+- 与其他库的集成：
+    - 无缝集成 NumPy、SciPy、Pandas 等数据处理库，方便进行数据预处理和特征工程。
+    - 与 Matplotlib、Seaborn 等可视化库兼容，便于结果展示和分析。
+- 模型评估与选择：
+    - 提供多种模型评估和选择工具，如交叉验证、网格搜索、随机搜索等。
+    - 支持多种评估指标和方法，帮助选择最佳模型。
+- 数据预处理与特征工程：
+    - 提供数据标准化、归一化、编码、缺失值处理等多种预处理工具。
+    - 支持特征选择、特征提取等特征工程方法，有助于提高模型性能。
+
+11. 什么是 NumPy 框架？
+
+NumPy（Numerical Python）是一个用于科学计算的开源库，提供了支持大型多维数组和矩阵运算的强大功能，以及大量用于操作这些数组的数学函数。它是 Python 科学计算生态系统的核心基础库之一，广泛应用于数据分析、机器学习、工程计算等领域。
+
+NumPy 的主要特点
+- 多维数组对象（ndarray）：
+    - 提供高效的多维数组对象 ndarray，支持快速的向量和矩阵运算。
+    - 数组可以是任意纬度，支持切片、索引等操作。
+- 丰富的数学函数库：
+    - 包含大量用于数组运算的数学函数，如线性代数、傅里叶变换、统计运算等。
+    - 支持广播机制，使不同形状的数组能够进行运算。
+- 高性能：
+    - 许多运算在 C 语言实现，具有极高的性能。
+    - 通过与 BLAS 和 LAPACK 等库的集成，提高了线性代数运算的效率。
+- 与其他库的兼容性：
+    - 与 Python 生态系统中的其他科学计算库（如 SciPy、Pandas、Matplotlib 等）无缝集成。
+    - 是许多高级库（如 TensorFlow、PyTorch 等）的基础。
+- 简洁的 API：
+    - 提供简单易用的接口，便于进行数组创建、操作和转换。
+    - 支持多种数据类型，包括整数、浮点数、复数等。
+
+12. Pandas 库的主要功能是什么？
+
+Pandas 是一个用于数据操作和分析的开源数据分析库，构建在 Python 之上。它提供了高效、灵活的数据结构和数据分析工具，特别适合处理结构化数据。Pandas 在数据科学、金融分析、统计分析等领域有广泛的应用。
+
+Pandas 的主要特点和功能
+- 数据结构：
+    - Series：一维数据结构，类似于带标签的数组，功能类似于 Python 的字典。
+    - DataFrame：二维数据结构，类似于电子表格或 SQL 表，具有行和列标签。
+- 数据加载与存储：
+    - 支持从各种文件格式加载数据，包括 CSV、Excel、SQL 数据库、JSON、HTML 等。
+    - 提供将数据导出到多种格式的功能，便于数据共享和存储。
+- 数据操作：
+    - 索引与切片：通过行和列标签或位置进行数据选择和过滤。
+    - 数据对齐：不同索引的数据自动对齐，便于数据合并和操作。
+    - 重塑与透视：支持数据透视表、堆叠/拆分、重塑等操作。
+    - 缺失数据处理：提供填充、删除、插值等多种方法处理缺失数据。
+- 数据清洗：
+    - 提供强大的数据清洗工具，如字符串操作、重复值处理、数据类型转换等。
+    - 支持数据合并、连接和连接操作（如 merge、join、concat 等）。
+- 数据聚合与分组操作：
+    - 支持 groupby 操作，便于根据某些条件对数据进行分组和聚合。
+    - 提供多种聚合函数，如 sum、mean、count、min、max 等。
+- 时间序列分析：
+    - 提供 DateTimeIndex，便于处理时间序列数据。
+    - 支持时间序列的重采样、移位、滚动窗口计算等操作。
+- 数据可视化：
+    - 集成 Matplotlib，支持直接在 DataFrame 上进行绘图操作。
+    - 提供便捷的绘图接口，便于快速生成各种类型的图表。
+- 高效的性能：
+    - 基于 NumPy 的高效数组操作，支持大规模数据的快速处理。
+    - 支持多种性能优化技术，如矢量化运算、分块处理等。
+
+13. 什么是 Matplotlib 库？
+
+Matplotlib 是一个用于创建静态、动态和交互式图形的 Python 库。它是数据可视化领域的一个重要工具，特别适合科学计算和数据分析。Matplotlib 提供了丰富的绘图功能，可以生成各种类型的图表，如折线图、柱状图、散点图、直方图、饼图等。
+
+Matplotlib 的主要特点
+- 多种绘图类型：
+    - 支持折线图、柱状图、散点图、直方图、饼图、箱线图、热力图等多种图表类型。
+    - 可以进行复杂的图形组合和自定义。
+- 高质量的图形输出：
+    - 生成高分辨率的图形，适用于出版物和演示文稿。
+    - 支持多种输出格式，如 PNG、PDF、SVG、EPS 等。
+- 灵活的图形配置：
+    - 提供丰富的配置选项，可以自定义图形的各个方面，如颜色、线型、标记、字体、图例等。
+    - 支持多子图布局，便于在一个图表中展示多组数据。
+- 交互式绘图：
+    - 支持与 Jupyter Notebook 的无缝集成，便于在交互式环境中进行数据可视化。
+    - 提供交互工具，如缩放、平移、选择等，便于数据探索。
+- 与其他库的集成：
+    - 与 NumPy、Pandas 等数据处理库紧密集成，便于数据加载和处理。
+    - 支持与 Seaborn、Plotly 等高级可视化库的结合使用，扩展绘图能力。
+
+1n. 什么是时间序列分析？
+
+时间序列分析是一种统计方法，用于分析随时间变化的数据。与其他数据分析方法不同，时间序列数据是按时间顺序排列的，通常用于预测未来的趋势、检测异常、理解数据的季节性和周期性等。
+
+时间序列数据的特点
+- 时间相关性：时间序列数据的一个基本特点是时间相关性，即当前时刻的数据点可能与之前时刻的数据点相关。
+- 趋势：数据可能显示出长期的上升或下降趋势。
+- 季节性：数据可能表现出周期性的波动，这些波动通常与季节变化、月份或季度有关。
+- 周期性：数据可能存在周期性波动，但这种波动周期通常不是固定的。
+- 随机性：数据中可能包含一些随机波动或噪声。
+
 ## 第二章 机器学习的一些基本概念
 
-### 2.1 概率与统计基础
+在机器学习领域，数据与算法同样重要。在进入算法之前，我们先来感受一些常用的数据集。
 
-很多读者学习机器学习遇到的第一只拦路虎，往往并非机器学习本身，而是概率论和数理统计的知识不扎实。导致在机器学习中一遇到公式就容易害怕。尤其是很多老师的书中对于公式推导经常跳步，使想学习的同学们也望而却步。
-不管是完全不管机器学习的公式只学编程实现，还是对于认为读者应该自己去推导公式，对于初学者来说都不是好消息，还不如扎扎实实地对于基础理论花足够的时间去理解。
-其实，概率统计的知识点主要是多且庞杂，深度并不太深，也不需要太高的智商和想象力。主要是知识点不系统，容易忘记，不适合突击式的连续性学习，需要复习。
+### 2.1 数据集
 
-### 2.2 模型评估的基本方法
+首先，我们来看一些常用的数据集。数据集是机器学习的基础，是机器学习算法的输入。
 
-前面我们介绍了，监督学习分为数值预测和分类预测两大类。针对这两种预测，我们有不同的评估方法。
-
-#### 数值预测的评估方法
-
-数值预测的评估方法主要有均方误差、平均绝对误差、R方等。
-
-均方误差 (Mean Squared Error, MSE)：预测值与实际值之差的平方的平均值，用于衡量预测的准确性。
-
-均方根误差 (Root Mean Squared Error, RMSE)：MSE的平方根，以与原数据相同的单位衡量误差。
-
-平均绝对误差 (Mean Absolute Error, MAE)：预测值与实际值之差的绝对值的平均值，直观地表示了预测的平均误差量。
-
-R方 (R-squared, R2)：用于衡量模型对数据的拟合程度，取值范围为[0,1]，越接近1表示拟合程度越好。
-
-#### 分类预测的评估方法
-
-分类预测的评估方法主要有准确率、精确率、召回率、F1值等。
-
-首先我们讨论一下最简单的情况，二分类问题。在二分类问题中，通常将预测结果分为正例和负例两类。在这种情况下，我们可以定义四种情况：
-
-- 真正例（True Positive, TP）：实际为正例的样本被预测为正例。
-- 真负例（True Negative, TN）：实际为负例的样本被预测为负例。
-- 假正例（False Positive, FP）：实际为负例的样本被预测为正例。
-- 假负例（False Negative, FN）：实际为正例的样本被预测为负例。
-
-假正例也假阳性，占比指标称为误报率（False Positive Rate, FPR），假负例也称为假阴性，占比指标称为漏报率（False Negative Rate, FNR）。
-
-举个例子来说明，假设有一个二分类模型用于预测某种疾病的患病情况，正例表示患病，负例表示健康。在这种情况下：
-
-假阴性：模型将一个实际上患病的人错误地预测为健康，即将病人错判为健康。
-假阳性：模型将一个实际上健康的人错误地预测为患病，即将健康人错判为患病。
-假阴性和假阳性是模型预测错误的两种情况，它们的出现可能会对模型的性能和可靠性产生影响。在不同的应用场景中，对于假阴性和假阳性的重视程度可能有所不同，需要根据具体情况进行权衡和调整。
-
-下面我们就可以定义三个重要的评估指标：
-
-- 准确率 (Accuracy)：分类正确的样本数占总样本数的比例，用于衡量分类器的整体性能。
-- 精确率 (Precision)：精确率是指在所有被模型预测为正例的样本中，实际为正例的比例。它衡量了模型预测为正例的准确性。精确率的计算公式为：精确率 = 真正例数TP / (真正例数TP + 假正例数FP)。想要提升精确率，就要减少误报的数量。
-- 召回率 (Recall)：召回率是指在所有实际为正例的样本中，被模型正确预测为正例的比例。它衡量了模型对正例的识别能力。召回率的计算公式为：召回率 = 真正例数 / (真正例数 + 假阴性数)。想要提升召回率，就要减少漏报的数量。
-
-在这里，请大家合上书思考一下，精确率和召回率的关系是什么？
-
-在实际应用中，精确率和召回率往往是相互矛盾的，提高精确率可能会降低召回率，提高召回率可能会降低精确率。也就是说，关注误报就可能会漏报，关注漏报就可能会误报。为了综合考虑精确率和召回率，我们引入了F1值。
-
-- F1值 (F1-score)：它结合了模型的精确率（precision）和召回率（recall）两个指标，以综合评估模型的性能表现。F1值的计算公式为：F1 = 2 * 精确率 * 召回率 / (精确率 + 召回率)。F1值的取值范围为[0,1]，越接近1表示模型的性能越好。
-
-在实际应用中，我们往往会绘制P-R曲线和ROC曲线来综合评估模型的性能。
-- P-R曲线 (Precision-Recall curve)：以召回率为横轴，精确率为纵轴绘制的曲线，用于衡量分类器的性能。
-- ROC曲线 (Receiver Operating Characteristic curve)：以假正例率为横轴，真正例率为纵轴绘制的曲线，用于衡量分类器的性能。
-
-### 2.3 一些常用的数据集
-
-#### 鸢尾花数据集
+#### 2.1.1 鸢尾花数据集
 
 鸢尾花数据集是机器学习领域中最著名的数据集之一，由英国统计学家和生物学家罗纳德·艾尔默·费雪在1936年收集整理。数据集包含了150个样本，分为3类，每类50个样本，每个样本包含4个特征：花萼长度、花萼宽度、花瓣长度、花瓣宽度。数据集的目标是根据这4个特征对鸢尾花进行分类。
 
@@ -282,6 +426,317 @@ print(iris)
 我们可以看到，前50个样本的标签是0，代表山鸢尾；接下来的50个样本的标签是1，代表变色鸢尾；最后的50个样本的标签是2，代表维吉尼亚鸢尾。
 
 所以，我们前面看到的花萼长度为5.1cm，花萼宽度为3.5cm，花瓣长度为1.4cm，花瓣宽度为0.2cm的鸢尾花是山鸢尾。
+
+#### 2.1.2 自己生成数据集
+
+除了加载现成的数据集，我们还可以自己生成数据集。在机器学习中，我们经常需要生成一些模拟数据来测试算法的性能。比如，我们可以生成一些符合正态分布的数据，然后用机器学习算法来拟合这些数据。
+
+```python
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import make_blobs, make_classification, make_gaussian_quantiles
+
+plt.figure(figsize=(8, 8))
+plt.subplots_adjust(bottom=0.05, top=0.9, left=0.05, right=0.95)
+
+plt.subplot(321)
+plt.title("One informative feature, one cluster per class", fontsize="small")
+X1, Y1 = make_classification(
+    n_features=2, n_redundant=0, n_informative=1, n_clusters_per_class=1
+)
+plt.scatter(X1[:, 0], X1[:, 1], marker="o", c=Y1, s=25, edgecolor="k")
+
+plt.subplot(322)
+plt.title("Two informative features, one cluster per class", fontsize="small")
+X1, Y1 = make_classification(
+    n_features=2, n_redundant=0, n_informative=2, n_clusters_per_class=1
+)
+plt.scatter(X1[:, 0], X1[:, 1], marker="o", c=Y1, s=25, edgecolor="k")
+
+plt.subplot(323)
+plt.title("Two informative features, two clusters per class", fontsize="small")
+X2, Y2 = make_classification(n_features=2, n_redundant=0, n_informative=2)
+plt.scatter(X2[:, 0], X2[:, 1], marker="o", c=Y2, s=25, edgecolor="k")
+
+plt.subplot(324)
+plt.title("Multi-class, two informative features, one cluster", fontsize="small")
+X1, Y1 = make_classification(
+    n_features=2, n_redundant=0, n_informative=2, n_clusters_per_class=1, n_classes=3
+)
+plt.scatter(X1[:, 0], X1[:, 1], marker="o", c=Y1, s=25, edgecolor="k")
+
+plt.subplot(325)
+plt.title("Three blobs", fontsize="small")
+X1, Y1 = make_blobs(n_features=2, centers=3)
+plt.scatter(X1[:, 0], X1[:, 1], marker="o", c=Y1, s=25, edgecolor="k")
+
+plt.subplot(326)
+plt.title("Gaussian divided into three quantiles", fontsize="small")
+X1, Y1 = make_gaussian_quantiles(n_features=2, n_classes=3)
+plt.scatter(X1[:, 0], X1[:, 1], marker="o", c=Y1, s=25, edgecolor="k")
+
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/generated_data.png)
+
+我们再看一个生成多标签的例子：
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+from sklearn.datasets import make_multilabel_classification as make_ml_clf
+
+COLORS = np.array(
+    [
+        "!",
+        "#FF3333",  # red
+        "#0198E1",  # blue
+        "#BF5FFF",  # purple
+        "#FCD116",  # yellow
+        "#FF7216",  # orange
+        "#4DBD33",  # green
+        "#87421F",  # brown
+    ]
+)
+
+# Use same random seed for multiple calls to make_multilabel_classification to
+# ensure same distributions
+RANDOM_SEED = np.random.randint(2**10)
+
+
+def plot_2d(ax, n_labels=1, n_classes=3, length=50):
+    X, Y, p_c, p_w_c = make_ml_clf(
+        n_samples=150,
+        n_features=2,
+        n_classes=n_classes,
+        n_labels=n_labels,
+        length=length,
+        allow_unlabeled=False,
+        return_distributions=True,
+        random_state=RANDOM_SEED,
+    )
+
+    ax.scatter(
+        X[:, 0], X[:, 1], color=COLORS.take((Y * [1, 2, 4]).sum(axis=1)), marker="."
+    )
+    ax.scatter(
+        p_w_c[0] * length,
+        p_w_c[1] * length,
+        marker="*",
+        linewidth=0.5,
+        edgecolor="black",
+        s=20 + 1500 * p_c**2,
+        color=COLORS.take([1, 2, 4]),
+    )
+    ax.set_xlabel("Feature 0 count")
+    return p_c, p_w_c
+
+
+_, (ax1, ax2) = plt.subplots(1, 2, sharex="row", sharey="row", figsize=(8, 4))
+plt.subplots_adjust(bottom=0.15)
+
+p_c, p_w_c = plot_2d(ax1, n_labels=1)
+ax1.set_title("n_labels=1, length=50")
+ax1.set_ylabel("Feature 1 count")
+
+plot_2d(ax2, n_labels=3)
+ax2.set_title("n_labels=3, length=50")
+ax2.set_xlim(left=0, auto=True)
+ax2.set_ylim(bottom=0, auto=True)
+
+plt.show()
+
+print("The data was generated from (random_state=%d):" % RANDOM_SEED)
+print("Class", "P(C)", "P(w0|C)", "P(w1|C)", sep="\t")
+for k, p, p_w in zip(["red", "blue", "yellow"], p_c, p_w_c.T):
+    print("%s\t%0.2f\t%0.2f\t%0.2f" % (k, p, p_w[0], p_w[1]))
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/n_labels.png)
+
+#### 2.1.3 训练集和测试集
+
+在机器学习中，我们通常将数据集分为训练集和测试集。训练集用于训练模型，测试集用于评估模型的性能。
+常用的划分方法有：
+- 留出法（Holdout Method）‌：这种方法将数据集分为两个互斥的集合，一个用作训练集，另一个用作测试集。通常，训练集占大部分（例如70%-80%），而测试集占小部分（例如20%-30%）。
+- 交叉验证（Cross-Validation）‌：这是一种更复杂的方法，它将数据集分成k个子集，每次使用k-1个子集作为训练数据，剩下的一个子集用作测试数据。这个过程重复k次，每个子集都有一次机会作为测试集。最后，模型的性能是所有k次测试结果的平均值。
+- 自助法（Bootstrap）‌：在这种方法中，从原始数据集中随机抽样生成训练集，未被抽中的样本构成测试集。由于抽样是有放回的，所以某些样本可能在训练集中出现多次，而有些则可能一次都不出现。
+
+我们可以通过sklearn库中的train_test_split函数来将数据集分为训练集和测试集。
+
+```python
+from sklearn.model_selection import train_test_split
+
+# 示例数据
+X = [[1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]]
+y = [0, 1, 0, 1, 0, 1]
+
+# 将数据划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+print("训练集特征：", X_train)
+print("测试集特征：", X_test)
+print("训练集标签：", y_train)
+print("测试集标签：", y_test)
+```
+
+参数解释
+- X 和 y：分别是特征矩阵和标签向量。
+- test_size：测试集的比例。比如 test_size=0.2 表示 20% 的数据将用作测试集，80% 的数据将用作训练集。你也可以传入一个整数，表示测试集的样本数量。
+- random_state：随机种子，确保每次运行划分结果一致。设置相同的 random_state 值可以重现相同的划分结果。
+
+
+我们再来个例子，拆分鸢尾花数据集：
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn import datasets
+from sklearn import svm
+
+X, y = datasets.load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.4)
+```
+
+### 2.2 模型评估的基本方法
+
+前面我们介绍了，监督学习分为数值预测和分类预测两大类。针对这两种预测，我们有不同的评估方法。
+
+#### 2.2.1 数值预测的评估方法
+
+数值预测的评估方法主要有均方误差、平均绝对误差、R方等。
+
+均方误差 (Mean Squared Error, MSE)：预测值与实际值之差的平方的平均值，用于衡量预测的准确性。
+
+均方根误差 (Root Mean Squared Error, RMSE)：MSE的平方根，以与原数据相同的单位衡量误差。
+
+平均绝对误差 (Mean Absolute Error, MAE)：预测值与实际值之差的绝对值的平均值，直观地表示了预测的平均误差量。
+
+R方 (R-squared, R2)：用于衡量模型对数据的拟合程度，取值范围为[0,1]，越接近1表示拟合程度越好。
+
+#### 2.2.2 分类预测的评估方法
+
+分类预测的评估方法主要有准确率、精确率、召回率、F1值等。
+
+首先我们讨论一下最简单的情况，二分类问题。在二分类问题中，通常将预测结果分为正例和负例两类。在这种情况下，我们可以定义四种情况：
+
+- 真正例（True Positive, TP）：实际为正例的样本被预测为正例。
+- 真负例（True Negative, TN）：实际为负例的样本被预测为负例。
+- 假正例（False Positive, FP）：实际为负例的样本被预测为正例。
+- 假负例（False Negative, FN）：实际为正例的样本被预测为负例。
+
+假正例也假阳性，占比指标称为误报率（False Positive Rate, FPR），假负例也称为假阴性，占比指标称为漏报率（False Negative Rate, FNR）。
+
+举个例子来说明，假设有一个二分类模型用于预测某种疾病的患病情况，正例表示患病，负例表示健康。在这种情况下：
+
+假阴性：模型将一个实际上患病的人错误地预测为健康，即将病人错判为健康。
+假阳性：模型将一个实际上健康的人错误地预测为患病，即将健康人错判为患病。
+假阴性和假阳性是模型预测错误的两种情况，它们的出现可能会对模型的性能和可靠性产生影响。在不同的应用场景中，对于假阴性和假阳性的重视程度可能有所不同，需要根据具体情况进行权衡和调整。
+
+下面我们就可以定义三个重要的评估指标：
+
+- 准确率 (Accuracy)：分类正确的样本数占总样本数的比例，用于衡量分类器的整体性能。
+- 精确率 (Precision)：精确率是指在所有被模型预测为正例的样本中，实际为正例的比例。它衡量了模型预测为正例的准确性。精确率的计算公式为：精确率 = 真正例数TP / (真正例数TP + 假正例数FP)。想要提升精确率，就要减少误报的数量。
+- 召回率 (Recall)：召回率是指在所有实际为正例的样本中，被模型正确预测为正例的比例。它衡量了模型对正例的识别能力。召回率的计算公式为：召回率 = 真正例数 / (真正例数 + 假阴性数)。想要提升召回率，就要减少漏报的数量。
+
+在这里，请大家合上书思考一下，精确率和召回率的关系是什么？
+
+在实际应用中，精确率和召回率往往是相互矛盾的，提高精确率可能会降低召回率，提高召回率可能会降低精确率。也就是说，关注误报就可能会漏报，关注漏报就可能会误报。为了综合考虑精确率和召回率，我们引入了F1值。
+
+- F1值 (F1-score)：它结合了模型的精确率（precision）和召回率（recall）两个指标，以综合评估模型的性能表现。F1值的计算公式为：F1 = 2 * 精确率 * 召回率 / (精确率 + 召回率)。F1值的取值范围为[0,1]，越接近1表示模型的性能越好。
+
+在实际应用中，我们往往会绘制P-R曲线和ROC曲线来综合评估模型的性能。
+- P-R曲线 (Precision-Recall curve)：以召回率为横轴，精确率为纵轴绘制的曲线，用于衡量分类器的性能。
+- ROC曲线 (Receiver Operating Characteristic curve)：以假正例率为横轴，真正例率为纵轴绘制的曲线，用于衡量分类器的性能。
+
+
+下面我们用一个例子来看下ROC曲线：
+
+```python
+import numpy as np
+
+from sklearn.datasets import load_iris
+
+iris = load_iris()
+target_names = iris.target_names
+X, y = iris.data, iris.target
+X, y = X[y != 2], y[y != 2]
+n_samples, n_features = X.shape
+
+
+random_state = np.random.RandomState(0)
+X = np.concatenate([X, random_state.randn(n_samples, 200 * n_features)], axis=1)
+
+import matplotlib.pyplot as plt
+
+from sklearn import svm
+from sklearn.metrics import RocCurveDisplay, auc
+from sklearn.model_selection import StratifiedKFold
+
+n_splits = 6
+cv = StratifiedKFold(n_splits=n_splits)
+classifier = svm.SVC(kernel="linear", probability=True, random_state=random_state)
+
+tprs = []
+aucs = []
+mean_fpr = np.linspace(0, 1, 100)
+
+fig, ax = plt.subplots(figsize=(6, 6))
+for fold, (train, test) in enumerate(cv.split(X, y)):
+    classifier.fit(X[train], y[train])
+    viz = RocCurveDisplay.from_estimator(
+        classifier,
+        X[test],
+        y[test],
+        name=f"ROC fold {fold}",
+        alpha=0.3,
+        lw=1,
+        ax=ax,
+    )
+    interp_tpr = np.interp(mean_fpr, viz.fpr, viz.tpr)
+    interp_tpr[0] = 0.0
+    tprs.append(interp_tpr)
+    aucs.append(viz.roc_auc)
+
+mean_tpr = np.mean(tprs, axis=0)
+mean_tpr[-1] = 1.0
+mean_auc = auc(mean_fpr, mean_tpr)
+std_auc = np.std(aucs)
+ax.plot(
+    mean_fpr,
+    mean_tpr,
+    color="b",
+    label=r"Mean ROC (AUC = %0.2f $\pm$ %0.2f)" % (mean_auc, std_auc),
+    lw=2,
+    alpha=0.8,
+)
+
+std_tpr = np.std(tprs, axis=0)
+tprs_upper = np.minimum(mean_tpr + std_tpr, 1)
+tprs_lower = np.maximum(mean_tpr - std_tpr, 0)
+ax.fill_between(
+    mean_fpr,
+    tprs_lower,
+    tprs_upper,
+    color="grey",
+    alpha=0.2,
+    label=r"$\pm$ 1 std. dev.",
+)
+
+ax.set(
+    xlabel="False Positive Rate",
+    ylabel="True Positive Rate",
+    title=f"Mean ROC curve with variability\n(Positive label '{target_names[1]}')",
+)
+ax.legend(loc="lower right")
+plt.show()
+```
+
+画出来的曲线如下图所示：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/roc.png)
 
 ## 第三章 机器学习编程基础
 
@@ -2025,9 +2480,144 @@ We find that chain-of-thought reasoning is an emergent property of model scale t
 
 ### 4.1 逻辑回归
 
-逻辑回归虽然名字叫回归，但其实它是一种线性的分类方法。逻辑回归是一种广义线性回归模型，适用于二分类问题。逻辑回归的输出是一个概率值，表示样本属于正类的概率。
+逻辑回归（Logistic Regression）是一种用于处理分类问题的统计模型，尽管名字中带有“回归”，但实际上它是一种分类方法。逻辑回归模型通过学习输入特征与输出类别之间的关系，来预测数据点属于某个类别的概率。
 
-### 5.2 决策树
+#### 4.1.1 逻辑回归的原理
+
+逻辑回归本质上是线性回归模型的扩展，但它使用 logistic (sigmoid) 函数 将预测结果映射到 (0, 1) 区间，从而表示概率。线性回归模型输出的值可以是任意实数，而逻辑回归通过 sigmoid 函数将输出值限制在 0 到 1 之间。具体来说，逻辑回归模型首先假设数据服从伯努利分布，然后通过极大似然估计的方法来求解模型参数，使得模型在当前数据集上的预测结果与实际结果尽可能一致。
+
+Logistic 函数（Sigmoid 函数）的数学表达式为：
+
+$\sigma(z)=\frac{1}{1+e^{-z}}$​
+ 
+其中，z是线性回归模型的输出，即：$z=\beta_0+\beta_1 x_1+...+\beta_n x_n$
+
+在上式中，$\beta_0,\beta_1,...,\beta_n$是模型参数，$x_1,...,x_n$是输入特征。
+
+逻辑回归模型输出的是样本属于某个类别的概率。例如，对于二分类问题，输出 σ(z) 表示样本属于类别 1 的概率，1−σ(z) 表示样本属于类别 0 的概率。
+
+逻辑回归的实现步骤
+- 数据准备：
+    - 收集并预处理数据，确保数据质量和格式适合模型训练。
+    - 特征缩放和归一化通常是有益的。
+- 模型定义：
+    - 定义逻辑回归模型的结构和参数。
+- 模型训练：
+    - 使用训练数据拟合模型参数，常用的方法是最大似然估计（Maximum Likelihood Estimation, MLE）。
+    - 优化算法如梯度下降（Gradient Descent）用于找到最佳参数。
+- 模型评估：
+    - 使用验证集或交叉验证评估模型性能。
+    - 常用的评估指标包括准确率（Accuracy）、精确率（Precision）、召回率（Recall）、F1 分数（F1 Score）和 ROC-AUC 曲线等。
+- 模型预测：
+    - 使用训练好的模型对新数据进行分类预测。
+
+逻辑回归在许多领域有广泛的应用，特别适用于二分类问题，但也可以通过一些扩展方法用于多分类问题。
+- 医疗诊断：预测病人是否患某种疾病（如糖尿病、心脏病等）。
+- 金融领域：信用评分、贷款违约预测等。
+- 市场营销：客户分类、客户流失预测等。
+- 社会科学：调查数据分析，事件发生概率预测等。
+
+
+逻辑回归的优缺点
+- 优点
+    - 简单易理解：逻辑回归模型简单，易于解释和理解。
+    - 计算效率高：训练和预测速度快，适合大规模数据集。
+    - 概率输出：输出的是样本属于某个类别的概率，便于进一步决策。
+    - 特征重要性：模型参数可以解释特征的重要性。
+- 缺点
+    - 线性可分性假设：假设数据是线性可分的，对于非线性关系的分类问题效果不佳。
+    - 过拟合：在特征数量较多的情况下，可能会发生过拟合。
+    - 特征工程要求高：需要对输入特征进行仔细选择和处理。
+
+#### 4.2.2 用SKlearn实现逻辑回归
+
+通过sklearn库，我们可以很方便地使用逻辑回归模型。我们只需要调用sklearn.linear_model包中的LogisticRegression类，然后使用fit方法拟合数据，使用predict方法进行预测。
+
+```python
+# 导入必要的库
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.datasets import load_iris
+
+# 加载鸢尾花数据集，数据集的内容我们在第二章已经介绍过了
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 将数据集划分为训练集和测试集，在第二章我们也介绍过
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 初始化逻辑回归模型
+log_reg = LogisticRegression(max_iter=200)
+
+# 训练模型
+log_reg.fit(X_train, y_train)
+
+# 使用模型进行预测
+y_pred = log_reg.predict(X_test)
+
+# 评估模型
+accuracy = accuracy_score(y_test, y_pred)
+print(f'准确率: {accuracy:.2f}')
+
+# 打印分类报告
+print("分类报告:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
+```
+
+输出结果如下：
+```
+准确率: 1.00
+分类报告:
+              precision    recall  f1-score   support
+
+      setosa       1.00      1.00      1.00        19
+  versicolor       1.00      1.00      1.00        13
+   virginica       1.00      1.00      1.00        13
+
+    accuracy                           1.00        45
+   macro avg       1.00      1.00      1.00        45
+weighted avg       1.00      1.00      1.00        45
+```
+
+### 4.2 决策树
+
+决策树是一种用于分类和回归任务的监督学习算法。它通过一系列的二元（是/否）决策将数据划分为不同的类别或预测连续值。决策树模型通过递归地分割数据空间来构建树形结构，其中每个节点代表一个决策点或分裂点。
+
+决策树由三个主要部分组成：
+- 根节点（Root Node）：树的起点，包含整个数据集的所有样本。从这里开始，数据被逐步分裂。
+- 内部节点（Internal Nodes）：每个内部节点表示对某个特征的决策或测试。根据特征值，将数据分成两个或多个分支。
+- 叶节点（Leaf Nodes）：叶节点表示最终的分类或回归结果。不再进一步分裂。
+
+
+决策树通过递归分裂数据集来构建树形模型。常用的分裂标准包括：
+
+信息增益（Information Gain）：基于熵（Entropy）减少的量度。
+基尼指数（Gini Index）：衡量数据集的不纯度。
+均方误差（Mean Squared Error, MSE）：用于回归问题，衡量预测值与真实值之间的误差。
+
+具体步骤如下：
+- 选择最佳分裂特征：
+计算每个特征的分裂标准（如信息增益或基尼指数）。
+选择分裂标准最高的特征。
+- 分裂数据集：
+根据选择的特征，将数据集分裂成两个或多个子集。
+- 递归构建子树：
+对每个子集重复步骤1和步骤2，直到满足停止条件（如达到最大树深度或叶节点纯度）。
+
+决策树的优缺点
+- 优点
+    - 易于理解和解释：决策树的树形结构直观，决策路径容易理解。
+    - 无需特征缩放：决策树不需要对特征进行归一化或标准化处理。
+    - 处理非线性关系：可以捕捉数据中的复杂非线性关系。
+    - 处理缺失值：可以自然地处理数据中的缺失值。
+- 缺点
+    - 容易过拟合：决策树容易生成过于复杂的模型，从而在训练数据上表现很好，但在测试数据上表现不佳。
+    - 不稳定性：对数据中的微小变化敏感，不同的数据集可能生成完全不同的树。
+    - 偏向于多值特征：在选择分裂特征时，可能偏向于具有更多取值的特征。
 
 决策树的编程与逻辑回归类似，我们只需要调用DecisionTreeClassifier去fit数据就可以了。
 
@@ -2120,11 +2710,44 @@ plt.show()
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/decision_tree_iris2.png)
 
 
-### 5.3 随机梯度下降
+### 4.3 随机梯度下降
 
 在SKlearn库中的文档中也承认，随机梯度下降是一种优化算法，放在监督学习的算法中是不合适的。它是梯度下降的一种变体，通过随机选择样本来估计梯度，从而加快训练速度。与传统的梯度下降法不同，随机梯度下降每次迭代只使用一个样本来更新模型参数，而不是使用所有样本的平均梯度。这种随机性使得随机梯度下降具有更快的收敛速度和更低的计算复杂度。
 
 虽然随机梯度下降提出比较早，但是直到深度学习流行起来之后，才成为教材中的重要部分。
+
+介绍随机梯度下降之前，我们先说一说标准的梯度下降。
+
+标准梯度下降（Batch Gradient Descent）的更新规则如下：
+$\theta = \theta - \eta \nabla_\theta J(\theta)$
+
+其中：
+- $\theta$ 是模型参数。
+- $\eta$ 是学习率。
+- $\nabla_\theta J(\theta)$ 是损失函数 $J(\theta)$ 对参数 $\theta$ 的梯度
+
+随机梯度下降（Stochastic Gradient Descent）的更新规则如下：
+$\theta = \theta - \eta \nabla_\theta J(\theta; x^{(i)}, y^{(i)})$
+
+其中：
+- $(x^{(i)}, y^{(i)})$ 是训练集中的第 $i$ 个样本。
+- $\theta$ 是模型参数。
+- $\eta$ 是学习率。
+- $\nabla_\theta J(\theta; x^{(i)}, y^{(i)})$ 是损失函数 $J(\theta)$ 对参数 $\theta$ 在样本 $(x^{(i)}, y^{(i)})$ 上的梯度。
+
+随机梯度下降每次只使用一个样本来更新参数，因此计算速度快，适合大规模数据集。
+
+随机梯度下降的优点和缺点
+- 优点
+    - 计算效率高：每次迭代只处理一个样本，计算速度快，内存占用小。
+    - 适用于大数据集：能够在大规模数据集上高效工作。
+    - 在线学习：可以用于在线学习，适应动态变化的数据。
+- 缺点
+    - 收敛速度慢：由于每次更新的梯度方向波动较大，收敛速度可能慢于批量梯度下降。
+    - 收敛不稳定：可能在最优值附近来回震荡，导致收敛不稳定。
+    - 需要调参：学习率的选择对收敛效果影响较大，需要通过实验调整。
+
+为了在计算效率和收敛稳定性之间找到平衡，可以使用 Mini-batch 梯度下降。它在每次迭代时使用一小批量样本（mini-batch）来计算梯度。这种方法结合了标准梯度下降和 SGD 的优点，既提高了计算效率，又减少了梯度的波动。
 
 下面我们看一下使用随机梯度下降对鸢尾花数据集进行分类的例子：
 
@@ -2175,20 +2798,90 @@ clf = SGDClassifier(alpha=0.001, max_iter=100).fit(X, y)
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/sgd_iris.png)
 
 
-### 5.4 支持向量机
+### 4.4 支持向量机
 
-在深度学习流行之前，支持向量机曾经是最有前途的机器学习方向。支持向量机有良好的理论基础，可以解决线性和非线性分类问题，也可以用于回归问题。支持向量机的核心思想是找到一个最优的超平面，使得不同类别的样本点之间的间隔最大化。
+在深度学习流行之前，支持向量机曾经是最有前途的机器学习方向。支持向量机有良好的理论基础，可以解决线性和非线性分类问题，也可以用于回归问题。
 
-在支持向量机中，使用合适的核函数是非常重要的。核函数可以将原始特征空间映射到更高维的特征空间，从而使得原始数据在新的特征空间中是线性可分的。常用的核函数有线性核、多项式核、高斯核等。
+我们先介绍三个基本概念：
+1. 超平面:
+在二维空间中，超平面就是一条直线；在三维空间中，超平面是一平面；而在更高维空间中，它是一个 d−1 维的子空间。对于一个给定的训练数据集，SVM 试图找到一个能够将不同类别分开的最优超平面。
+2. 间隔:间隔（Margin）是指从超平面到最近的训练样本（支持向量）的最短距离。SVM 的目标是最大化这个间隔，从而提高分类器的泛化能力。
+3. 支持向量: 支持向量是指那些位于间隔边界上的训练样本。它们是决定最优超平面位置的关键点。
 
-通过使用svm.SVC可以创建一个支持向量分类器。参数kernel="linear" 指定使用线性核函数。C=1000 设定了惩罚参数，较大的 C 值会减少分类错误，但可能导致过拟合。
+数据可以分为线性可分和线性不可分两种情况。
+对于线性可分数据，SVM 找到一个能够将样本完全分开的超平面，同时最大化两类之间的间隔
+对于线性不可分的数据，SVM 允许一定程度的误分类，通过引入松弛变量（Slack Variables）来实现。
+SVM 还可以通过核函数（Kernel Function）将数据映射到更高维空间，在高维空间中实现线性可分。
+
+常见的核函数包括：
+- 线性核函数：$K(x_i,x_j)=x_i . x_j$
+- 多项式核函数：$K(x_i,x_j)=(\gamma x_i . x_j + r)^d$
+- 高斯径向基核函数（RBF）：$K(x_i,x_j)=exp(-\gamma ||x_i-x_j||^2)$
+- Sigmoid核函数：$K(x_i,x_j)=tanh(\gamma x_i . x_j + r)$
+
+SVM 的优缺点
+- 优点
+    - 高效：在高维空间中仍然有效。
+    - 鲁棒性：在样本数量远小于特征数量时仍然表现良好。
+    - 灵活性：通过自定义核函数，可以适应不同的分类任务。
+- 缺点
+    - 计算复杂度高：对大规模数据集的训练时间较长。
+    - 参数选择困难：核函数和正则化参数的选择对模型性能影响较大。
+    - 对噪声敏感：对噪声数据和重叠的类不太鲁棒。
+
+按照惯例，我们用线性核函数来实现鸢尾花的分类：
 
 ```python
-clf = svm.SVC(kernel="linear", C=1000)
-clf.fit(X, y)
+# 导入必要的库
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.datasets import load_iris
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 将数据集划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 初始化支持向量机分类器
+svm_clf = SVC(kernel='linear')
+
+# 训练模型
+svm_clf.fit(X_train, y_train)
+
+# 使用模型进行预测
+y_pred = svm_clf.predict(X_test)
+
+# 评估模型
+accuracy = accuracy_score(y_test, y_pred)
+print(f'准确率: {accuracy:.2f}')
+
+# 打印分类报告
+print("分类报告:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
 ```
 
-我们来看一个完整的例子：
+运行结果如下：
+```
+准确率: 1.00
+分类报告:
+              precision    recall  f1-score   support
+
+      setosa       1.00      1.00      1.00        19
+  versicolor       1.00      1.00      1.00        13
+   virginica       1.00      1.00      1.00        13
+
+    accuracy                           1.00        45
+   macro avg       1.00      1.00      1.00        45
+weighted avg       1.00      1.00      1.00        45
+```
+
+我们来看一个分类生成的数据的例子：
 ```python
 import matplotlib.pyplot as plt
 
@@ -2233,8 +2926,261 @@ plt.show()
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/svm_linear.png)
 
+下面我们再来看使用多项式核函数如何来实现鸢尾花的分类：
 
-### 5.5 k近邻算法
+```python
+# 导入必要的库
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 将数据集划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 初始化支持向量机分类器，使用多项式核函数
+svm_clf = SVC(kernel='poly', degree=3, gamma='scale', coef0=1)
+
+# 训练模型
+svm_clf.fit(X_train, y_train)
+
+# 使用模型进行预测
+y_pred = svm_clf.predict(X_test)
+
+# 评估模型
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+
+# 打印分类报告
+print("Classification Report:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
+
+# 打印混淆矩阵
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# 使用PCA将数据降至二维以便可视化
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X)
+
+# 再次划分为训练集和测试集
+X_train_reduced, X_test_reduced = train_test_split(X_reduced, test_size=0.3, random_state=42)
+
+# 训练SVM模型
+svm_clf.fit(X_train_reduced, y_train)
+
+# 绘制决策边界
+def plot_decision_boundaries(X, y, model_class, **model_params):
+    h = .02  # 网格步长
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    model = model_class(**model_params)
+    model.fit(X, y)
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    plt.contourf(xx, yy, Z, alpha=0.8)
+    plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o')
+    plt.xlabel('Principal Component 1')
+    plt.ylabel('Principal Component 2')
+    plt.title('SVM with Polynomial Kernel (degree=3)')
+    plt.show()
+
+# 绘制鸢尾花数据集的决策边界
+plot_decision_boundaries(X_train_reduced, y_train, SVC, kernel='poly', degree=3, gamma='scale', coef0=1)
+```
+
+运行结果如下：
+```
+Accuracy: 0.98
+Classification Report:
+              precision    recall  f1-score   support
+
+      setosa       1.00      1.00      1.00        19
+  versicolor       1.00      0.92      0.96        13
+   virginica       0.93      1.00      0.96        13
+
+    accuracy                           0.98        45
+   macro avg       0.98      0.97      0.97        45
+weighted avg       0.98      0.98      0.98        45
+
+Confusion Matrix:
+[[19  0  0]
+ [ 0 12  1]
+ [ 0  0 13]]
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_svm_poly.png)
+
+我们再来看使用高斯径向基核函数如何来实现鸢尾花的分类：
+
+```python
+# 导入必要的库
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 将数据集划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 初始化支持向量机分类器，使用高斯径向基核函数
+svm_clf = SVC(kernel='rbf', gamma='scale')
+
+# 训练模型
+svm_clf.fit(X_train, y_train)
+
+# 使用模型进行预测
+y_pred = svm_clf.predict(X_test)
+
+# 评估模型
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+
+# 打印分类报告
+print("Classification Report:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
+
+# 打印混淆矩阵
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# 使用PCA将数据降至二维以便可视化
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X)
+
+# 再次划分为训练集和测试集
+X_train_reduced, X_test_reduced, y_train_reduced, y_test_reduced = train_test_split(X_reduced, y, test_size=0.3, random_state=42)
+
+# 训练SVM模型
+svm_clf.fit(X_train_reduced, y_train_reduced)
+
+# 绘制决策边界
+def plot_decision_boundaries(X, y, model_class, **model_params):
+    h = .02  # 网格步长
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    model = model_class(**model_params)
+    model.fit(X, y)
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    plt.contourf(xx, yy, Z, alpha=0.8)
+    plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o')
+    plt.xlabel('Principal Component 1')
+    plt.ylabel('Principal Component 2')
+    plt.title('SVM with RBF Kernel')
+    plt.show()
+
+# 绘制鸢尾花数据集的决策边界
+plot_decision_boundaries(X_train_reduced, y_train_reduced, SVC, kernel='rbf', gamma='scale')
+```
+
+运行结果如下：
+```
+Accuracy: 1.00
+Classification Report:
+              precision    recall  f1-score   support
+
+      setosa       1.00      1.00      1.00        19
+  versicolor       1.00      1.00      1.00        13
+   virginica       1.00      1.00      1.00        13
+
+    accuracy                           1.00        45
+   macro avg       1.00      1.00      1.00        45
+weighted avg       1.00      1.00      1.00        45
+
+Confusion Matrix:
+[[19  0  0]
+ [ 0 13  0]
+ [ 0  0 13]]
+```
+
+### 4.5 k近邻算法
+
+最近邻方法背后的原理是找到与新点距离最近的预定义数量的训练样本，并从这些样本中预测标签。样本数量可以是用户定义的常数（k近邻学习），也可以根据点的局部密度变化（基于半径的邻居学习）。距离通常可以是任何度量标准：标准欧几里得距离是最常见的选择。基于邻居的方法被称为非泛化机器学习方法，因为它们只是“记住”了所有训练数据（可能被转换成快速索引结构，如球树或KD树）。
+
+尽管最近邻方法很简单，但它在许多分类和回归问题中都取得了成功，包括手写数字和卫星图像场景。作为一种非参数方法，它在决策边界非常不规则的分类情况下往往很成功。
+
+```python
+import matplotlib.pyplot as plt
+
+from sklearn.inspection import DecisionBoundaryDisplay
+
+_, axs = plt.subplots(ncols=2, figsize=(12, 5))
+
+for ax, weights in zip(axs, ("uniform", "distance")):
+    clf.set_params(knn__weights=weights).fit(X_train, y_train)
+    disp = DecisionBoundaryDisplay.from_estimator(
+        clf,
+        X_test,
+        response_method="predict",
+        plot_method="pcolormesh",
+        xlabel=iris.feature_names[0],
+        ylabel=iris.feature_names[1],
+        shading="auto",
+        alpha=0.5,
+        ax=ax,
+    )
+    scatter = disp.ax_.scatter(X.iloc[:, 0], X.iloc[:, 1], c=y, edgecolors="k")
+    disp.ax_.legend(
+        scatter.legend_elements()[0],
+        iris.target_names,
+        loc="lower left",
+        title="Classes",
+    )
+    _ = disp.ax_.set_title(
+        f"3-Class classification\n(k={clf[-1].n_neighbors}, weights={weights!r})"
+    )
+
+plt.show()
+```
+
+运行结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_knn.png)
+
+在k近邻方法中，我们可以通过weights参数来指定邻居的权重。
+- 当weights="uniform"时，所有最近的邻居对决策的影响都是相同的。
+- 当weights="distance"时，分配给每个邻居的权重与该邻居到查询点的距离的倒数成正比。
+
+对照前面梯度下降方法和决策树方法，我们可以看到，k近邻方法的决策边界是非常不规则的。这也是k近邻方法的一个特点。针对不同的数据，选择不同的方法可能就会带来完全不同的效果。
+
+### 4.6 朴素贝叶斯
+
+```python
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
+gnb = GaussianNB()
+y_pred = gnb.fit(X_train, y_train).predict(X_test)
+print("Number of mislabeled points out of a total %d points : %d"
+      % (X_test.shape[0], (y_test != y_pred).sum()))
+```
+
+
 
 ## 第五章 监督学习：数值预测
 
@@ -2625,6 +3571,148 @@ S_ = ica.fit_transform(X)
 A_ = ica.mixing_  
 ```
 
+### 6.3 异常点检测
+
+许多应用程序需要能够判断一个新的观察值是否与现有的观察值属于同一分布（它是正常值），或者应该被视为不同（它是异常值）。通常，这种能力被用来清理真实的数据集。必须做出两个重要的区别：
+
+异常值检测：
+训练数据包含异常值，这些异常值被定义为与其他观察值相距甚远的观察值。因此，异常值检测估计器试图拟合训练数据最集中的区域，忽略偏离的观察值。
+
+新颖性检测：
+训练数据没有被异常值污染，我们对检测新的观察值是否是异常值感兴趣。在这种情况下，异常值也称为新颖值。
+
+异常值检测和新颖性检测都用于异常检测，其中人们有兴趣检测异常或不寻常的观察值。因此，异常值检测也被称为无监督异常检测，新颖性检测被称为半监督异常检测。在异常值检测的背景下，异常值/异常不能形成一个密集的集群，因为可用的估计器假设异常值/异常位于低密度区域。相反，在新颖性检测的背景下，新颖性/异常可以形成一个密集的集群，只要它们位于训练数据的低密度区域，在这个背景下被认为是正常的。
+
+```python
+# Author: Alexandre Gramfort <alexandre.gramfort@inria.fr>
+#         Albert Thomas <albert.thomas@telecom-paristech.fr>
+# License: BSD 3 clause
+
+import time
+
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+
+from sklearn import svm
+from sklearn.covariance import EllipticEnvelope
+from sklearn.datasets import make_blobs, make_moons
+from sklearn.ensemble import IsolationForest
+from sklearn.kernel_approximation import Nystroem
+from sklearn.linear_model import SGDOneClassSVM
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.pipeline import make_pipeline
+
+matplotlib.rcParams["contour.negative_linestyle"] = "solid"
+
+# Example settings
+n_samples = 300
+outliers_fraction = 0.15
+n_outliers = int(outliers_fraction * n_samples)
+n_inliers = n_samples - n_outliers
+
+# define outlier/anomaly detection methods to be compared.
+# the SGDOneClassSVM must be used in a pipeline with a kernel approximation
+# to give similar results to the OneClassSVM
+anomaly_algorithms = [
+    (
+        "Robust covariance",
+        EllipticEnvelope(contamination=outliers_fraction, random_state=42),
+    ),
+    ("One-Class SVM", svm.OneClassSVM(nu=outliers_fraction, kernel="rbf", gamma=0.1)),
+    (
+        "One-Class SVM (SGD)",
+        make_pipeline(
+            Nystroem(gamma=0.1, random_state=42, n_components=150),
+            SGDOneClassSVM(
+                nu=outliers_fraction,
+                shuffle=True,
+                fit_intercept=True,
+                random_state=42,
+                tol=1e-6,
+            ),
+        ),
+    ),
+    (
+        "Isolation Forest",
+        IsolationForest(contamination=outliers_fraction, random_state=42),
+    ),
+    (
+        "Local Outlier Factor",
+        LocalOutlierFactor(n_neighbors=35, contamination=outliers_fraction),
+    ),
+]
+
+# Define datasets
+blobs_params = dict(random_state=0, n_samples=n_inliers, n_features=2)
+datasets = [
+    make_blobs(centers=[[0, 0], [0, 0]], cluster_std=0.5, **blobs_params)[0],
+    make_blobs(centers=[[2, 2], [-2, -2]], cluster_std=[0.5, 0.5], **blobs_params)[0],
+    make_blobs(centers=[[2, 2], [-2, -2]], cluster_std=[1.5, 0.3], **blobs_params)[0],
+    4.0
+    * (
+        make_moons(n_samples=n_samples, noise=0.05, random_state=0)[0]
+        - np.array([0.5, 0.25])
+    ),
+    14.0 * (np.random.RandomState(42).rand(n_samples, 2) - 0.5),
+]
+
+# Compare given classifiers under given settings
+xx, yy = np.meshgrid(np.linspace(-7, 7, 150), np.linspace(-7, 7, 150))
+
+plt.figure(figsize=(len(anomaly_algorithms) * 2 + 4, 12.5))
+plt.subplots_adjust(
+    left=0.02, right=0.98, bottom=0.001, top=0.96, wspace=0.05, hspace=0.01
+)
+
+plot_num = 1
+rng = np.random.RandomState(42)
+
+for i_dataset, X in enumerate(datasets):
+    # Add outliers
+    X = np.concatenate([X, rng.uniform(low=-6, high=6, size=(n_outliers, 2))], axis=0)
+
+    for name, algorithm in anomaly_algorithms:
+        t0 = time.time()
+        algorithm.fit(X)
+        t1 = time.time()
+        plt.subplot(len(datasets), len(anomaly_algorithms), plot_num)
+        if i_dataset == 0:
+            plt.title(name, size=18)
+
+        # fit the data and tag outliers
+        if name == "Local Outlier Factor":
+            y_pred = algorithm.fit_predict(X)
+        else:
+            y_pred = algorithm.fit(X).predict(X)
+
+        # plot the levels lines and the points
+        if name != "Local Outlier Factor":  # LOF does not implement predict
+            Z = algorithm.predict(np.c_[xx.ravel(), yy.ravel()])
+            Z = Z.reshape(xx.shape)
+            plt.contour(xx, yy, Z, levels=[0], linewidths=2, colors="black")
+
+        colors = np.array(["#377eb8", "#ff7f00"])
+        plt.scatter(X[:, 0], X[:, 1], s=10, color=colors[(y_pred + 1) // 2])
+
+        plt.xlim(-7, 7)
+        plt.ylim(-7, 7)
+        plt.xticks(())
+        plt.yticks(())
+        plt.text(
+            0.99,
+            0.01,
+            ("%.2fs" % (t1 - t0)).lstrip("0"),
+            transform=plt.gca().transAxes,
+            size=15,
+            horizontalalignment="right",
+        )
+        plot_num += 1
+
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/outlier.png)
 
 ## 第七章 集成学习
 
