@@ -3116,11 +3116,127 @@ Confusion Matrix:
  [ 0  0 13]]
 ```
 
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_svm_rbf.png)
+
+最后，我们再看用sigmoid核函数如何来实现鸢尾花的分类：
+
+```python
+# 导入必要的库
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 将数据集划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 初始化支持向量机分类器，使用Sigmoid核函数
+svm_clf = SVC(kernel='sigmoid', gamma='scale')
+
+# 训练模型
+svm_clf.fit(X_train, y_train)
+
+# 使用模型进行预测
+y_pred = svm_clf.predict(X_test)
+
+# 评估模型
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+
+# 打印分类报告
+print("Classification Report:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
+
+# 打印混淆矩阵
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# 使用PCA将数据降至二维以便可视化
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X)
+
+# 再次划分为训练集和测试集
+X_train_reduced, X_test_reduced, y_train_reduced, y_test_reduced = train_test_split(X_reduced, y, test_size=0.3, random_state=42)
+
+# 训练SVM模型
+svm_clf.fit(X_train_reduced, y_train_reduced)
+
+# 绘制决策边界
+def plot_decision_boundaries(X, y, model_class, **model_params):
+    h = .02  # 网格步长
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    model = model_class(**model_params)
+    model.fit(X, y)
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    plt.contourf(xx, yy, Z, alpha=0.8)
+    plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o')
+    plt.xlabel('Principal Component 1')
+    plt.ylabel('Principal Component 2')
+    plt.title('SVM with Sigmoid Kernel')
+    plt.show()
+
+# 绘制鸢尾花数据集的决策边界
+plot_decision_boundaries(X_train_reduced, y_train_reduced, SVC, kernel='sigmoid', gamma='scale')
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_svm_sigmoid.png)
+
+从这张图的结果上，我们可以明确感受到核函数取法不同对于分类的准确性结果的影响。
+
 ### 4.5 k近邻算法
 
-最近邻方法背后的原理是找到与新点距离最近的预定义数量的训练样本，并从这些样本中预测标签。样本数量可以是用户定义的常数（k近邻学习），也可以根据点的局部密度变化（基于半径的邻居学习）。距离通常可以是任何度量标准：标准欧几里得距离是最常见的选择。基于邻居的方法被称为非泛化机器学习方法，因为它们只是“记住”了所有训练数据（可能被转换成快速索引结构，如球树或KD树）。
+最近邻方法（Nearest Neighbor）是一类用于模式识别和回归分析的非参数统计方法。它的基本思想是，通过在数据集中找到与目标样本最接近的一个或多个样本，并基于这些邻近样本的性质来进行预测或分类。
 
-尽管最近邻方法很简单，但它在许多分类和回归问题中都取得了成功，包括手写数字和卫星图像场景。作为一种非参数方法，它在决策边界非常不规则的分类情况下往往很成功。
+是简单的最近邻方法是K最近邻算法（K-Nearest Neighbors, KNN）。
+
+KNN的主要特点和步骤如下：
+- 训练阶段
+    - KNN 算法实际上没有显式的训练阶段，只是简单地存储所有的训练数据。
+- 预测阶段
+    - 给定一个新的样本，算法计算该样本与训练数据集中每个样本的距离（通常使用欧氏距离）。
+    - 选取距离最近的 K 个训练样本（称为“邻居”）。
+    - 对于分类任务，通过邻居的类别进行投票，并将得票最多的类别作为预测结果。
+    - 对于回归任务，计算邻居的平均值或加权平均值作为预测结果。
+
+KNN算法的步骤：
+1. 选择参数 K：K 是一个超参数，代表选择的邻居数量。K 的值一般为正整数，且通常通过交叉验证来选择一个合适的值。
+2. 计算距离：使用距离度量（例如欧氏距离、曼哈顿距离或其他）计算待分类样本与每个训练样本之间的距离。
+3. 找出最近的 K 个邻居：根据距离从小到大排序，选取前 K 个样本。
+4. 进行投票或平均：
+    - 对于分类任务，根据邻居的类别进行投票，选出得票最多的类别。
+    - 对于回归任务，计算邻居的平均值作为预测结果。
+
+通常使用的距离度量包括：
+- 欧氏距离（Euclidean Distance）：$d(x, y) = \sqrt{\sum_{i=1}^{n}(x_i - y_i)^2}$
+- 曼哈顿距离（Manhattan Distance）：$d(x, y) = \sum_{i=1}^{n}|x_i - y_i|$
+- 切比雪夫距离（Chebyshev Distance）：$d(x, y) = \max(|x_1 - y_1|, |x_2 - y_2|, ..., |x_n - y_n|)$
+
+KNN算法的优缺点：
+- 优点：
+    - 简单易实现。
+    - 无需显式的训练过程。
+    - 对于特定问题（如推荐系统）可以提供良好的性能。
+- 缺点：
+    - 计算复杂度高，尤其是对于大规模数据集。
+    - 存储需求大，需要存储全部训练数据。
+    - 对于高维数据效果不好（维度灾难）。
+    - 对噪声和不平衡数据敏感。
+
+
+我们来看一下k为11时的效果：
 
 ```python
 import matplotlib.pyplot as plt
@@ -3166,21 +3282,160 @@ plt.show()
 
 对照前面梯度下降方法和决策树方法，我们可以看到，k近邻方法的决策边界是非常不规则的。这也是k近邻方法的一个特点。针对不同的数据，选择不同的方法可能就会带来完全不同的效果。
 
-### 4.6 朴素贝叶斯
+下面我们再看一下k=3时的效果：
 
 ```python
+# 导入必要的库
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.datasets import load_iris
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 使用PCA将数据降至二维
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X)
+
+# 将降维后的数据划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X_reduced, y, test_size=0.3, random_state=42)
+
+# 初始化KNN分类器，选择K=3
+knn = KNeighborsClassifier(n_neighbors=3)
+
+# 训练模型
+knn.fit(X_train, y_train)
+
+# 进行预测
+y_pred = knn.predict(X_test)
+
+# 评估模型性能
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+print("Classification Report:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# 绘制决策边界
+def plot_decision_boundaries(X, y, model):
+    h = .02  # 网格步长
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    
+    plt.contourf(xx, yy, Z, alpha=0.8)
+    plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o')
+    plt.xlabel('Principal Component 1')
+    plt.ylabel('Principal Component 2')
+    plt.title('KNN Decision Boundary')
+    plt.show()
+
+# 绘制鸢尾花数据集的决策边界
+plot_decision_boundaries(X_train, y_train, knn)
+```
+
+效果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_knn_3.png)
+
+### 4.6 朴素贝叶斯方法
+
+朴素贝叶斯（Naive Bayes）方法是一类基于贝叶斯定理的简单而强大的分类算法，特别适用于大规模数据集。尽管其假设特征之间相互独立（这在实际情况中很少成立，因此称为“朴素”），但它在许多实际应用中表现良好，特别是文本分类和垃圾邮件过滤。
+
+贝叶斯定理
+贝叶斯定理描述了后验概率$P(C∣X)$是如何通过先验概率$ P(C)$、似然$ P(X∣C) $和证据 $P(X)$ 计算得到的：
+$$P(C|X) = \frac{P(X|C)P(C)}{P(X)}$$
+
+其中：
+- $P(C|X)$是给定特征$X$时类别$C$的后验概率。
+- $P(C)$是类别$C$的先验概率。
+- $P(X|C)$是类别$C$给定的情况下的似然。
+- $P(X)$是特征$X$的证据。
+
+朴素贝叶斯方法通过假设特征之间相互独立，简化了概率的计算：
+$$P(X|C) = P(x_1, x_2, ..., x_n|C) = P(x_1|C)P(x_2|C)...P(x_n|C)$$
+
+因此，后验概率可以表示为：
+$$P(C|X) \propto  P(C) \prod_i^n P(x_i|C) $$
+
+根据贝叶斯定理，朴素贝叶斯分类器选择使后验概率最大的类别:
+$$\hat{C}=argmax P(C) \prod_i^n P(x_i|C) $$
+
+朴素贝叶斯分类器的主要类型有：
+- 高斯朴素贝叶斯（Gaussian Naive Bayes）：假设特征值服从正态分布，适用于连续数据。
+- 多项式朴素贝叶斯（Multinomial Naive Bayes）：适用于离散数据，常用于文本分类，假设特征值是文档中单词的出现次数。
+- 伯努利朴素贝叶斯（Bernoulli Naive Bayes）：适用于二元数据，假设特征值是布尔变量（例如，单词是否出现在文档中）。
+
+```python
+# 导入必要的库
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
-X, y = load_iris(return_X_y=True)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 将数据集划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 初始化高斯朴素贝叶斯分类器
 gnb = GaussianNB()
-y_pred = gnb.fit(X_train, y_train).predict(X_test)
-print("Number of mislabeled points out of a total %d points : %d"
-      % (X_test.shape[0], (y_test != y_pred).sum()))
+
+# 训练模型
+gnb.fit(X_train, y_train)
+
+# 进行预测
+y_pred = gnb.predict(X_test)
+
+# 评估模型性能
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+print("Classification Report:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# 使用PCA将数据降至二维以便可视化
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X)
+
+# 再次划分为训练集和测试集
+X_train_reduced, X_test_reduced, y_train_reduced, y_test_reduced = train_test_split(X_reduced, y, test_size=0.3, random_state=42)
+
+# 训练朴素贝叶斯模型
+gnb.fit(X_train_reduced, y_train_reduced)
+
+# 进行预测
+y_pred_reduced = gnb.predict(X_test_reduced)
+
+# 绘制结果
+plt.figure(figsize=(8, 6))
+plt.scatter(X_test_reduced[:, 0], X_test_reduced[:, 1], c=y_pred_reduced, cmap='viridis', edgecolor='k', s=100)
+plt.title('Naive Bayes Classification with PCA on Iris Dataset')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.colorbar()
+plt.show()
 ```
 
+运行的效果如下：
 
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_bayes.png)
 
 ## 第五章 监督学习：数值预测
 
@@ -7880,6 +8135,922 @@ with open(args.outf, 'w') as outf:
 - 环境：代理与之交互并从中获得奖励或惩罚的世界。
 - 奖励函数：定义代理采取的每个动作的奖励或惩罚。
 
+#### 15.1.1 马尔可夫决策过程
+
+强化学习的数学基础是马尔可夫决策过程（MDP）。MDP是一个五元组，包括：
+1. 状态集（States, S)：系统可能处于的所有状态的集合。每个状态 $s \in S$ 描述了系统在某一时刻的情况。
+2. 动作集（Actions, $A$ )：智能体可以在每个状态 \(s\) 下执行的所有可能动作的集合。动作集可以是全局的（对所有状态相同）或局部的（依赖于状态）。
+3. 状态转移概率（State Transition Probabilities, \(P\)）**：
+    - 描述在特定状态 \(s\) 下执行某个动作 \(a\) 后转移到下一个状态 \(s'\) 的概率。记作 $P(s' | s, a)$。
+
+4. 奖励函数（Reward Function, $R$)：描述在特定状态 \(s\) 下执行动作 \(a\) 所获得的即时奖励。记作 \(R(s, a)\)。
+
+5. **折扣因子（Discount Factor, ($\gamma$：一个介于 0 和 1 之间的值，用于度量未来奖励的当前价值。折扣因子 \(\gamma\) 越接近 1，智能体越关注长期回报；越接近 0，智能体越关注即时回报。
+
+MDP 的目标是找到一个策略（Policy, $\pi$），该策略能够最大化累积奖励。策略 $\pi(a|s)$ 是从状态 s 选择动作 a 的概率分布。
+
+为了评估策略的优劣，引入了价值函数：
+
+1. **状态价值函数（State Value Function, $V^\pi(s)$)**：表示在策略 $\pi$ 下，从状态s开始的预期累积奖励。
+
+$$
+V^\pi(s) = \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \bigg| s_0 = s \right]
+$$
+
+2. **状态-动作价值函数（Action Value Function, $Q^\pi(s, a)$）**：表示在策略 $\pi$ 下，从状态s执行动作a后的预期累积奖励。
+
+$$
+Q^\pi(s, a) = \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \bigg| s_0 = s, a_0 = a \right]
+$$
+
+价值函数可以通过贝尔曼方程递归地表示:
+
+1. 状态价值函数的贝尔曼方程：
+$$
+V^\pi(s) = \sum_{a \in A} \pi(a|s) \sum_{s' \in S} P(s'|s, a) [R(s, a) + \gamma V^\pi(s')]
+$$
+
+2. 状态-动作价值函数的贝尔曼方程：
+$$
+Q^\pi(s, a) = R(s, a) + \gamma \sum_{s' \in S} P(s'|s, a) \sum_{a' \in A} \pi(a'|s') Q^\pi(s', a')
+$$
+
+
+#### 15.1.2 贝尔曼最优方程
+
+在 MDP 中，策略优化的目标是找到最优策略 \(\pi^*\)，使得对于所有状态 \(s \in S\)，\(V^{\pi^*}(s)\) 最大化。
+
+1. 最优状态价值函数：
+$$
+V^*(s) = \max_\pi V^\pi(s)
+$$
+
+2. 最优状态-动作价值函数：
+$$
+Q^*(s, a) = \max_\pi Q^\pi(s, a)
+$$
+
+求解贝尔曼最优方程的方法有两种，一种是值迭代法，另一种是策略迭代法。
+
+值迭代是一种直接迭代更新状态价值函数 $V^*(s)$ 的方法，直到收敛到最优值。步骤如下：
+
+1. 初始化状态价值函数 $V(s)$ 为任意值（通常初始化为零）。
+2. 不断迭代更新 $V(s)$ 直到收敛：
+$$
+V_{k+1}(s) = \max_{a \in A} \sum_{s' \in S} P(s' | s, a) [R(s, a) + \gamma V_k(s')]
+$$
+3. 根据最终的状态价值函数 \(V^*(s)\) 提取出最优策略：
+$$
+\pi^*(s) = \arg\max_{a \in A} \sum_{s' \in S} P(s' | s, a) [R(s, a) + \gamma V^*(s')]
+$$
+
+策略迭代是一种交替进行策略评估和策略改进的方法。
+
+策略评估的目的是计算当前策略 $\pi_k$ 的状态价值函数 $V^{\pi_k}(s)$。这一步通过迭代求解贝尔曼期望方程来实现：
+
+$$
+V^{\pi_k}(s) = \sum_{a \in A} \pi_k(a|s) \sum_{s' \in S} P(s' | s, a) [R(s, a) + \gamma V^{\pi_k}(s')]
+$$
+
+利用迭代法，直到 $V$ 收敛。
+
+策略改进的目的是利用当前的状态价值函数 \(V^{\pi_k}(s)\) 来生成一个新的策略 \(\pi_{k+1}\)。新的策略选择使得每个状态下的行动都能最大化未来的期望累积奖励：
+
+$$
+\pi_{k+1}(s) = \arg\max_{a \in A} \sum_{s' \in S} P(s' | s, a) [R(s, a) + \gamma V^{\pi_k}(s')]
+$$
+
+#### 15.1.3 动态规划
+
+#### 15.1.4 蒙特卡洛方法
+
+蒙特卡罗方法（Monte Carlo Methods）是一类基于随机采样的算法，用于求解各种数值问题。在强化学习中，蒙特卡罗方法通过模拟多个从起始状态到终止状态的轨迹（episodes），然后利用这些轨迹的数据来估计状态值或行动值，从而求解马尔科夫决策过程（MDP）。
+
+蒙特卡罗方法在强化学习中的主要思想是通过多次模拟从起始状态到终止状态的完整轨迹，并使用这些轨迹中的回报（returns）来估计状态值函数 $V(s)$ 或行动值函数 $Q(s, a)$。
+
+使用蒙特卡罗方法求解强化学习问题的基本步骤为：
+
+1. 初始化
+
+初始化状态值函数 $V(s)$ 或行动值函数 $Q(s, a)$，以及策略 $\pi$。
+
+2. 生成轨迹
+
+利用当前策略 $\pi$，生成一个从起始状态到终止状态的轨迹（episode）。轨迹包括状态、动作、奖励的序列。
+
+3. 计算回报
+
+对于轨迹中的每个状态或状态-动作对，计算从该状态或状态-动作对开始的总回报。总回报通常通过折扣因子 \(\gamma\) 来计算：
+
+$$
+G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots
+$$
+
+4. 更新估计
+
+使用轨迹中的回报来更新状态值函数 \(V(s)\) 或行动值函数 \(Q(s, a)\)。通常使用增量更新公式：
+
+$$
+V(s) \leftarrow V(s) + \alpha (G_t - V(s))
+$$
+
+或
+
+$$
+Q(s, a) \leftarrow Q(s, a) + \alpha (G_t - Q(s, a))
+$$
+
+其中，$\alpha$是学习率。
+
+5. 改进策略
+
+根据更新后的值函数或行动值函数改进策略。对于策略 \(\pi\)，可以使用 \(\epsilon\)-贪婪策略改进方法，以确保策略探索。
+
+6. 重复
+
+重复上述步骤，直到值函数或策略收敛。
+
+以下是使用蒙特卡罗方法求解强化学习问题的伪代码示例：
+
+```python
+import numpy as np
+
+def monte_carlo_control(env, num_episodes, gamma=1.0, epsilon=0.1, alpha=0.1):
+    Q = np.zeros((env.num_states, env.num_actions))  # 初始化Q值函数
+    returns_count = np.zeros((env.num_states, env.num_actions))  # 计数器
+
+    def generate_episode(policy):
+        episode = []
+        state = env.reset()
+        while True:
+            action = np.random.choice(env.num_actions, p=policy[state])
+            next_state, reward, done, _ = env.step(action)
+            episode.append((state, action, reward))
+            if done:
+                break
+            state = next_state
+        return episode
+
+    def update_policy(Q, epsilon):
+        policy = np.ones((env.num_states, env.num_actions)) * epsilon / env.num_actions
+        best_actions = np.argmax(Q, axis=1)
+        for state, action in enumerate(best_actions):
+            policy[state, action] += (1.0 - epsilon)
+        return policy
+
+    policy = np.ones((env.num_states, env.num_actions)) / env.num_actions
+
+    for _ in range(num_episodes):
+        episode = generate_episode(policy)
+        G = 0
+        for state, action, reward in reversed(episode):
+            G = gamma * G + reward
+            returns_count[state, action] += 1
+            Q[state, action] += (G - Q[state, action]) / returns_count[state, action]
+        policy = update_policy(Q, epsilon)
+
+    return policy, Q
+```
+
+蒙特卡罗方法的优缺点为：
+
+- 优点
+    - 简单易实现：蒙特卡罗方法的基本原理和实现相对简单。它通过直接采样和模拟环境的交互来估计值函数，而不需要复杂的数学推导和矩阵运算。
+    - 非逐步更新：蒙特卡罗方法不需要知道状态转移概率，可以直接从样本中学习。这使得它适用于模型未知的环境，即不需要事先知道环境的动态模型。
+    - 适用于模型未知环境：由于蒙特卡罗方法依赖于实际的经验数据（样本轨迹），而不是依赖于环境的数学描述，因此它可以在模型未知的环境中使用。这对很多实际问题来说非常有用，因为在许多情况下，环境的精确模型是未知的或难以获取的。
+    - 处理高维状态空间：蒙特卡罗方法可以处理高维状态空间，因为它的计算复杂度主要取决于采样的数量和质量，而不是状态空间的维度。
+- 缺点
+    - 样本效率低：蒙特卡罗方法通常需要大量样本来获得准确的估计。这是因为它依赖于多次模拟和累积经验数据来进行估计。因此，样本效率较低，特别是在状态空间和动作空间大的情况下。
+    - 仅适用于终止状态存在的环境：蒙特卡罗方法要求轨迹必须有终止状态。每次更新需要完整的轨迹，因此不适用于没有自然结束点的任务（如持续的时间序列预测任务）。
+    - 高方差：由于蒙特卡罗方法基于样本的估计，所得到的值函数或策略可能会有较高的方差。这意味着估计结果可能不够稳定，需要更多的样本来平滑估计值。
+    - 延迟更新：蒙特卡罗方法仅在一整条轨迹结束后才进行更新，这意味着在长轨迹中，更新的反馈会有较大的延迟。这与基于时间差分（TD）的方法不同，后者可以在每一步之后立即进行更新。
+    - 不适用于非马尔科夫环境：蒙特卡罗方法假设环境满足马尔科夫性质（即当前状态和动作完全决定未来的状态和回报），如果环境不满足这个假设，估计结果的准确性会受到影响。
+
+#### 15.1.5 时序差分学习
+
+时序差分法（Temporal Difference, 简称TD）是一种重要的强化学习方法，它结合了蒙特卡罗方法和动态规划的思想。TD方法通过在每一步更新值函数，利用当前状态和下一状态的估计值之间的差异（即时序差分误差）来逐步改进策略。
+
+TD方法的核心在于利用 **引导回报（Bootstrapping）**，即通过当前状态的估计值和下一状态的估计值之间的差异来更新值函数。这种方法既不完全依赖最终回报（如蒙特卡罗方法），也不需要完全的环境模型（如动态规划）。
+
+在TD方法中，时序差分误差（Temporal Difference Error, $\delta$）是更新值函数的关键。对于状态值函数 $V(s)$，时序差分误差定义为：
+
+$$
+\delta = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)
+$$
+
+其中：
+- $R_{t+1}$ 是从状态 $S_t$ 采取动作 $A_t$ 得到的即时奖励。
+- $\gamma$ 是折扣因子。
+- $V(S_{t+1})$ 是下一状态的估计值。
+- $V(S_t)$ 是当前状态的估计值。
+
+利用时序差分误差，状态值函数 $V(s)$ 的更新公式为：
+
+$$
+V(S_t) \leftarrow V(S_t) + \alpha \delta
+$$
+
+其中，$\alpha$ 是学习率。
+
+
+TD方法有多种具体实现，主要包括以下几种：
+- TD(0):TD(0) 是最基本的TD方法，也是单步TD方法。每一步仅使用下一个状态的估计值来更新当前状态的值函数。
+- SARSA:SARSA 是一种基于策略的TD方法，估计的是当前策略下的行动值函数 \(Q(s, a)\)。其更新公式为：
+$$
+Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t)]
+$$
+- Q-Learning:Q-Learning 是一种基于策略的TD方法，其目标是找到最优策略，对应的行动值函数 \(Q^*(s, a)\)。其更新公式为：
+$$
+Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha [R_{t+1} + \gamma \max_a Q(S_{t+1}, a) - Q(S_t, A_t)]
+$$
+- TD(λ):TD(λ) 是一种将TD方法与蒙特卡罗方法结合的广义算法，其中 \(\lambda\) 是一个权衡参数。TD(λ) 使用资格迹（Eligibility Traces）来在不同步长上平滑更新。
+
+以下是TD(0)的伪代码示例：
+
+```python
+import numpy as np
+
+def td_0(env, num_episodes, alpha=0.1, gamma=1.0):
+    V = np.zeros(env.num_states)  # 初始化状态值函数
+    
+    for _ in range(num_episodes):
+        state = env.reset()
+        while True:
+            action = np.random.choice(env.num_actions)
+            next_state, reward, done, _ = env.step(action)
+            # 计算时序差分误差
+            td_error = reward + gamma * V[next_state] - V[state]
+            # 更新状态值函数
+            V[state] += alpha * td_error
+            if done:
+                break
+            state = next_state
+    
+    return V
+```
+
+时序差分法的优点和缺点为：
+
+- 优点
+    - 样本效率高：TD方法可以在每一步更新值函数，而不需要等待整个轨迹结束。这使得它在样本利用效率上优于蒙特卡罗方法，特别是在序列较长或环境较复杂的情况下。
+    - 实时学习：TD方法能够在互动过程中实时更新值函数，适用于在线学习。每一步的更新使得算法可以迅速适应环境的变化。
+    - 适用于非终止任务：TD方法不需要完整的轨迹，因此可以处理无限长或没有自然终点的任务。这个特性使其在处理持续任务时非常有效。
+    - 无需环境模型：虽然TD方法结合了动态规划的思想，但它不需要对环境的转移概率进行建模，仅依赖于经验（采样）数据。这使得它能够在模型未知的环境中应用。
+    - 平衡偏差和方差：通过引导回报（Bootstrapping），TD方法在某种程度上平衡了蒙特卡罗方法的高方差和动态规划的高偏差问题。
+- 缺点
+    - 偏差：由于使用引导回报，TD方法可能存在偏差。初始估计不准确时，这种偏差可能会影响学习的效果。特别是在初期，估计值的准确性可能较差。
+    - 参数敏感性：TD方法的性能对学习率𝛼和折扣因子𝛾的选择高度敏感。不当的参数选择可能会导致学习过程中的振荡或收敛缓慢。
+    - 稳定性和收敛性问题：在某些情况下，尤其是使用函数逼近时，TD方法可能会遇到稳定性和收敛性问题。需要使用诸如经验回放和目标网络等技术来缓解这些问题。
+    - 复杂度：虽然TD方法的基本形式较为简单，但在实际应用中，为了提高性能，常常需要结合其他技术（如资格迹、深度学习等）。这种结合会增加算法的复杂度和实现难度。
+    - 需要良好的探索策略：为了确保状态空间的充分探索，TD方法通常需要结合有效的探索策略（如ϵ-贪婪策略）。不良的探索策略可能会导致欠探索，从而影响学习效果。
+
+
+#### 15.1.6 SARSA算法
+
+这一节我们介绍时序差分法中的一种经典算法：SARSA算法。SARSA算法是一种基于策略的时序差分学习方法，用于估计当前策略下的行动值函数 $Q(s, a)$。SARSA算法的目标是找到最优策略，使得在每个状态下选择的动作序列能够最大化累积奖励。
+
+SARSA算法名称中的每个字母分别对应一次更新中涉及的五个元素：当前状态 $S_t$、当前动作 $A_t$、即时奖励 $R_{t+1}$、下一状态 $S_{t+1}$ 和下一动作 $A_{t+1}$。
+SARSA的核心是利用当前策略来更新行动值函数 \(Q(s, a)\)。更新公式为：
+
+$$
+Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \left[ R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) \right]
+$$
+
+其中：
+- $Q(S_t, A_t)$ 是当前状态-动作对的估计值。
+- $R_{t+1}$ 是从状态 $S_t$ 采取动作 $A_t$ 获得的即时奖励。
+- $S_{t+1}$ 是采取动作 $A_t$ 后到达的下一状态。
+- $A_{t+1}$ 是在状态 $S_{t+1}$ 下根据当前策略选择的下一动作。
+- $\alpha$ 是学习率。
+- $\gamma$ 是折扣因子。
+
+
+SARSA算法是一种 **on-policy** 算法，这意味着它直接学习当前策略的行为。因此，选择下一动作 $A_{t+1}$ 时，通常采用 $\epsilon$-贪婪策略，以确保在学习过程中有足够的探索：
+
+- 以概率 $\epsilon$ 随机选择动作（探索）。
+- 以概率 $1 - \epsilon$ 选择当前行动值函数 $Q(s, a)$ 最大的动作（利用）。
+
+下面是SARSA算法的伪代码示例：
+
+```python
+import numpy as np
+
+def epsilon_greedy_policy(Q, state, epsilon, num_actions):
+    if np.random.rand() < epsilon:
+        return np.random.randint(num_actions)  # 探索
+    else:
+        return np.argmax(Q[state])  # 利用
+
+def sarsa(env, num_episodes, alpha=0.1, gamma=1.0, epsilon=0.1):
+    Q = np.zeros((env.num_states, env.num_actions))  # 初始化行动值函数
+
+    for _ in range(num_episodes):
+        state = env.reset()
+        action = epsilon_greedy_policy(Q, state, epsilon, env.num_actions)
+
+        while True:
+            next_state, reward, done, _ = env.step(action)
+            next_action = epsilon_greedy_policy(Q, next_state, epsilon, env.num_actions)
+
+            # 更新行动值函数
+            Q[state, action] += alpha * (reward + gamma * Q[next_state, next_action] - Q[state, action])
+
+            if done:
+                break
+            
+            state = next_state
+            action = next_action
+
+    return Q
+```
+
+SARSA算法的优点和缺点为：
+
+- 优点
+    - 策略一致性：SARSA直接优化当前策略，因此在策略改进过程中保持一致性，适用于需要稳定策略的应用场景。
+    - 简单易实现：SARSA算法的实现较为简单，适合初学者理解和应用。
+    - 适应性强：在动态和非静态环境中，SARSA能够较好地适应环境的变化。
+- 缺点
+    - 收敛速度慢：相比于Q-Learning，SARSA的收敛速度可能较慢，尤其是在初始阶段。
+    - 依赖探索策略：SARSA的性能高度依赖于探索策略的选择，𝜖值的设置对结果有显著影响。
+    - 可能陷入次优策略：如果探索不足，SARSA可能会陷入次优策略，难以找到全局最优解。
+
+#### 15.1.7 Q-Learning算法
+
+Q-learning是一种无模型（model-free）的强化学习算法，用于找到一个马尔可夫决策过程（MDP）的最优策略。该算法通过学习一个动作值函数 \(Q(s, a)\) 来指导智能体选择最优的动作。Q-learning是一种 **off-policy** 方法，这意味着它通过学习一个独立于当前策略的行为策略，从而估算最优策略的值。
+
+
+Q-learning通过更新状态-动作值函数 $Q(s, a)$，不断逼近最优的状态-动作值函数 $Q^*(s, a)$，从而找到最优策略 $\pi^*$。具体来说，Q-learning通过以下更新公式来迭代地改进 $Q(s, a)$：
+
+$$
+Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \left[ R_{t+1} + \gamma \max_{a} Q(S_{t+1}, a) - Q(S_t, A_t) \right]
+$$
+
+其中：
+- $Q(S_t, A_t)$ 是当前状态-动作对的估计值。
+- $R_{t+1}$ 是从状态 $S_t$ 采取动作 $A_t$ 获得的即时奖励。
+- $S_{t+1}$ 是采取动作 $A_t$ 后到达的下一状态。
+- $\alpha$ 是学习率，控制更新的步长。
+- $\gamma$ 是折扣因子，衡量未来奖励对当前决策的影响。
+- $\max_{a} Q(S_{t+1}, a)$ 是在状态 $S_{t+1}$ 下所有可能动作的最大值，代表了最优策略的估计值。
+
+尽管Q-learning是一个 **off-policy** 算法，它通常也使用 $\epsilon$-贪婪策略进行动作选择，以保证探索和利用的平衡：
+
+- 以概率 $\epsilon$ 随机选择动作（探索）。
+- 以概率 $1 - \epsilon$ 选择当前行动值函数 $Q(s, a)$ 最大的动作（利用）。
+
+下面是Q-learning算法的伪代码示例：
+
+```python
+import numpy as np
+
+def epsilon_greedy_policy(Q, state, epsilon, num_actions):
+    if np.random.rand() < epsilon:
+        return np.random.randint(num_actions)  # 探索
+    else:
+        return np.argmax(Q[state])  # 利用
+
+def q_learning(env, num_episodes, alpha=0.1, gamma=0.99, epsilon=0.1):
+    Q = np.zeros((env.num_states, env.num_actions))  # 初始化行动值函数
+
+    for _ in range(num_episodes):
+        state = env.reset()
+
+        while True:
+            action = epsilon_greedy_policy(Q, state, epsilon, env.num_actions)
+            next_state, reward, done, _ = env.step(action)
+
+            # 更新行动值函数
+            Q[state, action] += alpha * (reward + gamma * np.max(Q[next_state]) - Q[state, action])
+
+            if done:
+                break
+            
+            state = next_state
+
+    return Q
+```
+
+Q-learning算法的优点和缺点为：
+
+- 优点
+    - 简单易实现：Q-learning算法的实现较为简单，适合初学者理解和应用。
+    - 无模型：不需要对环境的转移概率进行建模，适用于复杂和未知的环境。
+    - 全局最优：在理论上，Q-learning能够在无限探索和适当学习率的条件下收敛到最优策略。
+- 缺点
+    - 收敛速度慢：在状态空间较大或动作空间较大的情况下，Q-learning的收敛速度可能较慢。
+    - 存储需求高：需要为每个状态-动作对存储一个值，当状态空间和动作空间较大时，存储需求会显著增加。
+    - 探索策略依赖：Q-learning的性能高度依赖于探索策略，ϵ值的设置对结果有显著影响。
+
+#### 15.1.8 策略梯度法
+
+策略梯度法（Policy Gradient Methods）是强化学习中的一种方法，通过直接优化策略的参数来最大化累计奖励。与基于值函数的方法（如Q-learning和SARSA）不同，策略梯度法不显式地估计状态值函数或动作值函数，而是直接优化策略。
+
+策略梯度法的核心思想是通过参数化策略函数 $\pi_\theta(a|s)$ 来表示智能体在状态 $s$ 下选择动作 $a$ 的概率。这里，$\theta$ 是策略的参数。目标是找到最优的策略参数 $\theta$，使得智能体在环境中累积的期望奖励最大化。
+
+策略梯度法的目标是最大化以下目标函数：
+
+$$
+J(\theta) = \mathbb{E}_{\pi_\theta} \left[ \sum_{t=0}^{T} \gamma^t R_t \right]
+$$
+
+其中：
+- $\pi_\theta$ 是参数化策略。
+- $R_t$ 是在时间步 $t$ 获得的奖励。
+- $\gamma$ 是折扣因子。
+
+
+策略梯度定理为我们提供了目标函数 \(J(\theta)\) 的梯度表达式，从而可以使用梯度上升法来优化策略参数。策略梯度定理表明：
+
+$$
+\nabla_\theta J(\theta) = \mathbb{E}_{\pi_\theta} \left[ \nabla_\theta \log \pi_\theta(a|s) Q^{\pi_\theta}(s, a) \right]
+$$
+
+其中：
+- $\nabla_\theta \log \pi_\theta(a|s)$ 是策略的梯度。
+- $Q^{\pi_\theta}(s, a)$ 是在状态 $s$ 下采取动作 $a$ 的动作值函数。
+
+REINFORCE算法是最基本的策略梯度算法，其核心步骤如下：
+
+1. 采样轨迹：从策略  $\pi_\theta$ 中采样轨迹 $(s_0, a_0, r_0, s_1, a_1, r_1, \ldots, s_T)$。
+2. 计算梯度：计算每个时间步的梯度 $\nabla_\theta \log \pi_\theta(a_t|s_t)$。
+3. 更新参数：使用梯度上升法更新策略参数 $\theta$。
+
+伪代码如下：
+
+```python
+import numpy as np
+
+def reinforce(env, num_episodes, alpha=0.01, gamma=0.99):
+    # 初始化策略参数
+    theta = np.random.rand(env.num_features, env.num_actions)
+    
+    def policy(state):
+        # 计算动作概率
+        logits = np.dot(state, theta)
+        return np.exp(logits) / np.sum(np.exp(logits))
+    
+    for _ in range(num_episodes):
+        state = env.reset()
+        trajectory = []
+        
+        # 生成轨迹
+        while True:
+            probs = policy(state)
+            action = np.random.choice(len(probs), p=probs)
+            next_state, reward, done, _ = env.step(action)
+            trajectory.append((state, action, reward))
+            if done:
+                break
+            state = next_state
+        
+        # 计算每个时间步的回报
+        returns = []
+        G = 0
+        for _, _, reward in reversed(trajectory):
+            G = reward + gamma * G
+            returns.insert(0, G)
+        
+        # 更新策略参数
+        for (state, action, _), G in zip(trajectory, returns):
+            probs = policy(state)
+            gradient = -probs
+            gradient[action] += 1
+            theta += alpha * G * gradient.reshape(-1, 1) * state.reshape(1, -1)
+    
+    return theta
+```
+
+策略梯度法的优点和缺点为：
+
+- 优点
+    - 处理连续动作空间：策略梯度法能够自然地处理连续的动作空间，而基于值函数的方法在处理连续动作空间时较为困难。
+    - 策略直接优化：通过直接优化策略，策略梯度法能够在策略空间中进行更精细的搜索。
+    - 稳定性：策略梯度法在一些情况下比基于值函数的方法更稳定，因为它不会依赖于值函数的估计。
+    - 适应性强：策略梯度方法可以处理非确定性策略，这在一些需要探索和利用平衡的复杂任务中非常有用。
+- 缺点
+    - 高方差：策略梯度估计通常具有较高的方差，这会导致训练过程中的不稳定性和收敛速度慢。
+    - 收敛速度慢：由于高方差的影响，策略梯度方法的收敛速度通常较慢，尤其是在高维的状态和动作空间中。
+    - 依赖于探索策略：策略梯度方法的性能高度依赖于策略的探索性，如果策略过于保守或过于激进，都可能影响训练效果。
+    - 计算成本高：由于需要对策略参数进行更新，策略梯度方法的计算成本较高，特别是在大规模问题中。
+    - 局部最优：策略梯度法优化容易陷入局部最优，特别是在复杂的策略空间中。
+
+#### 15.1.9 Actor-Critic方法
+
+Actor-Critic方法是一种用于强化学习的算法，它结合了策略优化（Policy Optimization）和价值估计（Value Estimation）的优点。该方法同时使用两个模型：Actor（行为者）和Critic（评论者），分别负责策略的更新和价值的评估。
+
+- Actor（行为者）
+    - Actor负责选择动作并根据策略梯度更新策略参数。
+    - Actor的目标是最大化预期累积奖励。
+
+- Critic（评论者）：
+    - Critic评估当前策略的好坏，计算状态值函数（Value Function）或优势函数（Advantage Function）。
+    - Critic的目标是提供更准确的价值估计，指导Actor的策略更新。
+
+Actor-Critic算法步骤为
+
+1. **策略表示**：
+    - 策略 $\pi_{\theta}(a|s)$ 表示在状态 $s$ 下选择动作 $a$ 的概率，由参数 $\theta$ 控制。
+
+2. **状态值函数**：
+    - 价值函数 $V(s)$ 表示在状态 $s$ 下的预期累积奖励。
+
+3. **优势函数**：
+    - 优势函数 $A(s, a)$ 衡量特定动作 $a$ 相对于状态 $s$ 的平均水平的好坏。
+    - 通常，优势函数可以表示为 $A(s, a) = Q(s, a) - V(s)$。
+
+4. **策略更新**：
+    - 使用策略梯度法更新Actor的参数：
+
+$$
+\theta \leftarrow \theta + \alpha \nabla_{\theta} \log \pi_{\theta}(a|s) A(s, a)
+$$
+
+其中，$\alpha$ 是学习率。
+
+5. **价值更新**：
+    - 使用TD误差（Temporal Difference Error）更新Critic的参数：
+
+$$
+\delta = r + \gamma V(s') - V(s)
+$$
+
+其中，$r$ 是即时奖励，$\gamma$ 是折扣因子，$s'$ 是下一状态。
+
+6. **同步更新**：
+    - 在每个时间步，Actor和Critic交替更新，Actor根据Critic的反馈调整策略，Critic根据Actor的策略调整价值估计。
+
+算法流程
+
+1. 初始化Actor的策略参数 \(\theta\) 和Critic的价值函数参数 $\phi$。
+2. 在每个时间步：
+    1. 在状态 $s_t$ 下，Actor根据策略 $\pi_{\theta}$ 选择动作 $a_t$。
+    2. 执行动作 $a_t$，获得即时奖励 \(r_t\) 和下一状态 $s_{t+1}$。
+    3. Critic计算TD误差 $\delta$：
+
+$$
+\delta_t = r_t + \gamma V_{\phi}(s_{t+1}) - V_{\phi}(s_t)
+$$
+
+    4. 更新Critic的参数 $\phi$：
+
+$$
+\phi \leftarrow \phi + \beta \delta_t \nabla_{\phi} V_{\phi}(s_t)
+$$
+
+    5. 计算优势函数 $A(s_t, a_t) = \delta_t$。
+    6. 更新Actor的参数 $\theta$：
+
+$$
+\theta \leftarrow \theta + \alpha \nabla_{\theta} \log \pi_{\theta}(a_t|s_t) \delta_t
+$$
+
+3. 重复上述过程，直到策略收敛或达到预定的训练步数。
+
+Actor-Critic方法通过将策略梯度和价值估计相结合，显著提高了强化学习算法的效率和稳定性。
+
+### 15.2 深度强化学习
+
+#### 15.2.1 DQN算法
+
+深度Q网络（Deep Q-Network, DQN）结合了Q学习和深度神经网络的优点。DQN算法特别适用于处理高维状态空间，比如游戏中的图像数据。以下是DQN算法的核心概念和步骤：
+
+前面我们介绍过，Q学习是一种无模型的强化学习算法，旨在找到一个策略，使得在特定状态下采取特定动作的期望回报最大化。Q学习使用一个Q表（Q-table）来存储状态-动作对的价值（Q值），但是对于高维状态空间，Q表变得不可行。
+于是，DQN使用一个深度神经网络来近似Q值函数，解决了Q表在高维状态空间中的扩展问题。神经网络的输入是状态，输出是每个可能动作的Q值。
+
+算法步骤
+
+1. 经验回放（Experience Replay）**：
+    - 代理（Agent）在环境中与环境交互，并将每次交互（状态、动作、奖励、下一个状态）存储在一个回放缓冲区（Replay Buffer）中。
+    - 从回放缓冲区中随机抽取小批量的经验进行训练，打破了数据的时间相关性，提高了训练的稳定性。
+
+2. 目标网络（Target Network）：
+    - DQN使用两个网络：一个是在线网络（Online Network），另一个是目标网络（Target Network）。
+    - 在线网络用于生成动作和更新参数；目标网络用于计算目标Q值。
+    - 目标网络的参数定期从在线网络复制，以保持训练的稳定性。
+
+3. 损失函数：
+    - 使用均方误差（Mean Squared Error, MSE）来衡量预测的Q值和目标Q值之间的差异。
+    - 目标Q值通过贝尔曼方程计算：
+
+$$
+y = r + \gamma \max_{a'} Q'(s', a')
+$$
+
+其中，$ r $ 是奖励，$ \gamma $ 是折扣因子，$ Q' $ 是目标网络的Q值，$ s' $ 和 $ a' $ 分别是下一个状态和动作。
+
+4. 参数更新：使用梯度下降法来最小化损失函数，更新在线网络的参数。
+
+算法流程
+
+- 初始化在线网络和目标网络的参数。
+- 初始化回放缓冲区。
+- 在每个时间步：
+    - 根据当前状态，使用在线网络选择动作（通常用 \(\epsilon\)-贪婪策略）。
+    - 执行动作，观测奖励和下一个状态。
+    - 将经验（状态、动作、奖励、下一个状态）存储到回放缓冲区。
+    - 从回放缓冲区中随机抽取小批量经验进行训练。
+    - 计算目标Q值并更新在线网络参数。
+    - 定期更新目标网络的参数。
+
+DQN算法在处理复杂环境（如Atari游戏）方面取得了显著成功，是深度强化学习领域的重要里程碑。
+
+#### 15.2.2 TRPO算法
+
+TRPO（Trust Region Policy Optimization，信任域策略优化）是基于策略梯度法的算法，旨在确保每次策略更新时不会对策略造成过大的变化，从而提高训练的稳定性和效率。TRPO通过引入信任域约束，避免了策略更新过程中过大的波动。
+
+介绍算法之前，我们先了解一下两个关键概念：
+- 信任域（Trust Region）：
+    - 信任域的概念来源于优化理论，即在每次更新策略时，只允许策略在一个“信任”的范围内变化，以避免过大的更新导致训练不稳定。
+    - TRPO通过引入信任域约束，限制每次策略更新的幅度。
+- KL散度（Kullback-Leibler Divergence）：
+    - 用于衡量新旧策略之间的差异。TRPO通过限制新旧策略之间的平均KL散度，使策略更新在信任域内。
+    - KL散度约束确保新策略不会偏离旧策略太远，从而提高训练的稳定性。
+
+下面我们看下TRPO算法的步骤：
+
+1. 目标函数：TRPO的目标是最大化策略的期望回报，同时约束新旧策略之间的平均KL散度：
+
+$$
+\max_{\theta} \mathbb{E}_{s \sim \rho_{\theta_{\text{old}}}, a \sim \pi_{\theta_{\text{old}}}} \left[ \frac{\pi_{\theta}(a|s)}{\pi_{\theta_{\text{old}}}(a|s)} \hat{A}(s, a) \right]
+$$
+
+其中：
+- $\pi_{\theta}(a|s)$ 是新策略在状态 $s$ 下选择动作 $a$ 的概率。
+- $\pi_{\theta_{\text{old}}}(a|s)$ 是旧策略在状态 $s$ 下选择动作 $a$ 的概率。
+- $\hat{A}(s, a)$ 是优势函数（Advantage Function）的估计。
+
+2. KL散度约束：
+    - TRPO引入一个约束，确保新旧策略之间的平均KL散度不超过一个预设的阈值 \(\delta\)：
+
+$$
+    \mathbb{E}_{s \sim \rho_{\theta_{\text{old}}}} \left[ D_{KL}(\pi_{\theta_{\text{old}}}(\cdot|s) || \pi_{\theta}(\cdot|s)) \right] \leq \delta
+$$
+
+其中：
+- $D_{KL}(\cdot || \cdot)$ 表示KL散度。
+
+3. 优化过程：
+
+- 通过拉格朗日乘子法将约束优化问题转化为无约束优化问题，进而使用共轭梯度法（Conjugate Gradient Method）进行求解。
+- 在每次更新中，首先计算策略梯度，然后找到符合KL散度约束的更新方向和步长。
+
+算法流程
+
+- 初始化策略参数 $\theta$。
+- 在每个训练周期：
+    - 与环境交互，收集一批数据（状态、动作、奖励、下一状态）。
+    - 计算优势函数 $\hat{A}(s, a)$。
+    - 计算策略梯度。
+    - 使用共轭梯度法找到满足KL散度约束的更新方向和步长。
+    - 更新策略参数 $\theta$。
+- 重复上述过程，直到策略收敛或达到预定的训练步数。
+
+TRPO通过引入信任域约束，显著提高了策略优化的稳定性和效率。尽管计算复杂度较高，但其在处理高维连续动作空间问题时表现尤为出色。
+
+#### 15.2.3 PPO算法
+
+PPO（Proximal Policy Optimization，近端策略优化）由OpenAI提出，它通过引入新的目标函数和约束，稳定了策略优化过程，提高了样本效率和训练稳定性。PPO算法是一种基于策略梯度的算法，是在TRPO算法的基础上进行改进的。PPO通过引入剪切（Clipping）机制，简化了TRPO的复杂性，避免了计算二阶导数。PPO优化目标函数时，限制策略变化的幅度，以防止策略更新过大。
+
+算法步骤
+
+1. 策略更新目标函数：PPO的目标函数如下：
+
+$$
+    L^{CLIP}(\theta) = \mathbb{E}_t \left[ \min(r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1 - \epsilon, 1 + \epsilon) \hat{A}_t) \right]
+$$
+
+其中：
+- $ r_t(\theta) = \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\theta_{\text{old}}}(a_t|s_t)} $
+- $\hat{A}_t$ 是优势函数（Advantage Function）的估计
+- $\epsilon$ 是一个超参数，用于限制策略变化的幅度
+
+2. 剪切机制（Clipping）：
+
+- 剪切机制通过限制策略更新的比例，确保策略不会偏离旧策略太远。
+- 具体实现是限制 $ r_t(\theta) $ 的值在 $[1 - \epsilon, 1 + \epsilon]$ 范围内。
+
+3. 优势函数估计：
+
+- 优势函数 $ \hat{A}_t $ 用于衡量当前动作相对于平均水平的好坏。
+- 可以使用广义优势估计（Generalized Advantage Estimation, GAE）来计算。
+
+4. 训练过程：
+
+- 在每个训练周期，收集一批数据（状态、动作、奖励等），并计算优势函数。
+- 使用剪切目标函数和梯度下降法更新策略参数。
+- 更新值函数（Value Function）的参数，以更好地估计状态价值。
+
+PPO算法流程如下：
+
+1. 初始化策略参数和价值函数参数。
+2. 在每个训练周期：
+    1. 与环境交互，收集一批数据（状态、动作、奖励、下一状态）。
+    2. 计算优势函数 $ \hat{A}_t $。
+    3. 使用剪切目标函数 $ L^{CLIP}(\theta) $ 更新策略参数。
+    4. 更新价值函数参数，以最小化预测值与实际回报之间的差异。
+3. 重复上述过程，直到策略收敛或达到预定的训练步数。
+
+PPO算法在实践中表现出色，具有较高的样本效率和训练稳定性，已被广泛应用于各种强化学习任务中。
+
+#### 15.2.4 A3C算法
+
+A3C（Asynchronous Advantage Actor-Critic，异步优势行为者-评论者）是一种由DeepMind提出的改进Actor-Critic算法。A3C通过并行执行多个代理（agent），加快了训练过程，并提高了策略的稳定性和样本效率。
+
+算法步骤
+
+1. **全局网络与本地网络**：
+    - 全局网络存储共享的策略和价值函数参数。
+    - 每个代理拥有一个本地网络，本地网络与全局网络参数相同，但在每个代理内独立更新。
+
+2. **与环境交互**：
+    - 每个代理与环境互动，收集状态、动作、奖励、下一状态等数据。
+
+3. **计算优势函数**：
+    - 优势函数可以基于状态值函数 $ V(s) $ 和动作值函数 $ Q(s, a) $ 计算：
+
+$$
+\hat{A}(s, a) = Q(s, a) - V(s)
+$$
+
+4. **更新本地网络参数**：
+    - 通过梯度下降法，使用本地数据更新本地网络参数。
+
+5. **异步更新全局网络参数**：
+    - 将本地网络的梯度异步应用到全局网络，更新全局参数。
+
+算法流程
+
+1. 初始化全局策略参数 $\theta$ 和全局价值函数参数 $\theta_v$。
+2. 启动多个代理，每个代理执行以下步骤：
+    1. 初始化本地策略参数 $\theta'$ 和本地价值函数参数 $\theta_v'$，并从全局网络复制参数。
+    2. 与环境交互，收集一批数据（状态、动作、奖励、下一状态）。
+    3. 计算优势函数 $ \hat{A}(s, a)$。
+    4. 使用本地数据更新本地策略参数 $\theta'$ 和本地价值函数参数 $\theta_v'$。
+    5. 将本地网络的梯度异步应用到全局网络，更新全局参数 $\theta$ 和 $\theta_v$。
+3. 重复上述过程，直到策略收敛或达到预定的训练步数。
+
+#### 15.2.5 DDPG算法
+
+DDPG（Deep Deterministic Policy Gradient，深度确定性策略梯度）也是一种基于Actor-Critic框架的算法，适用于连续动作空间。它结合了确定性策略梯度和深度Q网络的优点，能够有效处理高维连续动作空间问题。
+
+与随机策略不同，确定性策略直接输出一个具体的动作，而不是动作的概率分布。
+
+参考了DQN的机制，DDPG使用了经验回放缓冲区（Replay Buffer）和目标网络（Target Network）来提高训练的稳定性。
+DDPG使用经验回放缓冲区（replay buffer）存储代理与环境交互的经验 $(s_t, a_t, r_t, s_{t+1})$。
+从缓冲区中随机采样经验进行训练，以打破数据相关性，提高样本效率。
+
+为了稳定训练过程，使用目标网络 $\theta^{\mu'}$ 和 $\theta^{Q'}$，它们的参数是Actor和Critic网络参数的延迟复制。
+
+
+1. 初始化Actor网络 $\mu(s|\theta^{\mu})$ 和Critic网络 $Q(s, a|\theta^{Q})$ 的参数 $\theta^{\mu}$ 和 $\theta^{Q}$。
+2. 初始化目标网络 $\theta^{\mu'} \leftarrow \theta^{\mu}$ 和 $\theta^{Q'} \leftarrow \theta^{Q}$。
+3. 初始化经验回放缓冲区 $\mathcal{D}$。
+4. 在每个时间步：
+    1. 从当前状态 $s_t$ 开始，根据策略 $\mu(s_t|\theta^{\mu})$ 选择动作 $a_t$，并添加探索噪声 $N_t$。
+    2. 执行动作 $a_t$，观察奖励 $r_t$ 和新的状态 $s_{t+1}$。
+    3. 将经验 $(s_t, a_t, r_t, s_{t+1})$ 存储到回放缓冲区 $\mathcal{D}$。
+    4. 从回放缓冲区 $\mathcal{D}$ 中随机采样一个小批量 $(s_i, a_i, r_i, s_{i+1})$。
+    5. 计算目标值 $y_i$：$y_i = r_i + \gamma Q'(s_{i+1}, \mu'(s_{i+1}|\theta^{\mu'})|\theta^{Q'})$
+    6. 最小化Critic的损失：$L = \frac{1}{N} \sum_i (y_i - Q(s_i, a_i|\theta^Q))^2$
+    7. 使用梯度下降法更新Critic网络参数 $\theta^Q$。
+    8. 使用策略梯度法更新Actor网络参数 $\theta^{\mu}$：
+$
+    \nabla_{\theta^{\mu}} J \approx \frac{1}{N} \sum_i \nabla_a Q(s, a|\theta^Q)|_{s=s_i, a=\mu(s_i)} \nabla_{\theta^{\mu}} \mu(s|\theta^{\mu})|_{s_i}
+$
+    9. 软更新目标网络参数：
+
+$
+    \theta^{Q'} \leftarrow \tau \theta^Q + (1 - \tau) \theta^{Q'}
+$
+
+$
+    \theta^{\mu'} \leftarrow \tau \theta^{\mu} + (1 - \tau) \theta^{\mu'}
+$
+其中，$\tau$ 是一个小常数，通常设为0.001。
+
+#### 15.2.6 TD3算法
+
+TD3（Twin Delayed Deep Deterministic Policy Gradient）是是对DDPG（Deep Deterministic Policy Gradient）算法的改进，旨在缓解DDPG中存在的一些问题，如过估计和训练不稳定性。TD3通过以下几个关键策略来增强稳定性和性能：
+
+- 双重Q网络（Double Q Learning）：
+TD3使用了两个独立的Q网络来估计Q值。通过选择两个Q值中的较小值来更新目标Q值，可以有效地减少过估计偏差。
+$y = r + \gamma \min(Q_{\theta_1'}(s', \pi_{\phi'}(s')), Q_{\theta_2'}(s', \pi_{\phi'}(s')))$
+- 延迟策略更新（Delayed Policy Updates）：
+TD3引入了延迟策略更新机制，即策略网络（π）的更新频率低于Q网络。这种策略可以使Q网络更好地收敛，从而提高策略网络的更新效果。
+
+```
+if time_step % policy_delay == 0:
+    Update policy network
+```
+
+- 目标策略平滑（Target Policy Smoothing）：
+在计算目标动作时，TD3向动作中添加噪声，从而使得目标Q值更加平滑。这减少了策略对目标Q值高峰的依赖，增强了策略的鲁棒性。
+
+$\pi'(s') = \pi(s') + \epsilon, \quad \epsilon \sim \text{clip}(\mathcal{N}(0, \sigma), -c, c)$
+
+TD3算法的主要步骤
+
+- 初始化：
+    - 初始化策略网络和两个Q网络，以及它们对应的目标网络。
+    - 初始化经验回放缓冲区。
+- 经验采集：根据当前策略与环境交互，收集状态、动作、奖励和下一个状态。
+- 经验存储：将收集到的经验存储在回放缓冲区中。
+- 经验回放与训练：
+    - 从回放缓冲区中随机采样一批经验。
+    - 使用双重Q网络计算目标Q值，并更新Q网络的参数。
+    - 每隔一定步数，更新策略网络的参数。
+    - 更新目标网络的参数，使其慢慢跟随当前网络参数。
+
+TD3的伪代码
+
+```
+Initialize critic networks Q1, Q2 with random parameters θ1, θ2
+Initialize actor network π with random parameters φ
+Initialize target networks Q1', Q2', π' with θ1' ← θ1, θ2' ← θ2, φ' ← φ
+Initialize replay buffer R
+
+for each iteration do
+    for each environment step do
+        Select action with exploration noise: a ← π(s) + noise
+        Execute action a and observe reward r and next state s'
+        Store transition (s, a, r, s') in replay buffer R
+    
+    for each gradient step do
+        Sample a batch of transitions (s, a, r, s') from R
+        Compute target actions with policy smoothing: a' ← π'(s') + clipped noise
+        Compute target Q values: y ← r + γ min(Q1'(s', a'), Q2'(s', a'))
+        Update critics by minimizing the loss: L(θi) = 1/N Σ (Qθi(s, a) - y)^2
+        if step % policy_delay == 0 then
+            Update the policy using the sampled policy gradient
+            Update target networks with polyak averaging:
+            θ1' ← τθ1 + (1-τ)θ1'
+            θ2' ← τθ2 + (1-τ)θ2'
+            φ' ← τφ + (1-τ)φ'
+```
+
+TD3在许多连续控制任务中表现出色，如OpenAI Gym的Mujoco环境，显示出比DDPG更稳定和高效的性能。
+
+#### 15.2.7 SAC算法
+
+SAC（Soft Actor-Critic）旨在通过在策略优化过程中引入熵正则化来实现更好的探索和平衡。它在连续动作空间任务中表现出色，因其稳定性和高效性而受到广泛关注。
+
+SAC的目标是最大化累积奖励的同时，最大化策略的熵。策略的熵越大，表示策略越随机，从而增强了探索能力。通过引入熵项，SAC不仅关注收益最大化，还鼓励策略的多样性。
+
+SAC的主要步骤
+- 初始化：
+初始化策略网络（Actor）和两个Q网络（Critic），以及它们对应的目标网络。
+初始化经验回放缓冲区。
+- 经验采集：
+根据当前策略与环境交互，收集状态、动作、奖励和下一个状态。
+- 经验存储：
+将收集到的经验存储在回放缓冲区中。
+- 经验回放与训练：
+从回放缓冲区中随机采样一批经验。
+使用双重Q网络计算目标Q值，并更新Q网络的参数。
+更新策略网络的参数，最大化预期收益和策略熵之和。
+更新目标网络的参数，使其慢慢跟随当前网络参数。
+- SAC的目标函数
+SAC的目标函数包括两部分：Q函数的贝尔曼期望方程和策略的最大熵目标。
+
+Q值目标：
+通过最小化贝尔曼残差来更新Q网络：
+$L(Q) = \mathbb{E}_{(s, a, r, s') \sim D} \left[\left(Q(s, a) - (r + \gamma (V(s') - \alpha \log \pi(a'|s')))\right)^2\right]$
+
+策略目标：
+通过最大化期望奖励和策略熵来更新策略网络：
+
+$J(\pi) = \mathbb{E}_{s \sim D, a \sim \pi} \left[\alpha \log \pi(a|s) - Q(s, a)\right]$
+
+温度参数：
+温度参数 $\alpha$ 控制熵项的权重，可以是固定值，也可以是可学习的：
+$J(\alpha) = \mathbb{E}_{a \sim \pi} \left[-\alpha \log \pi(a|s) - \alpha H_{\text{target}}\right]$
+
+SAC算法的伪代码
+```
+Initialize critic networks Q1, Q2 with random parameters θ1, θ2
+Initialize actor network π with random parameters φ
+Initialize target networks Q1', Q2' with θ1' ← θ1, θ2' ← θ2
+Initialize temperature parameter α
+
+for each iteration do
+    for each environment step do
+        Select action a ~ π(s) + noise
+        Execute action a and observe reward r and next state s'
+        Store transition (s, a, r, s') in replay buffer
+
+    for each gradient step do
+        Sample a batch of transitions (s, a, r, s') from replay buffer
+        Compute target Q value: y = r + γ (min(Q1'(s', a'), Q2'(s', a')) - α log π(a'|s'))
+        Update critics by minimizing the loss: L(θi) = 1/N Σ (Qθi(s, a) - y)^2
+        Update policy by maximizing the objective: J(π) = 1/N Σ (α log π(a|s) - Q(s, a))
+        Update temperature parameter: J(α) = 1/N Σ (-α log π(a|s) - α H_target)
+        Update target networks with polyak averaging:
+        θ1' ← τθ1 + (1-τ)θ1'
+```
+
+### 15.3 强化学习编程基础
+
 强化学习中最经常使用的环境工具是OpenAI的Gym。Gym是一个用于开发和比较强化学习算法的工具包。它提供了一个简单的接口，可以在不同的环境中测试代理。2021年，是gym升级为gymnasium库，它提供了更多的环境和功能。
 
 不管是gym还是gymanasium，它们都是体育馆的意思，就是让代理在里面锻炼。
@@ -7891,7 +9062,7 @@ with open(args.outf, 'w') as outf:
 
 下面我们就来尝试不使用任何强化学习算法，而手工写一个代理程序。
 
-#### 15.1.1 实现第一个代理
+#### 15.3.1 实现第一个代理
 
 总体来说，对于gymnasium我们只需要做两件事情：一个是初始化环境，另一个就是通过step函数不停地给环境做输入，然后观察对应的结果。
 
@@ -8053,7 +9224,8 @@ for _ in range(1000):
         
 env.close()
 ```
-#### 15.1.2 Atari游戏环境
+
+#### 15.3.2 Atari游戏环境
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/Atari.png)
 
@@ -8108,7 +9280,7 @@ env.close()
 
 完整的游戏支持列表可以在https://gymnasium.farama.org/environments/atari/ 官方文档中查到。
 
-### 15.2 通过stable-baselines3库训练强化学习模型
+### 15.4 通过stable-baselines3库训练强化学习模型
 
 我们可以通过调用库的方式，不编写一行自己的强化学习代码，就可以训练一个强化学习模型。
 
@@ -8121,7 +9293,7 @@ pip install gymnasium[accept-rom-license]
 pip install stable_baselines3
 ```
 
-#### 15.2.1 用DQN算法实现强化学习
+#### 15.4.1 用DQN算法实现强化学习
 
 我们以乒乓球游戏为例。乒乓球游戏的规则大家都能理解，在游戏里，我们可以控制球拍上下移动，目标是让球拍击中球，不让球飞出边界。这个操作我们称为"动作"。
 
