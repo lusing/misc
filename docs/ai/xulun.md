@@ -3521,6 +3521,7 @@ plt.show()
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_bayes.png)
 
+
 ## 第五章 监督学习：数值预测
 
 我们先来看数值预测，也就是根据已有的数据去预测未知的数据。被举烂了的例子就是预测房价。
@@ -3679,7 +3680,6 @@ plt.show()
 
 这样的分类工作，可以由人来做，也可以通过算法来实现。这样的算法就称之为聚类算法。
 
-
 #### 6.1.1 K均值(K-Means)算法
 
 聚类算法中最著名的是K均值算法，也叫做K-Means算法。KMeans算法可以理解为将数据分成最适合的群组，通过计算数据点与中心之间的距离来确定数据点所属的群组。
@@ -3689,6 +3689,25 @@ plt.show()
 $E=\sum_{i=1}^k\sum_{x\in C_i}||x-\mu_i||_2^2$
 
 其中$\mu_i$是簇$C_i$的均值向量。
+
+K均值算法的步骤
+- 选择 K 个初始簇中心（质心）：通常随机选择 K 个数据点作为初始簇中心。
+- 分配数据点：将每个数据点分配到最近的簇中心，形成 K 个簇。
+- 更新簇中心：计算每个簇的质心，即簇内所有数据点的平均值，作为新的簇中心。
+- 重复步骤 2 和 3：直到簇中心不再变化或变化小于某个阈值，或达到预设的迭代次数。
+
+K均值算法的优点和缺点
+- 优点：
+
+    - 简单易懂，容易实现。
+    - 计算速度快，适合大规模数据集。
+    - 在许多实际问题中表现良好。
+- 缺点：
+
+- 需要预先指定 𝐾的值，不同的k值可能会导致不同的聚类结果。
+- 对初始簇中心敏感，不同的初始选择可能导致不同的结果。
+- 只能找到凸形簇（即簇的形状为球状），对非凸形簇效果较差。
+- 对噪声和异常值敏感。
 
 在编程使用时，我们只要指定分成几个簇就可以了。下面是一个简单的例子，用于分析鸢尾花数据集。
 
@@ -3727,6 +3746,203 @@ print(labels)
 ```
 
 从中可以看到，仅仅是简单聚类所获得的结果已经相当不错了。
+
+那么，k的值如何取呢？常用的方法有肘部法、轮廓系数法、Gap 统计法和知识先验和领域知识4种。
+
+1. 肘部法（Elbow Method）
+肘部法通过绘制不同 𝐾值对应的总的簇内平方和（Within-Cluster Sum of Squares, WCSS）来选择 𝐾值。WCSS 是所有数据点到其簇中心距离的平方和。随着 
+K 增加，WCSS 会逐渐减小。当𝐾增加到某个值后，WCSS 的减小幅度明显变缓，形成一个“肘部”形状，此时的 𝐾值即为合理选择。
+
+
+我们来看个例子：
+
+```python
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+
+# 生成示例数据
+X, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
+
+# 计算不同 K 值的 WCSS
+wcss = []
+K_range = range(1, 11)
+for k in K_range:
+    kmeans = KMeans(n_clusters=k, random_state=0)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+
+# 绘制肘部法图
+plt.plot(K_range, wcss, 'bx-')
+plt.xlabel('Number of clusters (K)')
+plt.ylabel('WCSS')
+plt.title('Elbow Method For Optimal K')
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/elbow_method.png)
+
+从上图中可以看到，当 𝐾=4 时，WCSS 的减小幅度明显变缓，因此 𝐾=4 是合理的选择。
+
+2. 轮廓系数法（Silhouette Score）
+轮廓系数（Silhouette Score）综合了簇内紧密度和簇间分离度，用于评估聚类质量。轮廓系数在 -1 到 1 之间，值越大表示聚类效果越好。通过计算不同𝐾值对应的轮廓系数，选择轮廓系数最大的𝐾值。
+
+```python
+
+from sklearn.metrics import silhouette_score
+
+# 计算不同 K 值的轮廓系数
+silhouette_scores = []
+for k in K_range:
+    kmeans = KMeans(n_clusters=k, random_state=0)
+    kmeans.fit(X)
+    if k > 1:  # silhouette_score 需要至少两个簇
+        score = silhouette_score(X, kmeans.labels_)
+        silhouette_scores.append(score)
+    else:
+        silhouette_scores.append(None)
+
+# 绘制轮廓系数图
+plt.plot(K_range, silhouette_scores, 'bx-')
+plt.xlabel('Number of clusters (K)')
+plt.ylabel('Silhouette Score')
+plt.title('Silhouette Method For Optimal K')
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/sihouette_method.png)
+
+从上图中可以看到，当 𝐾=4 时，轮廓系数最大，因此 𝐾=4 是合理的选择。
+
+3. Gap 统计法（Gap Statistic）
+
+肘部法虽然直观，但是不能自动化。Gap 统计法通过比较数据实际的聚类结果与随机数据的聚类结果来选择𝐾值。具体步骤如下：
+
+- 对实际数据计算总的簇内平方和（WCSS）。
+- 生成多个随机数据，计算其 WCSS。
+- 计算两者的差距（Gap），选择 Gap 最大的 𝐾值。
+
+Gap 统计法可以通过 gap_statistic 包来实现。gap_statistic 包提供了一个名为 OptimalK 的类，可以帮助我们选择最优的 𝐾值。
+
+gap_statistic库是一个第三方库，我们先安装一下：
+```python
+pip install gap-stat
+```
+
+然后直接调用OptimalK类即可：
+
+```python
+
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+from gap_statistic import OptimalK
+
+# 生成示例数据
+X, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
+
+# 使用 Gap 统计法选择最优 K 值
+optimalK = OptimalK(parallel_backend='joblib')
+n_clusters = optimalK(X, cluster_array=np.arange(1, 11))
+
+print(f'最佳的簇大小为: {n_clusters}')
+```
+
+输出的结果是：
+
+```
+最佳的簇大小为: 5
+```
+
+下面我们再看看，鸢尾花数据集究竟为分多少个簇：
+
+```python
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+from gap_statistic import OptimalK
+
+# 载入数据
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 使用 Gap 统计法选择最优 K 值
+optimalK = OptimalK(parallel_backend='joblib')
+n_clusters = optimalK(X, cluster_array=np.arange(1, 11))
+
+print(f'最佳的簇大小为: {n_clusters}')
+```
+
+输出结果为：
+
+```
+最佳的簇大小为: 8
+```
+
+4. 知识先验和领域知识
+
+在某些情况下，可能有关于数据结构的先验知识或领域知识，这可以帮助选择合理的𝐾值。例如，如果你知道数据应该分为特定数量的组，这可以作为𝐾值的参考。
+
+除此之外，我们还可以对KMenas算法进行改进，比如KMeans++算法，它是一种改进的KMeans算法，可以更好地选择初始簇中心，从而提高算法的性能。它的目的是提高 KMeans 算法的聚类性能和收敛速度。相比于传统的随机初始化，k-means++ 能够更好地选择初始质心，从而减少算法陷入局部最优的概率。
+
+k-means++ 算法步骤:
+
+- 随机选择第一个质心：从数据集中随机选择一个点作为第一个质心。
+- 选择剩余的质心：对于每一个数据点 x，计算其与离它最近的已选择质心之间的距离 D(x)。然后，以 $D(x)^2$作为概率选择下一个质心，即距离越远的点被选择为质心的概率越大。这一步重复进行，直到选择出 K 个质心。
+- 运行标准的 KMeans 算法：使用选择好的 K 个初始质心，运行标准的 KMeans 算法进行聚类。
+
+Kmeans++的优点:
+
+- 更好的初始质心：通过这种方法选择的初始质心通常会更接近数据的实际分布，从而提高聚类的性能。
+- 减少局部最优：相比于随机初始化，k-means++ 更不容易陷入局部最优解。
+- 加快收敛：由于初始质心选择更优，KMeans 算法通常需要更少的迭代次数即可收敛。
+
+在 scikit-learn 中，KMeans 算法默认使用 k-means++ 进行初始化。当然，我们也可以显式指定初始化方法，通过 init 参数指定。
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.datasets import load_iris
+from sklearn.decomposition import PCA
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+
+# 使用 KMeans 进行聚类，默认使用 k-means++ 初始化
+kmeans = KMeans(n_clusters=3, init='k-means++', random_state=0)
+kmeans.fit(X)
+y_kmeans = kmeans.predict(X)
+
+# 使用 PCA 将数据降到二维，以便可视化
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+# 绘制聚类结果
+plt.figure(figsize=(8, 6))
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y_kmeans, s=50, cmap='viridis', marker='o', edgecolor='k')
+
+# 绘制簇中心
+centers = pca.transform(kmeans.cluster_centers_)
+plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200, alpha=0.75, marker='x')
+
+plt.xlabel('PCA Feature 1')
+plt.ylabel('PCA Feature 2')
+plt.title('KMeans++ Clustering on Iris Dataset')
+plt.show()
+```
+
+上面的代码中，我们使用了PCA将数据降到二维，以便可视化。然后我们使用KMeans算法对数据进行聚类，最后绘制聚类结果。效果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/kmeans_pp.png)
 
 #### 6.1.2 DBSCAN算法
 
@@ -3801,7 +4017,23 @@ clust.fit(X)
 
 #### 6.1.3 亲和传播算法
 
-亲和传播（AffinityPropagation）通过在样本对之间发送消息直到收敛来创建聚类。然后，使用少量的代表样本来描述数据集，这些代表样本被确定为最能代表其他样本的样本。样本对之间发送的消息表示一个样本成为另一个样本的代表的适合程度，这些消息会根据其他样本对的值进行更新。这种更新是迭代进行的，直到收敛为止，此时选择最终的代表样本，从而得到最终的聚类结果。
+亲和传播（Affinity Propagation）通过在样本对之间发送消息直到收敛来创建聚类。然后，使用少量的代表样本来描述数据集，这些代表样本被确定为最能代表其他样本的样本。样本对之间发送的消息表示一个样本成为另一个样本的代表的适合程度，这些消息会根据其他样本对的值进行更新。这种更新是迭代进行的，直到收敛为止，此时选择最终的代表样本，从而得到最终的聚类结果。
+
+Affinity Propagation 算法通过在数据点之间传递两种类型的信息来确定簇：责任（Responsibility）和可用性（Availability）。具体步骤如下：
+
+1. 亲和度矩阵（Similarity Matrix）：首先，计算每对数据点之间的相似度（通常使用负欧氏距离）。相似度矩阵 $ S $ 的元素 $ S(i, j) $ 表示数据点 $ i $ 作为数据点 $ j $ 的代表点的适合程度（负距离越大，适合度越高）。
+2. 责任更新（Responsibility Update）：
+   - 责任 $ R(i, k) $ 表示数据点 $ k $ 作为数据点 $ i $ 的代表点的责任大小。更新公式为：
+     $R(i, k) = S(i, k) - \max_{k' \neq k} \{ A(i, k') + S(i, k') \}$
+   - 这一步计算数据点 $ i $ 相对于其他所有可能的代表点 $ k $ 的偏好。
+3. 可用性更新（Availability Update）：
+   - 可用性 $ A(i, k) $ 表示数据点 $ i $ 选择数据点 $ k $ 作为代表点的可行性大小。更新公式为：
+     $A(i, k) = \min \left( 0, R(k, k) + \sum_{i' \notin \{i, k\}} \max(0, R(i', k)) \right) \quad \text{for } i \neq k$
+     $A(k, k) = \sum_{i' \neq k} \max(0, R(i', k))$
+   - 这一步计算数据点 $ k $ 作为代表点的可行性。
+4. 聚类决定：
+   - 经过多次迭代更新责任和可用性矩阵之后，综合考虑责任和可用性矩阵的值，选择 $ R(i, k) + A(i, k) $ 最大的 $ k $ 作为数据点 $ i $ 的代表点。
+   - 最终，数据点 $ k $ 作为代表点的那些点形成一个簇。
 
 我们还是以上面的5堆数据为例：
 
@@ -3857,13 +4089,147 @@ plt.show()
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/affinity_propagation.png)
 
-#### 6.1.x 聚类算法的局限性
+亲和传播算法的优点和缺点为：
+- 优点
+
+    - 自动确定簇数量：不需要预先指定簇的数量，这对于复杂数据集非常有用。
+    - 处理非对称相似度：能够处理非对称的相似度矩阵。
+    - 鲁棒性：对噪声和异常值有一定的鲁棒性。
+
+- 缺点
+
+    - 计算复杂度高：对于大规模数据集，计算和内存消耗较高。
+    - 敏感性：对相似度矩阵和参数（如偏好参数）的选择较为敏感。
+
+
+我们再来一个用亲和传播算法来分析鸢尾花数据集的例子：
+
+```python
+import numpy as np
+from sklearn.cluster import AffinityPropagation
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+
+# 进行 Affinity Propagation 聚类
+affinity_propagation = AffinityPropagation(random_state=0)
+affinity_propagation.fit(X)
+cluster_centers_indices = affinity_propagation.cluster_centers_indices_
+labels = affinity_propagation.labels_
+
+# 使用 PCA 将数据降到二维，以便可视化
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+# 绘制聚类结果
+plt.figure(figsize=(8, 6))
+colors = plt.cm.rainbow(np.linspace(0, 1, len(cluster_centers_indices)))
+
+for k, col in zip(range(len(cluster_centers_indices)), colors):
+    class_members = (labels == k)
+    cluster_center = X_pca[cluster_centers_indices[k]]
+    plt.plot(X_pca[class_members, 0], X_pca[class_members, 1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=8)
+    plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=14)
+    for x in X_pca[class_members]:
+        plt.plot([cluster_center[0], x[0]], [cluster_center[1], x[1]], 'k--', linewidth=0.5)
+
+plt.title('Affinity Propagation Clustering of Iris Dataset')
+plt.xlabel('PCA Component 1')
+plt.ylabel('PCA Component 2')
+plt.show()
+```
+
+输出结果如下：
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/affinity_iris.png)
+
+#### 6.1.4 聚类算法的局限性
 
 在sklearn库的加持下，我们调用聚类算法非常简单。但是，我们不能把聚类算法当成强人工智能。我们来看一下主要的聚类算法在同样的几个数据集上的表现：
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/cluster_all.png)
 
-### 6.2 降维学习
+我们可以看到，不同的聚类算法在不同的数据集上表现不同。这说明，聚类算法并不是万能的，我们需要根据具体的数据集来选择合适的算法。
+
+### 6.2 高斯混合模型
+
+高斯混合模型(Gaussian Mixture Models,GMM)是一种广泛用于统计建模和数据聚类的概率模型。GMM 假设所有数据点是由多个高斯分布（也称为正态分布）组成的混合分布生成的。每个高斯分布代表数据中的一个簇。GMM 通过最大化数据点属于这些高斯分布的可能性来进行聚类和密度估计。
+
+高斯分布是一个连续概率分布，它由均值（μ）和方差（σ²）参数化，其概率密度函数（PDF）为：
+
+$ f(x|\mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(x-\mu)^2}{2\sigma^2} \right) $
+
+GMM 是多个高斯分布的加权和，每个分布都有自己的均值和方差。GMM 的概率密度函数为：$p(x|\lambda) = \sum_{k=1}^{K} \pi_k \cdot \mathcal{N}(x|\mu_k, \Sigma_k) $
+
+其中：
+- $ K $ 是高斯分布的数量。
+- $ \pi_k $ 是第 $ k $ 个高斯分布的混合权重，满足 $ \sum_{k=1}^{K} \pi_k = 1 $。
+- $ \mathcal{N}(x|\mu_k, \Sigma_k) $ 是第 $ k $ 个高斯分布，其均值为 $ \mu_k $，协方差矩阵为 $ \Sigma_k $。
+
+期望最大化（EM）算法是用于估计 GMM 参数的一种常用方法，包括每个高斯分布的均值、方差和混合权重。EM 算法通过以下两个步骤迭代进行：
+
+1. 期望步骤（E-step）：计算每个数据点属于每个高斯分布的概率（即责任）。
+2. 最大化步骤（M-step）：根据责任重新估计 GMM 参数。
+
+
+高斯混合模型的优缺点为：
+
+- 优点
+    - 灵活性：能够拟合任意形状的分布，因为多个高斯分布的组合可以近似任何连续分布。
+    - 概率解释：提供了每个数据点属于每个簇的概率，这比硬聚类方法（如 K-Means）更具信息性。
+
+- 缺点
+    - 复杂性：参数估计和模型选择（例如，选择合适的高斯分布数量）较为复杂。
+    - 计算成本：对于大规模数据，EM 算法的收敛速度可能较慢。
+
+
+在SciKit-Learn中，我们可以通过调用mixture.GaussianMixture类来实现高斯混合模型。
+
+我们还是以鸢尾花数据集为例，来看如何使用高斯混合模型进行聚类：
+
+```python
+import numpy as np
+from sklearn.mixture import GaussianMixture
+from sklearn.datasets import load_iris
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+
+# 进行 GMM 聚类
+gmm = GaussianMixture(n_components=3, random_state=0)
+gmm.fit(X)
+labels = gmm.predict(X)
+
+# 使用 PCA 将数据降到二维，以便可视化
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+# 绘制聚类结果
+plt.figure(figsize=(8, 6))
+colors = plt.cm.rainbow(np.linspace(0, 1, 3))
+
+for k, col in zip(range(3), colors):
+    class_members = (labels == k)
+    plt.plot(X_pca[class_members, 0], X_pca[class_members, 1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=8)
+
+plt.title('GMM Clustering of Iris Dataset')
+plt.xlabel('PCA Component 1')
+plt.ylabel('PCA Component 2')
+plt.show()
+```
+
+结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/gmm_iris.png)
+
+
+### 6.3 降维学习
 
 在非监督学习中，降维学习是和聚类一样应用广泛的技术。顾名思义，它是用于减少数据特征的维度的技术。它通过保留一些比较重要的特征，去除一些冗余的特征，减少数据特征的维度。特征的重要性取决于该特征能够表达多少数据集的信息，以及使用什么方法进行降维。
 
@@ -3881,11 +4247,19 @@ plt.show()
 
 在Sklearn中，decomposition包用来实现降维学习。
 
-#### 6.2.1 主成分分析
+#### 6.3.1 主成分分析
 
 主成分分析（Principal Component Analysis，简称PCA）是一种常用的降维方法，用于将高维数据集转换为低维表示，同时保留数据的主要信息。它通过线性变换将原始特征空间转换为新的特征空间，新的特征空间中的特征被称为主成分。主成分是原始特征的线性组合，具有以下特点：
 - 第一个主成分包含了原始数据中的最大方差，第二个主成分包含了次大方差，以此类推。这意味着主成分能够捕捉到数据中的最重要的信息。
 - 主成分之间是正交的，即它们彼此之间是不相关的。
+
+PCA 的步骤
+
+- 数据标准化：将数据标准化，使每个特征的均值为 0，方差为 1。
+- 计算协方差矩阵：计算数据集的协方差矩阵。
+- 特征值分解：对协方差矩阵进行特征值分解，得到特征值和特征向量。
+- 选择主成分：选择前 𝑘个最大特征值对应的特征向量，作为新的坐标轴。
+- 转换数据：将原始数据投影到选定的主成分上，得到降维后的数据。
 
 在Sklearn中，我们可以很方便地通过调用decomposition.PCA类来实现主成分分析。比如我们要将4维的Iris数据集降维到3维：
 
@@ -3895,10 +4269,51 @@ pca.fit(X)
 X = pca.transform(X)
 ```
 
-#### 6.2.2 独立成分分析
+我们来看完整的代码：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 数据标准化
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# 使用 PCA 进行降维
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+# 绘制降维结果
+plt.figure(figsize=(8, 6))
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap=plt.cm.viridis)
+plt.colorbar()
+plt.title('PCA on Iris Dataset')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.show()
+```
+
+结果如下：
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/pca_iris.png)
+
+#### 6.3.2 独立成分分析
 
 与主成分分析类似的还有独立成分分析。独立成分分析（Independent Component Analysis，简称ICA）是一种盲源分离技术，用于从混合信号中恢复原始信号。通常，ICA不用于降维，而是用于分离叠加的信号。
 ICA假设原始信号是相互独立的，即信号之间是不相关的。ICA通过线性变换将混合信号转换为原始信号，使得原始信号在新的特征空间中是相互独立的。
+
+ICA 的步骤
+
+- 中心化：将数据中心化，使其均值为零。
+- 白化：将数据白化，使其协方差矩阵为单位矩阵。
+- 独立成分提取：通过最大化非高斯性（如使用负熵）来分离独立成分。
 
 在Sklearn中，我们可以通过调用decomposition.FastICA类来实现独立成分分析。其调用方式与PCA类似：
 
@@ -3910,7 +4325,169 @@ S_ = ica.fit_transform(X)
 A_ = ica.mixing_  
 ```
 
-### 6.3 异常点检测
+我们来看一个完整的处理随机生成的独立信号的示例：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import FastICA
+
+# 生成随机混合信号
+np.random.seed(0)
+n_samples = 2000
+time = np.linspace(0, 8, n_samples)
+
+s1 = np.sin(2 * time)  # 正弦波
+s2 = np.sign(np.sin(3 * time))  # 方波
+s3 = np.random.rand(n_samples)  # 随机噪声
+
+S = np.c_[s1, s2, s3]
+S += 0.2 * np.random.normal(size=S.shape)  # 添加噪声
+S /= S.std(axis=0)  # 标准化
+
+# 混合信号
+A = np.array([[1, 1, 1], [0.5, 2, 1.0], [1.5, 1.0, 2.0]])  # 混合矩阵
+X = np.dot(S, A.T)  # 观测信号
+
+# 使用 ICA 分离信号
+ica = FastICA(n_components=3)
+S_ = ica.fit_transform(X)  # 重构信号
+A_ = ica.mixing_  # 估计混合矩阵
+
+# 绘制结果
+plt.figure(figsize=(10, 8))
+
+plt.subplot(3, 1, 1)
+plt.title('Original Signals')
+plt.plot(S)
+
+plt.subplot(3, 1, 2)
+plt.title('Mixed Signals')
+plt.plot(X)
+
+plt.subplot(3, 1, 3)
+plt.title('ICA Recovered Signals')
+plt.plot(S_)
+
+plt.tight_layout()
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/ica_random.png)
+
+### 6.4 流形学习
+
+流形学习（Manifold Learning）是一类非线性降维技术，用于在高维数据中发现低维流形结构。流形学习假设高维数据实际上存在于一个低维的嵌入空间中，并试图找到这一嵌入。它特别适用于处理那些通过线性方法（如PCA）难以有效降维的数据集。
+
+流形是一个局部类似于欧几里得空间的拓扑空间。直观上，可以认为流形是嵌入在高维空间中的低维曲面。例如，地球表面是嵌入在三维空间中的二维流形。
+
+流形学习的目标是找到一个低维的表示，使得原始高维数据在该低维空间中的结构尽可能保持不变。通常，这涉及到保持数据点之间的局部邻域关系。
+
+常见的流形学习算法有：
+- 局部线性嵌入（LLE）：局部线性嵌入（Locally Linear Embedding, LLE）通过假设每个数据点及其邻居可以用线性组合表示，来找到数据的低维表示。步骤如下：
+    - 对每个数据点，找到其最近的 k 个邻居。
+    - 计算每个数据点在其邻居中的线性重构权重。
+    - 在低维空间中重新表示数据点，使得这些重构权重尽可能保持不变。
+- Isomap（Isometric Mapping）：扩展了多维缩放（MDS），通过在高维空间中保持全局几何距离。步骤如下：
+    - 构建数据点的邻接图，连接每个点与其最近的 k 个邻居。
+    - 计算邻接图中所有点对之间的最短路径距离。
+    - 使用经典的多维缩放（MDS）将距离矩阵嵌入到低维空间中。
+- t-SNE：t-SNE（t-Distributed Stochastic Neighbor Embedding）通过在高维和低维空间中分别计算点对之间的概率分布，使高维数据在低维空间中聚类。步骤如下：
+    - 在高维空间中计算点对之间的相似度，使用高斯分布。
+    - 在低维空间中计算点对之间的相似度，使用 t 分布。
+    - 最小化两种分布之间的 Kullback-Leibler 散度。
+- UMAP：UMAP（Uniform Manifold Approximation and Projection）基于流形理论和代数拓扑，旨在更好地保持全局和局部结构。步骤如下：
+    - 构建高维空间中的近邻图。
+    - 使用代数拓扑方法在低维空间中优化表示。
+
+我们来看下使用局部线性嵌入和IsoMap算法对鸢尾花数据集进行降维：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.manifold import LocallyLinearEmbedding, Isomap
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+
+# 使用 LLE 进行降维
+lle = LocallyLinearEmbedding(n_components=2, n_neighbors=10)
+X_lle = lle.fit_transform(X)
+
+# 使用 Isomap 进行降维
+isomap = Isomap(n_components=2, n_neighbors=10)
+X_isomap = isomap.fit_transform(X)
+
+# 绘制降维结果
+plt.figure(figsize=(12, 6))
+
+plt.subplot(1, 2, 1)
+plt.scatter(X_lle[:, 0], X_lle[:, 1], c=iris.target, cmap=plt.cm.viridis)
+plt.title('LLE')
+
+plt.subplot(1, 2, 2)
+plt.scatter(X_isomap[:, 0], X_isomap[:, 1], c=iris.target, cmap=plt.cm.viridis)
+plt.title('Isomap')
+
+plt.show()
+```
+
+降维结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/lle_isomap.png)
+
+我们继续详细讨论下t-SNE. t-SNE 通过在高维和低维空间中计算数据点之间的相似度来实现降维。具体步骤如下：
+
+- 高维空间中的相似度：
+   - 对于高维空间中的每对数据点 $ x_i $ 和 $ x_j $，t-SNE 使用高斯分布计算相似度：
+   $p_{j|i} = \frac{\exp(-\|x_i - x_j\|^2 / 2\sigma_i^2)}{\sum_{k \neq i} \exp(-\|x_i - x_k\|^2 / 2\sigma_i^2)}$
+   - 这里，$\sigma_i$ 是与数据点 $ x_i $ 相关的标准差，表示高斯核的宽度。相似度是条件概率，表示在点 $ x_i $ 选择点 $ x_j $ 的概率。
+- 对称化：$p_{ij} = \frac{p_{j|i} + p_{i|j}}{2n}$. 这里 $ n $ 是数据点的数量。
+- 低维空间中的相似度：
+    - 在低维空间中，t-SNE 使用 t 分布（通常是自由度为 1 的学生 t 分布，即柯西分布）计算相似度：
+   $q_{ij} = \frac{(1 + \|y_i - y_j\|^2)^{-1}}{\sum_{k \neq l} (1 + \|y_k - y_l\|^2)^{-1}}$
+   - 这里 $ y_i $ 和 $ y_j $ 是低维空间中的数据点。
+
+t-SNE 通过最小化高维空间和低维空间中相似度分布的 Kullback-Leibler 散度（KL 散度）来优化低维表示：
+$KL(P \| Q) = \sum_{i \neq j} p_{ij} \log \frac{p_{ij}}{q_{ij}}$
+这里 $ P $ 和 $ Q $ 分别表示高维和低维空间中的相似度分布。
+
+
+我们来看用t-SNE对鸢尾花数据集进行降维：
+
+```python
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.manifold import TSNE
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 使用 t-SNE 进行降维
+tsne = TSNE(n_components=2, random_state=0)
+X_tsne = tsne.fit_transform(X)
+
+# 绘制降维结果
+plt.figure(figsize=(8, 6))
+plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap=plt.cm.viridis)
+plt.colorbar()
+plt.title('t-SNE on Iris Dataset')
+plt.xlabel('t-SNE Component 1')
+plt.ylabel('t-SNE Component 2')
+plt.show()
+```
+
+结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/t_sne_iris.png)
+
+### 6.5 异常点检测
 
 许多应用程序需要能够判断一个新的观察值是否与现有的观察值属于同一分布（它是正常值），或者应该被视为不同（它是异常值）。通常，这种能力被用来清理真实的数据集。必须做出两个重要的区别：
 
@@ -4053,15 +4630,783 @@ plt.show()
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/outlier.png)
 
+### 6.6 受限玻尔兹曼机
+
+受限玻尔兹曼机（Restricted Boltzmann Machine，简称 RBM）是一种生成随机网络，用于对数据进行无监督学习。RBM 是一种能量模型，最早由 Geoffrey Hinton 提出，广泛应用于深度学习和概率图模型中。以下是 RBM 的一些关键特点和结构：
+
+RBM 由两层组成：
+
+1. 可见层（Visible Layer）：包含可见单元，表示输入数据。
+2. 隐藏层（Hidden Layer）：包含隐藏单元，捕捉数据的潜在特征。
+
+这两层之间的单元是完全连接的，但同一层内的单元之间不存在连接，这就是“受限”的含义。
+
+受限玻尔兹曼机定义了一个能量函数 $ E(v, h) $，用于描述可见单元 $ v $ 和隐藏单元 $ h $ 的联合状态：
+
+$ E(v, h) = -\sum_{i} v_i b_i - \sum_{j} h_j c_j - \sum_{i,j} v_i h_j w_{ij} $
+
+其中：
+- $ v_i $ 和 $ h_j $ 分别表示可见单元和隐藏单元的状态。
+- $ b_i $ 和 $ c_j $ 是可见单元和隐藏单元的偏置。
+- $ w_{ij} $ 是连接可见单元 $ v_i $ 和隐藏单元 $ h_j $ 的权重。
+
+受限玻尔兹曼机定义了数据的联合概率分布：$ p(v, h) = \frac{e^{-E(v, h)}}{Z} $
+
+其中 $ Z $ 是配分函数，用于归一化概率分布：$ Z = \sum_{v, h} e^{-E(v, h)} $
+
+训练受限玻尔兹曼机通常使用对比散度（Contrastive Divergence, CD）算法。该算法通过以下步骤来更新权重和偏置：
+
+1. 正向传播：给定输入数据，计算隐藏单元的激活值。
+2. 重构数据：根据隐藏单元的激活值重构输入数据。
+3. 计算梯度：根据原始数据和重构数据的差异更新权重和偏置。
+
+BernoulliRBM 是 scikit-learn 中用于实现受限玻尔兹曼机（Restricted Boltzmann Machine, RBM）的类。它假设可见单元是伯努利分布的，这意味着输入数据应该是二进制的或者经过适当的预处理。
+
+BernoulliRBM的用法为：
+
+```python
+from sklearn.neural_network import BernoulliRBM
+
+# 创建一个 BernoulliRBM 实例
+rbm = BernoulliRBM(n_components=256, learning_rate=0.01, n_iter=10, random_state=42)
+
+# 训练 RBM
+rbm.fit(X_train)
+
+# 转换数据
+X_transformed = rbm.transform(X_train)
+```
+
+参数说明
+- n_components: 隐藏单元的数量。
+- learning_rate: 学习率。
+- batch_size: 每次迭代的样本数量。
+- n_iter: 训练的迭代次数。
+- random_state: 随机数种子，保证结果可重复。
+- verbose: 是否输出训练过程信息。
+
+下面我们来看如何使用受限波尔兹曼机对糖尿病数据集进行预测。
+
+```python
+import numpy as np
+from sklearn import datasets
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import BernoulliRBM
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# 加载糖尿病数据集
+diabetes = datasets.load_diabetes()
+X = diabetes.data
+y = (diabetes.target > diabetes.target.mean()).astype(int)  # 将目标二值化（高于平均值为1，低于等于平均值为0）
+
+# 数据标准化
+scaler = StandardScaler()
+
+# 定义 RBM 和 Logistic 回归模型
+rbm = BernoulliRBM(random_state=0, n_iter=100, verbose=True)
+logistic = LogisticRegression(max_iter=1000)
+
+# 创建一个流水线，将标准化、RBM 和 Logistic 回归结合在一起
+classifier = Pipeline(steps=[('scaler', scaler), ('rbm', rbm), ('logistic', logistic)])
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 训练模型
+classifier.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = classifier.predict(X_test)
+
+# 计算准确率
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Classification accuracy: {accuracy}')
+```
+
 ## 第七章 集成学习
 
-## 第八章 机器学习优化
+集成学习（Ensemble Learning）是一种机器学习技术，通过结合多个基学习器（Base Learners）来构建一个更强大的模型，从而提高预测性能和泛化能力。集成学习的核心思想是“集体智慧”，即多个模型的组合往往比单个模型的表现更好。
+
+集成学习的基本类型
+
+- Bagging（Bootstrap Aggregating）：
+    - 原理：通过有放回抽样从训练数据集中生成多个子集，在每个子集上训练一个基学习器，然后将这些基学习器的预测结果进行平均（回归任务）或投票（分类任务）。
+    - 优点：减少模型的方差，提高稳定性和泛化能力。
+    - 示例：随机森林（Random Forest）。
+- Boosting：
+    - 原理：通过顺序训练多个基学习器，每个基学习器在前一个基学习器的基础上进行改进，重点关注前一个模型错误分类的样本。最终的预测结果是所有基学习器的加权和。
+    - 优点：逐步减少偏差，显著提高模型性能。
+    - 示例：AdaBoost、梯度提升（Gradient Boosting）。
+- Stacking（Stacked Generalization）：
+    - 原理：通过训练多个不同类型的基学习器，然后将它们的预测结果作为新的特征输入到一个元学习器（Meta-Learner）中进行最终预测。
+    - 优点：利用不同模型的优势，进一步提高预测性能。
+    - 示例：各种 stacking 实现通常结合多种不同的基学习器和元学习器。
+- Voting：
+    - 原理：通过结合多个基学习器的预测结果来确定最终的预测类别，对于硬投票（hard voting），选择多数基学习器投票的类别作为最终预测结果；对于软投票（soft voting），选择具有最高平均预测概率的类别作为最终预测结果。
+    - 优点：简单易实现，且能有效提高分类精度。
+    - 示例：Voting Classifier。
+
+### 7.1 梯度提升树
+
+梯度提升树（Gradient-Boosted Trees，简称GBT）是一种集成学习方法，通过结合多个弱学习者（通常是决策树）来创建一个强大的预测模型。该方法逐步构建决策树，每一步都优化前一步的误差，使模型逐渐逼近目标函数。
+
+梯度提升树的基本概念
+- 弱学习者：通常是浅层决策树（即树的深度较小），这些树单独的预测能力有限。
+- 集成方法：将多个弱学习者的预测结果结合起来，形成一个强大的预测模型。
+- 加法模型：GBTs 使用逐步加法模型，逐步向模型中添加新的弱学习者，每个新模型都是对前面模型误差的调整。
+- 梯度下降：GBTs 使用梯度下降算法来最小化损失函数，每棵新树都是沿着梯度方向来减少前一步的预测误差。
+
+梯度提升树的工作原理
+1. 初始化模型：从一个简单的模型开始，通常是使用所有训练样本的均值或中位数作为初始预测。
+2. 计算残差：对于每个训练样本，计算当前模型的预测误差（残差）。
+3. 拟合残差：训练一个新的决策树来拟合这些残差。
+4. 更新模型：将新树的预测结果加到现有模型中，更新后的模型更接近实际值。
+5. 重复步骤 2-4：不断重复上述步骤，逐步减少模型的误差，直到达到预定的迭代次数或误差达到满意的水平。
+
+以下是一个使用 scikit-learn 库实现梯度提升树回归的示例代码：
+
+```python
+import numpy as np
+from sklearn.datasets import make_regression
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error
+
+# 生成样本数据
+X, y = make_regression(n_samples=1000, n_features=20, noise=0.1, random_state=42)
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建 GradientBoostingRegressor 模型
+gbr = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
+
+# 训练模型
+gbr.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = gbr.predict(X_test)
+
+# 计算均方误差
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: {mse:.4f}")
+```
+
+代码说明
+
+- 生成数据: 使用 make_regression 生成回归问题的样本数据。
+- 划分数据: 将数据集划分为训练集和测试集。
+- 创建模型: 使用 GradientBoostingRegressor 创建梯度提升树回归模型。
+- 训练模型: 在训练集上训练模型。
+- 预测与评估: 在测试集上进行预测并计算均方误差（MSE）。
+
+参数说明
+
+- n_estimators: 决策树的数量，即弱学习者的数量。
+- learning_rate: 学习率，控制每棵树对最终模型的贡献，通常设置为较小的值。
+- max_depth: 决策树的最大深度，控制每棵树的复杂度。
+
+
+梯度提升树优点和缺点
+
+- 优点:
+    - 高精度：能够处理复杂的非线性关系。
+    - 灵活性：可以应用于回归和分类任务。
+    - 可解释性：每棵树的贡献可以通过特征重要性进行解释。
+- 缺点:
+    - 训练时间长：由于逐步添加树，训练时间较长。
+    - 过拟合：如果树的数量过多或树的深度过大，容易过拟合。
+    - 参数调优复杂：需要调整多个参数（如学习率、树的数量和深度）以获得最佳性能。
+
+### 7.2 随机森林
+
+随机森林（Random Forests）是一种集成学习方法，通过组合多个决策树来提高模型的预测性能和鲁棒性。它在分类和回归任务中都表现出色。随机森林通过引入随机性来生成各个决策树，从而降低了过拟合风险，并提高了模型的泛化能力。
+
+随机森林的基本概念
+决策树：单个决策树是一个弱学习者，容易过拟合训练数据。
+集成方法：将多个决策树的预测结果结合起来，形成一个更强大的模型。
+随机性：在训练每棵树时引入随机性，包括对数据和特征的随机选择，从而使每棵树有所不同。
+随机森林的工作原理
+数据集划分：从原始训练数据中通过自助法（Bootstrap）随机抽取多个子集（有放回抽样）。
+决策树训练：对于每个子集，训练一棵决策树。在树的每个节点分裂时，随机选择特定数量的特征来决定最佳分裂点，而不是使用所有特征。
+集成预测：对于分类任务，随机森林通过对所有树的预测结果进行投票来确定最终类别；对于回归任务，取所有树预测值的平均值。
+使用 scikit-learn 实现随机森林
+
+下面我们用随机森林算法来处理下鸢尾花数据集：
+
+```python
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+# 载入数据集
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建 RandomForestClassifier 模型
+rf = RandomForestClassifier(n_estimators=100, max_features='sqrt', random_state=42)
+
+# 训练模型
+rf.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = rf.predict(X_test)
+
+# 计算准确率
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.4f}")
+```
+
+代码说明
+
+- 载入数据：使用 load_iris 载入鸢尾花数据集。
+- 划分数据：将数据集划分为训练集和测试集。
+- 创建模型：使用 RandomForestClassifier 创建随机森林分类器。
+- 训练模型：在训练集上训练模型。
+- 预测与评估：在测试集上进行预测并计算准确率。
+
+参数说明
+
+- n_estimators: 决策树的数量，即森林中树的数量。
+- max_features: 决策树分裂时考虑的最大特征数，可以是整数、浮点数或特定的字符串（如 'sqrt' 表示特征总数的平方根）。
+- random_state: 随机种子，用于结果复现。
+
+我们再来用随机森林处理下糖尿病数据集：
+
+```python
+import numpy as np
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+
+# 载入糖尿病数据集
+diabetes = load_diabetes()
+X, y = diabetes.data, diabetes.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建 RandomForestRegressor 模型
+rf = RandomForestRegressor(n_estimators=100, max_features='sqrt', random_state=42)
+
+# 训练模型
+rf.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = rf.predict(X_test)
+
+# 计算均方误差
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: {mse:.4f}")
+```
+
+随机森林的优点和缺点
+- 优点:
+    - 高准确性：通过集成多个决策树，显著提高了模型的预测性能。
+    - 抗过拟合：引入随机性后，每棵树的预测误差互相抵消，整体模型更稳定。
+    - 处理高维数据：适用于具有大量特征的数据集。
+    - 特征重要性：提供特征重要性评估，有助于特征选择和数据理解。
+- 缺点:
+    - 训练时间长：包含许多决策树，训练时间较长。
+    - 资源消耗大：需要较大的内存和计算资源，特别是当树的数量和数据规模较大时。
+    - 不易解释：单个决策树容易解释，但随机森林作为一个整体难以解释其决策过程。
+
+### 7.3 Bagging
+
+Bagging（Bootstrap Aggregating）元估计器（Bagging meta-estimator）通过将多个基学习器（通常是相同类型的模型，如决策树）的预测结果结合起来，从而提高整体预测性能并降低模型的方差。Bagging 的核心思想是通过对数据集进行有放回抽样（bootstrap sampling）生成多个训练子集，并在这些子集上分别训练多个基学习器。
+
+Bagging 的基本概念
+
+- 有放回抽样：从原始训练数据集中随机抽取多个子集，每个子集的样本数与原始数据集相同，但由于有放回抽样，子集中可能包含重复的样本。
+- 基学习器：通常选择同一种类型的学习器，如决策树。在这些子集上训练多个基学习器。
+- 集成预测：对于分类任务，Bagging 通过对所有基学习器的预测结果进行投票来确定最终类别；对于回归任务，取所有基学习器预测值的平均值。
+
+Bagging 的优点和缺点
+- 优点:
+
+    - 减少方差：通过对多个基学习器的预测结果进行平均或投票，Bagging 可以显著减少模型的方差，从而提高模型的稳定性和泛化能力。
+    - 防止过拟合：由于每个基学习器在不同的子集上训练，Bagging 有助于减少过拟合现象。
+    - 并行计算：各个基学习器可以独立训练，易于并行化，提升计算效率。
+- 缺点:
+
+    - 增加计算开销：训练多个基学习器需要更多的计算资源和时间。
+    - 模型解释性差：由于最终预测是多个基学习器的综合结果，难以解释每个单独预测的贡献。
+    - 使用 scikit-learn 实现 Bagging meta-estimator
+
+下面我们用Bagging meta-estimator来处理糖尿病数据集：
+
+```python
+import numpy as np
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import BaggingRegressor
+from sklearn.metrics import mean_squared_error
+
+# 载入糖尿病数据集
+diabetes = load_diabetes()
+X, y = diabetes.data, diabetes.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建基学习器：决策树回归模型
+base_estimator = DecisionTreeRegressor(random_state=42)
+
+# 创建 BaggingRegressor 模型
+bagging = BaggingRegressor(base_estimator=base_estimator, n_estimators=100, random_state=42)
+
+# 训练模型
+bagging.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = bagging.predict(X_test)
+
+# 计算均方误差
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: {mse:.4f}")
+```
+
+代码说明
+
+- 载入数据：使用 load_diabetes 载入糖尿病数据集。
+- 划分数据：将数据集划分为训练集和测试集，测试集占总数据的 20%。
+- 创建基学习器：使用 DecisionTreeRegressor 作为基学习器。
+- 创建 BaggingRegressor 模型：将基学习器 DecisionTreeRegressor 和其他参数传递给 BaggingRegressor。
+- 训练模型：在训练集上训练 Bagging 模型。
+- 预测与评估：在测试集上进行预测并计算均方误差（MSE）。
+
+参数说明
+
+- base_estimator: 基学习器，在此示例中为决策树回归模型。
+- n_estimators: 基学习器的数量，即 Bagging 中的模型数量。在此示例中设置为 100。
+- random_state: 随机种子，用于结果复现。在此示例中设置为 42。
+
+### 7.4 投票法
+
+投票法通过结合多个不同类型的基学习器的预测结果来提高整体模型的性能。它通常用于分类任务，通过投票机制来确定最终的预测类别。Voting Classifier 有两种主要类型：硬投票（hard voting）和软投票（soft voting）。
+
+- 硬投票（Hard Voting）:在硬投票中，Voting Classifier 汇总各个基学习器的预测结果，然后选择多数基学习器投票的类别作为最终预测结果。即使某个基学习器的预测错误，只要大多数基学习器的预测是正确的，最终结果仍然可能是正确的。
+
+- 软投票（Soft Voting）:在软投票中，Voting Classifier 结合各个基学习器的预测概率，然后选择具有最高平均预测概率的类别作为最终预测结果。这种方法利用了每个基学习器的概率输出，通常能获得更好的性能。
+
+
+下面我们使用软投票来处理鸢尾花数据集，使用结合逻辑回归、支持向量机和随机森林分类器来构建 Voting Classifier。
+集成学习可以将之前的知识都结合起来，这个感觉是不是很爽？
+
+```python
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.metrics import accuracy_score
+
+# 载入鸢尾花数据集
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建基学习器
+clf1 = LogisticRegression(random_state=42)
+clf2 = SVC(probability=True, random_state=42)
+clf3 = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# 创建 VotingClassifier 模型（软投票）
+voting_clf = VotingClassifier(estimators=[('lr', clf1), ('svc', clf2), ('rf', clf3)], voting='soft')
+
+# 训练模型
+voting_clf.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = voting_clf.predict(X_test)
+
+# 计算准确率
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.4f}")
+```
+
+代码说明
+
+- 载入数据：使用 load_iris 载入鸢尾花数据集。
+- 划分数据：将数据集划分为训练集和测试集，测试集占总数据的 20%。
+- 创建基学习器：使用逻辑回归（Logistic Regression）、支持向量机（SVC）和随机森林（RandomForestClassifier）作为基学习器。
+- 创建 VotingClassifier 模型：
+- estimators: 包含基学习器的列表，格式为 (名称, 模型实例) 的元组。
+- voting='soft': 使用软投票机制。
+- 训练模型：在训练集上训练 Voting Classifier 模型。
+- 预测与评估：在测试集上进行预测并计算准确率。
+
+参数说明
+
+- estimators: 基学习器的列表，每个基学习器由一个名称和实际的模型实例组成。
+- voting: 投票机制，可选 'hard'（硬投票）或 'soft'（软投票）。
+
+### 7.5 Stacking
+
+Stacked Generalization（简称 Stacking）通过组合多个不同类型的基学习器（Base Learners）的预测结果来提高整体模型的性能。与 Bagging 和 Boosting 不同，Stacking 不是简单地对多个模型的预测结果进行平均或加权，而是通过训练一个元学习器（Meta-Learner）来学习如何最佳地组合这些基学习器的预测结果。
+
+Stacking 的基本原理
+
+- 基学习器（Base Learners）：
+    - 多个基学习器可以是不同类型的模型，例如决策树、支持向量机、逻辑回归等。
+    - 这些基学习器在原始训练数据上独立训练，并生成初级预测（First-Level Predictions）。
+- 元学习器（Meta-Learner）：
+    - 元学习器是一个新的模型，它以基学习器的初级预测作为输入特征，训练一个最终的模型。
+    - 元学习器的目标是学习如何最佳地组合基学习器的预测，以提高整体预测性能。
+
+Stacking 的实现步骤
+
+- 训练基学习器：
+    - 将训练数据集划分为 K 折（K-Folds），在每一折上训练基学习器，并在剩余数据上进行预测，生成初级预测。
+    - 将所有折的初级预测结果组合起来，形成一个新的训练集。
+- 训练元学习器：使用基学习器的初级预测结果作为特征，原始的目标变量作为标签，训练元学习器。
+- 预测阶段：
+    - 在测试数据上，首先用基学习器生成初级预测。
+    - 将这些初级预测输入到元学习器中，得到最终的预测结果。
+
+下面我们把来逻辑回归、支持向量机和随机森林分类器来构建 Stacking 模型去处理鸢尾花数据集：
+
+```python
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier, StackingClassifier
+from sklearn.metrics import accuracy_score
+
+# 载入鸢尾花数据集
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建基学习器
+estimators = [
+    ('lr', LogisticRegression(random_state=42)),
+    ('svc', SVC(probability=True, random_state=42)),
+    ('rf', RandomForestClassifier(n_estimators=100, random_state=42))
+]
+
+# 创建 StackingClassifier 模型
+stacking_clf = StackingClassifier(estimators=estimators, final_estimator=LogisticRegression())
+
+# 训练模型
+stacking_clf.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = stacking_clf.predict(X_test)
+
+# 计算准确率
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Stacking Classifier Accuracy: {accuracy:.4f}")
+```
+
+代码说明
+
+- 载入数据：使用 load_iris 载入鸢尾花数据集。
+- 划分数据：将数据集划分为训练集和测试集，测试集占总数据的 20%。
+- 创建基学习器：使用逻辑回归（LogisticRegression）、支持向量机（SVC）和随机森林（RandomForestClassifier）作为基学习器。
+- 创建 StackingClassifier 模型：
+    - estimators: 包含基学习器的列表，格式为 (名称, 模型实例) 的元组。
+    - final_estimator: 元学习器，在此示例中为逻辑回归（LogisticRegression）。
+- 训练模型：在训练集上训练 Stacking 模型。
+- 预测与评估：在测试集上进行预测并计算准确率。
+
+参数说明
+
+- estimators: 基学习器的列表，每个基学习器由一个名称和实际的模型实例组成。
+- final_estimator: 元学习器，用于组合基学习器的预测结果。
+
+### 7.6 AdaBoost
+
+AdaBoost（Adaptive Boosting）是一种提升方法（Boosting），通过结合多个弱分类器（通常是决策树桩，即只有一个分裂节点的决策树）来构建一个强分类器。AdaBoost 是由 Freund 和 Schapire 在 1995 年提出的，旨在提高分类器的性能。
+
+AdaBoost 的工作原理
+
+1. **初始化样本权重**：
+   - 初始时，每个训练样本的权重是相等的，设为 \(\frac{1}{N}\)，其中 \(N\) 是训练样本的数量。
+
+2. **迭代过程**：
+   - 对于每一轮迭代 \(t\)，执行以下步骤：
+     1. **训练弱分类器**：根据当前样本权重分布，训练一个弱分类器 \(h_t\)。
+     2. **计算分类误差**：计算弱分类器在训练集上的误差率 \(\epsilon_t\)，即错分样本的权重之和。
+     3. **计算分类器权重**：根据分类误差计算弱分类器的权重 \(\alpha_t\)，公式为：
+       $
+       \alpha_t = \frac{1}{2} \ln\left(\frac{1 - \epsilon_t}{\epsilon_t}\right)
+       $
+     4. **更新样本权重**：更新样本权重，公式为：
+       $
+       w_{i}^{(t+1)} = \frac{w_{i}^{(t)} \exp(-\alpha_t y_i h_t(x_i))}{Z_t}
+       $
+       其中，\(y_i\) 是样本 \(i\) 的真实标签（取值为 \(\pm 1\)），\(x_i\) 是样本特征，\(Z_t\) 是规范化因子，确保权重和为 1。
+
+3. **构建最终分类器**：
+   - 最终分类器是所有弱分类器加权投票的结果，公式为：
+     $
+     H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right)
+     $
+     其中，$T$ 是迭代次数。
+
+AdaBoost 的优点和缺点
+
+- 优点：
+    - 提高准确性：通过结合多个弱分类器，显著提高分类器的准确性。
+    - 鲁棒性：对一些常见的噪声和数据异常具有一定的鲁棒性。
+    - 无需调参：相对简单，只需指定迭代次数，通常不需要复杂的超参数调优。
+
+- 缺点：
+    - 对噪声敏感：在存在大量噪声数据时，可能会导致过拟合。
+    - 计算开销：随着迭代次数的增加，计算开销和时间开销也会增加。
+
+下面我们使用AdaBoost处理鸢尾花数据集，并使用决策树作为弱分类器。
+
+```python
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.metrics import accuracy_score
+
+# 载入数据
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建决策树桩（弱分类器）
+weak_classifier = DecisionTreeClassifier(max_depth=1, random_state=42)
+
+# 创建 AdaBoost 模型
+ada_clf = AdaBoostClassifier(estimator=weak_classifier, n_estimators=50, random_state=42)
+
+# 训练模型
+ada_clf.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = ada_clf.predict(X_test)
+
+# 计算准确率
+accuracy = accuracy_score(y_test, y_pred)
+print(f"AdaBoost Classifier Accuracy: {accuracy:.4f}")
+```
+
+### 7.7 极端随机树
+
+极端随机树与随机森林类似，但在构建决策树时有一些不同的策略。主要区别在于，极端随机树在分割节点时不仅随机选择特征，还随机选择分割阈值。
+
+极端随机树的特点
+- 极端随机性：在每个节点分裂时，不仅随机选择特征，还在特征的取值范围内随机选择切分点。这种极端的随机性有助于降低过拟合。
+- 高效性：由于节点分裂的随机性，训练过程通常比随机森林更快。不需要在每个节点执行复杂的优化步骤。
+- 集成方法：与随机森林类似，通过构建多棵决策树并集成它们的结果来提高模型的稳定性和准确性。
+
+
+下面我们使用极端随机树处理鸢尾花数据集：
+
+```python
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.metrics import accuracy_score
+
+# 载入数据
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建 ExtraTreesClassifier 模型
+extra_trees_clf = ExtraTreesClassifier(n_estimators=100, random_state=42)
+
+# 训练模型
+extra_trees_clf.fit(X_train, y_train)
+
+# 在测试集上进行预测
+y_pred = extra_trees_clf.predict(X_test)
+
+# 计算准确率
+accuracy = accuracy_score(y_test, y_pred)
+print(f"ExtraTreesClassifier Accuracy: {accuracy:.4f}")
+```
+
+参数说明
+
+- n_estimators：要构建的树的数量。
+- criterion：用于分裂节点的标准（如 "gini" 或 "entropy"）。
+- max_features：在每个分裂点考虑的最大特征数量。
+- max_depth：每棵树的最大深度。
+- min_samples_split：分裂内部节点所需的最小样本数。
+- min_samples_leaf：叶节点所需的最小样本数。
+
+极端随机树的优点和缺点
+- 优点：
+
+    - 处理高维数据：适用于高维数据集。
+    - 抗过拟合：比单一决策树更不容易过拟合。
+    - 高效：训练速度快，适用于大规模数据集。
+缺点：
+
+    - 解释性较差：由于集成了多棵树，模型的解释性不如单一决策树。
+    - 内存消耗大：需要存储多棵树，内存消耗较大。
+
+### 7.8 孤立森林
+
+孤立森林是一种基于树结构的无监督异常检测算法，它通过随机选择特征并在特征的随机值上分割数据来隔离数据点。异常点更容易被隔离，因为它们与其他点的差异更大，因此需要更少的分裂步骤。
+
+孤立森林的工作原理
+- 随机分割数据：
+通过随机选择一个特征以及该特征上的一个随机分割值，将数据集分割成两个子集。这个过程在每个子集上递归进行，形成一棵树。
+- 构建多棵树：
+重复上述过程，构建多棵树（称为森林）。每棵树是通过随机子采样数据集构建的。
+- 计算路径长度：对于每个数据点，计算其在树中的路径长度（即从根节点到达叶节点的步数）。异常点通常会在较少的分裂步骤后被孤立，因此其路径长度较短。
+- 异常分数：通过路径长度计算异常分数。路径长度越短，数据点越可能是异常点。
+
+我们来看一个例子：
+
+```python
+from sklearn.ensemble import IsolationForest
+import numpy as np
+
+# 生成示例数据
+rng = np.random.RandomState(42)
+X = 0.3 * rng.randn(100, 2)
+X_train = np.r_[X + 2, X - 2]
+
+# 生成一些异常点
+X_outliers = rng.uniform(low=-4, high=4, size=(20, 2))
+
+# 训练 IsolationForest 模型
+iso_forest = IsolationForest(contamination=0.1, random_state=42)
+iso_forest.fit(X_train)
+
+# 预测训练数据和异常点
+y_pred_train = iso_forest.predict(X_train)
+y_pred_outliers = iso_forest.predict(X_outliers)
+
+print("Training Data Predictions:", y_pred_train)
+print("Outlier Predictions:", y_pred_outliers)
+```
+
+参数说明
+
+- n_estimators：森林中树的数量。
+- max_samples：构建每棵树时用于训练的数据点数，可以是整数或浮点数（表示比例）。
+- contamination：数据集中异常点的比例，用于自动设置阈值。
+- max_features：用于分裂节点时的最大特征数。
+- bootstrap：是否对样本进行重采样。
+
+孤立森林的优点和缺点：
+- 优点：
+
+    - 无监督学习：不需要标签即可检测异常。
+    - 高效：适用于大规模数据集，计算复杂度较低。
+    - 多维数据：适用于多维数据集。
+- 缺点：
+
+    - 参数敏感：需要调整参数（如 contamination）来获得最佳效果。
+    - 解释性较弱：树结构的随机性使得模型解释性较弱。
+
+### 7.9 XGBoost
+
+XGBoost（Extreme Gradient Boosting）是一个优化的分布式梯度提升库，旨在实现高效、灵活和可扩展的机器学习模型。它基于梯度提升决策树（GBDT），但在多个方面进行了改进，使其在处理大规模、高维数据集时表现出色。XGBoost 由 Tianqi Chen 开发，并且在许多数据科学竞赛中表现优异，成为了数据科学家和机器学习工程师的常用工具。
+
+XGBoost 的特点
+- 高效性：XGBoost 通过硬件优化和算法改进，提高了训练速度和效率。它利用了多线程并行计算。
+- 正则化：通过添加正则化项（如 L1 和 L2）来防止过拟合，使得模型更具泛化能力。
+- 灵活性：支持多种目标函数和自定义目标函数，适用于回归、分类、排序等任务。
+- 分布式计算：支持在分布式环境下运行，适用于大规模数据集。
+- 缺失值处理：内置了对缺失值的处理机制，在训练过程中能够自动处理缺失数据。
+- 树剪枝：通过最大深度和最小子节点权重等参数进行树剪枝，进一步防止过拟合。
+
+下面我们调用XGBoost库来处理鸢尾花数据集。注意，XGBoost需要安装额外的库，可以通过`pip install xgboost`安装。
+
+```python
+import xgboost as xgb
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# 载入数据
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建 DMatrix 数据结构
+dtrain = xgb.DMatrix(X_train, label=y_train)
+dtest = xgb.DMatrix(X_test, label=y_test)
+
+# 设置参数
+params = {
+    'booster': 'gbtree',
+    'objective': 'multi:softmax',  # 多分类问题
+    'num_class': 3,                # 类别数
+    'eta': 0.3,                    # 学习率
+    'max_depth': 6,                # 树的最大深度
+    'eval_metric': 'mlogloss'      # 评价指标
+}
+
+# 训练模型
+num_round = 100
+bst = xgb.train(params, dtrain, num_round)
+
+# 预测
+y_pred = bst.predict(dtest)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"XGBoost Accuracy: {accuracy:.4f}")
+```
+
+参数说明
+
+- booster：选择基学习器类型（如 'gbtree'、'gblinear'、'dart'）。
+- objective：定义优化目标（如 'reg:squarederror'、'binary:logistic'、'multi:softmax'）。
+- eta：学习率（步长缩减），控制每一步的权重。
+- max_depth：树的最大深度，控制模型的复杂度。
+- eval_metric：评价指标（如 'rmse'、'mae'、'logloss'、'error'）。
+
+
+XGBoost的优点和缺点
+- 优点：
+
+    - 高效性：训练速度快，适用于大数据集。
+    - 灵活性：支持多种任务和自定义目标函数。
+    - 正则化：通过正则化项有效防止过拟合。
+    - 分布式计算：支持在分布式环境下运行。
+- 缺点：
+
+    - 复杂性：参数众多，调参过程复杂。
+    - 计算资源：在大数据集上训练时，可能消耗大量内存和计算资源。
+
+### 7.10 小结
+
+通过上面的学习，我们对于集成学习有了更深入的了解。集成学习是一种通过结合多个基学习器来提高整体模型性能的方法。常见的集成学习方法包括 Bagging、Boosting、Voting 和 Stacking 等。集成学习可以有效提高模型的泛化能力，降低过拟合风险。
+
+## 第八章 机器学习的算力技术
 
 机器学习有三大要素：数据、算法和算力。前面我们花了很多时间讲数据和算法，这一章就来介绍一下算力技术。
 
 2012年，Alex Krizhevsky等人在ImageNet比赛中使用了GPU来训练深度神经网络，取得了惊人的成绩。从那时起，GPU和TPU等硬件加速技术就成为了机器学习的标配。
 
-时至今日，虽然多任务编程早已经深入人心，但是很多同学还没有接触过CPU上的SIMD指令，更不用说GPGPU的编程。这一篇我们先给SIMD和GPU编程扫个盲，让大家以后用到的时候有个感性认识。
+时至今日，虽然多任务编程早已经深入人心，但是很多同学还没有接触过CPU上的SIMD指令，更不用说GPGPU的编程。本章我们就来介绍一下算力相关的技术。
+
+未来大家可能遇到的问题千变万化，在使用封装的库不够用的时候，或者是要移植到其它平台的时候，就需要用到这些技术了。
 
 ### 8.1 CPU上的多任务编程
 
@@ -4154,7 +5499,7 @@ add_executable(matrix_add matadd.cpp)
 
 早在线程写进C++11标准之前，就有很多并发编程的框架了，比如MPI和OpenMP.
 
-OpenMP是一套支持跨平台共享内存方式的多线程并发的编程API，使用C, C++和Fortran语言，可以在多种处理器体系和操作系统中运行。它由OpenMP Architecture Review Board (ARB)牵头提出，并由多家计算机硬件和软件厂商共同定义和管理。
+OpenMP是一套支持跨平台共享内存方式的多线程并发的编程API，使用C, C++和Fortran语言，可以在多种处理器体系和操作系统中运行。它由OpenMP Architecture Review Board (ARB)牵头提出，并由多家计算机硬件和软件厂商共同定义和管理。OpenMP提供了一组编译指示、库例程和环境变量，使开发者可以在现有的串行代码中插入并行化指令，从而简化并行程序的开发。
 
 OpenMP最早是1997年发布的，当时只支持Fortran语言。1998年开始支持C/C++. 
 
@@ -5956,8 +7301,6 @@ static __device__ __forceinline__ unsigned int __qsflo(unsigned int word) {
 其中用到的bfind.u32指令用于查找一个无符号整数中最右边的非零位（即最低有效位），并返回其位位置。该指令将无符号整数作为操作数输入，并将最低有效位的位位置输出到目的操作数中。
 "=r"(ret)表示输出寄存器,返回结果保存在ret中。
 "r"(word)表示输入寄存器,将参数word作为输入。
-
-##### GPU特有的算法
 
 最后一点要强调的时，很多时候将代码并行化，并不是简简单单的从CPU转到GPU，而很有可能是要改变算法。
 
