@@ -1,0 +1,14 @@
+graph TD;
+    A(主函数)-->|初始化变量| B[sineWithCuda]
+    B-->|初始化GPU| C{cudaSetDevice}
+    C-->|分配GPU内存| D{cudaMalloc}
+    D-->|从CPU内存复制到GPU内存| E{cudaMemcpy: HostToDevice}
+    E-->|在GPU上启动sine| F{sine}
+    F-->|检查sine执行错误| G{cudaGetLastError}
+    G-->|等待GPU返回| H{cudaDeviceSynchronize}
+    H-->|将GPU结果复制回CPU| I{cudaMemcpy: DeviceToHost}
+    I-->|释放GPU内存| J{cudaFree}
+    J--> K(sineWithCuda结束)
+    B-->L{输出结果}
+    L-->M(清理设备)
+    M-->N(主函数结束)

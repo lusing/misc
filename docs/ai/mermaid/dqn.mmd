@@ -1,0 +1,67 @@
+classDiagram
+    class BaseAlgorithm {
+        +policy_aliases: ClassVar[Dict[str, Type[BasePolicy]]]
+        +policy: BasePolicy
+        +observation_space: spaces.Space
+        +action_space: spaces.Space
+        +n_envs: int
+        +lr_schedule: Schedule
+        +set_logger(logger: Logger) None
+        +logger: Logger
+        +get_env() Optional[VecEnv]
+        +get_vec_normalize_env() Optional[VecNormalize]
+        +set_env(env: GymEnv, force_reset: bool = True) None
+        +learn(self: SelfBaseAlgorithm, ...) Tuple[np.ndarray, Optional[Tuple[np.ndarray, ...]]]
+        +set_random_seed(seed: Optional[int] = None) None
+        +set_parameters(load_path_or_dict: Union[str, TensorDict], ...) None
+        +load(cls: Type[SelfBaseAlgorithm], ...) SelfBaseAlgorithm
+        +get_parameters() Dict[str, Dict]
+        +save(path: Union[str, pathlib.Path, io.BufferedIOBase], ...) None
+    }
+
+    class OffPolicyAlgorithm {
+        +policy: Union[str, Type[BasePolicy]]
+        +env: Union[GymEnv, str]
+        +learning_rate: Union[float, Schedule]
+        +buffer_size: int
+        +learning_starts: int
+        +batch_size: int
+        +tau: float
+        +gamma: float
+        +train_freq: Union[int, Tuple[int, str]]
+        +gradient_steps: int
+        +action_noise: Optional[ActionNoise]
+        +replay_buffer_class: Optional[Type[ReplayBuffer]]
+        +replay_buffer_kwargs: Optional[Dict[str, Any]]
+        +policy_kwargs: Optional[Dict[str, Any]]
+        +stats_window_size: int
+        +tensorboard_log: Optional[str]
+        +verbose: int
+        +device: Union[th.device, str]
+        +seed: Optional[int]
+        +sde_support: bool
+        +optimize_memory_usage: bool
+        +supported_action_spaces: Tuple[Type[spaces.Space], ...]
+        +support_multi_env: bool
+    }
+
+    class DQN {
+        +exploration_initial_eps: float
+        +exploration_final_eps: float
+        +exploration_fraction: float
+        +target_update_interval: int
+        +max_grad_norm: float
+        +exploration_rate: float
+        +exploration_schedule: Schedule
+        +q_net: QNetwork
+        +q_net_target: QNetwork
+        +policy: DQNPolicy
+        +batch_norm_stats: List[th.Tensor]
+        +batch_norm_stats_target: List[th.Tensor]
+        +train(gradient_steps: int, batch_size: int = 100) None
+        +predict(observation: Union[np.ndarray, Dict[str, np.ndarray]], ...)
+        +learn(self: SelfDQN, ...) SelfDQN
+    }
+
+    OffPolicyAlgorithm <|-- DQN
+    BaseAlgorithm <|-- OffPolicyAlgorithm

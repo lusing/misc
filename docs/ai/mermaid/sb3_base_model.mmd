@@ -1,0 +1,51 @@
+---
+title: DQN
+---
+
+classDiagram
+    class Module["torch.nn.Module"]{
+        +forward(self, x)
+    }
+    class BaseModel {
+        +save(self, path: str)
+        +load(cls: Type[SelfBaseModel], path: str, device: Union[th.device, str] = "auto")
+        +load_from_vector(self, vector: np.ndarray)
+        +parameters_to_vector(self)
+        +set_training_mode(self, mode: bool)
+    }
+    class BasePolicy{
+        +init_weights(module: nn.Module, gain: float = 1)
+        +predict(self,observation: Union[np.ndarray, Dict[str, np.ndarray]],...)
+    }
+    class QNetwork{
+
+    }
+    class DQNPolicy{
+
+    }
+    class CnnPolicy{
+
+    }
+    class DQN{
+        -exploration_schedule: Schedule
+        -q_net: QNetwork
+        -q_net_target: QNetwork
+        -policy: DQNPolicy
+        +train(self, gradient_steps: int, batch_size: int = 100)
+        +predict()
+        +learn()
+    }
+    class ABC
+    class BaseAlgorithm{
+        +learn()
+        +predict()
+    }
+
+    Module <|-- BaseModel
+    BaseModel <|-- BasePolicy
+    BasePolicy <|-- QNetwork
+    BasePolicy <|-- DQNPolicy
+    DQNPolicy <|-- CnnPolicy
+    OffPolicyAlgorithm <|-- DQN
+    ABC <|-- BaseAlgorithm
+    BaseAlgorithm <|-- OffPolicyAlgorithm

@@ -1,0 +1,36 @@
+classDiagram
+    class BaseFeaturesExtractor {
+        +_observation_space: gym.Space
+        +_features_dim: int
+        +features_dim: int
+    }
+
+    class FlattenExtractor {
+        +flatten: nn.Flatten
+        +forward(observations: th.Tensor) th.Tensor
+    }
+
+    class NatureCNN {
+        +cnn: nn.Sequential
+        +linear: nn.Sequential
+        +forward(observations: th.Tensor) th.Tensor
+    }
+
+    class MlpExtractor {
+        +policy_net: nn.Sequential
+        +value_net: nn.Sequential
+        +latent_dim_pi: int
+        +latent_dim_vf: int
+        +forward(features: th.Tensor) Tuple[th.Tensor, th.Tensor]
+        +forward_actor(features: th.Tensor) th.Tensor
+        +forward_critic(features: th.Tensor) th.Tensor
+    }
+
+    class CombinedExtractor {
+        +extractors: nn.ModuleDict
+        +forward(observations: TensorDict) th.Tensor
+    }
+
+    BaseFeaturesExtractor <|-- FlattenExtractor
+    BaseFeaturesExtractor <|-- NatureCNN
+    BaseFeaturesExtractor <|-- CombinedExtractor

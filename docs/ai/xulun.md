@@ -187,6 +187,7 @@
 可解释的机器学习（Explainable Machine Learning，简称XAI）是指开发和应用能够提供透明性、解释性和可理解性的机器学习模型和方法。随着机器学习和深度学习模型在各种领域中的应用越来越广泛，模型的复杂性也随之增加，这使得它们常常成为“黑箱”，即虽然模型能够给出高准确度的预测，但其内部工作机制对人类来说是难以理解的。
 
 可解释机器学习的方法可以分为两大类：模型内在可解释性（Intrinsic Interpretability）和模型后处理可解释性（Post-hoc Interpretability）。
+
 - 模型内在可解释性: 这些模型在设计时就考虑了可解释性，通常结构简单且易于理解，如：
 
     - 线性回归（Linear Regression）：输出是输入特征的线性组合，权重表示特征的重要性。
@@ -217,6 +218,7 @@
 TensorFlow 是一个开源的端到端机器学习框架，由 Google Brain 团队开发和维护。它最初于 2015 年发布，旨在简化和加速机器学习和深度学习模型的开发、训练和部署。TensorFlow 提供了丰富的工具和库，支持从研究到生产环境的各个环节。
 
 TensorFlow 的主要特点
+
 - 灵活性和可扩展性：
     - 支持从移动设备到分布式计算集群的多种平台。
     - 可以处理从研究实验到大规模生产环境的多种需求。
@@ -242,6 +244,7 @@ TensorFlow 的主要特点
 PyTorch 是一个开源的深度学习框架，由 Facebook 的人工智能研究团队（FAIR）开发和维护。自 2016 年发布以来，PyTorch 迅速成为研究和工业界广泛使用的深度学习工具之一。它以其动态计算图、灵活性和易用性而著称，特别受到学术研究和快速原型设计的青睐。
 
 PyTorch 的主要特点
+
 - 动态计算图（Dynamic Computation Graph）：
     - PyTorch 使用动态计算图，这意味着计算图在运行时构建和修改，这使得调试和开发更加直观和灵活。
     - 相比静态图，动态图允许更加灵活和复杂的模型设计。
@@ -266,6 +269,7 @@ PyTorch 的主要特点
 Scikit-learn（简称 sklearn）是一个用于机器学习的开源库，构建在 Python 语言之上。它基于 SciPy（Scientific Python）生态系统，提供了一系列简单而高效的工具，用于数据挖掘和数据分析。Scikit-learn 以其易用性、可扩展性和丰富的算法实现，成为数据科学和机器学习领域的流行选择。
 
 Scikit-learn 的主要特点
+
 - 丰富的算法库：
     - 提供了多种机器学习算法，包括分类、回归、聚类、降维、模型选择和预处理等。
     - 支持诸如线性回归、逻辑回归、支持向量机（SVM）、决策树、随机森林、K-means 聚类、PCA（主成分分析）等常用算法。
@@ -290,6 +294,7 @@ Scikit-learn 的主要特点
 NumPy（Numerical Python）是一个用于科学计算的开源库，提供了支持大型多维数组和矩阵运算的强大功能，以及大量用于操作这些数组的数学函数。它是 Python 科学计算生态系统的核心基础库之一，广泛应用于数据分析、机器学习、工程计算等领域。
 
 NumPy 的主要特点
+
 - 多维数组对象（ndarray）：
     - 提供高效的多维数组对象 ndarray，支持快速的向量和矩阵运算。
     - 数组可以是任意纬度，支持切片、索引等操作。
@@ -311,6 +316,7 @@ NumPy 的主要特点
 Pandas 是一个用于数据操作和分析的开源数据分析库，构建在 Python 之上。它提供了高效、灵活的数据结构和数据分析工具，特别适合处理结构化数据。Pandas 在数据科学、金融分析、统计分析等领域有广泛的应用。
 
 Pandas 的主要特点和功能
+
 - 数据结构：
     - Series：一维数据结构，类似于带标签的数组，功能类似于 Python 的字典。
     - DataFrame：二维数据结构，类似于电子表格或 SQL 表，具有行和列标签。
@@ -343,6 +349,7 @@ Pandas 的主要特点和功能
 Matplotlib 是一个用于创建静态、动态和交互式图形的 Python 库。它是数据可视化领域的一个重要工具，特别适合科学计算和数据分析。Matplotlib 提供了丰富的绘图功能，可以生成各种类型的图表，如折线图、柱状图、散点图、直方图、饼图等。
 
 Matplotlib 的主要特点
+
 - 多种绘图类型：
     - 支持折线图、柱状图、散点图、直方图、饼图、箱线图、热力图等多种图表类型。
     - 可以进行复杂的图形组合和自定义。
@@ -359,11 +366,12 @@ Matplotlib 的主要特点
     - 与 NumPy、Pandas 等数据处理库紧密集成，便于数据加载和处理。
     - 支持与 Seaborn、Plotly 等高级可视化库的结合使用，扩展绘图能力。
 
-1n. 什么是时间序列分析？
+14. 什么是时间序列分析？
 
 时间序列分析是一种统计方法，用于分析随时间变化的数据。与其他数据分析方法不同，时间序列数据是按时间顺序排列的，通常用于预测未来的趋势、检测异常、理解数据的季节性和周期性等。
 
 时间序列数据的特点
+
 - 时间相关性：时间序列数据的一个基本特点是时间相关性，即当前时刻的数据点可能与之前时刻的数据点相关。
 - 趋势：数据可能显示出长期的上升或下降趋势。
 - 季节性：数据可能表现出周期性的波动，这些波动通常与季节变化、月份或季度有关。
@@ -2614,6 +2622,8 @@ $\sigma(z)=\frac{1}{1+e^{-z}}$​
     - 过拟合：在特征数量较多的情况下，可能会发生过拟合。
     - 特征工程要求高：需要对输入特征进行仔细选择和处理。
 
+我们可以使用最小二乘法或者梯度下降等方法来求解逻辑回归模型的参数。
+
 #### 4.2.2 用SKlearn实现逻辑回归
 
 通过sklearn库，我们可以很方便地使用逻辑回归模型。我们只需要调用sklearn.linear_model包中的LogisticRegression类，然后使用fit方法拟合数据，使用predict方法进行预测。
@@ -3521,6 +3531,284 @@ plt.show()
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_bayes.png)
 
+### 4.7 高斯过程
+
+高斯过程（Gaussian Process, GP）是概率论和数理统计中随机过程的一种，它是一系列服从正态分布的随机变量在一指数集（index set）内的组合。在高斯过程中，任意随机变量的线性组合都服从正态分布，每个有限维分布都是联合正态分布，且其本身在连续指数集上的概率密度函数即是所有随机变量的高斯测度，因此被视为联合正态分布的无限维广义延伸。高斯过程由其数学期望和协方差函数完全决定，并继承了正态分布的诸多性质。
+
+高斯过程的例子包括维纳过程、奥恩斯坦-乌伦贝克过程等。在人工智能领域，高斯过程模型属于无参数模型，可以解决高维空间（实际上是无限维）的数学问题，可以面对复杂的数学问题。结合贝叶斯概率算法，高斯过程可以实现通过先验概率，推导未知后验输入变量的后验概率。高斯过程观测变量空间是连续域，可以是时间或空间。
+
+高斯过程分类器（GPC）是一种基于高斯过程（Gaussian Process, GP）的非参数贝叶斯分类方法。高斯过程分类器通过将高斯过程的柔性和贝叶斯框架结合起来，对于分类问题提供了强大的非线性建模能力。
+
+在 GPC 中，假设存在一个隐函数 $f(\mathbf{x})$，其值决定了输入 $\mathbf{x}$ 属于某个类别的概率。通过高斯过程来建模隐函数 $f(\mathbf{x})$。
+
+链接函数（如逻辑函数或 probit 函数）将隐函数值映射到类别的概率。对于逻辑函数，映射关系为：$p(y=1|\mathbf{x}) = \sigma(f(\mathbf{x})) = \frac{1}{1 + \exp(-f(\mathbf{x}))}$
+其中，$\sigma(\cdot)$ 是逻辑函数。
+
+高斯过程分类器分为训练阶段和预测阶段两部分：
+
+1. 训练阶段：
+    - 给定训练数据 $\{\mathbf{X}, \mathbf{y}\}$，其中 $\mathbf{X}$ 是输入矩阵，$\mathbf{y}$ 是类别标签向量。假设隐函数 $f$ 服从高斯过程：
+      $f(\mathbf{x}) \sim \mathcal{GP}(0, k(\mathbf{x}, \mathbf{x}'))$
+      其中，$k(\mathbf{x}, \mathbf{x}')$ 是核函数。
+    - 通过贝叶斯推断，计算隐函数的后验分布。由于引入了非线性链接函数，后验分布通常是非高斯的，需要使用近似推断方法，如拉普拉斯近似或期望传播（EP）。
+
+2. 预测阶段：
+    - 给定新的输入 $\mathbf{x}_*$，计算其隐函数值的后验分布，并通过链接函数获得类别概率：
+      $p(y_*=1|\mathbf{x}_*, \mathbf{X}, \mathbf{y}) = \int \sigma(f_*) p(f_*|\mathbf{x}_*, \mathbf{X}, \mathbf{y}) df_*$
+      其中，$f_*$ 是新输入点的隐函数值。
+
+我们来看如何使用高斯过程分类器来实现鸢尾花的分类：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 仅使用前两维特征进行可视化
+X = X[:, :2]
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 标准化特征
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 定义核函数
+kernel = 1.0 * RBF(length_scale=1.0)
+
+# 创建高斯过程分类器
+gpc = GaussianProcessClassifier(kernel=kernel, n_restarts_optimizer=10)
+
+# 训练模型
+gpc.fit(X_train, y_train)
+
+# 预测
+y_pred = gpc.predict(X_test)
+
+# 打印模型的性能
+print(f'Accuracy: {accuracy_score(y_test, y_pred):.2f}')
+print('Classification Report:')
+print(classification_report(y_test, y_pred))
+print('Confusion Matrix:')
+print(confusion_matrix(y_test, y_pred))
+
+# 可视化决策边界
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.linspace(x_min, x_max, 200), np.linspace(y_min, y_max, 200))
+
+Z = gpc.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+
+plt.figure(figsize=(10, 6))
+plt.contourf(xx, yy, Z, alpha=0.8, cmap=plt.cm.viridis)
+plt.scatter(X_test[:, 0], X_test[:, 1], c=y_test, s=50, edgecolor='k', cmap=plt.cm.viridis)
+plt.title('Gaussian Process Classifier on Iris Dataset')
+plt.xlabel('Sepal length')
+plt.ylabel('Sepal width')
+plt.show()
+```
+
+代码的主要过程如下：
+- 加载和预处理数据：
+    - 使用load_iris()加载鸢尾花数据集。
+    - 仅使用前两维特征（萼片长度和宽度）以便于可视化。
+    - 划分数据集为训练集和测试集。
+    - 使用StandardScaler对特征进行标准化。
+- 定义和训练GPC模型：
+    - 使用高斯径向基函数（RBF）作为核函数。
+    - 创建GaussianProcessClassifier实例并训练模型。
+- 模型预测和评估：
+    - 预测测试集的标签并计算准确率。
+    - 打印分类报告和混淆矩阵以评估模型性能。
+- 可视化决策边界：
+    - 生成网格点并预测每个网格点的类别，以绘制决策边界。
+    - 绘制测试集的散点图，并在背景上显示决策边界。
+
+运行结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/gpc_iris.png)
+
+### 4.8 半监督学习
+
+半监督学习 (Semi-supervised Learning) 结合了少量标记数据（有标签）和大量未标记数据（无标签）进行训练。此方法介于监督学习和无监督学习之间，旨在通过利用未标记数据来提高模型的性能。
+
+在许多实际应用中，获取大量的未标记数据相对容易且成本较低，但获取带标签的数据却费用高昂且耗时。半监督学习通过有效利用未标记数据，可以在减少标注成本的同时提高模型的准确性和鲁棒性。
+
+半监督学习的主要方法
+
+1. 自训练 (Self-training)：
+    - 在初始阶段，使用有标签的数据训练一个初始模型。
+    - 用该模型预测未标记数据中的标签，并将高置信度的预测结果加入有标签数据集中，重新训练模型。
+    - 反复迭代上述过程。
+
+2. 共训练 (Co-training)：
+    - 将特征分为两部分，分别训练两个模型。
+    - 每个模型用自己的预测结果去标记未标记数据，并将高置信度的预测结果提供给另一个模型。
+    - 两个模型相互合作，共同提高性能。
+
+3. 图半监督学习 (Graph-based Semi-supervised Learning)：
+    - 构建样本之间的图结构，用节点表示样本，用边表示样本之间的相似度。
+    - 利用图结构信息，通过传播标签来预测未标记数据的标签。
+
+4. 生成对抗网络 (GAN) 的半监督学习：
+    - 使用生成对抗网络中的生成器和判别器，其中判别器不仅预测真假样本，还预测样本的类别。
+    - 结合生成器生成的样本和部分有标签的数据来训练判别器。
+
+我们来看一个例子感受下：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.semi_supervised import LabelPropagation
+from sklearn.metrics import accuracy_score
+
+# 加载数据集
+digits = datasets.load_digits()
+n_total_samples = len(digits.images)
+n_labeled_points = int(n_total_samples * 0.1)  # 仅使用 10% 的数据作为有标签数据
+
+# 初始化标签：将大部分标签设为 -1 表示未标记
+labels = -np.ones(n_total_samples)
+labels[:n_labeled_points] = digits.target[:n_labeled_points]
+
+# 打乱数据
+rng = np.random.RandomState(0)
+indices = np.arange(n_total_samples)
+rng.shuffle(indices)
+
+# 拆分数据为有标签和无标签部分
+X = digits.data[indices]
+y = labels[indices]
+
+# 使用 LabelPropagation 进行半监督学习
+label_prop_model = LabelPropagation()
+label_prop_model.fit(X, y)
+
+# 预测并计算准确率
+y_pred = label_prop_model.predict(X)
+accuracy = accuracy_score(digits.target[indices], y_pred)
+
+print(f"准确率: {accuracy:.2f}")
+
+# 可视化部分预测结果
+fig, axes = plt.subplots(2, 5, figsize=(10, 5))
+for ax, image, label, prediction in zip(axes.ravel(), digits.images[indices], digits.target[indices], y_pred):
+    ax.imshow(image, cmap=plt.cm.gray_r)
+    ax.set_title(f"True: {label}\nPred: {prediction}")
+    ax.axis('off')
+plt.show()
+```
+
+代码的主要过程如下：
+
+- 加载数据：使用 datasets.load_digits 加载手写数字数据集。
+- 初始化标签：将 90% 的标签设为 -1 表示未标记，仅使用 10% 的数据作为有标签数据。
+- 打乱数据：随机打乱数据顺序。
+- 半监督学习：使用 LabelPropagation 模型进行训练和预测。
+- 评估模型：计算预测准确率并可视化部分预测结果。
+
+代码运行结果如下：
+
+```
+准确率: 0.19
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/label_prop_digits.png)
+
+我们来看下官方的例子：
+
+```python
+# Authors: Clay Woolam   <clay@woolam.org>
+#          Oliver Rausch <rauscho@ethz.ch>
+# License: BSD
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+from sklearn import datasets
+from sklearn.semi_supervised import LabelSpreading, SelfTrainingClassifier
+from sklearn.svm import SVC
+
+iris = datasets.load_iris()
+
+X = iris.data[:, :2]
+y = iris.target
+
+# step size in the mesh
+h = 0.02
+
+rng = np.random.RandomState(0)
+y_rand = rng.rand(y.shape[0])
+y_30 = np.copy(y)
+y_30[y_rand < 0.3] = -1  # set random samples to be unlabeled
+y_50 = np.copy(y)
+y_50[y_rand < 0.5] = -1
+# we create an instance of SVM and fit out data. We do not scale our
+# data since we want to plot the support vectors
+ls30 = (LabelSpreading().fit(X, y_30), y_30, "Label Spreading 30% data")
+ls50 = (LabelSpreading().fit(X, y_50), y_50, "Label Spreading 50% data")
+ls100 = (LabelSpreading().fit(X, y), y, "Label Spreading 100% data")
+
+# the base classifier for self-training is identical to the SVC
+base_classifier = SVC(kernel="rbf", gamma=0.5, probability=True)
+st30 = (
+    SelfTrainingClassifier(base_classifier).fit(X, y_30),
+    y_30,
+    "Self-training 30% data",
+)
+st50 = (
+    SelfTrainingClassifier(base_classifier).fit(X, y_50),
+    y_50,
+    "Self-training 50% data",
+)
+
+rbf_svc = (SVC(kernel="rbf", gamma=0.5).fit(X, y), y, "SVC with rbf kernel")
+
+# create a mesh to plot in
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+color_map = {-1: (1, 1, 1), 0: (0, 0, 0.9), 1: (1, 0, 0), 2: (0.8, 0.6, 0)}
+
+classifiers = (ls30, st30, ls50, st50, ls100, rbf_svc)
+for i, (clf, y_train, title) in enumerate(classifiers):
+    # Plot the decision boundary. For that, we will assign a color to each
+    # point in the mesh [x_min, x_max]x[y_min, y_max].
+    plt.subplot(3, 2, i + 1)
+    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+
+    # Put the result into a color plot
+    Z = Z.reshape(xx.shape)
+    plt.contourf(xx, yy, Z, cmap=plt.cm.Paired)
+    plt.axis("off")
+
+    # Plot also the training points
+    colors = [color_map[y] for y in y_train]
+    plt.scatter(X[:, 0], X[:, 1], c=colors, edgecolors="black")
+
+    plt.title(title)
+
+plt.suptitle("Unlabeled points are colored white", y=0.1)
+plt.show()
+```
+
+运行结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/self_training.png)
 
 ## 第五章 监督学习：数值预测
 
@@ -3529,6 +3817,22 @@ plt.show()
 ### 5.1 线性回归
 
 最简单的数值预测方法就是用一条直线来拟合现有的数据。
+
+假设我们有一组数据点 $(x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n)$，并希望找到一个函数 $f(x)$ 来拟合这些数据点。最小二乘法的目标是找到函数 $f(x)$ 的参数，使得以下目标函数最小：$ S = \sum_{i=1}^{n} [y_i - f(x_i)]^2 $
+
+其中，$S$ 是误差平方和。
+
+在线性回归中，拟合函数通常是一个线性函数，即：$ f(x) = \beta_0 + \beta_1 x $
+
+此时，最小二乘法通过求解以下方程组来找到最佳参数 $\beta_0$ 和 $\beta_1$：
+
+$
+\begin{cases}
+\sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i) = 0 \\
+\sum_{i=1}^{n} x_i (y_i - \beta_0 - \beta_1 x_i) = 0
+\end{cases}
+$
+
 
 我们举个例子，预测2024年开年的上证指数收盘价。我们先把1月初几天的数据输入进来：
 
@@ -3634,39 +3938,1298 @@ model.fit(X,y)
 print(model.predict([[0,0,0,0,0]]))
 ```
 
-### 5.2 k近邻回归
+下面我们再尝试去处理一个更加复杂的数据集，这次我们使用波士顿房价数据集。
+因为某些原因，sklearn从1.2版本中已经去掉了波士顿房价数据集，所以我们需要使用keras来加载波士顿房价数据集。
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# 加载波士顿房价数据集
+from keras.datasets import boston_housing
+
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 创建线性回归模型
+model = LinearRegression()
+
+# 训练模型
+model.fit(X_train, y_train)
+
+# 预测
+y_pred = model.predict(X_test)
+
+# 打印模型的性能指标
+print(f'Mean squared error: {mean_squared_error(y_test, y_pred):.2f}')
+print(f'R^2 score: {r2_score(y_test, y_pred):.2f}')
+
+# 可视化结果：只绘制一个特征（例如，RM）与房价的关系
+plt.figure(figsize=(10, 6))
+plt.scatter(X_test[:, 5], y_test, color='red', label='Actual Prices')
+plt.scatter(X_test[:, 5], y_pred, color='blue', label='Predicted Prices')
+plt.xlabel('Average number of rooms per dwelling (RM)')
+plt.ylabel('House Price')
+plt.title('Boston House Price Prediction using Linear Regression')
+plt.legend()
+plt.show()
+
+# 打印模型的系数和截距
+print(f'Model Coefficients: {model.coef_}')
+print(f'Model Intercept: {model.intercept_}')
+```
+
+运行结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/boston_lr.png)
+
+### 5.2 Lasso回归与最小角回归
+
+#### 5.2.1 Lasso回归
+
+Lasso 回归（Least Absolute Shrinkage and Selection Operator）是一种线性回归方法，旨在通过对回归系数施加 $ L1 $ 正则化（即回归系数的绝对值之和）实现特征选择和模型稀疏化。Lasso 回归不仅可以用于预测，还能帮助我们理解哪些特征对目标变量最为重要。
+
+Lasso 回归的目标是最小化以下目标函数：
+
+$ \underset{\beta}{\min} \left\{ \frac{1}{2n} \sum_{i=1}^{n} \left( y_i - \sum_{j=1}^{p} x_{ij} \beta_j \right)^2 + \alpha \sum_{j=1}^{p} |\beta_j| \right\} $
+
+其中：
+- $ n $ 是样本数。
+- $ p $ 是特征数。
+- $ y_i $ 是第 $ i $ 个样本的实际值。
+- $ x_{ij} $ 是第 $ i $ 个样本的第 $ j $ 个特征值。
+- $ \beta_j $ 是第 $ j $ 个特征的回归系数。
+- $ \alpha $ 是正则化参数，控制正则化的强度。
+
+Lasso 回归的主要功能有：
+
+- 特征选择：Lasso 回归可以将一些回归系数缩减为零，从而自动选择出对模型有重要贡献的特征。
+- 防止过拟合：通过引入正则化项，Lasso 回归可以防止模型在训练数据上过拟合，从而提高模型在测试数据上的泛化能力。
+- 模型稀疏化：Lasso 回归倾向于产生稀疏模型，即只有少数特征的系数非零。对于高维数据（特征数远大于样本数）尤为重要，因为它能简化模型，降低计算复杂度。
+
+下面我们看如何用Lasso回归来预测波士顿房价：
+
+```python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Lasso
+from sklearn.metrics import mean_squared_error
+from keras.datasets import boston_housing
+
+# 加载波士顿房价数据集
+(X_train_full, y_train_full), (X_test, y_test) = boston_housing.load_data()
+
+# 划分训练集和验证集
+X_train, X_val, y_train, y_val = train_test_split(X_train_full, y_train_full, test_size=0.2, random_state=0)
+
+
+# 创建并训练 Lasso 回归模型
+lasso = Lasso(alpha=1.0)
+lasso.fit(X_train, y_train)
+
+# 进行预测
+y_train_pred = lasso.predict(X_train)
+y_test_pred = lasso.predict(X_test)
+
+# 计算均方误差
+train_mse = mean_squared_error(y_train, y_train_pred)
+test_mse = mean_squared_error(y_test, y_test_pred)
+
+print(f'训练集均方误差: {train_mse}')
+print(f'测试集均方误差: {test_mse}')
+
+# 输出 Lasso 回归系数
+print("Lasso 回归系数:", lasso.coef_)
+```
+
+输出结果如下：
+
+```
+训练集均方误差: 29.341397538231636
+测试集均方误差: 26.250061684108413
+Lasso 回归系数: [-0.05807504  0.0685187  -0.          0.         -0.          0.74629764
+  0.03929297 -0.72118044  0.3090587  -0.01661717 -0.60356941  0.00983247
+ -0.7810909 ]
+ ```
+
+在上面的代码中，Lasso的正则化参数𝛼设为 1.0。肯定有些读者会很好奇这个$\alpha$值如何取？
+
+选择合适的正则化强度 $ \alpha $ 是 Lasso 回归中一个关键步骤。过大的 $ \alpha $ 值可能会导致模型过于简单，忽略重要特征；过小的 $ \alpha $ 值则可能导致模型过拟合。常用的方法包括交叉验证和路径算法。
+
+Scikit-learn 提供了 LassoCV 类，可以通过交叉验证来选择最佳的 $ \alpha $ 值。下面是一个示例：
+
+```python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LassoCV
+from sklearn.metrics import mean_squared_error
+from tensorflow.keras.datasets import boston_housing
+
+# 加载波士顿房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 使用 LassoCV 进行交叉验证选择最优的 alpha
+lasso_cv = LassoCV(cv=5, random_state=0)
+lasso_cv.fit(X_train, y_train)
+
+# 输出最优的 alpha 值
+print(f'最优的 alpha 值: {lasso_cv.alpha_}')
+
+# 使用最优的 alpha 值进行预测
+y_train_pred = lasso_cv.predict(X_train)
+y_test_pred = lasso_cv.predict(X_test)
+
+# 计算均方误差
+train_mse = mean_squared_error(y_train, y_train_pred)
+test_mse = mean_squared_error(y_test, y_test_pred)
+
+print(f'训练集均方误差: {train_mse}')
+print(f'测试集均方误差: {test_mse}')
+```
+
+输出结果如下：
+
+```
+最优的 alpha 值: 0.6859344132928149
+训练集均方误差: 25.85262694347411
+测试集均方误差: 23.277920133940906
+```
+
+#### 5.2.2 最小角回归
+
+下面我们再介绍一下最小角回归Least Angle Regression (LARS)。LARS是一种用于高维数据的回归技术，特别适用于当特征数量大于样本数量时。LARS 在处理稀疏模型（即很多特征的回归系数为零）方面表现出色，并且计算效率高。它的主要优点是在模型构建过程中可以逐步引入和删除特征，从而找到最优的模型参数。
+
+LARS 算法的思想是逐步逼近最优解，每次迭代选择与当前残差最相关的特征，沿着该特征的方向移动，直到另一个特征与残差的相关性相同。具体步骤如下：
+
+1. 初始化：
+    - 所有回归系数 $ \beta $ 初始化为零。
+    - 计算所有特征与响应变量的相关性，选择与响应变量最相关的特征。
+
+2. 向前方向搜索：
+    - 沿着选择的特征方向向前移动，即增加该特征的回归系数，直到另一个特征与当前残差的相关性相同。此步骤确保同时考虑多个特征对响应变量的贡献。
+
+3. 更新方向：
+    - 选择新的方向，使得模型能够同时考虑当前选择的多个特征，并沿着这个新的方向继续移动。
+    - 重复上述步骤，每次迭代引入一个新的特征，直到所有特征都被纳入模型或达到某个停止条件（如残差足够小）。
+
+4. 停止规则：
+    - 当所有特征都已被纳入模型，或达到预设的停止条件时，算法停止。
+
+
+LARS算法不需要指定参数。我们来看用最小角回归来预测波士顿房价：
+
+```python
+import numpy as np
+from sklearn.linear_model import Lars
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from tensorflow.keras.datasets import boston_housing
+
+# 加载波士顿房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 使用 LARS 进行模型训练
+lars = Lars()
+lars.fit(X_train, y_train)
+
+# 进行预测
+y_train_pred = lars.predict(X_train)
+y_test_pred = lars.predict(X_test)
+
+# 计算均方误差
+train_mse = mean_squared_error(y_train, y_train_pred)
+test_mse = mean_squared_error(y_test, y_test_pred)
+
+print(f'训练集均方误差: {train_mse}')
+print(f'测试集均方误差: {test_mse}')
+```
+
+输出结果如下：
+
+```
+训练集均方误差: 22.085431828483273
+测试集均方误差: 24.25006601308819
+```
+
+我们还可以将Lasso和LARS结合在一起，使用LassoLars模型。LassoLars是一种结合了Lasso回归和LARS算法的方法，可以在高维数据集上实现特征选择和模型稀疏化。我们来看如何用LassoLars来预测波士顿房价：
+
+```python
+import numpy as np
+from sklearn.linear_model import LassoLars
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from tensorflow.keras.datasets import boston_housing
+
+# 加载波士顿房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 使用 LARS Lasso 进行模型训练
+lasso_lars = LassoLars()
+lasso_lars.fit(X_train, y_train)
+
+# 进行预测
+y_train_pred = lasso_lars.predict(X_train)
+y_test_pred = lasso_lars.predict(X_test)
+
+# 计算均方误差
+train_mse = mean_squared_error(y_train, y_train_pred)
+test_mse = mean_squared_error(y_test, y_test_pred)
+
+print(f'训练集均方误差: {train_mse}')
+print(f'测试集均方误差: {test_mse}')
+```
+
+输出结果如下：
+
+```
+训练集均方误差: 27.781703889808558
+测试集均方误差: 25.82293972655321
+```
+
+#### 5.2.3 LassoLarsCV
+
+我们继续5.2.1节讨论的Lasso回归的$\alpha$值的问题。LassoLarsCV是一种用于选择 Lasso 回归中最优正则化强度 $ \alpha $ 的方法，结合了上节介绍的LARS算法与交叉验证技术。它的全称是 Lasso Least Angle Regression with Cross-Validation。
+
+LassoLarsCV 结合了 LARS 算法和交叉验证技术，通过以下步骤找到最优的 $ \alpha $ 值：
+
+1. 路径生成：使用 LARS 算法生成一条路径，即不同 $ \alpha $ 值下的模型解。这条路径对应于不同的正则化强度，从而得到不同的模型稀疏度。
+2. 交叉验证：
+    - 对每个 $ \alpha $ 值，使用交叉验证技术评估模型性能。具体来说，将数据集划分为 $ k $ 个子集，交替使用 $ k-1 $ 个子集进行训练，剩下的一个子集进行验证。
+    - 计算每个 $ \alpha $ 值下的交叉验证误差。
+3. 选择最优 $ \alpha $：选择交叉验证误差最小的 $ \alpha $ 值作为最优的正则化强度。
+
+我们来看如何用LassoLarsCV来预测波士顿房价时取最优的$\alpha$值：
+
+```python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LassoLarsCV
+from sklearn.metrics import mean_squared_error
+from keras.datasets import boston_housing
+
+# 加载波士顿房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 使用 LassoLarsCV 进行路径算法选择最优的 alpha
+lasso_lars_cv = LassoLarsCV(cv=5)
+lasso_lars_cv.fit(X_train, y_train)
+
+# 输出最优的 alpha 值
+print(f'最优的 alpha 值: {lasso_lars_cv.alpha_}')
+
+# 使用最优的 alpha 值进行预测
+y_train_pred = lasso_lars_cv.predict(X_train)
+y_test_pred = lasso_lars_cv.predict(X_test)
+
+# 计算均方误差
+train_mse = mean_squared_error(y_train, y_train_pred)
+test_mse = mean_squared_error(y_test, y_test_pred)
+
+print(f'训练集均方误差: {train_mse}')
+print(f'测试集均方误差: {test_mse}')
+```
+
+输出结果如下：
+
+```
+最优的 alpha 值: 0.0
+训练集均方误差: 22.004800838348142
+测试集均方误差: 23.195599256423414
+```
+
+#### 5.2.4 多任务Lasso
+
+多任务Lasso是一种扩展的 Lasso 回归方法，用于同时处理多个相关回归任务。在这种方法中，我们假设不同的任务共享相似的稀疏模式，即它们具有相似的非零系数位置。通过引入这种假设，多任务Lasso 能够更有效地利用数据的结构信息，提升模型的预测性能。
+
+多任务Lasso 将 Lasso 的思想扩展到多任务场景。假设我们有 $ K $ 个回归任务，每个任务都有自己的响应变量，但它们共享相同的特征矩阵 $ X $。多任务Lasso 的目标函数可以表示为：
+
+$ \min_{W} \left( \frac{1}{2n} \sum_{k=1}^K \sum_{i=1}^n (y_{ik} - X_i w_k)^2 + \alpha \sum_{j=1}^p \|W_j\|_2 \right) $
+
+其中：
+- $ W $ 是回归系数矩阵，每列 $ w_k $ 对应一个任务的回归系数。
+- $ \|W_j\|_2 $ 是矩阵 $ W $ 的第 $ j $ 行的 $ L2 $ 范数，即 $ j $ 特征在所有任务中的系数的平方和的平方根。
+
+多任务Lasso 假设所有任务的稀疏模式是共享的，即如果某个特征对一个任务的重要性较大，那么它对其他任务也可能重要。
+    
+通过共享稀疏模式，Multi-task Lasso 能够更好地利用数据的结构信息，特别是在任务之间存在相关性的情况下，可以提升模型的预测性能。
+    
+多任务Lasso使用 $ L2 $ 范数对每个特征在所有任务中的系数进行正则化，从而控制模型的复杂性，避免过拟合。
+
+我们来看多任务Lasso的用法：
+
+```python
+import numpy as np
+from sklearn.linear_model import MultiTaskLasso
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+# 生成模拟数据
+n_samples, n_features, n_tasks = 100, 20, 3
+X = np.random.randn(n_samples, n_features)
+W = np.random.randn(n_features, n_tasks)
+Y = np.dot(X, W) + np.random.randn(n_samples, n_tasks)
+
+# 分割数据集
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+
+# 使用 Multi-task Lasso 进行模型训练
+multi_task_lasso = MultiTaskLasso(alpha=0.1)
+multi_task_lasso.fit(X_train, Y_train)
+
+# 进行预测
+Y_train_pred = multi_task_lasso.predict(X_train)
+Y_test_pred = multi_task_lasso.predict(X_test)
+
+# 计算均方误差
+train_mse = mean_squared_error(Y_train, Y_train_pred)
+test_mse = mean_squared_error(Y_test, Y_test_pred)
+
+print(f'训练集均方误差: {train_mse}')
+print(f'测试集均方误差: {test_mse}')
+```
+
+输出结果如下：
+
+```
+训练集均方误差: 0.8263506167661774
+测试集均方误差: 1.1121606407888283
+```
+
+### 5.3 岭回归
+
+岭回归(Ridge Regression)，是一种在普通最小二乘法（Ordinary Least Squares, OLS）回归的基础上引入 $ L2 $ 正则化的线性回归方法。它通过对回归系数施加惩罚，控制模型复杂性，从而减小过拟合的风险，特别是在存在多重共线性的情况下。上节我们介绍的Lasso回归是$L1$正则化。
+
+岭回归的目标函数如下：$\min_{\beta} \left( \frac{1}{2n} \sum_{i=1}^n (y_i - X_i \beta)^2 + \alpha \|\beta\|_2^2 \right)$
+
+其中：
+- $ y_i $ 是第 $ i $ 个样本的真实值。
+- $ X_i $ 是第 $ i $ 个样本的特征向量。
+- $ \beta $ 是回归系数向量。
+- $ n $ 是样本数量。
+- $ \alpha $ 是正则化参数，控制正则化项的强度。
+- $ \|\beta\|_2^2 $ 是回归系数的 $ L2 $ 范数的平方，即所有系数的平方和。
+
+岭回归的主要特点有：
+
+- 处理多重共线性：多重共线性是指特征矩阵中的特征彼此高度相关，这会导致 OLS 回归系数估计不稳定。岭回归通过引入 \( L2 \) 正则化，增加对回归系数的约束，从而稳定估计。
+- 减少模型复杂性：正则化项 $ \alpha \|\beta\|_2^2 $ 使得回归系数更加保守，减少了模型的复杂性，防止过拟合。
+- 不会产生稀疏解：Lasso 不同，岭回归不会将回归系数缩减为零。因此，它不会进行特征选择，而是减小所有系数值。
+
+下面我们看看如何用岭回归来预测波士顿房价：
+
+```python
+import numpy as np
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
+from tensorflow.keras.datasets import boston_housing
+
+# 加载 Boston 房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 数据标准化
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 使用 Ridge Regression 进行模型训练
+ridge = Ridge(alpha=1.0)  # alpha 控制正则化强度
+ridge.fit(X_train, y_train)
+
+# 进行预测
+y_train_pred = ridge.predict(X_train)
+y_test_pred = ridge.predict(X_test)
+
+# 计算均方误差
+train_mse = mean_squared_error(y_train, y_train_pred)
+test_mse = mean_squared_error(y_test, y_test_pred)
+
+print(f'训练集均方误差: {train_mse}')
+print(f'测试集均方误差: {test_mse}')
+```
+
+输出结果如下：
+
+```
+训练集均方误差: 22.00668625632674
+测试集均方误差: 23.105483040456598
+```
+
+同样，我们面临如何选择最优的 $\alpha$ 值的问题。这里我们学习一种新的方法，叫做只留交叉验证（Leave-One-Out Cross-Validation, LOOCV）。只留交叉验证是一种特殊的交叉验证技术，在这种方法中，每次只留出一个样本作为验证集，其余的样本用来训练模型。这种方法对数据集中的每个样本都重复一次，最终的模型性能通过所有验证集的结果综合得出。
+
+只留交叉验证的迭代过程为：
+
+- 对于数据集中的每个样本：
+    1. 将该样本作为验证集。
+    2. 其余的样本作为训练集。
+    3. 使用训练集训练模型。
+    4. 用验证集评估模型性能，记录误差或评分。
+
+假设数据集有 $ n $ 个样本 $( X_1, y_1 ), ( X_2, y_2 ), \ldots, ( X_n, y_n )$。
+
+1. 对于第 $ i $ 个样本：
+
+    - 训练集：$ \{( X_1, y_1 ), \ldots, ( X_{i-1}, y_{i-1} ), ( X_{i+1}, y_{i+1} ), \ldots, ( X_n, y_n )\} $
+    - 验证集：$ ( X_i, y_i ) $
+
+2. 训练模型并计算在验证集上的误差 $ e_i $。
+
+3. 最终误差为所有 $ e_i $ 的平均值：$ \text{LOOCV Error} = \frac{1}{n} \sum_{i=1}^n e_i $
+
+scikit learn框架为提供了 LeaveOneOut 类来实现只留交叉验证：
+
+```python
+import numpy as np
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import LeaveOneOut
+from sklearn.metrics import mean_squared_error
+from keras.datasets import boston_housing
+from sklearn.preprocessing import StandardScaler
+
+# 加载 Boston 房价数据集
+(X, y), _ = boston_housing.load_data()
+
+# 数据标准化
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# 定义 Ridge 回归模型
+model = Ridge(alpha=1.0)
+
+# 定义 LOOCV
+loo = LeaveOneOut()
+
+mse_list = []
+
+# 进行 LOOCV
+for train_index, test_index in loo.split(X):
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    
+    mse = mean_squared_error(y_test, y_pred)
+    mse_list.append(mse)
+
+# 计算平均均方误差
+average_mse = np.mean(mse_list)
+
+print(f'LOOCV 平均均方误差: {average_mse}')
+```
+
+输出的结果为：
+
+```
+LOOCV 平均均方误差: 24.249383742216512
+```
+
+同样，scikit-learn也提供了`RidgeCV`类，通过交叉验证自动选择最佳的正则化参数 $ \alpha $。用户可以提供一组候选的 $ \alpha $ 值，`RidgeCV` 会在这些值中选择一个使得交叉验证误差最小的 $ \alpha $。
+
+我们来看一个例子：
+
+```python
+import numpy as np
+from sklearn.linear_model import RidgeCV
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
+from tensorflow.keras.datasets import boston_housing
+
+# 加载 Boston 房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 数据标准化
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 定义 RidgeCV 模型，并指定候选的 alpha 值
+alphas = [0.1, 1.0, 10.0, 100.0]
+ridge_cv = RidgeCV(alphas=alphas, store_cv_values=True)
+
+# 训练模型
+ridge_cv.fit(X_train, y_train)
+
+# 获取最佳的 alpha 值
+best_alpha = ridge_cv.alpha_
+print(f'最佳的 alpha 值: {best_alpha}')
+
+# 进行预测
+y_train_pred = ridge_cv.predict(X_train)
+y_test_pred = ridge_cv.predict(X_test)
+
+# 计算均方误差
+train_mse = mean_squared_error(y_train, y_train_pred)
+test_mse = mean_squared_error(y_test, y_test_pred)
+
+print(f'训练集均方误差: {train_mse}')
+print(f'测试集均方误差: {test_mse}')
+```
+
+### 5.4 核岭回归
+
+Kernel Ridge Regression（核岭回归）是一种结合了核方法和岭回归（Ridge Regression）的回归技术。它在处理非线性数据和高维数据时非常有效。
+
+核岭回归结合了核方法和岭回归，通过在核函数计算的高维特征空间中进行岭回归。其目标函数如下：$ \text{Loss} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{i=1}^{n} \alpha_i^2 $
+
+其中，$\alpha_i$ 是模型参数，$\lambda$ 是正则化参数。
+
+我们来看一个核岭回归的例子：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.kernel_ridge import KernelRidge
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+
+# 生成一些非线性数据
+np.random.seed(0)
+X = 5 * np.random.rand(100, 1)
+y = np.sin(X).ravel() + np.random.normal(0, 0.1, X.shape[0])
+
+# 分割数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 创建核岭回归模型
+model = KernelRidge(kernel='rbf', alpha=1.0, gamma=0.1)
+
+# 训练模型
+model.fit(X_train, y_train)
+
+# 预测
+y_pred = model.predict(X_test)
+
+# 可视化结果
+plt.figure(figsize=(10, 6))
+plt.scatter(X_test, y_test, color='red', label='Actual')
+plt.scatter(X_test, y_pred, color='blue', label='Predicted')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.title('Kernel Ridge Regression')
+plt.legend()
+plt.show()
+
+# 打印模型的性能
+print(f'Mean squared error: {mean_squared_error(y_test, y_pred):.2f}')
+print(f'R^2 score: {r2_score(y_test, y_pred):.2f}')
+```
+
+运行结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/kernel_ridge_regression.png)
+
+下面我们用核岭回归来预测波士顿房价：
+
+```python
+import numpy as np
+from sklearn.kernel_ridge import KernelRidge
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, r2_score
+from tensorflow.keras.datasets import boston_housing
+import matplotlib.pyplot as plt
+
+# 加载波士顿房价数据集
+(X_train_full, y_train_full), (X_test, y_test) = boston_housing.load_data()
+
+# 分割训练集为训练集和验证集
+X_train, X_val, y_train, y_val = train_test_split(X_train_full, y_train_full, test_size=0.2, random_state=42)
+
+# 特征标准化
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_val = scaler.transform(X_val)
+X_test = scaler.transform(X_test)
+
+# 创建核岭回归模型
+model = KernelRidge(kernel='rbf', alpha=1.0, gamma=0.1)
+
+# 训练模型
+model.fit(X_train, y_train)
+
+# 预测验证集
+y_val_pred = model.predict(X_val)
+
+# 预测测试集
+y_test_pred = model.predict(X_test)
+
+# 打印验证集性能
+print(f'Validation Mean Squared Error: {mean_squared_error(y_val, y_val_pred):.2f}')
+print(f'Validation R^2 Score: {r2_score(y_val, y_val_pred):.2f}')
+
+# 打印测试集性能
+print(f'Test Mean Squared Error: {mean_squared_error(y_test, y_test_pred):.2f}')
+print(f'Test R^2 Score: {r2_score(y_test, y_test_pred):.2f}')
+
+# 可视化结果
+plt.figure(figsize=(10, 6))
+
+# 验证集结果
+plt.subplot(1, 2, 1)
+plt.scatter(y_val, y_val_pred, color='blue', label='Predicted vs Actual')
+plt.plot([min(y_val), max(y_val)], [min(y_val), max(y_val)], color='red', linestyle='--', label='Ideal')
+plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices')
+plt.title('Validation Set')
+plt.legend()
+
+# 测试集结果
+plt.subplot(1, 2, 2)
+plt.scatter(y_test, y_test_pred, color='green', label='Predicted vs Actual')
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--', label='Ideal')
+plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices')
+plt.title('Test Set')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+简单解释下上面的代码：
+- 加载数据：我们使用Keras中的boston_housing数据集，并将其分为训练集和测试集。
+- 分割训练集：将训练集进一步分割为训练集和验证集。
+- 特征标准化：使用StandardScaler对特征进行标准化处理，以提高模型性能。
+- 创建模型：使用scikit-learn的KernelRidge类创建核岭回归模型，并指定核函数（RBF核）、正则化参数 α 和核函数参数 γ。
+- 训练模型：使用训练集数据训练模型。
+- 预测：对验证集和测试集进行预测。
+- 打印性能指标：输出验证集和测试集的均方误差（Mean Squared Error）和R²得分（R^2 Score）。
+- 可视化结果：绘制实际值和预测值的散点图，以便可视化模型的效果。
+
+输出的结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/kernel_boston.png)
+
+### 5.5 决策树回归
+
+决策树通过将特征空间划分为多个区域来拟合数据。决策树回归的目标是最小化每个区域内的平方误差。
+
+其过程跟决策树分类类似，不过在叶节点上的预测值是区域内所有样本的平均值。
+
+- 分裂节点：从根节点开始，选择一个特征及其阈值，将数据集划分成两个子集。选择的标准是使得划分后的子集在目标变量上的误差最小化（如均方误差）。
+- 递归划分：对每个子集重复上述过程，继续选择特征和阈值进行划分，直到满足停止条件（如达到最大深度或叶节点样本数小于某个阈值）。
+- 预测：对于新的输入数据，从根节点开始，根据决策树的分裂规则，沿着树的路径向下遍历，直到到达叶节点。叶节点的值即为预测值。
+
+DecisionTreeRegressor的主要参数有：
+
+- criterion：用于衡量分裂质量的函数，常用的是 `mse`（均方误差）和 `friedman_mse`。
+- max_depth：树的最大深度，防止过拟合。
+- min_samples_split：每个内部节点（非叶节点）划分所需的最小样本数。
+- min_samples_leaf：叶节点所需的最小样本数。
+- max_features：用于最佳分裂的特征数量。
+- random_state：控制树分裂时的随机性。
+
+我们来看一下决策树回归的用法：
+
+```python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_squared_error
 
 import matplotlib as mpl
+
 zhfont = mpl.font_manager.FontProperties(fname='/usr/share/fonts/truetype/liberation/simhei.ttf')
 plt.rcParams['axes.unicode_minus'] = False
 
-# 准备数据
-n_dots = 40
-X = 5 * np.random.rand(n_dots, 1)
-y = np.cos(X).ravel()
-y += 0.1 * np.random.rand(n_dots) - 0.1
 
-# KNN回归
-k = 5
-knn = KNeighborsRegressor(k)
-knn.fit(X, y)
+# 生成示例数据
+np.random.seed(0)
+X = np.sort(5 * np.random.rand(80, 1), axis=0)
+y = np.sin(X).ravel()
+y[::5] += 1 * (0.5 - np.random.rand(16))  # 添加噪声
 
-# 生成预测数据
-T = np.linspace(0, 5, 500)[:, np.newaxis]
-y_pred = knn.predict(T)
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
-# 绘制回归曲线
-plt.scatter(X, y, c='g', label='data', s=100)
-plt.scatter(T, y_pred, c='k', label='prediction', lw=2)
-plt.axis('tight')
-plt.title('k近邻回归 (k=%i)' % k,fontproperties=zhfont)
+# 创建并拟合决策树回归模型
+regr = DecisionTreeRegressor(max_depth=3, random_state=0)
+regr.fit(X_train, y_train)
+
+# 进行预测
+y_pred = regr.predict(X_test)
+
+# 计算均方误差
+mse = mean_squared_error(y_test, y_pred)
+print(f'均方误差: {mse}')
+
+# 可视化决策树回归效果
+import matplotlib.pyplot as plt
+
+X_grid = np.arange(0.0, 5.0, 0.01)[:, np.newaxis]
+y_grid_pred = regr.predict(X_grid)
+
+plt.figure()
+plt.scatter(X, y, s=20, edgecolor="black", c="darkorange", label="Data")
+plt.plot(X_grid, y_grid_pred, color="cornflowerblue", label="Pred", linewidth=2)
+plt.xlabel("数据",fontproperties=zhfont)
+plt.ylabel("目标",fontproperties=zhfont)
+plt.title("决策树回归",fontproperties=zhfont)
+plt.legend()
 plt.show()
 ```
+
+运行结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/decison_tree_reg.png)
+
+下面我们就用决策树回归来预测波士顿房价：
+
+```python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+from keras.datasets import boston_housing
+
+import matplotlib as mpl
+
+zhfont = mpl.font_manager.FontProperties(fname='/usr/share/fonts/truetype/liberation/simhei.ttf')
+plt.rcParams['axes.unicode_minus'] = False
+
+
+# 加载波士顿房价数据集
+(X_train_full, y_train_full), (X_test, y_test) = boston_housing.load_data()
+
+# 划分训练集和验证集
+X_train, X_val, y_train, y_val = train_test_split(X_train_full, y_train_full, test_size=0.2, random_state=0)
+
+# 特征缩放
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_val_scaled = scaler.transform(X_val)
+X_test_scaled = scaler.transform(X_test)
+
+# 创建并训练决策树回归模型
+regr = DecisionTreeRegressor(max_depth=5, random_state=0)
+regr.fit(X_train_scaled, y_train)
+
+# 在验证集上进行预测
+y_val_pred = regr.predict(X_val_scaled)
+val_mse = mean_squared_error(y_val, y_val_pred)
+print(f'验证集均方误差: {val_mse}')
+
+# 在测试集上进行预测
+y_test_pred = regr.predict(X_test_scaled)
+test_mse = mean_squared_error(y_test, y_test_pred)
+print(f'测试集均方误差: {test_mse}')
+
+# 可视化验证集预测结果
+plt.figure(figsize=(10, 6))
+plt.scatter(y_val, y_val_pred, color='blue', edgecolor='k', alpha=0.6)
+plt.plot([y_val.min(), y_val.max()], [y_val.min(), y_val.max()], 'k--', lw=2)
+plt.xlabel('真实值',fontproperties=zhfont)
+plt.ylabel('预测值',fontproperties=zhfont)
+plt.title('决策树回归 - 验证集',fontproperties=zhfont)
+plt.show()
+
+# 可视化测试集预测结果
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_test_pred, color='green', edgecolor='k', alpha=0.6)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)
+plt.xlabel('真实值',fontproperties=zhfont)
+plt.ylabel('预测值',fontproperties=zhfont)
+plt.title('决策树回归 - 测试集',fontproperties=zhfont)
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/decision_tree_boston.png)
+
+
+### 5.6 k近邻回归
+
+k近邻算法也同样可以用于回归。使用k近邻算法实现回归需要以下三个步骤：
+
+1. 距离度量：
+    - 首先，需要定义一个距离度量来计算数据点之间的相似性。常见的距离度量包括欧氏距离（Euclidean Distance）、曼哈顿距离（Manhattan Distance）、闵可夫斯基距离（Minkowski Distance）和余弦相似度（Cosine Similarity）。
+    - 对于两个数据点 $ \mathbf{x}_i $ 和 $ \mathbf{x}_j $，欧氏距离计算公式为：
+      $d(\mathbf{x}_i, \mathbf{x}_j) = \sqrt{\sum_{k=1}^{n} (x_{ik} - x_{jk})^2}$
+
+2. 寻找最近邻：
+    - 给定一个新的数据点 $ \mathbf{x} $，计算它与训练集中所有数据点的距离。
+    - 根据这些距离，找到与 $ \mathbf{x} $ 距离最近的 $ k $ 个数据点（即最近邻）。
+
+3. 预测目标值：
+    - 对于回归问题，通常使用这 $ k $ 个最近邻的数据点的目标值的平均值来作为预测值。即，如果 $ \mathcal{N}_k(\mathbf{x}) $ 表示 $ \mathbf{x} $ 的 $ k $ 个最近邻的数据点集合，则预测值 $ \hat{y} $ 为：
+      $
+      \hat{y} = \frac{1}{k} \sum_{i \in \mathcal{N}_k(\mathbf{x})} y_i
+      $
+    - 也可以使用加权平均的方法，即根据距离的倒数来加权邻居的目标值，距离越近权重越大。
+
+我们来看一个k近邻回归的例子：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+
+# 生成一些非线性数据
+np.random.seed(0)
+X = 5 * np.random.rand(100, 1)
+y = np.sin(X).ravel() + np.random.normal(0, 0.1, X.shape[0])
+
+# 分割数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 特征标准化
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 创建k-最近邻回归模型
+k = 5
+model = KNeighborsRegressor(n_neighbors=k)
+
+# 训练模型
+model.fit(X_train, y_train)
+
+# 预测
+y_pred = model.predict(X_test)
+
+# 可视化结果
+plt.figure(figsize=(10, 6))
+plt.scatter(X_test, y_test, color='red', label='Actual')
+plt.scatter(X_test, y_pred, color='blue', label='Predicted')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.title(f'k-Nearest Neighbors Regression (k={k})')
+plt.legend()
+plt.show()
+
+# 打印模型的性能
+print(f'Mean squared error: {mean_squared_error(y_test, y_pred):.2f}')
+print(f'R^2 score: {r2_score(y_test, y_pred):.2f}')
+```
+
+输出结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/knn_regression.png)
+
+好，我们再用k近邻回归来预测波士顿房价：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+from tensorflow.keras.datasets import boston_housing
+
+# 加载Keras中的波士顿房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 特征标准化
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 创建k-最近邻回归模型
+k = 5
+model = KNeighborsRegressor(n_neighbors=k)
+
+# 训练模型
+model.fit(X_train, y_train)
+
+# 预测
+y_pred = model.predict(X_test)
+
+# 打印模型的性能
+print(f'Mean squared error: {mean_squared_error(y_test, y_pred):.2f}')
+print(f'R^2 score: {r2_score(y_test, y_pred):.2f}')
+
+# 可视化结果
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, color='blue', label='Predicted vs Actual')
+plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices')
+plt.title(f'k-Nearest Neighbors Regression (k={k})')
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
+plt.legend()
+plt.show()
+```
+
+输出结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/knn_boston.png)
+
+
+### 5.7 高斯过程回归
+
+高斯过程回归（GPR）是一种非参数的贝叶斯回归方法，其核心思想是利用高斯过程（Gaussian Process, GP）来进行函数拟合和预测。GP 是一个定义在输入空间上的随机过程，每个输入点对应一个高斯分布的输出。GPR 通过这种方式，可以在不明确假设函数形式的前提下，对数据进行回归分析。
+
+高斯过程是指对于任何有限个输入点，其对应的输出值服从多元高斯分布。GP 可以被认为是无限维度的高斯分布，定义为：
+$f(\mathbf{x}) \sim \mathcal{GP}(m(\mathbf{x}), k(\mathbf{x}, \mathbf{x}'))$
+
+其中，$m(\mathbf{x})$ 是均值函数，$k(\mathbf{x}, \mathbf{x}')$ 是协方差函数（或核函数）。
+
+高斯过程回归可以分为训练和预测两个阶段：
+
+1. 训练阶段：
+    - 给定训练数据集 $\{\mathbf{X}, \mathbf{y}\}$，其中 $\mathbf{X}$ 是输入矩阵，$\mathbf{y}$ 是输出向量。假设训练数据的输出值服从多元高斯分布：
+      $\mathbf{y} \sim \mathcal{N}(\mathbf{0}, \mathbf{K} + \sigma_n^2 \mathbf{I})$
+      其中，$\mathbf{K}$ 是由核函数计算得到的协方差矩阵，$\sigma_n^2$ 是噪声的方差。
+
+2. 预测阶段：
+    - 给定新的输入点 $\mathbf{x}_*$，构造联合分布：
+      $
+      \begin{bmatrix}
+      \mathbf{y} \\
+      f(\mathbf{x}_*)
+      \end{bmatrix} \sim \mathcal{N}\left( \mathbf{0}, \begin{bmatrix}
+      \mathbf{K} + \sigma_n^2 \mathbf{I} & \mathbf{k}_* \\
+      \mathbf{k}_*^\top & k(\mathbf{x}_*, \mathbf{x}_*)
+      \end{bmatrix} \right)
+      $
+      其中，$\mathbf{k}_*$ 是训练数据与新输入点的协方差向量。
+
+    - 根据多元高斯分布的条件分布性质，可以得到预测分布：
+      $
+      f(\mathbf{x}_*) | \mathbf{X}, \mathbf{y}, \mathbf{x}_* \sim \mathcal{N}(\mu_*, \sigma_*^2)
+      $
+      其中，均值和方差分别为：
+      $
+      \mu_* = \mathbf{k}_*^\top (\mathbf{K} + \sigma_n^2 \mathbf{I})^{-1} \mathbf{y}
+      $
+      $
+      \sigma_*^2 = k(\mathbf{x}_*, \mathbf{x}_*) - \mathbf{k}_*^\top (\mathbf{K} + \sigma_n^2 \mathbf{I})^{-1} \mathbf{k}_*
+      $
+
+下面我们来看如何用高斯过程回归来处理波士顿房价数据集：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, r2_score
+from keras.datasets import boston_housing
+
+# 加载Keras中的波士顿房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 特征标准化
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 定义核函数
+# 使用常量核和RBF核的乘积
+kernel = C(1.0, (1e-3, 1e3)) * RBF(length_scale=1.0, length_scale_bounds=(1e-3, 1e3))
+
+# 创建高斯过程回归模型
+gpr = GaussianProcessRegressor(kernel=kernel, n_restarts_optimizer=10, alpha=1e-2)
+
+# 训练模型
+gpr.fit(X_train, y_train)
+
+# 预测
+y_pred, y_std = gpr.predict(X_test, return_std=True)
+
+# 打印模型的性能
+print(f'Mean squared error: {mean_squared_error(y_test, y_pred):.2f}')
+print(f'R^2 score: {r2_score(y_test, y_pred):.2f}')
+
+# 可视化结果
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, color='blue', label='Predicted vs Actual')
+plt.errorbar(y_test, y_pred, yerr=y_std, fmt='o', color='blue', alpha=0.5, label='Uncertainty')
+plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices')
+plt.title('Gaussian Process Regression')
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
+plt.legend()
+plt.show()
+```
+
+简单解释一下代码：
+- 加载波士顿房价数据集：使用keras.datasets中的boston_housing.load_data()函数加载数据集。
+- 数据标准化：使用StandardScaler对特征进行标准化，以确保不同特征在同一尺度上。
+- 定义核函数：使用常量核（ConstantKernel）和RBF（径向基函数）核的乘积。常量核用来表示整体的幅度，RBF核用来表示输入点之间的相似性。
+- 创建GPR模型：使用GaussianProcessRegressor创建高斯过程回归模型，n_restarts_optimizer参数设置为10，用于多次优化核参数以找到最优值，alpha参数用于添加噪声项。
+- 训练模型：使用训练数据训练GPR模型。
+- 预测：使用测试数据进行预测，同时返回预测的不确定性（标准差）。
+- 性能评估：打印均方误差（MSE）和决定系数（R²）来评估模型性能。
+- 可视化结果：绘制预测值与实际值的散点图，并显示预测的不确定性范围。添加一条理想情况下的参考线（y=x）。
+
+输出结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/gaussian_process_boston.png)
+
+### 5.8 交叉分解
+
+交叉分解(Cross Decomposition)是用于分析两组变量之间关系的一组技术。通过找到描述它们之间共享信息的潜在结构，这些技术在有两组数据矩阵并希望了解它们之间变量关系的场景中非常有用。
+
+在交叉分解中，常见的方法包括典型相关分析（Canonical Correlation Analysis, CCA）和偏最小二乘法（Partial Least Squares, PLS）。这些方法在化学计量学、基因组学、经济学等领域得到了广泛应用，因为在这些领域中，理解不同类型数据之间的相互作用是至关重要的。
+
+典型相关分析CCA 是一种用于理解两组多维变量之间关系的方法。它找到每个数据集中变量的线性组合，这些组合之间的相关性最大。
+典型相关分析目标是找到成对的典型变量 $ (u_i, v_i) $，使得 $ u_i $ 和 $ v_i $ 之间的相关性最大化。
+
+偏最小二乘法PLS 是一种将预测变量和响应变量投影到新空间以最大化它们之间协方差的方法。当预测变量多于观测值且预测变量高度共线时，PLS 特别有用。
+
+我们来看如何使用偏最小二乘法做回归：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cross_decomposition import PLSRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+import matplotlib as mpl
+
+zhfont = mpl.font_manager.FontProperties(fname='/usr/share/fonts/truetype/liberation/simhei.ttf')
+plt.rcParams['axes.unicode_minus'] = False
+
+# 生成合成数据
+np.random.seed(0)
+X = np.random.normal(size=(100, 10))
+Y = np.random.normal(size=(100, 3))
+
+# 划分训练集和测试集
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)
+
+# 创建并训练 PLS 模型
+pls = PLSRegression(n_components=2)
+pls.fit(X_train, Y_train)
+
+# 在测试数据上进行预测
+Y_pred = pls.predict(X_test)
+
+# 评估模型
+mse = mean_squared_error(Y_test, Y_pred)
+print(f'均方误差: {mse:.2f}')
+
+# 绘制结果
+plt.figure(figsize=(10, 6))
+plt.scatter(Y_test[:, 0], Y_pred[:, 0], label='1')
+plt.scatter(Y_test[:, 1], Y_pred[:, 1], label='2')
+plt.plot([-3, 3], [-3, 3], '--k', linewidth=2)
+plt.xlabel('真实值',fontproperties=zhfont)
+plt.ylabel('预测值',fontproperties=zhfont)
+plt.title('PLS 回归',fontproperties=zhfont)
+plt.legend()
+plt.show()
+```
+
+偏最小二乘典型相关分析PLSCanonical是偏最小二乘法（Partial Least Squares, PLS）的一种变体，它结合了偏最小二乘回归和典型相关分析（Canonical Correlation Analysis, CCA）的特点。PLSCanonical 尤其适用于处理两组变量之间的多重关系，旨在通过寻找能够最大化两组变量之间协方差的低维表示来揭示它们的潜在结构。
+
+与 PLS 回归类似，PLSCanonical 通过将原始数据投影到一个新的潜在空间中来工作。它试图同时找到两个数据集之间的线性组合，这些组合能够最大限度地解释两个数据集之间的协方差。具体来说，PLSCanonical 寻找一对向量 $u$ 和 $v$，使得 $X$ 和 $Y$ 的投影 $X u$ 和 $Y v$ 之间的协方差最大。
+
+具体做法可以分为下面几步：
+
+1. 数据标准化：对数据进行标准化处理，使得每个变量的均值为 0，方差为 1。
+2. 计算协方差矩阵：计算两组变量之间的协方差矩阵。
+3. 找到潜在变量：找到一对向量 $u$ 和 $v$，使得投影 $X u$ 和 $Y v$ 的协方差最大。
+4. 重复步骤：继续寻找下一对潜在变量，直到达到预定的潜在变量数量。
+
+下面我们来看一个PLSCanonical的例子：
+
+```python
+import numpy as np
+from sklearn.cross_decomposition import PLSCanonical
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
+
+# 生成合成数据
+np.random.seed(0)
+X = np.random.normal(size=(100, 10))
+Y = np.random.normal(size=(100, 3))
+
+# 数据标准化
+scaler_X = StandardScaler()
+scaler_Y = StandardScaler()
+X = scaler_X.fit_transform(X)
+Y = scaler_Y.fit_transform(Y)
+
+# 划分训练集和测试集
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)
+
+# 创建并训练 PLSCanonical 模型
+plsc = PLSCanonical(n_components=2)
+plsc.fit(X_train, Y_train)
+
+# 在测试数据上进行预测
+Y_pred = plsc.predict(X_test)
+
+# 评估模型
+mse = mean_squared_error(Y_test, Y_pred)
+print(f'均方误差: {mse:.2f}')
+```
+
+另外，PLSSVD（Partial Least Squares Singular Value Decomposition，偏最小二乘奇异值分解）是一种偏最小二乘回归（Partial Least Squares, PLS）的变体，结合了偏最小二乘法和奇异值分解（Singular Value Decomposition, SVD）的特点。PLSSVD 通过同时分解两个数据矩阵，找到它们之间的最大协方差方向，旨在构建更稳健的回归模型。
+
+奇异值分解 (Singular Value Decomposition, SVD)是一种在线性代数中广泛应用的矩阵分解技术。它将一个矩阵分解为三个特定矩阵的乘积，用于揭示原始矩阵的许多重要属性和结构。
+
+对于一个给定的矩阵 $ A $（大小为 $ m \times n $），SVD 将其分解为三个矩阵的乘积：
+$ A = U \Sigma V^T $
+
+其中：
+
+- $ U $ 是一个 $ m \times m $ 的正交矩阵，称为左奇异向量矩阵。
+- $ \Sigma $ 是一个 $ m \times n $ 的对角矩阵，称为奇异值矩阵，其对角线上的元素是奇异值，按降序排列。
+- $ V $ 是一个 $ n \times n $ 的正交矩阵，称为右奇异向量矩阵，$ V^T $ 是 $ V $ 的转置矩阵。
+
+PLSSVD 的主要目的是通过奇异值分解技术，找到一对投影矩阵，使得两个数据集之间的投影具有最大的协方差。它通过以下步骤实现：
+
+1. 标准化数据：对数据进行标准化处理，使每个变量的均值为 0，方差为 1。这可以通过StandardScaler类来实现。
+2. 计算协方差矩阵：计算两个数据集之间的协方差矩阵。
+3. 奇异值分解：对协方差矩阵进行奇异值分解，找到最重要的奇异向量。
+4. 投影到低维空间：将原始数据投影到由奇异向量定义的低维空间，生成潜在变量。
+
+我们来看一个PLSSVD的例子：
+
+```python
+import numpy as np
+from sklearn.cross_decomposition import PLSSVD
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# 生成合成数据
+np.random.seed(0)
+X = np.random.normal(size=(100, 10))
+Y = np.random.normal(size=(100, 3))
+
+# 数据标准化
+scaler_X = StandardScaler()
+scaler_Y = StandardScaler()
+X = scaler_X.fit_transform(X)
+Y = scaler_Y.fit_transform(Y)
+
+# 划分训练集和测试集
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)
+
+# 创建并训练 PLSSVD 模型
+plssvd = PLSSVD(n_components=2)
+plssvd.fit(X_train, Y_train)
+
+# 在训练数据上进行变换以获取潜在变量
+X_train_scores, Y_train_scores = plssvd.transform(X_train, Y_train)
+
+# 在测试数据上进行变换以获取潜在变量
+X_test_scores, Y_test_scores = plssvd.transform(X_test, Y_test)
+
+# 输出潜在变量
+print(f'X 潜在变量 (训练数据投影):\n{X_train_scores}')
+print(f'Y 潜在变量 (训练数据投影):\n{Y_train_scores}')
+print(f'X 潜在变量 (测试数据投影):\n{X_test_scores}')
+print(f'Y 潜在变量 (测试数据投影):\n{Y_test_scores}')
+```
+
+小结一下，交叉分解的4个类：
+- PLSCanonical：用于寻找两个数据集之间的典型相关关系。
+- PLSRegression：用于回归分析，找到预测变量和响应变量之间的线性关系。
+- PLSSVD：结合了偏最小二乘和奇异值分解，最大化两个数据集之间的协方差。
+- CCA：用于寻找两个多维变量集合之间的最大相关性。
+
+### 5.9 学会使用高级工具
+
+在实际工作中，我们通常会使用一些高级工具来帮助我们更快地完成工作。比如，我们可以使用Pipeline来将多个步骤组合在一起，使用GridSearchCV来进行超参数搜索，使用RandomizedSearchCV来进行随机搜索等。
+
+更进一步，我们可以使用一些更高级的库来更高效完全特定的任务。比如，时间序列预测可以使用Meta开源的Prophet库。
+
+这像调用sklearn一样简单，但是Prophet是专门为时间序列预测而设计的，它可以自动处理节假日效应、趋势变化、季节性等。
+
+比如我们用Prophet来预测波士顿房价数据集：
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from tensorflow.keras.datasets import boston_housing
+from prophet import Prophet
+
+# 加载 Boston 房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 为了示范，将训练集和测试集的目标变量合并，并创建一个日期索引
+y = np.concatenate([y_train, y_test])
+dates = pd.date_range(start='2000-01-01', periods=len(y), freq='M')  # 生成日期索引
+
+# 创建 DataFrame，Prophet 需要列名为 'ds' 和 'y'
+df = pd.DataFrame({'ds': dates, 'y': y})
+
+# 初始化 Prophet 模型
+model = Prophet()
+
+# 训练模型
+model.fit(df)
+
+# 生成未来的日期
+future = model.make_future_dataframe(periods=12, freq='M')  # 预测未来 12 个月的数据
+
+# 进行预测
+forecast = model.predict(future)
+
+# 打印预测结果
+print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
+
+# 可视化预测结果
+fig = model.plot(forecast)
+```
+
+forecast DataFrame 包含了预测的房价值及其上下置信区间。通过可视化，我们可以直观地看到模型的预测结果及其不确定性范围。
+
+绘制的结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/prophet_boston.png)
+
+下面我们以预测阿里巴巴股票价格为例，看看时间序列如何使用Prophet来预测：
+
+```python
+import pandas as pd
+import yfinance as yf
+from prophet import Prophet
+import matplotlib.pyplot as plt
+
+# 获取股价数据
+ticker = 'BABA'  # 以阿里巴巴公司为例
+data = yf.download(ticker, start='2015-01-01', end='2024-06-16')
+
+# 准备数据
+df = data.reset_index()[['Date', 'Close']]
+df.columns = ['ds', 'y']  # Prophet 需要列名为 'ds' 和 'y'
+
+# 初始化 Prophet 模型
+model = Prophet()
+
+# 训练模型
+model.fit(df)
+
+# 生成未来的日期
+future = model.make_future_dataframe(periods=365)  # 预测未来 365 天的数据
+
+# 进行预测
+forecast = model.predict(future)
+
+# 打印预测结果
+print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
+
+# 可视化预测结果
+fig1 = model.plot(forecast)
+plt.title(f'{ticker} Stock Price Prediction')
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.show()
+
+# 可视化预测成分
+fig2 = model.plot_components(forecast)
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/prophet_stock_baba.png)
+
 
 ## 第六章 非监督学习
 
@@ -5138,14 +6701,13 @@ AdaBoost（Adaptive Boosting）是一种提升方法（Boosting），通过结�
 
 AdaBoost 的工作原理
 
-1. **初始化样本权重**：
-   - 初始时，每个训练样本的权重是相等的，设为 \(\frac{1}{N}\)，其中 \(N\) 是训练样本的数量。
+1. 初始化样本权重：初始时，每个训练样本的权重是相等的，设为 $\frac{1}{N}$，其中 $N$ 是训练样本的数量。
 
 2. **迭代过程**：
-   - 对于每一轮迭代 \(t\)，执行以下步骤：
-     1. **训练弱分类器**：根据当前样本权重分布，训练一个弱分类器 \(h_t\)。
-     2. **计算分类误差**：计算弱分类器在训练集上的误差率 \(\epsilon_t\)，即错分样本的权重之和。
-     3. **计算分类器权重**：根据分类误差计算弱分类器的权重 \(\alpha_t\)，公式为：
+   - 对于每一轮迭代 $t$，执行以下步骤：
+     1. **训练弱分类器**：根据当前样本权重分布，训练一个弱分类器 $h_t$。
+     2. **计算分类误差**：计算弱分类器在训练集上的误差率 $\epsilon_t$，即错分样本的权重之和。
+     3. **计算分类器权重**：根据分类误差计算弱分类器的权重 $\alpha_t$，公式为：
        $
        \alpha_t = \frac{1}{2} \ln\left(\frac{1 - \epsilon_t}{\epsilon_t}\right)
        $
@@ -5153,7 +6715,7 @@ AdaBoost 的工作原理
        $
        w_{i}^{(t+1)} = \frac{w_{i}^{(t)} \exp(-\alpha_t y_i h_t(x_i))}{Z_t}
        $
-       其中，\(y_i\) 是样本 \(i\) 的真实标签（取值为 \(\pm 1\)），\(x_i\) 是样本特征，\(Z_t\) 是规范化因子，确保权重和为 1。
+       其中，$y_i$ 是样本 $i$ 的真实标签（取值为 $\pm 1$），$x_i$ 是样本特征，$Z_t$ 是规范化因子，确保权重和为 1。
 
 3. **构建最终分类器**：
    - 最终分类器是所有弱分类器加权投票的结果，公式为：
@@ -7449,22 +9011,7 @@ sm80和90没有实质上的变化。
 
 我们先写一个可以运行起来的CUDA代码，流程如下：
 
-```mermaid
-graph TD;
-    A(Main Function)-->|初始化变量| B[sineWithCuda]
-    B-->|初始化GPU| C{cudaSetDevice}
-    C-->|分配GPU内存| D{cudaMalloc}
-    D-->|从CPU内存复制到GPU内存| E{cudaMemcpy: HostToDevice}
-    E-->|在GPU上启动sine| F{sine}
-    F-->|检查sine执行错误| G{cudaGetLastError}
-    G-->|等待GPU返回| H{cudaDeviceSynchronize}
-    H-->|将GPU结果复制回CPU| I{cudaMemcpy: DeviceToHost}
-    I-->|释放GPU内存| J{cudaFree}
-    J--> K(End of sineWithCuda)
-    B-->L{输出结果}
-    L-->M(清理设备)
-    M-->N(End of Main Function)
-```
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/cuda.png)
 
 首先是设备上的代码：
 
@@ -11094,7 +12641,7 @@ time_cost = datetime.now() - start_date
 print('time cost=', time_cost)
 ```
 
-#### PPO算法
+#### 15.4.2 PPO算法
 
 有了上面的框架之后，我们把DQN算法换成PPO算法，就可以让PPO算法来玩乒乓球游戏了。
 
@@ -11177,7 +12724,7 @@ time_cost = datetime.now() - start_date
 print('time cost=', time_cost)
 ```
 
-#### 视频输出 - 从Monitor到RecordVideo
+#### 15.4.3 视频输出 - 从Monitor到RecordVideo
 
 有时候我们希望把游戏的视频输出出来，gym曾经使用Monitor来实现。现在gymnasium则改用RecordVideo来实现。
 
@@ -11221,221 +12768,7 @@ ffmpeg -i rl-video-episode-0.mp4  output.apng
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/rl1.apng)
 
-
-### 15.3 stable_baselines3库源码分析
-
-```mermaid
-classDiagram
-    class Module["torch.nn.Module"]{
-        +forward(self, x)
-    }
-    class BaseModel {
-        +save(self, path: str)
-        +load(cls: Type[SelfBaseModel], path: str, device: Union[th.device, str] = "auto")
-        +load_from_vector(self, vector: np.ndarray)
-        +parameters_to_vector(self)
-        +set_training_mode(self, mode: bool)
-    }
-    class BasePolicy{
-        +init_weights(module: nn.Module, gain: float = 1)
-        +predict(self,observation: Union[np.ndarray, Dict[str, np.ndarray]],...)
-    }
-    class QNetwork{
-
-    }
-    class DQNPolicy{
-
-    }
-    class CnnPolicy{
-
-    }
-    class DQN{
-        -exploration_schedule: Schedule
-        -q_net: QNetwork
-        -q_net_target: QNetwork
-        -policy: DQNPolicy
-        +train(self, gradient_steps: int, batch_size: int = 100)
-        +predict()
-        +learn()
-    }
-    class ABC
-    class BaseAlgorithm{
-        +learn()
-        +predict()
-    }
-
-    Module <|-- BaseModel
-    BaseModel <|-- BasePolicy
-    BasePolicy <|-- QNetwork
-    BasePolicy <|-- DQNPolicy
-    DQNPolicy <|-- CnnPolicy
-    OffPolicyAlgorithm <|-- DQN
-    ABC <|-- BaseAlgorithm
-    BaseAlgorithm <|-- OffPolicyAlgorithm
-
-```
-
-```mermaid
-classDiagram
-    class BasePolicy {
-        +observation_space: spaces.Space
-        +action_space: spaces.Discrete
-        +features_extractor: BaseFeaturesExtractor
-        +normalize_images: bool
-        +_predict(observation: th.Tensor, deterministic: bool = True) th.Tensor
-        +_get_constructor_parameters() Dict[str, Any]
-    }
-
-    class QNetwork {
-        +action_space: spaces.Discrete
-        +net_arch: Optional[List[int]]
-        +activation_fn: Type[nn.Module]
-        +features_dim: int
-        +q_net: nn.Sequential
-        +forward(obs: th.Tensor) th.Tensor
-        +_predict(observation: th.Tensor, deterministic: bool = True) th.Tensor
-        +_get_constructor_parameters() Dict[str, Any]
-    }
-
-    class DQNPolicy {
-        +q_net: QNetwork
-        +q_net_target: QNetwork
-        +net_arch: Optional[List[int]]
-        +activation_fn: Type[nn.Module]
-        +net_args: Dict[str, Any]
-        +make_q_net() QNetwork
-        +forward(obs: th.Tensor, deterministic: bool = True) th.Tensor
-        +_predict(obs: th.Tensor, deterministic: bool = True) th.Tensor
-        +_get_constructor_parameters() Dict[str, Any]
-        +set_training_mode(mode: bool) None
-    }
-
-    class MlpPolicy {
-    }
-
-    class CnnPolicy {
-    }
-
-    class MultiInputPolicy {
-    }
-
-    BasePolicy <|-- QNetwork
-    BasePolicy <|-- DQNPolicy
-    DQNPolicy <|-- MlpPolicy
-    DQNPolicy <|-- CnnPolicy
-    DQNPolicy <|-- MultiInputPolicy
-
-
-```
-
-```mermaid
-classDiagram
-    class BaseAlgorithm {
-        +policy_aliases: ClassVar[Dict[str, Type[BasePolicy]]]
-        +policy: BasePolicy
-        +observation_space: spaces.Space
-        +action_space: spaces.Space
-        +n_envs: int
-        +lr_schedule: Schedule
-        +set_logger(logger: Logger) None
-        +logger: Logger
-        +get_env() Optional[VecEnv]
-        +get_vec_normalize_env() Optional[VecNormalize]
-        +set_env(env: GymEnv, force_reset: bool = True) None
-        +learn(self: SelfBaseAlgorithm, ...) Tuple[np.ndarray, Optional[Tuple[np.ndarray, ...]]]
-        +set_random_seed(seed: Optional[int] = None) None
-        +set_parameters(load_path_or_dict: Union[str, TensorDict], ...) None
-        +load(cls: Type[SelfBaseAlgorithm], ...) SelfBaseAlgorithm
-        +get_parameters() Dict[str, Dict]
-        +save(path: Union[str, pathlib.Path, io.BufferedIOBase], ...) None
-    }
-
-    class OffPolicyAlgorithm {
-        +policy: Union[str, Type[BasePolicy]]
-        +env: Union[GymEnv, str]
-        +learning_rate: Union[float, Schedule]
-        +buffer_size: int
-        +learning_starts: int
-        +batch_size: int
-        +tau: float
-        +gamma: float
-        +train_freq: Union[int, Tuple[int, str]]
-        +gradient_steps: int
-        +action_noise: Optional[ActionNoise]
-        +replay_buffer_class: Optional[Type[ReplayBuffer]]
-        +replay_buffer_kwargs: Optional[Dict[str, Any]]
-        +policy_kwargs: Optional[Dict[str, Any]]
-        +stats_window_size: int
-        +tensorboard_log: Optional[str]
-        +verbose: int
-        +device: Union[th.device, str]
-        +seed: Optional[int]
-        +sde_support: bool
-        +optimize_memory_usage: bool
-        +supported_action_spaces: Tuple[Type[spaces.Space], ...]
-        +support_multi_env: bool
-    }
-
-    class DQN {
-        +exploration_initial_eps: float
-        +exploration_final_eps: float
-        +exploration_fraction: float
-        +target_update_interval: int
-        +max_grad_norm: float
-        +exploration_rate: float
-        +exploration_schedule: Schedule
-        +q_net: QNetwork
-        +q_net_target: QNetwork
-        +policy: DQNPolicy
-        +batch_norm_stats: List[th.Tensor]
-        +batch_norm_stats_target: List[th.Tensor]
-        +train(gradient_steps: int, batch_size: int = 100) None
-        +predict(observation: Union[np.ndarray, Dict[str, np.ndarray]], ...)
-        +learn(self: SelfDQN, ...) SelfDQN
-    }
-
-    OffPolicyAlgorithm <|-- DQN
-    BaseAlgorithm <|-- OffPolicyAlgorithm
-```
-
-```mermaid
-classDiagram
-    class BaseFeaturesExtractor {
-        +_observation_space: gym.Space
-        +_features_dim: int
-        +features_dim: int
-    }
-
-    class FlattenExtractor {
-        +flatten: nn.Flatten
-        +forward(observations: th.Tensor) th.Tensor
-    }
-
-    class NatureCNN {
-        +cnn: nn.Sequential
-        +linear: nn.Sequential
-        +forward(observations: th.Tensor) th.Tensor
-    }
-
-    class MlpExtractor {
-        +policy_net: nn.Sequential
-        +value_net: nn.Sequential
-        +latent_dim_pi: int
-        +latent_dim_vf: int
-        +forward(features: th.Tensor) Tuple[th.Tensor, th.Tensor]
-        +forward_actor(features: th.Tensor) th.Tensor
-        +forward_critic(features: th.Tensor) th.Tensor
-    }
-
-    class CombinedExtractor {
-        +extractors: nn.ModuleDict
-        +forward(observations: TensorDict) th.Tensor
-    }
-
-    BaseFeaturesExtractor <|-- FlattenExtractor
-    BaseFeaturesExtractor <|-- NatureCNN
-    BaseFeaturesExtractor <|-- CombinedExtractor
-```
+### 15.5 stable_baselines3库源码分析
 
 ## 第十六章 机器学习工程
 

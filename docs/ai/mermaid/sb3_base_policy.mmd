@@ -1,0 +1,52 @@
+---
+title: "Policy"
+---
+
+classDiagram
+    class BasePolicy {
+        +observation_space: spaces.Space
+        +action_space: spaces.Discrete
+        +features_extractor: BaseFeaturesExtractor
+        +normalize_images: bool
+        +_predict(observation: th.Tensor, deterministic: bool = True) th.Tensor
+        +_get_constructor_parameters() Dict[str, Any]
+    }
+
+    class QNetwork {
+        +action_space: spaces.Discrete
+        +net_arch: Optional[List[int]]
+        +activation_fn: Type[nn.Module]
+        +features_dim: int
+        +q_net: nn.Sequential
+        +forward(obs: th.Tensor) th.Tensor
+        +_predict(observation: th.Tensor, deterministic: bool = True) th.Tensor
+        +_get_constructor_parameters() Dict[str, Any]
+    }
+
+    class DQNPolicy {
+        +q_net: QNetwork
+        +q_net_target: QNetwork
+        +net_arch: Optional[List[int]]
+        +activation_fn: Type[nn.Module]
+        +net_args: Dict[str, Any]
+        +make_q_net() QNetwork
+        +forward(obs: th.Tensor, deterministic: bool = True) th.Tensor
+        +_predict(obs: th.Tensor, deterministic: bool = True) th.Tensor
+        +_get_constructor_parameters() Dict[str, Any]
+        +set_training_mode(mode: bool) None
+    }
+
+    class MlpPolicy {
+    }
+
+    class CnnPolicy {
+    }
+
+    class MultiInputPolicy {
+    }
+
+    BasePolicy <|-- QNetwork
+    BasePolicy <|-- DQNPolicy
+    DQNPolicy <|-- MlpPolicy
+    DQNPolicy <|-- CnnPolicy
+    DQNPolicy <|-- MultiInputPolicy
