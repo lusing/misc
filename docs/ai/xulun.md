@@ -833,19 +833,9 @@ plt.show()
 
 ## 第三章 机器学习编程基础
 
-### 3.1 Python语言编程简介
+机器学习中会使用到很多的库，我们在进入理论学习之前先对这些工具有一个基本的了解。
 
-在机器学习领域，使用最多的是Python语言。
-Python语言于1989年由吉多·范罗苏姆（Guido van Rossum）创立，于1991年正式发布。
-Python语言的主要特点有：
-- 代码表达能力强，简洁、可读性好。比如Python使用缩进来代表代码块，不用像C语言一样使用大括号
-- 跨平台：Python对于Windows, MacOS和Linux都有良好的支持。而且针对深度学习还有像Anaconda一样的集成包
-- 支持多种编程范式：既可以用面向对象的方法来编写，也可以采用命令式或函数式
-- 最完整的人工智能生态：从机器学习、到深度学习、一直到最新的预训练大模型，基本上都是以Python为第一开发语言
-- 开源免费：虽然功能非常强大，但是不像Matlab等软件一样需要付费。而且生态软件也一样基本都是开源免费的，使用和扩展都非常方便
-- 学术界偏好：学术研究的论文基本都使用Python，使用Python便于复现最新的进展
-
-### 3.2 NumPy科学计算基础
+### 3.1 NumPy科学计算基础
 
 NumPy是Numeric Python的缩写，它是一个开源的Python库，主要用于矩阵上的科学计算。Python本身是一种解释型的语言，不适合于数学计算等对于性能要求比较高的情况，而NumPy就是用C++语言实现的高性能的矩阵计算库的集大成者。NumPy包的核心是多维矩阵的支持。
 NumPy不仅本身功能强大，它也是后面要介绍的sklearn等框架的基础，也是TensorFlow, PyTorch和JAX等深度学习框架实现时的标准。像JAX就可以理解成是在GPU加速的NumPy. 
@@ -903,7 +893,7 @@ In [54]: a10
 Out[54]: array([   3.,   27.,  243.])
 ```
 
-#### 多维数组的形状
+#### 3.1.1 多维数组的形状
 
 多维数组中，维度是一个重要的概念。维度是指数组中轴的个数，也就是说，一维数组有一个维度，二维数组有两个维度，三维数组有三个维度，以此类推。一维数组我们通常称为向量，二维数组我们通常称为矩阵，三维以上的数组我们通常称为张量。
 
@@ -975,7 +965,7 @@ array([[   1.   ,    5.125,    9.25 ,   13.375,   17.5  ],
        [  83.5  ,   87.625,   91.75 ,   95.875,  100.   ]])
 ```
 
-#### 生成带有数据的多维数组
+#### 3.1.2 生成带有数据的多维数组
 
 我们在数据处理中，经常要生成一些特殊的数组，比如全是0的数组，全是1的数组，对角线是1的数组等。NumPy提供了一些函数来生成这些特殊的数组。
 
@@ -1064,7 +1054,7 @@ array([[  1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,   9.],
        [  9.,  18.,  27.,  36.,  45.,  54.,  63.,  72.,  81.]])
 ```
 
-#### 访问元素
+#### 3.1.3 访问元素
 
 NumPy中使用[]方括号来访问元素。如果是一维数组，就用下标数字，例如a[1]，如果是多维数组，就在方括号中使用元组tuple，例如a[(2,3,4)]
 
@@ -1104,7 +1094,7 @@ In [6]: print(a21[(1,1,1)])
 50.5
 ```
 
-#### 切片
+#### 3.1.4 切片
 
 用一个值采用方括号下标方式引用，而如果想要引用多个值的话，可以考虑做一个切片。比如s[1:3]就是由s[1]和s[2]组成的列表。
 
@@ -1167,7 +1157,7 @@ In [14]: a22[1:-1]
 Out[14]: array([ 3.25,  5.5 ,  7.75])
 ```
 
-#### 多维数组的数据类型
+#### 3.1.5 多维数组的数据类型
 
 在前面的学习中，我们并不在意数据类型，一样也可以使用多维数组。但是，有了类型之后，数组可以更方便和更快速的操作。
 我们前面所学习的生成数组的方法，其实都可以默认带一个dtype参数。
@@ -1183,7 +1173,7 @@ array([    2.        ,     9.51365692,    45.254834  ,   215.2694823 ,
         1024.        ])
 ```
 
-#### 对数组的每个元素都进行计算
+#### 3.1.6 对数组的每个元素都进行计算
 
 数据只有可以计算才有价值。我们学会了生成数组，访问数组，下一步就是如何对数组进行计算。
 NumPy提供了大量的针对数组进行运算的函数，比如X是一个数组，np.sin(X)可以对数组中每一个元素都进行sin运算。
@@ -1271,7 +1261,7 @@ array([[False, False],
        [False, False]], dtype=bool)
 ```
 
-#### 汇总类的运算
+#### 3.1.7 汇总类的运算
 
 除了对每个元素进行计算，我们还可以对这些元素进行汇总，比如求和sum，求平均值mean等。
 
@@ -1284,7 +1274,7 @@ In [41]: np.mean(a28)
 Out[41]: 2.5
 ```
 
-#### 矩阵matrix
+#### 3.1.8 矩阵matrix
 
 除了前面所讲的多维数组，NumPy还提供了矩阵类matrix. matrix的默认运算都是矩阵运算。
 例:
@@ -1334,9 +1324,9 @@ matrix([[ 0.8125 , -0.125  ,  0.     ],
         [ 0.     ,  0.     ,  2.     ]])
 ```
 
-### 3.3 NumPy的GPU和TPU加速
+### 3.2 NumPy的GPU和TPU加速
 
-#### 矩阵
+#### 3.2.1 矩阵
 
 NumPy最为核心的功能就是多维矩阵的支持。
 
@@ -1431,7 +1421,7 @@ a8 = random.uniform(subkey,shape=(10,10)) # a random number using subkey
 print(a8)
 ```
 
-#### 范数
+#### 3.2.2 范数
 
 范数（Norm）是一个数学概念，用于测量向量空间中向量的“大小”。范数需要满足以下性质：
 
@@ -1486,7 +1476,7 @@ print(n10)
 
 这个结果为581.67865.
 
-#### 逆矩阵
+#### 3.2.3 逆矩阵
 
 对角线是1，其它全是0的方阵，我们称为单位矩阵。在NumPy和JAX中，我们用eye函数来生成单位矩阵。
 
@@ -1546,7 +1536,7 @@ print(inv1)
  [ 1.5000001  -0.50000006]]
  ```
 
-#### 导数与梯度
+#### 3.2.4 导数与梯度
 
 导数是一个函数在某点处的变化率，用于描述函数在该点处的变化率。导数可以表示函数在该点处的斜率，即函数在该点处的陡峭程度。
 
@@ -1594,7 +1584,7 @@ print(x)  # 打印最终的 x 值，应接近 0（函数的最小值）
 
 其中，学习率（或称为步长）是一个正数，用于控制每一步更新的幅度。学习率需要仔细选择，过大可能导致算法不收敛，过小可能导致收敛速度过慢。
 
-#### 概率
+#### 3.2.5 概率
 
 唤醒完线性代数和高等数学的一些记忆之后，最后我们来回顾一下概率论。
 
@@ -1710,860 +1700,269 @@ avg_info = avg_information(p)
 print(avg_info)
 ```
 
-### 3.4 Scikit-Learn框架基础
+### 3.3 PyTorch框架基础
 
-Scikit-Learn，简称sklearn，是在NumPy基础上发展起来的机器学习框架，实现了主要的机器学习的算法。
+同JAX一样，PyTorch也是一个支持GPU加速的深度学习框架。PyTorch的核心是张量（Tensor）类，它是一个多维数组，类似于NumPy的ndarray。PyTorch的张量支持GPU加速，可以在GPU上进行张量运算，从而加速深度学习模型的训练和推理。
 
-### 3.5 PyTorch框架基础
+#### 3.3.1 随机数生成
 
-### 3.6 在网页里运行机器学习的框架 - TensorFlow.js
+1. 生成均匀分布的随机数
 
-Python确实在机器学习和深度学习领域有着不可替代的生态优势，不过，放到浏览器端和手机端，Python的生态优势好像就发挥不出来了。不管是Android手机还是iOS手机，默认都没有Python运行环境，也写不了Python应用。浏览器里和小程序里，就更没Python什么事儿了。
-
-在浏览器里，可以直接使用TensorFlow.js库，尽管可能会有性能的问题，但是至少是从0到1的突破。
-
-![](https://img-blog.csdnimg.cn/img_convert/5e72f38de1714c77a25374648884d534.png)
-
-我们看个例子：
-```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta encoding="UTF-8"/>
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.6.0/dist/tf.min.js"></script>
-    </head>
-    <body>
-        <div id="tf-display"></div>
-        <script>
-            let a = tf.tensor1d([1.0]);
-            let d1 = document.getElementById("tf-display");
-            d1.innerText = a;
-        </script>
-    </body>
-</html>
-```
-
-可以看到，在浏览器里显示了一个值为1.0的张量的值。我们的第一个TensorFlow.js(以下简称tf.js)应用就算是跑通了。通过引用tf.js的库，我们就可以调用tf下面的函数。
-
-下面我们修改一下，看看tf.js是靠什么技术在运行的。我们通过tf.getBackend()函数来查看支持tf.js
-
-```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta encoding="UTF-8"/>
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.6.0/dist/tf.min.js"></script>
-    </head>
-    <body>
-        <div id="tf-display"></div>
-        <div id="tf-backend"></div>
-        <script>
-            let a = tf.tensor1d([1.0,2.0,3.0]);
-            let d1 = document.getElementById("tf-display");
-            d1.innerText = a;
-
-            let backend = tf.getBackend();
-            let div_backend = document.getElementById("tf-backend");
-            div_backend.innerText = backend;
-        </script>
-    </body>
-</html>
-```
-
-在我的浏览器里，tf.js是使用webgl来进行计算的。
-
-#### 运行在node里的tfjs
-
-作为一个js库，tf.js当然也可以运行在node环境里。我们可以通过
-```
-npm install @tensorflow/tfjs
-```
-来安装tf.js库。
-
-然后把上面网页里面的代码移值过来：
-```js
-const tf = require('@tensorflow/tfjs');
-
-let a = tf.tensor1d([1.0,2.0,3.0]);
-console.log(a);
-
-console.log(tf.getBackend());
-```
-
-在我的电脑里执行，这个getBackend()返回的是'cpu'. 
-tf.js还会给tfjs-node做个广告：
-```
-============================
-Hi there 👋. Looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, which binds to TensorFlow C++, by running npm i @tensorflow/tfjs-node, or npm i @tensorflow/tfjs-node-gpu if you have CUDA. Then call require('@tensorflow/tfjs-node'); (-gpu suffix for CUDA) at the start of your program. Visit https://github.com/tensorflow/tfjs-node for more details.
-============================
-```
-
-听人劝吃饱饭，那我们就换成tfjs-node吧：
-
-```js
-const tf = require('@tensorflow/tfjs-node');
-
-let a = tf.tensor1d([1.0,2.0,3.0]);
-console.log(a);
-
-console.log(tf.getBackend());
-```
-
-记得要
-```
-npm install @tensorflow/tfjs-node
-```
-
-现在，后端从cpu换成了tensorflow。
-
-还有更凶残的，我们还可以换成tfjs-node-gpu来使用GPU：
-```js
-const tf = require('@tensorflow/tfjs-node-gpu');
-
-let a = tf.tensor1d([1.0,2.0,3.0]);
-console.log(a);
-
-console.log(tf.getBackend());
-```
-在没有GPU的机器上，会使用CPU版的tensorflow作为后端，不会报错。
-
-#### JavaScript的数组操作
-
-js是一门动态语言，js的数组是动态数组，没有定长数组越界这一说法的。
-
-比如说我们要给一个空数组的第2个元素赋值，这是没有任何问题的：
-```javascript
-let a1 = [];
-a1[2] = 3;
-console.log(a1);
-```
-输出结果为：
-```
-[ <2 empty items>, 3 ]
-```
-
-我们可以毫无压力地用这样的数组去生成张量：
-```js
-let a1_t = tf.tensor1d(a1);
-a1_t.print();
-```
-
-tf.js会给我们甩出两个NaN出来：
-```
-Tensor
-    [NaN, NaN, 3]
-```
-
-不但是空数组随便添加元素，我们用new Array生成一个长度的数组后，仍然可以说话不算话，随意给赋值。比如我们new 5个元素的Array，给第9个赋值：
-```js
-let a2 = new Array(5);
-a2[9] = 10;
-console.log(a2);
-
-
-let a2_t = tf.tensor1d(a2);
-a2_t.print();
-```
-
-tf.js照例给我们补9个NaN出来：
-```
-[ <9 empty items>, 10 ]
-Tensor
-    [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10]
-```
-
-如果懒得数一共多少个元素，就想在数组的末尾添加新元素，可以使用push方法，参数个数不限，push几个元素都可以：
-```js
-let a3 = new Array();
-a3.push(1,2,3);
-a3.push(4,5);
-
-let a3_t = tf.tensor1d(a3);
-a3_t.print();
-```
-
-输出为：
-```
-Tensor
-    [1, 2, 3, 4, 5]
-```
-
-如果想从头添加新元素，可以使用unshift方法：
-```js
-let a3 = new Array();
-a3.push(1,2,3);
-a3.push(4,5);
-a3.unshift(6);
-
-let a3_t = tf.tensor1d(a3);
-a3_t.print();
-```
-
-输出为：
-```
-Tensor
-    [6, 1, 2, 3, 4, 5]
-```
-
-同时我们复习一下，与push相对的，删除最后一个元素的是pop方法；而与unshift相对的是shift方法。
-
-比如我们对上面的a3进行pop：
-```javascript
-let a4 = a3;
-let a00 = a3.pop();
-console.log(a00);
-console.log(a4);
-```
-
-所得结果为：
-```
-5
-[ 6, 1, 2, 3, 4 ]
-```
-
-最后，我们还有强大的splice方法，可以在任意位置添加与删除。
-
-splice方法的第一个参数是起始位置，第二个参数是要删除的个数。
-我们来看个例子，我们先生成10个元素的数组，然后把前5个空元素都删掉：
-
-```js
-let a5 = []
-a5.length = 10;
-a5[5] = 100;
-console.log(a5);
-a5.splice(0,5);
-console.log(a5);
-```
-
-输出结果为：
-```
-[ <5 empty items>, 100, <4 empty items> ]
-[ 100, <4 empty items> ]
-```
-
-如果不删除，想要添加元素的话，我们可以给第二个参数置0，然后后面是要添加的元素。比如我们给上面的a5在100后面增加三个新元素1.5, 2.5, 3.5：
-
-```js
-a5.splice(1,0,1.5,2.5,3.5);
-console.log(a5);
-```
-
-输出如下：
-
-```
-[ 100, 1.5, 2.5, 3.5, <4 empty items> ]
-```
-
-记住是要给元素值，而不是给个数组啊，否则的话就变成二维数组了：
-
-```js
-a5.splice(1,0,[1.5,2.5,3.5]);
-console.log(a5);
-```
-
-结果为：
-```
-[ 100, [ 1.5, 2.5, 3.5 ], 1.5, 2.5, 3.5, <4 empty items> ]
-```
-
-好，复习至此，我们来看tf.js中的张量
-
-#### tf.js中的张量
-
-![](https://img-blog.csdnimg.cn/img_convert/44330be11dcbd3bb90158082c62d1345.png)
-
-##### 一维张量
-
-tfjs支持从1d到6d一共6维张量构造函数，当然7维以上没有专用函数了还是可以reshape出来。
-
-最简单的张量是一维的，我们可以用tf.tensor1d：
-```js
-let t1d = tf.tensor1d([1, 2, 3]);
-t1d.print();
-```
-
-输出为：
-```
-Tensor
-    [1, 2, 3]
-```
-
-当然，还可以指定数据类型：
-```js
-const t1d_f = tf.tensor1d([1.0,2.0,3.0],'float32')
-t1d_f.print();
-```
-
-输出结果为：
-```
-Tensor
-    [1, 2, 3]
-```
-
-数据类型可用值为：
-- 'float32'
-- 'int32'
-- 'bool'
-- 'complex64'
-- 'string'
-
-可以通过linspace函数来生成一维序列，其原型为：
-```js
-tf.linspace (start, stop, num)
-```
-其中
-- start为起始值
-- end为结束值
-- num为生成的序列的元素个数
-
-例： 
-```js
-tf.linspace(1, 10, 10).print();
-```
-
-输出结果为：
-```
-Tensor
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-```
-
-如果想用指定步长的方式来生成，可以使用range函数：
-```
-tf.range(start, stop, step?, dtype?)
-```
-
-我们来看个例子：
-```js
-tf.range(0, 9, 2).print();
-```
-
-输出结果为：
-```
-Tensor
-    [0, 2, 4, 6, 8]
-```
-
-##### 二维张量
-
-![](https://img-blog.csdnimg.cn/img_convert/4365deb8f649e8abd84166268ae61863.png)
-
-二维张量可以用二维数组来定义：
-```js
-let t2d = tf.tensor2d([[0,0],[0,1]]);
-t2d.print();
-```
-
-不过tf.js的二维张量必须是矩阵，而js的二维数组是可以不等长的，这点尤其要注意。
-
-因为二维张量主要用于存放矩阵，有生成矩阵的方法可供调用。
-
-比如我们可以使用tf.eye来生成单位矩阵：
-```js
-const t_eye = tf.eye(4);
-t_eye.print();
-```
- 
-输出结果为：
-```
-Tensor
-    [[1, 0, 0, 0],
-     [0, 1, 0, 0],
-     [0, 0, 1, 0],
-     [0, 0, 0, 1]]
-```
-
-我们也可以将一维向量转化为以其为对角向量的二维向量：
-```js
-const x1 = tf.tensor1d([1, 2, 3, 4, 5, 6, 7, 8]);
-tf.diag(x1).print();
-```
-
-输出结果为：
-```
-Tensor
-    [[1, 0, 0, 0, 0, 0, 0, 0],
-     [0, 2, 0, 0, 0, 0, 0, 0],
-     [0, 0, 3, 0, 0, 0, 0, 0],
-     [0, 0, 0, 4, 0, 0, 0, 0],
-     [0, 0, 0, 0, 5, 0, 0, 0],
-     [0, 0, 0, 0, 0, 6, 0, 0],
-     [0, 0, 0, 0, 0, 0, 7, 0],
-     [0, 0, 0, 0, 0, 0, 0, 8]]
-```
-
-从二维张量开始，我们可以指定张量的形状了。
-
-比如我们用一维数组给定值，然后指定[2,2]的形状：
-```js
-let t2d2 = tf.tensor2d([1,2,3,4],[2,2],'float32');
-t2d2.print();
-```
-
-输出结果如下：
-```
-Tensor
-    [[1, 2],
-     [3, 4]]
-```
-
-##### 高维向量
-
-![](https://img-blog.csdnimg.cn/img_convert/c3848ff76853c32941b21bf53df27160.png)
-
-从三维开始，用高维数组来表示张量值的可读性就越来越差了。比如：
-```js
-tf.tensor3d([[[1], [2]], [[3], [4]]]).print();
-```
-
-输出结果为：
-```
-Tensor
-    [[[1],
-      [2]],
-
-     [[3],
-      [4]]]
-```
-
-我们可以还是先指定一维数组，然后再指定形状：
-```js
-tf.tensor3d([1,2,3,4,5,6,7,8],[2,2,2],'int32').print();
-```
-
-输出如下：
-```
-Tensor
-    [[[1, 2],
-      [3, 4]],
-
-     [[5, 6],
-      [7, 8]]]
-```
-
-我们向4，5，6维挺进：
-```js
-tf.tensor4d([[[[1], [2]], [[3], [4]]]]).print();
-tf.tensor5d([[[[[1],[2]],[[3],[4]]],[[[5],[6]],[[7],[8]]]]]).print();
-tf.tensor6d([[[[[[1],[2]],[[3],[4]]],[[[5],[6]],[[7],[8]]]]]]).print();
-```
-
-输出如下：
-```
-Tensor
-    [[[[1],
-       [2]],
-
-      [[3],
-       [4]]]]
-Tensor
-    [[[[[1],
-        [2]],
-
-       [[3],
-        [4]]],
-
-
-      [[[5],
-        [6]],
-
-       [[7],
-        [8]]]]]
-Tensor
-    [[[[[[1],
-         [2]],
-
-        [[3],
-         [4]]],
-
-
-       [[[5],
-         [6]],
-
-        [[7],
-         [8]]]]]]
-```
-
-此时，指定形状的优势就更加明显了。
-
-我们可以用tf.zeros函数生成全是0的任意维的张量：
-```js
-tf.zeros([2,2,2,2,2,2]).print();
-```
-
-也可以通过tf.ones将所有值置为1:
-```js
-tf.ones([3,3,3]).print();
-```
-
-还可以通过tf.fill函数生成为指定值的张量：
-```js
-tf.fill([4,4,4],255).print();
-```
-
-比起序列值和固定值，生成符合正态分布的随机值可能是更常用的场景。其原型为：
-```js
-tf.truncatedNormal(shape, mean?, stdDev?, dtype?, seed?)
-```
-其中：
-- shape是张量形状
-- mean是平均值
-- stdDev是标准差
-- dtype是数据类型，整形和浮点形在此差别可能很大
-- seed是随机数种子
-
-我们看个例子：
-```js
-tf.truncatedNormal([3,3,3],1,1,"float32",123).print();
-tf.truncatedNormal([2,2,2],1,1,"int32",99).print();
-```
-
-输出如下：
-```
-Tensor
-    [[[0.9669023 , 0.2715541 , 0.6810297 ],
-      [-0.8329115, -0.7022814, 1.4331075 ],
-      [1.8136243 , 1.8001028 , -0.3285823]],
-
-     [[1.381816  , 1.1050107 , 0.7487067 ],
-      [1.9785664 , 0.9248876 , -0.9470147],
-      [0.0489896 , 0.3297685 , 0.8626058 ]],
-
-     [[0.3341007 , 1.1067212 , 0.4879217 ],
-      [2.1620302 , 1.3034405 , 0.2832415 ],
-      [1.3012471 , 1.0853187 , 1.9235317 ]]]
-Tensor
-    [[[0, 1],
-      [1, 0]],
-
-     [[0, 0],
-      [1, 2]]]
-```
-
-####  将张量转换成js数组
-
-![](https://img-blog.csdnimg.cn/img_convert/740e72498f836a96ad4321dc9e6d3fe1.png)
-
-前面我们学习了很多种张量的生成方法。但是，不知道你意识到了没有，很多时候还是转回到js数组更容易进行一些高阶的操作。
-
-将张量转换成为数组有两种方式，一种是按照原形状转换成数组。异步的可以使用Tensor.array()方法，同步的可以使用Tensor.arraySync()方法。
-
-我们来将上节生成的随机数的向量转回成js的数组：
-```js
-let t7 = tf.truncatedNormal([2,2,2],1,1,"int32",99);
-let a7 = t7.arraySync();
-console.log(a7);
-```
-
-输出结果为：
-```
-[ [ [ 0, 1 ], [ 1, 0 ] ], [ [ 0, 0 ], [ 1, 2 ] ] ]
-```
-
-记得这是一个高维数组啊，每个元素都是数组。
-比如：
-```js
-a7.forEach(
-    (x) => { console.log(x);}
-);
-```
-
-输出将是两个数组元素：
-```
-[ [ 0, 1 ], [ 1, 0 ] ]
-[ [ 0, 0 ], [ 1, 2 ] ]
-```
-
-如果不想要形状，可以用data()或者dataSync()方法将张量转换成TypedArray.
-
-```js
-let t5 = tf.truncatedNormal([2,2,2],1,1,"int32",99);
-let a5 = t5.dataSync();
-console.log(a5);
-```
-
-输出结果如下：
-```
-Int32Array(8) [
-  0, 1, 1, 0,
-  0, 0, 1, 2
-]
-```
-
-如果对TypedArray进行forEach操作：
-```js
-a5.forEach(
-    (x) => { console.log(x);}
-);
-```
-获取的结果就是线性的了：
-```
-0
-1
-1
-0
-0
-0
-1
-2
-```
-
-拍平成一维的之后，我们就可以用every和some等来进行元素的判断了。
-比如我们看a5是不是所有元素都是0，是不是有元素为0：
-```js
-console.log(a5.every((x) => { return(x===0)}));
-console.log(a5.some((x) => { return(x===0)}));
-```
-
-因为不全为0，所以every的值为假，而some为真。
-
-### 3.7 Hugging Face框架基础
-
-这一节我们来学习下预训练模型的封装库，Hugging Face的Transformers库的使用。Hugging Face的库非常活跃，比如支持LLaDA大规型的类，是在本文开始写作的前一天发布的。
-库新到这种程度，而且相应配套的库也在不停修改中，这个时候进入这个领域一定要做好要花时间完善还不成熟的功能，尤其是花较多时间debug问题的思想准备。
-
-另外，还是再提醒大家，大模型算法不是普通编程。模型规模和思维链仍然非常重要。
-
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/CoT.png)
-
-#### 3.7.1 Pipeline编程
-
-Pipeline是transformers库中面向任务的编程方式。比如我们最常用的任务就是文本生成。
-
-我们只需要指定"text-generation"任务，再选择一种模型，就可以了。比如下面这样，我们选择使用gpt2来进行文本生成：
-
-```python
-text_generator = pipeline("text-generation", model="gpt2")
-```
-
-我们来个完整版，除去引用包和设置一个结束符，基本上就是两句话，一句生成pipeline，一句打印结果。
-
-```python
-from transformers import pipeline
-
-text_generator = pipeline("text-generation", model="gpt2", max_new_tokens=250)
-
-text_generator.model.config.pad_token_id = text_generator.model.config.eos_token_id
-
-text = text_generator("I have a dream ")[0]["generated_text"]
-
-print(text)
-```
-
-这是其中一次我运行的结果：
-```
-I have a dream "
-
-The young man's lips parted under a wave of laughter. "My dream!"
-
-Bagel said that "My dream!"
-
-The young man jumped back the moment he got off the train. "Good, good!"
-
-On the other hand, the boy had gotten off. "My dream!"
-
-There he was again in that black and white moment that his soul couldn't shake.
-
-In this youth, the only thing that could stop him from reaching his dream was this.
-
-"Dad, we're here now!"
-
-Bagel didn't know how to react, at his level of maturity, he had to show up before the others to ask him something, if that wasn't his right, then his first duty had always been to save Gung-hye's life. But even so, he didn't understand why Bamboo was being so careful and so slow to respond to him. It turned out that she hadn't sent him one word to the authorities, she had simply told them not to respond.
-
-Of course they wouldn't listen to the question, it was even worse after realizing it, Bamboo had to understand when his next
-```
-
-GPT2是openai的第二代GPT模型。我们可以看到在你个人目录下的.cache\huggingface\hub\models--gpt2目录下面，会有500多M的数据，这就是gpt2模型的大小。
-
-如果觉得gpt2的效果不够好，我们可以换一个更大的gpt-large模型：
-```python
-text_generator = pipeline("text-generation", model="gpt2-large", max_new_tokens=250)
-
-text_generator.model.config.pad_token_id = text_generator.model.config.eos_token_id
-
-text = text_generator("I have a dream ")[0]["generated_text"]
-
-print(text)
-```
-
-.cache\huggingface\hub\models--gpt2-large这个大小就有3G多了。
-
-还不过瘾的话可以使用gpt2-xl，这下子模型大小就有6个G了。
-
-如果C盘空间有限，可以通过指定TRANSFORMERS_CACHE环境变量将其指向D盘或者其它盘。
-
-除了文本生成之外，pipeline支持很多其它的基于文本、语音、图像等任务。
-虽然不推荐，不指定模型的时候，系统其实也会给我们默认配一个模型。
-
-比如我们写一个情感分析的pipeline: 
-```python
-from transformers import pipeline
-
-pipe = pipeline("text-classification")
-result = pipe("这个游戏不错")
-print(result)
-```
-
-系统就默认给我们找了distilbert-base-uncased-finetuned-sst-2-english模型。
-
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/chat.png)
-
-同样，我们也可以搞一个对话的pipeline。唯一的区别是我们需要用Conversation把输入信息包装一下，获取的结果也从Conversation对象中读取。
-比如我们使用facebook的blenderbot模型：
-
-```python
-from transformers import pipeline, Conversation
-
-pipe = pipeline('conversational', model='facebook/blenderbot-1B-distill')
-
-conversation_1 = Conversation("What's your favorite moive?") # 创建一个对话对象
-pipe([conversation_1]) # 传入一个对话对象列表，得到模型的回复
-print(conversation_1.generated_responses) # 打印模型的回复
-conversation_1.add_user_input("Avatar") # 添加用户的输入
-pipe([conversation_1]) # 再次传入对话对象列表，得到模型的回复
-print(conversation_1.generated_responses) # 打印模型的回复
-```
-
-#### 3.7.2 使用分词器和模型
-
-除了使用pipeline之外，我们有更传统一点的用法，就是显示使用分词器和模型的方法。
-
-语言字符串，尤其是像中文和日文这样不使用拉丁字母或者西里尔字母的语言，不方便直接被语言模型所使用，所以我们要先用分词器Tokenizer来编码字符串，推理完成后再用分词器来进行解码。
-一般来说，我们不需要指定分词器的类型，通过AutoTokenizer就可以了：
-
-```
-tokenizer = AutoTokenizer.from_pretrained("gpt2")
-```
-
-我们来个例子来看一下：
+使用 torch.rand 可以生成在 [0, 1) 区间内均匀分布的随机数。
 
 ```python
 import torch
-from transformers import GPT2LMHeadModel, AutoTokenizer
 
-# 加载预训练模型及对应的分词器
-tokenizer = AutoTokenizer.from_pretrained("gpt2")
-model = GPT2LMHeadModel.from_pretrained("gpt2")
-
-# 使用分词器将文本转换为tokens
-input_tokens = tokenizer.encode("I have a dream ", return_tensors="pt")
-
-model.config.pad_token_id = model.config.eos_token_id
-
-# 使用模型生成文本
-output = model.generate(input_tokens, max_length=250,
-                        num_return_sequences=1, no_repeat_ngram_size=2)
-
-# 将生成的tokens转换回文本
-generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
-
-print(generated_text)
+# 生成一个 3x3 的张量，元素在 [0, 1) 区间内
+random_tensor = torch.rand(3, 3)
+print(random_tensor)
 ```
 
-我们还可以更抽象一下，使用语言模型的通用抽象类AutoModelForCausalLM：
+运行结果如下：
+
+```
+tensor([[0.3687, 0.4345, 0.5181],
+        [0.0358, 0.5245, 0.1144],
+        [0.8433, 0.8607, 0.7082]])
+```
+
+2. 生成标准正态分布的随机数
+
+使用 torch.randn 可以生成服从标准正态分布（均值为 0，标准差为 1）的随机数。
 
 ```python
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-model = AutoModelForCausalLM.from_pretrained("gpt2")
 
-# 加载预训练模型及对应的分词器
-tokenizer = AutoTokenizer.from_pretrained("gpt2", cache_dir='e:/xulun/models/')
-tokenizer.pad_token_id = tokenizer.eos_token_id
-model = AutoModelForCausalLM.from_pretrained("gpt2", cache_dir='e:/xulun/models/')
-
-# 使用分词器将文本转换为tokens
-input_tokens = tokenizer.encode("I have a dream ", return_tensors="pt")
-
-# 使用模型生成文本
-output = model.generate(input_tokens, max_length=250,
-                        num_return_sequences=1, no_repeat_ngram_size=2)
-
-# 将生成的tokens转换回文本
-generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
-
-print(generated_text)
+# 生成一个 3x3 的张量，元素服从标准正态分布
+normal_tensor = torch.randn(3, 3)
+print(normal_tensor)
 ```
 
-有了上面的抽象层，我们使用其他大模型就可以照方抓药了。
-不过，LlaMA的模型目前还没有完全能支持，比如LlamaTokenizerFast还处于测试阶段。将来随着更新，我再回来更新本文吧。
+运行结果如下：
+
+```
+tensor([[ 1.1555e+00, -1.1852e+00, -1.0129e-03],
+        [-5.6360e-02, -1.3856e-01,  3.1301e-01],
+        [ 9.5240e-01,  6.7079e-01, -5.9284e-02]])
+```
+
+3. 生成指定范围内的均匀分布随机数
+使用 torch.randint 可以生成指定整型范围内的随机数。
 
 ```python
-from transformers import LlamaTokenizerFast
+import torch
 
-tokenizer = LlamaTokenizerFast.from_pretrained("hf-internal-testing/llama-tokenizer")
-print(tokenizer.encode("Hello this is a test"))
+# 生成一个 3x3 的张量，元素在 [0, 10) 区间内的随机整数
+int_tensor = torch.randint(0, 10, (3, 3))
+print(int_tensor)
 ```
 
-#### 3.7.3 执行其它任务的大模型
+结果都是整数：
+```
+tensor([[8, 7, 9],
+        [0, 1, 6],
+        [0, 2, 1]])
+```
 
-有了上面的框架之后，我们只要知道有什么模型可以用，我们得来介绍一些预训练模型。
+4. 生成指定均值和标准差的正态分布随机数
 
-首先第一个肯定是我们已经多次熟悉过的GPT模型了，gpt2我们刚学习过，gpt3的API我们在第二篇中openai API部分介绍过。
-
-第二个值得一提的是Google的T5模型。它的核心思想是基于迁移学习，能够将各种文本任务统一起来。我们可以看下表了解T5在各个子任务上取得的成果。
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/T5.png)
-另外，T5的训练已经使用了1024和TPU v3的加速器。
-
-我们使用large的T5 1.1模型来尝试去写个摘要：
+使用 torch.normal 可以生成具有指定均值和标准差的正态分布随机数。
 
 ```python
-from transformers import T5Tokenizer, T5ForConditionalGeneration
+import torch
 
-tokenizer = T5Tokenizer.from_pretrained("google/t5-v1_1-large")
-model = T5ForConditionalGeneration.from_pretrained("google/t5-v1_1-base",max_length=250)
-
-str1 = """
-Summarize:
-We have explored chain-of-thought prompting as a simple and broadly applicable method for enhancing
-reasoning in language models. Through experiments on arithmetic, symbolic, and commonsense
-reasoning, we find that chain-of-thought reasoning is an emergent property of model scale that allows
-sufficiently large language models to perform reasoning tasks that otherwise have flat scaling curves.
-Broadening the range of reasoning tasks that language models can perform will hopefully inspire
-further work on language-based approaches to reasoning.
-"""
-
-input_ids = tokenizer(str1, return_tensors="pt").input_ids
-outputs = model.generate(input_ids)
-print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+# 生成一个 3x3 的张量，元素服从均值为 2，标准差为 3 的正态分布
+mean = 2
+std = 3
+normal_tensor = torch.normal(mean, std, size=(3, 3))
+print(normal_tensor)
 ```
 
-GPT来自openai，BERT来自Google. Facebook的团队尝试集合二者之所长，推出了BART模型。
+如果大家已经忘了什么是正态分布，我们可以一起画个图复习一下：
+```python
+import torch
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as stats
 
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/bart.png)
+# 设置随机种子以保证可重复性
+torch.manual_seed(42)
 
-BART的预训练过程包括两个步骤：（1）使用任意的去噪函数对文本进行损坏，例如随机打乱句子顺序或用掩码符号替换文本片段；（2）学习一个模型来重建原始文本。BART使用了一个标准的基于Transformer的神经机器翻译架构，它可以看作是泛化了BERT（由于双向编码器）、GPT（由于左到右解码器）和其他更多最近的预训练方案。
+# 生成正态分布数据
+mean = 0.0  # 均值
+std = 1.0   # 标准差
+num_samples = 1000  # 样本数量
 
-下面我们来个用bart-large-cnn来写摘要的例子：
+# 使用 PyTorch 生成正态分布数据
+data = torch.normal(mean, std, size=(num_samples,))
+
+# 将数据转换为 numpy 数组以便使用 Matplotlib
+data_np = data.numpy()
+
+# 绘制直方图
+plt.hist(data_np, bins=30, density=True, alpha=0.6, color='g', label='Histogram')
+
+# 绘制正态分布的概率密度函数（PDF）曲线
+xmin, xmax = plt.xlim()
+x = np.linspace(xmin, xmax, 100)
+p = stats.norm.pdf(x, mean, std)
+plt.plot(x, p, 'k', linewidth=2, label='Normal PDF')
+
+# 添加标题和标签
+plt.title('Normal Distribution')
+plt.xlabel('Value')
+plt.ylabel('Density')
+plt.legend()
+
+# 显示图形
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/normal_distribution.png)
+
+5. 生成二项分布的随机数
+
+使用 torch.bernoulli 可以生成服从伯努利分布的随机数。
 
 ```python
-from transformers import AutoTokenizer, BartForConditionalGeneration
+import torch
 
-model = BartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
-tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-cnn")
-
-ARTICLE_TO_SUMMARIZE = (
-    """
-    We have explored chain-of-thought prompting as a simple and broadly applicable method for enhancing
-reasoning in language models. Through experiments on arithmetic, symbolic, and commonsense
-reasoning, we find that chain-of-thought reasoning is an emergent property of model scale that allows
-sufficiently large language models to perform reasoning tasks that otherwise have flat scaling curves.
-Broadening the range of reasoning tasks that language models can perform will hopefully inspire
-further work on language-based approaches to reasoning.
-    """
-)
-inputs = tokenizer([ARTICLE_TO_SUMMARIZE],
-                   max_length=1024, return_tensors="pt")
-
-# Generate Summary
-summary_ids = model.generate(
-    inputs["input_ids"], num_beams=2, min_length=0, max_length=100)
-print(tokenizer.batch_decode(summary_ids, skip_special_tokens=True,
-      clean_up_tokenization_spaces=False)[0])
+# 生成一个 3x3 的张量，元素服从伯努利分布（参数为 0.5）
+prob_tensor = torch.full((3, 3), 0.5)
+bernoulli_tensor = torch.bernoulli(prob_tensor)
+print(bernoulli_tensor)
 ```
 
-生成的结果如下：
+输出如下：
+
 ```
-We find that chain-of-thought reasoning is an emergent property of model scale that allows large language models to perform reasoning tasks. Broadening the range of reasoning tasks that language models can perform will hopefully inspire further work.
+tensor([[0., 0., 1.],
+        [1., 1., 1.],
+        [1., 0., 0.]])
+```
+
+6. 生成多项分布的随机数
+
+使用 torch.multinomial 可以生成服从多项分布的随机数。
+
+```python
+import torch
+
+# 定义概率分布
+probabilities = torch.tensor([0.1, 0.3, 0.6])
+
+# 从定义的概率分布中抽取 5 个样本
+multinomial_samples = torch.multinomial(probabilities, 5, replacement=True)
+print(multinomial_samples)
+```
+
+7. 设置随机种子
+为了确保随机数的可重复性，可以设置随机种子。
+
+```python
+import torch
+
+# 设置随机种子
+torch.manual_seed(42)
+
+# 生成随机数
+random_tensor = torch.rand(3, 3)
+print(random_tensor)
+```
+
+#### 3.3.2 导数与梯度
+
+在 PyTorch 中，计算导数和微分主要依赖于 torch.autograd 模块，它提供了自动微分功能。torch.autograd 可以对张量进行自动求导，是实现反向传播算法的基础。在这部分，我们将讨论如何使用 PyTorch 计算导数和微分，并提供一些示例代码。
+
+首先，需要创建一个启用了梯度计算的张量。可以通过设置 requires_grad=True 来实现。
+
+```python
+import torch
+
+# 创建一个张量并启用梯度计算
+x = torch.tensor([2.0], requires_grad=True)
+```
+定义一个函数，并通过前向传播计算其值。然后，通过调用 backward() 方法计算导数。
+
+```python
+# 定义一个简单的函数 y = x^2
+y = x ** 2
+
+# 计算导数 dy/dx
+y.backward()
+
+# 打印导数
+print(x.grad)  # 输出: tensor([4.])
+```
+
+在这个例子中，$y = x^2$ 的导数 $\frac{dy}{dx}$ 在 x = 2.0 处的值应该是 4.0。
+
+如果函数涉及多个变量，可以对每个变量分别计算导数。
+
+```python
+# 创建多个张量并启用梯度计算
+x = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)
+w = torch.tensor([0.1, 0.2, 0.3], requires_grad=True)
+b = torch.tensor([0.5], requires_grad=True)
+
+# 定义一个简单的线性函数 y = w * x + b
+y = x * w + b
+
+# 计算导数 dy/dx
+y.backward(torch.tensor([1.0, 1.0, 1.0]))
+
+# 打印导数
+print(x.grad)  # 输出: tensor([0.1000, 0.2000, 0.3000])
+print(w.grad)  # 输出: tensor([1., 2., 3.])
+print(b.grad)  # 输出: tensor([3.])
+```
+
+在这个例子中，我们对 y 的每个元素分别计算了导数，并使用 backward() 方法传入一个与 y 形状相同的张量，以指定每个元素的权重。
+
+PyTorch 也支持计算高阶导数。可以通过对第一次导数再次调用 backward() 来实现。
+
+```python
+import torch
+
+# 创建一个张量并启用梯度计算
+x = torch.tensor([2.0], requires_grad=True)
+
+# 定义一个函数 y = x^3
+y = x ** 3
+
+# 计算 dy/dx
+y.backward(retain_graph=True)
+
+# 打印第一次导数
+print(x.grad)  # 输出: tensor([12.])
+
+# 计算高阶导数 d^2y/dx^2
+x.grad.zero_()  # 在计算高阶导数前需要清除之前的梯度
+grad_y = x.grad.clone()
+grad_y.backward()
+
+# 打印第二次导数
+print(x.grad)  # 输出: tensor([6.])
+```
+
+在这个例子中，y = x^3 的第一次导数在 x = 2.0 处的值是 12.0，第二次导数的值是 6.0。
+
+除了使用 backward() 方法，PyTorch 还提供了 torch.autograd.grad 函数，可以更加灵活地计算导数。
+
+```python
+import torch
+
+# 创建一个张量并启用梯度计算
+x = torch.tensor([2.0], requires_grad=True)
+
+# 定义一个函数 y = x^2
+y = x ** 2
+
+# 使用 torch.autograd.grad 计算导数
+grad_x = torch.autograd.grad(outputs=y, inputs=x, grad_outputs=torch.ones_like(y))
+
+# 打印导数
+print(grad_x)  # 输出: (tensor([4.]),)
 ```
 
 ## 第四章 监督学习：分类
@@ -10439,6 +9838,1499 @@ sigmoid函数的优点是平滑，输出范围在0到1之间。其缺点为容�
 
 同时广泛使用的还有tanh函数，它是sigmoid函数的变种，输出范围在-1到1之间。它在某些方面比Sigmoid函数更好，因为它的输出均值为0，减少了梯度消失问题。
 
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/tanh.png)
+
+sigmoid 和 tanh 激活函数会将输入压缩到一个有限的范围内（如 -1 到 1），而这些输出在反向传播过程中经过多层的链式相乘后，梯度会迅速衰减。
+
+假设我们有一个深度为 $L$ 的神经网络，网络的前向传播计算为：$a^{[l]} = g(z^{[l]})$
+
+其中，$g$ 是激活函数，$z^{[l]} = W^{[l]}a^{[l-1]} + b^{[l]}$。
+
+在反向传播过程中，梯度的计算涉及到激活函数的导数：$\frac{\partial \mathcal{L}}{\partial W^{[l]}} = \delta^{[l]} a^{[l-1]}$
+
+其中，$\delta^{[l]}$ 是第 $l$ 层的误差项，并且：$\delta^{[l]} = \frac{\partial \mathcal{L}}{\partial z^{[l]}} = \left( W^{[l+1]} \right)^T \delta^{[l+1]} \circ g'(z^{[l]})$
+
+如果激活函数的导数 $ g'(z) $ 很小，例如 sigmoid 函数在靠近 0 和 1 的区域内导数接近于零，乘积 $ \delta^{[l]} $ 会变得越来越小，导致梯度消失。
+
+ReLU（Rectified Linear Unit）及其变种（如 Leaky ReLU、Parametric ReLU）能够有效减轻梯度消失问题，因为它们在正半轴上具有恒定的梯度。
+
+ReLU 函数的定义非常简单：
+
+对于任何负输入，输出都是 0。
+对于任何非负输入，输出都等于输入本身。
+
+我们来画一下ReLU函数：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 定义 ReLU 函数
+def relu(x):
+    return np.maximum(0, x)
+
+# 创建输入数据
+x = np.linspace(-10, 10, 400)
+
+# 计算 ReLU 输出
+y = relu(x)
+
+# 绘制图形
+plt.figure(figsize=(8, 6))
+plt.plot(x, y, label='ReLU(x)', color='blue')
+plt.title('ReLU Activation Function')
+plt.xlabel('x')
+plt.ylabel('ReLU(x)')
+plt.grid(True)
+plt.legend()
+plt.show()
+```
+
+画出来结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/relu.png)
+
+在BERT，GPT等大型模型中，GELU函数已经成为主流。GELU（Gaussian Error Linear Unit）是一种激活函数，用于深度学习中的神经网络。它结合了高斯误差函数和线性变换的优点，提供了平滑的非线性变换。
+
+GELU 激活函数的数学表达式如下：$\text{GELU}(x) = x \cdot \Phi(x)$
+
+其中，$\Phi(x)$ 是标准正态分布的累积分布函数：$\Phi(x) = \frac{1}{2} \left[1 + \text{erf}\left(\frac{x}{\sqrt{2}}\right)\right]$
+
+这里，$\text{erf}(x)$ 是误差函数（error function）。
+
+我们来绘制一下GELU函数：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import erf
+
+# 定义 GELU 函数
+def gelu(x):
+    return 0.5 * x * (1 + erf(x / np.sqrt(2)))
+
+# 创建输入数据
+x = np.linspace(-10, 10, 400)
+
+# 计算 GELU 输出
+y = gelu(x)
+
+# 绘制图形
+plt.figure(figsize=(8, 6))
+plt.plot(x, y, label='GELU(x)', color='blue')
+plt.title('GELU Activation Function')
+plt.xlabel('x')
+plt.ylabel('GELU(x)')
+plt.grid(True)
+plt.legend()
+plt.show()
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/gelu.png)
+
+
+#### 9.1.2 优化方法
+
+深度学习中的优化方法是用于调整神经网络权重，以最小化损失函数，从而提高模型的性能和准确性。以下是一些常见的优化方法：
+
+- 梯度下降算法: 这部分我们在学习监督学习时已经介绍过了
+    - 批量梯度下降（Batch Gradient Descent）:批量梯度下降使用整个训练集来计算损失函数的梯度，并更新模型参数。虽然它能提供稳定的收敛路径，但计算代价大，尤其是对于大型数据集。
+    - 随机梯度下降（Stochastic Gradient Descent, SGD）:随机梯度下降每次使用一个样本来更新模型参数。虽然它的更新频率高，但收敛路径相对不稳定，可以帮助摆脱局部最优解。
+    - 小批量梯度下降（Mini-batch Gradient Descent）：小批量梯度下降结合了批量梯度下降和随机梯度下降的优点。它在每次迭代中使用一小部分数据（小批量）来计算梯度，从而在计算效率和收敛稳定性之间取得平衡。
+- 动量方法
+    - 动量梯度下降（Momentum）：动量方法通过加速梯度下降的方向来加快收敛速度。它在每次更新时考虑了前一步的梯度更新，从而在较平坦的区域内加快收敛。
+        - $v_t = \gamma v_{t-1} + \eta \nabla L(\theta_t)$
+        - $\theta_{t+1} = \theta_t - v_t$
+        - 其中，$\gamma$ 是动量因子，$\eta$ 是学习率。
+    - Nesterov 加速梯度（Nesterov Accelerated Gradient, NAG）:NAG 是动量的一种改进方法，它在计算梯度时考虑了动量的影响，从而在梯度更新时更加精确。
+        - $v_t = \gamma v_{t-1} + \eta \nabla L(\theta_t - \gamma v_{t-1})$
+        - $\theta_{t+1} = \theta_t - v_t$
+- 自适应学习率方法
+    - AdaGrad: AdaGrad 是一种自适应学习率方法，它根据每个参数的历史梯度来调整学习率。它适用于稀疏数据集，但可能会导致学习率过早衰减。
+        - $g_{t,i} = \nabla L(\theta_{t,i})$
+        - $G_{t} = G_{t-1} + g_{t,i}^2$
+        - $\theta_{t+1,i} = \theta_{t,i} - \frac{\eta}{\sqrt{G_t + \epsilon}} g_{t,i}$
+    - RMSProp: RMSProp 是一种改进的自适应学习率方法，它使用指数加权移动平均来调整学习率。它通过对梯度的平方进行指数加权移动平均来调整学习率，从而减少学习率的波动。
+        - $g_{t,i} = \nabla L(\theta_{t,i})$
+        - $G_{t} = \beta G_{t-1} + (1 - \beta) g_{t,i}^2$
+        - $\theta_{t+1,i} = \theta_{t,i} - \frac{\eta}{\sqrt{G_t + \epsilon}} g_{t,i}$
+    - Adam: Adam 是一种结合了动量方法和 RMSProp 的自适应学习率方法。它使用指数加权移动平均来调整学习率和动量，从而提高收敛速度和稳定性。
+        - $m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t$
+        - $v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$
+        - $\hat{m}_t = \frac{m_t}{1 - \beta_1^t}$
+        - $\hat{v}_t = \frac{v_t}{1 - \beta_2^t}$
+
+PyTorch中封装了大量的优化器，包括 SGD、Adam、RMSProp 等。我们可以通过调用 torch.optim 模块来使用这些优化器。
+我们看两个例子：
+
+```python
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+optimizer = optim.Adam([var1, var2], lr=0.0001)
+```
+
+下面我们来看个真实的例子，看看实际应用中的大模型使用的是哪种优化方法。
+
+以LLaMA 2大模型为例，它使用的是AdamW优化器，这是一种改进的 Adam 优化算法，结合了权重衰减（weight decay）技术。AdamW 通过分离 L2 正则化和梯度更新，能更有效地防止过拟合。
+
+AdamW 的更新公式如下：
+
+$m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t$
+
+$v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$
+
+$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}$
+
+$\hat{v}_t = \frac{v_t}{1 - \beta_2^t}$
+
+$\theta_{t+1} = \theta_t - \eta \left(\frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon} + \lambda \theta_t\right)$
+
+其中，$\lambda$ 是权重衰减因子。
+
+LLaMA 2 使用了余弦退火调度（cosine annealing scheduler）来调整学习率。这种调度策略在训练初期会保持较高的学习率，然后逐渐降低，帮助模型更好地收敛到全局最优解。
+
+余弦退火调度的公式如下：
+
+$\eta_t = \eta_{\text{min}} + \frac{1}{2} (\eta_{\text{max}} - \eta_{\text{min}}) \left(1 + \cos\left(\frac{T_{\text{cur}}}{T_{\text{max}}} \pi\right)\right)$
+
+其中：
+- $\eta_t$ 是当前学习率。
+- $\eta_{\text{min}}$ 和 $\eta_{\text{max}}$ 分别是最小和最大学习率。
+- $T_{\text{cur}}$ 是当前迭代次数。
+- $T_{\text{max}}$ 是总的迭代次数。
+
+我们可以调用torch.optim.lr_scheduler.CosineAnnealingLR来使用余弦退火调度。这种调度器在训练初期保持较高的学习率，然后逐渐降低，到达最低点后再周期性地回升，模拟余弦函数的波动。这种方法在某些训练任务中可以帮助模型更好地收敛。
+
+以下是 CosineAnnealingLR 的基本用法及其参数说明：
+
+- optimizer：所需调整学习率的优化器。
+- T_max：更新周期的最大迭代次数。
+- eta_min：最低学习率，默认为 0。
+- last_epoch：上一个 epoch 的索引，默认为 -1。如果设置为 -1，学习率将从初始值开始。
+
+以下是一个完整的示例，包括模型定义、优化器设置、学习率调度器设置以及训练循环：
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.optim.lr_scheduler import CosineAnnealingLR
+
+# 定义一个简单的神经网络模型
+class SimpleModel(nn.Module):
+    def __init__(self):
+        super(SimpleModel, self).__init__()
+        self.fc = nn.Linear(10, 1)
+
+    def forward(self, x):
+        return self.fc(x)
+
+# 实例化模型
+model = SimpleModel()
+
+# 定义损失函数和优化器
+criterion = nn.MSELoss()
+optimizer = optim.AdamW(model.parameters(), lr=0.1)  # 初始学习率为 0.1
+
+# 设置学习率调度器
+scheduler = CosineAnnealingLR(optimizer, T_max=100, eta_min=0.01)
+
+# 模拟数据
+inputs = torch.randn(32, 10)  # 32 个样本，每个样本 10 个特征
+targets = torch.randn(32, 1)  # 32 个目标值
+
+# 训练循环
+num_epochs = 200
+for epoch in range(num_epochs):
+    model.train()
+    
+    # 前向传播
+    outputs = model(inputs)
+    loss = criterion(outputs, targets)
+    
+    # 反向传播和优化
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+    
+    # 更新学习率
+    scheduler.step()
+    
+    # 打印学习率和损失值
+    current_lr = optimizer.param_groups[0]['lr']
+    print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}, Learning Rate: {current_lr:.6f}")
+```
+
+在这个示例中，我们完成了以下操作：
+
+- 模型定义：我们定义了一个简单的线性回归模型。
+- 优化器设置：使用 AdamW 优化器，并将初始学习率设为 0.1。
+- 学习率调度器设置：使用 CosineAnnealingLR，设置 T_max 为 100，表示每 100 个 epoch 完成一个余弦周期，最低学习率 eta_min 设为 0.01。
+- 训练循环：在每个 epoch 中，我们前向传播计算损失，反向传播更新参数，并调用 scheduler.step() 更新学习率。每个 epoch 后打印当前的损失值和学习率。
+
+注意事项
+
+- T_max 的选择很重要。它决定了学习率的更新周期。如果训练时间较长，T_max 的值应相应较大。
+- eta_min 可以控制学习率的下限，避免学习率过低导致训练停滞。
+- 调度器的学习率更新是在调用 scheduler.step() 方法时进行的，因此确保在每个 epoch 或指定的间隔内调用该方法。
+
+#### 9.1.3 损失函数
+
+在深度学习中，损失函数（或称为代价函数、目标函数）用于衡量模型预测输出与实际目标之间的差异。不同类型的任务（如回归、分类、生成等）通常使用不同的损失函数。以下是一些常用的损失函数：
+
+- 回归任务中的损失函数
+    - 均方误差（Mean Squared Error, MSE）均方误差用于衡量预测值与真实值之间的平方差。其定义为：
+
+$$
+\text{MSE} = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2
+$$
+其中，$y_i$ 是真实值，$\hat{y}_i$ 是预测值，$N$ 是样本数量。
+
+在 PyTorch 中可以通过 nn.MSELoss 实现：
+
+```python
+import torch.nn as nn
+mse_loss = nn.MSELoss()
+```
+
+
+平均绝对误差（Mean Absolute Error, MAE）平均绝对误差用于衡量预测值与真实值之间的绝对差。
+
+其定义为：
+
+$$ \text{MAE} = \frac{1}{N} \sum_{i=1}^{N} |y_i - \hat{y}_i| $$
+
+在 PyTorch 中可以通过 nn.L1Loss 实现：
+
+
+```python
+import torch.nn as nn
+mae_loss = nn.L1Loss()
+```
+
+- 分类任务中的损失函数
+
+交叉熵损失（Cross Entropy Loss）交叉熵损失用于多分类问题，结合了 softmax 和负对数似然损失。其定义为：
+
+
+$$
+\text{CrossEntropyLoss} = -\sum_{i} y_i \log(\hat{y}_i)
+$$
+
+在 PyTorch 中可以通过 nn.CrossEntropyLoss 实现：
+
+```python
+
+import torch.nn as nn
+cross_entropy_loss = nn.CrossEntropyLoss()
+```
+
+二元交叉熵损失（Binary Cross Entropy Loss）: 二元交叉熵损失用于二分类问题。其定义为：
+
+$$
+\text{BCELoss} = -\frac{1}{N} \sum_{i=1}^{N} [y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i)]
+$$
+在 PyTorch 中可以通过 nn.BCELoss 实现：
+
+```python
+import torch.nn as nn
+bce_loss = nn.BCELoss()
+```
+
+选择合适的损失函数是深度学习模型训练中的关键步骤。不同的任务和数据分布可能需要不同的损失函数。了解和选择合适的损失函数可以帮助模型更好地学习和泛化。
+
+#### 9.1.4 Dropout
+
+Dropout 是一种在训练神经网络时用于减少过拟合的正则化技术。它的主要思想是在每次训练过程中，随机忽略（即“丢弃”）一部分神经元，使得网络不依赖于某些特定的神经元，从而提高模型的泛化能力。
+
+在每一次训练迭代中，Dropout 会以一定的概率 $p$（通常是 0.5）随机将一些神经元的输出设置为 0。换句话说，对于给定的神经元，它有 $p$ 的概率被“丢弃”，有 
+$1−p$ 的概率被保留。被丢弃的神经元在当前迭代中不会参与前向传播和反向传播。
+
+在测试阶段，为了保证输出的期望值不变，所有神经元的输出会乘以一个因子 $1−p$。
+
+Dropout 的作用主要有：
+- 减少过拟合：Dropout 通过随机忽略部分神经元，防止模型对某些特定的神经元产生过度依赖，从而减少过拟合现象。
+- 增强模型的泛化能力：因为 Dropout 使得每次迭代的模型结构不同，可以看作是对多个不同的子模型进行训练。这种“集成学习”的效果能够提高模型的泛化能力。
+- 防止神经元共适应：神经元共适应指的是一些神经元依赖于其他特定的神经元来纠正错误。Dropout 通过打破这种依赖关系，使得每个神经元更具鲁棒性和独立性。
+
+在 PyTorch 中，Dropout 可以通过 nn.Dropout 层来实现。在训练模型时，Dropout 会自动应用于前向传播，并在测试阶段关闭。以下是一个简单示例，展示了如何在网络中使用 Dropout：
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+# 定义一个简单的全连接网络，包含 Dropout 层
+class SimpleNet(nn.Module):
+    def __init__(self):
+        super(SimpleNet, self).__init__()
+        self.fc1 = nn.Linear(784, 256)
+        self.dropout = nn.Dropout(p=0.5)
+        self.fc2 = nn.Linear(256, 10)
+    
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = self.fc2(x)
+        return x
+```
+
+#### 9.1.5 自动求导
+
+PyTorch 的自动微分功能依赖于一个称为自动求导（Autograd）的系统。Autograd 是 PyTorch 中的一个核心功能，它允许用户在张量操作过程中自动计算梯度。
+
+Autograd 使用了反向传播（backpropagation）算法来计算梯度。其核心思想是通过记录张量的操作图来跟踪计算过程，并在需要计算梯度时反向遍历这个图。
+
+在 PyTorch 中，每个张量都可能有一个关联的计算图。这个计算图是由有向无环图（DAG）构成的，其中节点表示张量，边表示张量之间的操作。每次对张量进行操作（例如加法、乘法等），PyTorch 会在计算图中记录这个操作。
+
+每个张量对象都有一个 requires_grad 属性，如果设置为 True，则 PyTorch 会开始跟踪所有对该张量的操作，以便在反向传播时计算梯度。计算图中的每个张量对象还包含一个 grad 属性，用于存储计算得到的梯度。
+
+当调用 backward() 方法时，PyTorch 会从计算图的终端节点开始，使用链式法则（Chain Rule）反向计算各个张量的梯度。这种方法可以有效地计算复杂函数的梯度。
+
+以下是一个简单的示例代码，展示了 Autograd 的工作原理：
+
+```python
+import torch
+
+# 创建一个张量并设置 requires_grad=True 以启用自动求导
+x = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)
+
+# 定义一个简单的函数 y = 3 * x + 2
+y = 3 * x + 2
+
+# 定义一个更复杂的函数 z = y^2
+z = y.pow(2).sum()
+
+# 反向传播以计算梯度
+z.backward()
+
+# 输出 x 的梯度
+print(x.grad)
+```
+
+在上面的代码中,我们首先创建了一个张量 x 并将 requires_grad 设置为 True。
+然后，我们定义了两个函数 y 和 z。这里，y 是 x 的线性变换，z 是 y 的平方和。
+调用 z.backward() 将触发反向传播，计算 z 相对于 x 的梯度。
+最后，我们输出 x 的梯度，存储在 x.grad 中。
+
+#### 9.1.6 前向神经网络的基本结构
+
+前向神经网络（Feedforward Neural Network, FNN）前向神经网络是最基础的神经网络结构，其中数据从输入层经过一个或多个隐藏层到达输出层，每层的神经元之间全连接。FNN 的训练过程主要通过前向传播和反向传播来优化模型参数。
+
+一个典型的前向神经网络由以下几部分组成：
+
+- 输入层（Input Layer）：接受输入数据，每个神经元代表一个输入特征。
+- 隐藏层（Hidden Layers）：位于输入层和输出层之间，可以有一个或多个隐藏层，每层包含若干神经元。隐藏层的神经元通过激活函数（如 ReLU, Sigmoid, Tanh 等）引入非线性。
+- 输出层（Output Layer）：生成最终的输出，每个神经元对应一个输出。
+
+前向传播是指数据从输入层经由隐藏层传递到输出层的过程。每一层的输出作为下一层的输入。数学上，每层的线性变换和激活函数可以表示为：
+
+$h^{(l)} = f(W^{(l)} h^{(l-1)} + b^{(l)})$
+
+其中：
+- $h^{(l)}$ 是第 $l$ 层的输出。
+- $W^{(l)}$ 是第 $l$ 层的权重矩阵。
+- $b^{(l)}$ 是第 $l$ 层的偏置向量。
+- $f$ 是激活函数（如 ReLU, Sigmoid 等）。
+
+反向传播是指通过计算损失函数相对于每个参数的梯度，从输出层向输入层传播误差，并更新权重和偏置以最小化损失函数。主要步骤包括：
+
+- 计算损失函数（Loss Function）：常用的损失函数有均方误差（MSE）和交叉熵损失（Cross-Entropy Loss）。
+- 计算梯度：使用链式法则计算损失函数相对于每个参数的梯度。
+- 更新参数：根据梯度下降算法更新参数（权重和偏置），公式如下：
+
+$W^{(l)} \leftarrow W^{(l)} - \eta \frac{\partial L}{\partial W^{(l)}}$
+
+$b^{(l)} \leftarrow b^{(l)} - \eta \frac{\partial L}{\partial b^{(l)}}$
+
+其中，$\eta$ 是学习率。
+
+我们先看如何定义一个前向网络：
+
+```python
+class IrisNet(nn.Module):
+    def __init__(self):
+        super(IrisNet, self).__init__()
+        self.fc1 = nn.Linear(4, 16)
+        self.fc2 = nn.Linear(16, 3)
+    
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+model = IrisNet()
+```
+
+这段代码定义了一个名为IrisNet的神经网络模型。该模型继承自nn.Module类，是PyTorch中的一个基类，用于定义神经网络模型。
+
+在IrisNet的构造函数中，有两个全连接层(nn.Linear)，分别是self.fc1和self.fc2。self.fc1将输入维度为4的数据映射到维度为16的特征空间，而self.fc2将维度为16的特征空间映射到维度为3的输出空间。
+
+forward方法定义了模型的前向传播过程。在前向传播中，输入数据x首先通过self.fc1进行线性变换，并经过ReLU激活函数(torch.relu)进行非线性变换。然后，变换后的结果再通过self.fc2进行线性变换，得到最终的输出。
+
+最后，通过model = IrisNet()创建了一个IrisNet的实例，即创建了一个名为model的神经网络模型对象。
+
+接下来，我们还需要定义损失函数和优化器，以便训练模型。
+
+```python
+# 3. 定义损失函数和优化器
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.01)
+```
+
+在这段代码中，我们定义了一个交叉熵损失函数(nn.CrossEntropyLoss)和一个Adam优化器(optim.Adam)。交叉熵损失函数适用于多分类问题，Adam优化器是一种自适应学习率方法，结合了动量方法和RMSProp方法。
+
+CrossEntropyLoss 是深度学习中常用的损失函数，特别适用于多分类任务。它结合了 softmax 激活函数和负对数似然损失（negative log-likelihood loss），可以有效地衡量模型输出的概率分布与目标分布之间的差异。
+
+在多分类问题中，softmax 函数用于将模型的原始输出（logits）转换为概率分布。给定一个样本的 logits 向量 z，softmax 函数定义如下：
+
+$$
+\sigma(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}
+$$
+
+交叉熵损失用于衡量两个概率分布之间的差异。在分类问题中，它衡量的是模型输出的预测概率分布与真实标签分布之间的差异。给定一个样本的真实标签（用 one-hot 编码表示） ，交叉熵损失定义如下：
+
+
+$$
+\text{CrossEntropyLoss}(y, \hat{y}) = -\sum_{i} y_i \log(\hat{y}_i)
+$$
+
+针对独热编码，损失可以简化为：
+
+$$
+\text{CrossEntropyLoss} = -\log(\hat{y}_i)
+$$
+在 PyTorch 中，nn.CrossEntropyLoss 将 softmax 和交叉熵损失结合在一起。给定模型的原始输出（logits）和真实标签（不需要 one-hot 编码），它会先对 logits 应用 softmax 函数，然后计算交叉熵损失。
+
+然后我们可以开始训练模型：
+
+```python
+num_epochs = 100
+for epoch in range(num_epochs):
+    # 前向传播
+    outputs = model(X_train)
+    loss = criterion(outputs, y_train)
+    
+    # 反向传播和优化
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+    
+    if (epoch+1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+```
+
+这里的关键代码我们需要介绍下：
+
+- `optimizer.zero_grad()`: 这个操作用于将模型参数的梯度归零。在每次进行反向传播之前，我们需要清除之前计算的梯度值，以避免梯度累积的影响。这样做是因为PyTorch默认会将每次计算的梯度值累加到之前的梯度上，而不是替换之前的梯度值[2]。
+- `loss.backward()`: 这个操作用于计算损失函数关于模型参数的梯度。在前向传播计算损失函数之后，我们可以调用`loss.backward()`来自动计算梯度。这个操作会根据链式法则自动计算出每个参数的梯度，并将其存储在参数的.grad属性中[1]。
+- `optimizer.step()`: 这个操作用于更新模型参数。在计算完梯度之后，我们可以调用`optimizer.step()`来根据优化算法更新模型参数。这个操作会根据优化算法的规则，使用之前计算的梯度值来更新模型参数，从而使模型向更优的方向前进[1]。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/pic_iris.png)
+
+下面我们看来完整的代码：
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+
+# 1. 加载并预处理数据
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+
+# 数据标准化
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 转换为 PyTorch 张量
+X_train = torch.tensor(X_train, dtype=torch.float32)
+y_train = torch.tensor(y_train, dtype=torch.long)
+X_test = torch.tensor(X_test, dtype=torch.float32)
+y_test = torch.tensor(y_test, dtype=torch.long)
+
+# 2. 构建全连接神经网络模型
+class IrisNet(nn.Module):
+    def __init__(self):
+        super(IrisNet, self).__init__()
+        self.fc1 = nn.Linear(4, 16)
+        self.fc2 = nn.Linear(16, 3)
+    
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+model = IrisNet()
+
+# 3. 定义损失函数和优化器
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.01)
+
+# 4. 训练模型
+num_epochs = 100
+for epoch in range(num_epochs):
+    # 前向传播
+    outputs = model(X_train)
+    loss = criterion(outputs, y_train)
+    
+    # 反向传播和优化
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+    
+    if (epoch+1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+# 5. 在测试集上评估模型
+model.eval()  # 将模型设置为评估模式
+with torch.no_grad():
+    outputs = model(X_test)
+    _, predicted = torch.max(outputs, 1)
+    accuracy = accuracy_score(y_test, predicted)
+    print(f'Accuracy on test set: {accuracy:.4f}')
+```
+
+运行结果如下：
+
+```
+Epoch [10/100], Loss: 0.6799
+Epoch [20/100], Loss: 0.4794
+Epoch [30/100], Loss: 0.3776
+Epoch [40/100], Loss: 0.3168
+Epoch [50/100], Loss: 0.2647
+Epoch [60/100], Loss: 0.2135
+Epoch [70/100], Loss: 0.1692
+Epoch [80/100], Loss: 0.1331
+Epoch [90/100], Loss: 0.1072
+Epoch [100/100], Loss: 0.0899
+Accuracy on test set: 1.0000
+```
+
+我们看下分类的效果：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/mlp_iris.png)
+
+下面我们再用深度学习来处理下波士顿房价数据集：
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset, random_split
+from keras.datasets import boston_housing
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 加载波士顿房价数据集
+(train_data, train_targets), (test_data, test_targets) = boston_housing.load_data()
+
+# 数据标准化
+scaler = StandardScaler()
+train_data = scaler.fit_transform(train_data)
+test_data = scaler.transform(test_data)
+
+# 转换为 PyTorch 张量
+train_data = torch.tensor(train_data, dtype=torch.float32)
+train_targets = torch.tensor(train_targets, dtype=torch.float32).view(-1, 1)
+test_data = torch.tensor(test_data, dtype=torch.float32)
+test_targets = torch.tensor(test_targets, dtype=torch.float32).view(-1, 1)
+
+# 创建数据集和数据加载器
+train_dataset = TensorDataset(train_data, train_targets)
+test_dataset = TensorDataset(test_data, test_targets)
+
+train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)
+
+# 定义全连接网络
+class BostonHousingModel(nn.Module):
+    def __init__(self):
+        super(BostonHousingModel, self).__init__()
+        self.fc1 = nn.Linear(13, 64)
+        self.fc2 = nn.Linear(64, 64)
+        self.fc3 = nn.Linear(64, 1)
+    
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+# 创建模型实例
+model = BostonHousingModel()
+
+# 定义损失函数和优化器
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# 训练模型
+num_epochs = 100
+train_losses = []
+val_losses = []
+
+for epoch in range(num_epochs):
+    model.train()
+    running_loss = 0.0
+    for inputs, targets in train_loader:
+        optimizer.zero_grad()
+        outputs = model(inputs)
+        loss = criterion(outputs, targets)
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item() * inputs.size(0)
+    
+    train_loss = running_loss / len(train_loader.dataset)
+    train_losses.append(train_loss)
+    
+    model.eval()
+    val_loss = 0.0
+    with torch.no_grad():
+        for inputs, targets in test_loader:
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            val_loss += loss.item() * inputs.size(0)
+    
+    val_loss = val_loss / len(test_loader.dataset)
+    val_losses.append(val_loss)
+    
+    print(f'Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss:.4f}, Validation Loss: {val_loss:.4f}')
+
+# 评估模型
+model.eval()
+test_loss = 0.0
+with torch.no_grad():
+    for inputs, targets in test_loader:
+        outputs = model(inputs)
+        loss = criterion(outputs, targets)
+        test_loss += loss.item() * inputs.size(0)
+test_loss = test_loss / len(test_loader.dataset)
+print(f'Test MSE: {test_loss:.4f}')
+
+# 可视化训练过程
+epochs = range(1, num_epochs + 1)
+plt.figure(figsize=(12, 6))
+plt.plot(epochs, train_losses, 'bo-', label='Training loss')
+plt.plot(epochs, val_losses, 'ro-', label='Validation loss')
+plt.title('Training and validation loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
+```
+
+运行结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/mlp_boston.png)
+
+### 9.2 计算图
+
+在 PyTorch 中，计算图（Computational Graph）是一个用于描述张量之间操作关系的有向无环图（Directed Acyclic Graph, DAG）。计算图的节点表示张量，边表示张量之间的操作。计算图是 PyTorch 实现自动微分（Autograd）的基础。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/TorchScript.png)
+
+#### 9.2.1 计算图的构建
+
+计算图的构建是动态的，即在每次前向传播（forward pass）时，根据你所执行的操作动态创建。这种动态计算图的特性使得 PyTorch 非常灵活，尤其是在处理变长输入或需要在每个前向传播过程中改变模型结构的情况下。
+
+计算图的主要作用是跟踪张量之间的操作，以便在反向传播（backward pass）时，能够使用链式法则（Chain Rule）高效地计算梯度。
+
+当你对张量进行操作时，PyTorch 会在后台构建计算图。例如：
+
+```python
+import torch
+
+# 创建张量并设置 requires_grad=True 以启用自动求导
+x = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)
+
+# 对张量进行操作
+y = x + 2
+z = y * y * 3
+out = z.mean()
+
+# 查看计算图的输出
+print(out)
+```
+
+在上面的代码中，PyTorch 通过以下步骤构建计算图：
+
+创建张量 x 并设置 requires_grad=True，表示希望计算该张量的梯度。
+进行操作 y = x + 2，在计算图中记录这一步操作。
+进行操作 z = y * y * 3，在计算图中记录这一步操作。
+进行操作 out = z.mean()，在计算图中记录这一步操作。
+
+我们看下输出的结果：
+
+```
+tensor(50., grad_fn=<MeanBackward0>)
+```
+
+可以看到，grad_fn 的值为 <MeanBackward0>，表示 out 张量是通过 mean 操作得到的。
+
+当我们调用 backward() 方法时，PyTorch 会从计算图的终端节点（如上例中的 out）开始，反向遍历计算图，并使用链式法则计算每个张量的梯度。
+
+```python
+# 反向传播以计算梯度
+out.backward()
+
+# 输出 x 的梯度
+print(x.grad)
+```
+
+在上面的代码中，out.backward() 会计算 out 相对于 x 的梯度，并将梯度存储在 x.grad 中。
+
+#### 9.2.2 通过Trace机制生成计算图
+
+Tracing 通过运行一遍模型的前向传播，记录下计算图。适用于大多数纯前向计算的模型，但对控制流（如 if 语句和循环）的支持有限。
+
+我们可以通过 torch.jit.trace 方法来生成计算图：
+
+```python
+import torch
+import torch.nn as nn
+
+# 定义一个简单的模型
+class MyModel(nn.Module):
+    def __init__(self):
+        super(MyModel, self).__init__()
+        self.fc = nn.Linear(10, 5)
+
+    def forward(self, x):
+        return torch.relu(self.fc(x))
+
+# 创建模型实例
+model = MyModel()
+
+# 创建一个输入张量
+input_tensor = torch.randn(3, 10)
+
+# 使用 tracing 将模型转换为 TorchScript
+traced_model = torch.jit.trace(model, input_tensor)
+
+# 保存 TorchScript 模型
+traced_model.save("traced_model.pt")
+
+# 加载 TorchScript 模型
+loaded_model = torch.jit.load("traced_model.pt")
+
+# 进行推理
+output = loaded_model(input_tensor)
+print(output)
+```
+
+在上面的代码中，我们首先定义了一个简单的模型 MyModel，然后创建了一个输入张量 input_tensor。接着，我们使用 torch.jit.trace 方法将模型转换为 TorchScript，并保存为 traced_model.pt 文件。最后，我们通过 torch.jit.load 方法加载模型，并进行推理。
+
+TorchScript 是 PyTorch 的一种中间表示（Intermediate Representation, IR），它是一种高效的序列化和优化格式，可以提高模型的性能和便于部署。TorchScript 模型具有以下特点：
+
+- 可序列化和可优化：TorchScript 模型可以保存为文件，然后加载到其他环境中进行推理。这使得模型的部署更加便捷和高效。
+- 跨平台和跨语言支持：TorchScript 模型可以在 C++ 环境中运行，这对于嵌入式系统或移动设备上的部署非常有帮助。
+- 静态图：与动态的 PyTorch 计算图不同，TorchScript 使用静态计算图，这在某些情况下可以带来性能优化。
+
+#### 9.2.3 通过Script机制生成计算图
+
+Scripting 通过直接解析 Python 代码，将其转换为 TorchScript。适用于包含复杂控制流的模型。
+
+```python
+import torch
+import torch.nn as nn
+import torch.jit as jit
+
+# 定义一个包含控制流的模型
+class MyScriptModel(nn.Module):
+    def __init__(self):
+        super(MyScriptModel, self).__init__()
+        self.fc = nn.Linear(10, 5)
+
+    def forward(self, x):
+        if x.mean() > 0:
+            return torch.relu(self.fc(x))
+        else:
+            return -torch.relu(self.fc(x))
+
+# 创建模型实例
+script_model = MyScriptModel()
+
+# 使用 scripting 将模型转换为 TorchScript
+scripted_model = jit.script(script_model)
+
+# 保存 TorchScript 模型
+scripted_model.save("scripted_model.pt")
+
+# 加载 TorchScript 模型
+loaded_scripted_model = torch.jit.load("scripted_model.pt")
+
+# 创建一个输入张量
+input_tensor = torch.randn(3, 10)
+
+# 进行推理
+output = loaded_scripted_model(input_tensor)
+print(output)
+```
+
+在上面的代码中，我们定义了一个包含控制流的模型 MyScriptModel，然后使用 torch.jit.script 方法将模型转换为 TorchScript，并保存为 scripted_model.pt 文件。最后，我们通过 torch.jit.load 方法加载模型，并进行推理。
+
+#### 9.2.4 TorchScript IR
+
+TorchScript IR（Intermediate Representation，中间表示）是 PyTorch 中用于表示和操作 TorchScript 程序的一种低级表示形式。TorchScript IR 是一种图结构，它描述了计算过程中的操作和数据流，类似于计算图。它使得模型可以在没有 Python 解释器的生产环境中运行，并且可以进行各种优化和转换。
+
+TorchScript IR 的特点
+
+- 图结构：TorchScript IR 使用图结构来表示计算过程，每个节点（Node）对应一个操作（Operation），每条边（Edge）对应数据流（Tensor）。
+- 操作符（Operators）：操作符定义了节点执行的具体操作，如加法、矩阵乘法等。
+- 类型系统：TorchScript IR 具有静态类型系统，定义了每个操作的输入和输出类型。
+- 优化和转换：由于是静态图，TorchScript IR 可以进行各种优化和转换，如常量折叠、内联、死代码消除等。
+
+TorchScript IR 的组成部分
+- 图（Graph）:整个计算过程表示为一个图：
+    - 节点（Node）：图中的一个操作。
+    - 边（Edge）：表示数据流，连接不同节点的数据依赖关系。
+- 节点（Node）每个节点表示一个操作，包括：
+    - 操作符（Operator）：定义节点执行的具体操作。
+    - 输入和输出（Inputs and Outputs）：节点所需的输入和产生的输出。
+- 类型（Type）:每个节点的输入和输出都有明确的类型定义，常见的类型包括：
+    - Tensor：张量类型。
+    - Scalar：标量类型。
+    - List：列表类型。
+    - Tuple：元组类型。
+    - Dict：字典类型。
+
+TorchScript IR 的工作流程
+
+- 前端（Frontend）：将 Python 代码解析为 TorchScript IR。
+- 中端（Midend）：对 TorchScript IR 进行各种优化和转换。
+- 后端（Backend）：将优化后的 TorchScript IR 生成可执行代码。
+
+前端负责将 Python 代码转换为 TorchScript IR。这包括解析 Python 代码，生成抽象语法树（AST），并将其转换为 TorchScript 图。
+
+中端对生成的 TorchScript 图进行优化，包括：
+
+- 常量折叠：将常量表达式计算并替换为常量值。
+- 内联：将函数调用展开为实际的函数体。
+- 死代码消除：移除不会被执行的代码。
+
+后端将优化后的 TorchScript 图转换为实际的可执行代码，这可以是 CPU 代码、GPU 代码或其他硬件平台上的代码。
+
+说了这么多，那么，我们如何查看TorchScript IR呢？我们可以通过下面的代码来查看：
+
+```python
+import torch
+import torch.nn as nn
+import torch.jit as jit
+
+# 定义一个简单的模型
+class MyModel(nn.Module):
+    def __init__(self):
+        super(MyModel, self).__init__()
+        self.fc = nn.Linear(10, 5)
+
+    def forward(self, x):
+        return torch.relu(self.fc(x))
+
+# 创建模型实例
+model = MyModel()
+
+# 使用 scripting 将模型转换为 TorchScript
+scripted_model = jit.script(model)
+
+# 打印 TorchScript IR
+print(scripted_model.graph)
+```
+
+在上面的代码中，我们定义了一个简单的模型 MyModel，并使用 torch.jit.script 方法将模型转换为 TorchScript。然后，我们通过打印 scripted_model.graph 来查看 TorchScript IR。
+
+打印出来的结果如下：
+
+```
+graph(%self : __torch__.___torch_mangle_3.MyModel,
+      %x.1 : Tensor):
+  %fc : __torch__.torch.nn.modules.linear.___torch_mangle_2.Linear = prim::GetAttr[name="fc"](%self)
+  %4 : Tensor = prim::CallMethod[name="forward"](%fc, %x.1) # <ipython-input-6-5a8b04b374f6>:12:26
+  %5 : Tensor = aten::relu(%4) # <ipython-input-6-5a8b04b374f6>:12:15
+  return (%5)
+```
+
+我们可以看到，打印出来的结果是一个图结构，每个节点表示一个操作，如 prim::GetAttr、prim::CallMethod 和 aten::relu。每个节点包含操作的输入和输出，以及操作的具体实现。
+
+#### 9.2.5 torch.fx
+
+torch.fx 是 PyTorch 的一个模块，用于对神经网络模型进行静态图形表示、变换和编译。torch.fx 提供了一种方法，可以将 PyTorch 的动态图模型转换为更容易分析和优化的静态图形表示。以下是如何使用 torch.fx 的基本步骤和示例。
+
+基本步骤
+- 定义 PyTorch 模型：定义一个常规的 PyTorch 模型。
+- 使用 torch.fx.symbolic_trace 创建模型的 GraphModule：将模型转换为 torch.fx.GraphModule。
+- 分析和变换图形：可以对生成的图形进行分析、优化或改写。
+- 生成新的模型：使用变换后的图形生成新的模型。
+
+我们来看一个例子：
+
+```python
+import torch
+import torch.nn as nn
+import torch.fx as fx
+
+# 定义一个简单的 PyTorch 模型
+class MyModel(nn.Module):
+    def __init__(self):
+        super(MyModel, self).__init__()
+        self.fc1 = nn.Linear(10, 10)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(10, 5)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.fc2(x)
+        return x
+
+# 实例化模型
+model = MyModel()
+
+# 使用 torch.fx.symbolic_trace 创建模型的 GraphModule
+traced_model = fx.symbolic_trace(model)
+
+# 打印 GraphModule 的图形表示
+print(traced_model.graph)
+
+# 定义一个简单的变换 Pass
+class MyPass(fx.Transformer):
+    def call_function(self, target, args, kwargs):
+        # 在调用函数前插入一个 print 语句
+        if target == torch.relu:
+            print(f"ReLU is called with args: {args}, kwargs: {kwargs}")
+        return super().call_function(target, args, kwargs)
+
+# 应用变换 Pass
+transformed_model = MyPass(traced_model).transform()
+
+# 打印变换后的 GraphModule 的图形表示
+print(transformed_model.graph)
+
+# 使用变换后的模型进行推理
+input_tensor = torch.randn(1, 10)
+output = transformed_model(input_tensor)
+print(output)
+```
+
+输出如下：
+
+```
+graph():
+    %x : [num_users=1] = placeholder[target=x]
+    %fc1 : [num_users=1] = call_module[target=fc1](args = (%x,), kwargs = {})
+    %relu : [num_users=1] = call_module[target=relu](args = (%fc1,), kwargs = {})
+    %fc2 : [num_users=1] = call_module[target=fc2](args = (%relu,), kwargs = {})
+    return fc2
+graph():
+    %x : [num_users=1] = placeholder[target=x]
+    %fc1 : [num_users=1] = call_module[target=fc1](args = (%x,), kwargs = {})
+    %relu : [num_users=1] = call_module[target=relu](args = (%fc1,), kwargs = {})
+    %fc2 : [num_users=1] = call_module[target=fc2](args = (%relu,), kwargs = {})
+    return fc2
+tensor([[ 0.3579,  0.0094, -0.9394,  1.0753,  0.9414]],
+       grad_fn=<AddmmBackward0>)
+```
+
+### 9.3 优化方法
+
+优化方法的公式比较多，前面已经简单介绍过了，这里我们结合编程方法继续详细讲解下。
+
+#### 9.3.1 动量方法
+
+动量梯度下降（Momentum Gradient Descent）是一种优化算法，它在标准梯度下降算法的基础上引入了动量的概念，以加速收敛和减少振荡。动量的引入可以帮助优化器在梯度方向上积累动量，从而在平坦区域或山谷中更快地前进，并在陡峭区域减少振荡。
+
+在标准梯度下降算法中，参数更新的公式如下：
+
+$\theta_{t+1} = \theta_t - \eta \nabla_\theta L(\theta_t)$
+
+其中：
+- $\theta_t$ 是第 $t$ 次迭代时的参数。
+- $\eta$ 是学习率。
+- $\nabla_\theta L(\theta_t)$ 是损失函数 $L$ 对参数 $\theta$ 的梯度。
+
+动量梯度下降在参数更新时引入了一个动量项，更新公式如下：
+
+$$ v_{t+1} = \gamma v_t + \eta \nabla_\theta L(\theta_t) $$
+
+$$ \theta_{t+1} = \theta_t - v_{t+1} $$
+
+其中：
+- $v_t$ 是动量项，表示之前梯度的指数加权平均。
+- $\gamma$ 是动量系数，通常取值在 $0.9$ 左右，表示动量的衰减因子。
+- 其他符号与标准梯度下降中的含义相同。
+
+动量的引入相当于在参数更新时增加了一个惯性，使得优化过程能够更平滑地进行。具体来说：
+
+- 加速收敛：在梯度方向一致的情况下（例如在山谷中），动量项会积累梯度，使得参数更新的步伐加大，从而加速收敛。
+- 减少振荡：在梯度方向频繁变化的情况下（例如在陡峭区域），动量项会平滑这些变化，减少振荡。
+
+
+动量梯度下降没有自己单独的优化器类，而是作为随机梯度下降的一个参数。
+
+```python
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+```
+
+momentum参数的值就是动量系数$\gamma$.
+
+Nesterov 加速梯度（Nesterov Accelerated Gradient, NAG）是对动量梯度下降的一种改进，由俄罗斯数学家 Yurii Nesterov 提出。这种方法在动量梯度下降的基础上，通过对未来位置的梯度进行估计，从而进一步加速收敛。
+
+具体来说，它在计算梯度时，不是基于当前参数位置，而是基于当前参数位置加上动量项的一个估计值。这一估计值是对未来位置的预测，从而使得更新更为准确，收敛更快。
+
+Nesterov 加速梯度的更新公式如下：
+
+$$ v_{t+1} = \gamma v_t + \eta \nabla_\theta L(\theta_t - \gamma v_t) $$
+
+$$ \theta_{t+1} = \theta_t - v_{t+1} $$
+
+其中：
+
+- $\theta_t - \gamma v_t$ 是对未来位置的预测。
+- 其他符号与动量梯度下降中的含义相同。
+
+Nesterov 加速梯度的核心思想是：在计算梯度时，不是基于当前的参数位置，而是基于当前参数位置加上动量项的一个估计值。这样可以避免动量带来的“惯性”导致的方向偏移，使得梯度更新更为准确。
+
+在 PyTorch 中，Nesterov 加速梯度同样只是一个参数，可以通过设置 nesterov=True 来实现：
+
+```python
+# 使用 Nesterov 加速梯度的 SGD 优化器
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, nesterov=True)
+```
+
+#### 9.3.2 自适应方法 AdaGrad
+
+大家在编程的时候会发现，即使是带了动量的随机梯度下降，也有可能会出现学习率过大或者过小的情况，这时候就需要自适应学习率优化算法。
+自适应学习率优化算法是一类根据参数梯度自适应调整学习率的优化算法。这类算法通常能够更快地收敛，并且对于不同参数具有不同的学习率，从而更好地适应不同参数的特性。
+
+AdaGrad（Adaptive Gradient Algorithm）是一种自适应学习率优化算法。其核心思想是根据参数的历史梯度信息来调整每个参数的学习率，使得经常更新的参数学习率降低，而不常更新的参数学习率升高。
+
+AdaGrad 的关键在于对每个参数维护一个累积梯度平方和，并使用这个累积量来调整学习率。具体来说，对于每个参数 $\theta_i$，学习率的调整公式如下：
+
+$$ \theta_{t+1, i} = \theta_{t, i} - \frac{\eta}{\sqrt{G_{t, i} + \epsilon}} g_{t, i} $$
+
+其中：
+- $\eta$ 是全局学习率（初始学习率）。
+- $G_{t, i}$ 是第 $i$ 个参数的梯度平方和，即 $G_{t, i} = \sum_{k=1}^t g_{k, i}^2$。
+- $g_{t, i}$ 是损失函数对第 $i$ 个参数在第 $t$ 步的梯度。
+- $\epsilon$ 是一个小常数，用于防止除零。
+
+AdaGrad的更新公式为：
+
+$ g_{t, i} = \nabla_{\theta_i} L(\theta_t) $ (1-梯度计算公式) 
+
+$ G_{t, i} = \sum_{k=1}^t g_{k, i}^2 $ (2-累积梯度平方和公式)
+
+$ \theta_{t+1, i} = \theta_{t, i} - \frac{\eta}{\sqrt{G_{t, i} + \epsilon}} g_{t, i} $ (3-参数更新公式)
+
+
+我们先来看看这个公式(1)-梯度计算公式:
+
+$g_{t, i}$：表示在第 $t$ 次迭代中，损失函数 $L(\theta_t)$ 对参数 $\theta_i$ 的梯度。
+
+$\nabla_{\theta_i} L(\theta_t)$：表示损失函数 $L(\theta_t)$ 对参数 $\theta_i$ 的偏导数，即梯度。
+
+这个公式表示在第 $t$ 次迭代时，计算损失函数 $L(\theta_t)$ 对当前参数 $\theta_i$ 的梯度。这个梯度 $g_{t, i}$ 表明参数 $\theta_i$ 在当前迭代中的变化方向和变化率。
+
+接下来我们看看公式(2)-累积梯度平方和公式：
+
+$G_{t, i}$：表示从第 1 次迭代到第 $t$ 次迭代，参数 $\theta_i$的梯度平方的累积和。
+
+$\sum_{k=1}^t g_{k, i}^2$：表示从第 1 次迭代到第 $t$ 次迭代，所有 $g_{k, i}$ 的平方和。
+
+公式（2）表示在第 $t$ 次迭代时，计算参数 $\theta_i$ 从第 1 次迭代到第 $t$ 次迭代的梯度平方和。这一累积量 $G_{t, i}$ 被用来调整学习率，使得学习率能够根据梯度的历史变化情况进行自适应调整。
+
+最后我们看看公式(3)：
+
+- $\theta_{t+1, i}$：表示在第 $t+1$次迭代中参数$\theta_i$的新值。
+- $\theta_{t, i}$：表示在第 $t$ 次迭代中参数 $\theta_i$的当前值。
+- $\eta$：表示全局学习率（初始学习率）。
+- $G_{t, i}$：表示第 $t$次迭代时参数 $\theta_i$的累积梯度平方和（如上公式所示）。
+- $\epsilon$：是一个小常数，用于防止除零。
+- $g_{t, i}$：表示在第$t$次迭代中，损失函数 $L(\theta_t)$ 对参数 $\theta_i$的梯度。
+
+AdaGrad的优点和缺点为：
+
+- 优点
+    - 自适应学习率：不同参数有不同的学习率，适应性好，尤其是在稀疏数据情境下。
+    - 无需手动调整学习率：由于学习率是自适应的，减少了超参数调整的工作量。
+- 缺点
+    - 学习率单调递减：累积的梯度平方和不断增大，导致学习率不断减小，可能会导致学习率过小，进而导致训练过程过早停止。
+    - 不适用非凸问题：在非凸优化问题中，可能导致收敛到次优解。
+
+在 PyTorch 中，我们可以通过 optim.Adagrad 创建一个 AdaGrad 优化器，lr 参数表示初始学习率：
+
+```python
+# 使用 AdaGrad 优化器
+optimizer = optim.Adagrad(model.parameters(), lr=0.01)
+```
+
+#### 9.3.3 RMSProp
+
+RMSprop（Root Mean Square Propagation）是一种自适应学习率优化算法，由 Geoffrey Hinton 提出。它旨在解决 AdaGrad 算法在深度学习应用中的一些局限性，特别是学习率不断减小的问题。
+
+RMSprop 通过对梯度平方的指数加权移动平均来调整学习率，从而避免了 AdaGrad 中累积梯度平方和不断增大导致学习率过小的问题。其核心公式如下：
+
+梯度平方的指数加权移动平均:$E[g^2]_{t, i} = \gamma E[g^2]_{t-1, i} + (1 - \gamma) g_{t, i}^2$
+
+参数更新:$\theta_{t+1, i} = \theta_{t, i} - \frac{\eta}{\sqrt{E[g^2]_{t, i} + \epsilon}} g_{t, i}$
+
+其中：
+- $\eta$ 是学习率（通常较小）。
+- $\gamma$ 是衰减率，通常取值在 0.9 到 0.99 之间。
+- $E[g^2]_{t, i}$ 是第 $i$ 个参数的梯度平方的指数加权移动平均。
+- $g_{t, i}$ 是损失函数对第 $i$ 个参数在第 $t$ 步的梯度。
+- $\epsilon$ 是一个小常数，用于防止除零。
+
+RMSProp优点
+
+- 解决学习率不断减小的问题：通过指数加权移动平均，RMSprop 能够保持稳定的学习率，从而避免 AdaGrad 中学习率过小的问题。
+- 更快的收敛速度：RMSprop 通过自适应调整学习率，可以更快地收敛到最优解。
+- 适用于非凸优化问题：RMSprop 在处理复杂、非凸的损失函数时表现良好。
+
+我们顺带介绍一下非凸优化问题。
+
+非凸优化问题是指目标函数或约束条件中的至少一个是非凸的优化问题。在数学中，凸函数具有以下性质：如果任意两点之间的线段上的函数值不大于该线段两端点的函数值，则该函数是凸的。非凸函数则不满足此性质。
+
+对于函数 $f(x)$，如果对任意的 $x_1, x_2$ 和 $\lambda \in [0, 1]$，都有$f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2)$, 则称 \( f(x) \) 为凸函数。
+
+如果函数 $f(x)$ 不满足上述凸函数定义，则称其为非凸函数。非凸函数可能具有多个局部极小值和局部极大值，这使得优化问题变得更加复杂。
+
+非凸优化问题的特点:
+
+- 多局部最优解：非凸优化问题可能存在多个局部最优解（局部极小值或极大值）。找到全局最优解变得更加困难，因为优化算法可能会陷入局部最优解。
+- 复杂地形：非凸目标函数的图形可能非常复杂，具有许多凹陷和凸起，这使得优化算法难以导航。
+- 全局收敛性差：许多优化算法在处理非凸优化问题时，可能无法保证收敛到全局最优解，尤其是梯度下降类方法容易陷入局部最优。
+
+在 PyTorch 中，我们可以通过 optim.RMSprop 创建一个 RMSprop 优化器，lr 参数表示初始学习率：
+
+```python
+# 使用 RMSprop 优化器
+optimizer = optim.RMSprop(model.parameters(), lr=0.01, alpha=0.99, eps=1e-08, weight_decay=0, momentum=0, centered=False)
+```
+
+我们来介绍一下参数：
+
+- lr=0.01:学习率。这是每次参数更新时的步长。学习率决定了模型参数更新的速度。过大的学习率可能导致训练过程不稳定，过小的学习率可能导致收敛速度过慢。这里设置为 0.01。
+- alpha=0.99:衰减率。这是梯度平方的指数加权移动平均的系数。它决定了历史梯度对当前梯度的影响程度。值越接近 1，历史梯度的影响越大。这里设置为 0.99，意味着给历史梯度较高的权重。
+- eps=1e-08: epsilon。用于防止除零操作的小常数。
+- weight_decay=0:权重衰减（L2 正则化）。这是用于防止过拟合的一种方法，通过在损失函数中添加参数值的平方和来实现。0 表示不进行权重衰减。
+momentum=0:
+- 动量。这是用于加速梯度下降算法的一种方法，通过在梯度更新中加入之前梯度的某个比例来实现。0 表示不使用动量。
+- centered=False: 中心化。如果为 True，则梯度的均值将被从梯度平方的移动平均中减去。这种方法可以在某些情况下提高性能。这里设置为 False。
+
+#### 9.3.4 Adam算法
+
+Adam（Adaptive Moment Estimation）是一种结合了动量和 RMSprop 优点的自适应学习率优化算法。Adam 算法在处理稀疏梯度和噪声较大的梯度时效果显著，因此在深度学习领域中被广泛使用。
+
+Adam 算法通过计算梯度的一阶矩（动量）和二阶矩（加速度）的指数加权移动平均来更新参数。它的核心思想是结合了动量优化和 RMSprop 优化的优点。
+
+梯度的一阶矩估计（动量）:$m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t$
+
+梯度的二阶矩估计（加速度）:$v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$
+
+由于在初始阶段， $m_t$ 和 $v_t$ 都偏向于零，需要进行偏差校正：
+
+$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}$
+
+$\hat{v}_t = \frac{v_t}{1 - \beta_2^t}$
+
+参数更新：
+
+$\theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t$
+
+其中：
+- $\theta_t$是第 $t$ 步的参数。
+- $g_t$ 是损失函数对参数的梯度。
+- $\eta$ 是学习率。
+- $\beta_1$ 和 $\beta_2$ 是分别控制一阶矩和二阶矩衰减率的参数，通常取值为 0.9 和 0.999。
+- $\epsilon$ 是一个小常数，用于防止除零，通常取值为 $10^{-8}$。
+
+调用Adam优化器的方法很简单：
+
+```python
+# 使用 Adam 优化器
+optimizer = optim.Adam(model.parameters(), lr=0.01)
+```
+
+#### 9.3.5 AdamW算法
+
+
+AdamW 是 Adam（Adaptive Moment Estimation）优化算法的变体，改进了权重衰减（weight decay）机制。AdamW 由 Ilya Loshchilov 和 Frank Hutter 在他们的论文《Decoupled Weight Decay Regularization》中提出。与传统的 Adam 不同，AdamW 将权重衰减从梯度更新过程中分离出来，从而提高了模型的正则化效果和训练性能。
+
+在传统的 Adam 优化算法中，权重衰减（L2 正则化）作为损失函数的一部分被引入到梯度计算中。这种方式的权重衰减实际上改变了梯度的计算方式，可能导致不理想的正则化效果。
+
+AdamW 将权重衰减从梯度更新过程中分离出来，使得权重衰减只影响参数本身，而不影响梯度的计算。这种方法能够更好地控制参数的缩减，从而提高正则化效果。
+
+AdamW的前三个公式跟Adam一样：
+
+1. 梯度的一阶矩估计（动量）：$m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t$
+
+2. 梯度的二阶矩估计（加速度）：$v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$
+
+3. 偏差校正：
+   $\hat{m}_t = \frac{m_t}{1 - \beta_1^t}$
+
+   $\hat{v}_t = \frac{v_t}{1 - \beta_2^t}$
+
+注意，权重衰减项$\eta \lambda \theta_t$被明确地从梯度更新中分离出来。
+
+4. 参数更新：$\theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon} - \eta \lambda \theta_t$
+
+AdamW算法的优点：
+
+- 更好的正则化效果：通过将权重衰减与梯度更新分离，AdamW 能够更好地控制参数的缩减，提高模型的泛化能力。
+- 更稳定的训练过程：AdamW 改进了传统 Adam 在处理权重衰减时的不稳定性，特别是在训练深度神经网络时表现尤为显著。
+- 易于实现：AdamW 只需要对参数更新公式进行简单的修改，易于在现有的深度学习框架中实现。
+
+在 PyTorch 中，我们可以通过 optim.AdamW 创建一个 AdamW 优化器，lr 参数表示初始学习率, weight_decay 参数表示权重衰减系数：
+
+```python
+# 使用 AdamW 优化器
+optimizer = optim.AdamW(model.parameters(), lr=0.01, weight_decay=0.01)
+```
+
+### 9.4 PyTorch前馈神经网络编程
+
+#### 9.4.1 占位符
+
+`torch.nn.Identity` 是 PyTorch 中的一个神经网络模块，它不对输入进行任何操作，直接返回输入。这在需要占位符层或在模型中进行动态调整时特别有用。
+
+语法为：
+
+```python
+torch.nn.Identity(*args, **kwargs)
+```
+
+我们来看一个例子：
+
+```python
+import torch
+import torch.nn as nn
+
+# 定义一个简单的模型，包含一个占位符层
+class SimpleModel(nn.Module):
+    def __init__(self):
+        super(SimpleModel, self).__init__()
+        self.fc1 = nn.Linear(10, 5)
+        self.placeholder = nn.Identity()
+        self.fc2 = nn.Linear(5, 2)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.placeholder(x)  # 占位符层，不做任何操作
+        x = self.fc2(x)
+        return x
+
+# 创建模型实例并进行前向传播
+model = SimpleModel()
+input_data = torch.randn(1, 10)
+output = model(input_data)
+print(output)
+```
+
+在上面的代码中，我们定义了一个简单的模型 SimpleModel，包含一个占位符层 nn.Identity。在模型的 forward 方法中，我们先通过全连接层 fc1 对输入进行线性变换，然后通过占位符层 placeholder 返回输入，最后再通过全连接层 fc2 进行线性变换。
+
+#### 9.4.2 全连接层
+
+`torch.nn.Linear` 是 PyTorch 中的一个模块，用于实现一个线性变换 $y = xA^T + b$，其中 $x$ 是输入，$A$ 是权重矩阵，$b$ 是偏置向量。
+
+```python
+torch.nn.Linear(in_features, out_features, bias=True)
+```
+
+参数
+
+- in_features：输入张量的特征数。
+- out_features：输出张量的特征数。
+- bias（可选）：是否使用偏置。默认值为 True。
+
+我们来看下Linear层的基本用法：
+
+```python
+import torch
+import torch.nn as nn
+
+# 定义一个线性层
+linear = nn.Linear(in_features=3, out_features=2)
+
+# 创建一个输入张量
+input_tensor = torch.randn(4, 3)  # 形状为 (batch_size, in_features)
+
+# 进行前向传播
+output_tensor = linear(input_tensor)
+
+print("Input Tensor:\n", input_tensor)
+print("Output Tensor:\n", output_tensor)
+```
+
+在上面的代码中，我们首先定义了一个线性层 linear，输入特征数为 3，输出特征数为 2。然后我们创建了一个形状为 (4, 3) 的输入张量 input_tensor，并通过 linear 进行前向传播，得到输出张量 output_tensor。
+
+然后我们看一下如在模型中使用 Linear 层
+在构建神经网络模型时，线性层常用于全连接层。
+
+```python
+import torch
+import torch.nn as nn
+
+# 定义一个简单的神经网络模型
+class SimpleModel(nn.Module):
+    def __init__(self):
+        super(SimpleModel, self).__init__()
+        self.fc1 = nn.Linear(in_features=10, out_features=5)
+        self.fc2 = nn.Linear(in_features=5, out_features=1)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = torch.relu(x)
+        x = self.fc2(x)
+        return x
+
+# 创建模型实例
+model = SimpleModel()
+
+# 创建一个输入张量
+input_tensor = torch.randn(2, 10)  # 形状为 (batch_size, in_features)
+
+# 进行前向传播
+output_tensor = model(input_tensor)
+
+print("Input Tensor:\n", input_tensor)
+print("Output Tensor:\n", output_tensor)
+```
+
+在上面的代码中，我们定义了一个简单的神经网络模型 SimpleModel，包含两个线性层 fc1 和 fc2。在模型的 forward 方法中，我们先通过 fc1 对输入进行线性变换，然后通过 ReLU 激活函数进行非线性变换，最后再通过 fc2 进行线性变换。
+
+最后我们看一下如何初始化 Linear 层的权重和偏置
+
+```python
+import torch
+import torch.nn as nn
+
+# 定义一个线性层
+linear = nn.Linear(in_features=3, out_features=2)
+
+# 自定义初始化权重和偏置
+nn.init.constant_(linear.weight, 0.5)
+nn.init.constant_(linear.bias, 0.1)
+
+# 创建一个输入张量
+input_tensor = torch.randn(4, 3)
+
+# 进行前向传播
+output_tensor = linear(input_tensor)
+
+print("Initialized Weights:\n", linear.weight)
+print("Initialized Bias:\n", linear.bias)
+print("Output Tensor:\n", output_tensor)
+```
+
+在上面的代码中，我们首先定义了一个线性层 linear，输入特征数为 3，输出特征数为 2。然后我们通过 nn.init.constant_ 自定义初始化了权重和偏置，将权重初始化为 0.5，偏置初始化为 0.1。最后我们创建了一个形状为 (4, 3) 的输入张量 input_tensor，并通过 linear 进行前向传播，得到输出张量 output_tensor。
+
+#### 9.4.3 双线性层 Bilinear
+
+`torch.nn.Bilinear` 是一个双线性层，它接受两个输入张量 $x_1$ 和 $x_2$，并计算双线性变换：$y = x_1^T W x_2 + b$
+
+其中 $W$ 是一个权重张量，$b$ 是一个偏置向量。
+
+```python
+torch.nn.Bilinear(in1_features, in2_features, out_features, bias=True)
+```
+
+参数
+
+- in1_features：第一个输入张量的特征数。
+- in2_features：第二个输入张量的特征数。
+- out_features：输出张量的特征数。
+- bias（可选）：是否使用偏置。默认值为 True。
+
+我们来看一个使用双线性层的简单例子：
+
+```python
+import torch
+import torch.nn as nn
+
+# 定义一个双线性层
+bilinear = nn.Bilinear(in1_features=3, in2_features=4, out_features=2)
+
+# 创建两个输入张量
+input1 = torch.randn(5, 3)  # 形状为 (batch_size, in1_features)
+input2 = torch.randn(5, 4)  # 形状为 (batch_size, in2_features)
+
+# 进行前向传播
+output = bilinear(input1, input2)
+
+print("Input1:\n", input1)
+print("Input2:\n", input2)
+print("Output:\n", output)
+```
+
+#### 9.4.4 线性层的延迟初始化
+
+`torch.nn.LazyLinear` 是一种延迟初始化的线性层，允许在创建层时不指定输入特征数。它将在第一次输入数据时自动推断输入特征数，并初始化权重和偏置。
+
+```python
+torch.nn.LazyLinear(out_features, bias=True)
+```
+
+参数
+
+- out_features：输出张量的特征数。
+- bias（可选）：是否使用偏置。默认值为 True。
+
+我们来看一个使用延迟初始化的线性层的例子：
+
+```python
+import torch
+import torch.nn as nn
+
+# 定义一个 LazyLinear 层，不指定输入特征数
+lazy_linear = nn.LazyLinear(out_features=5)
+
+# 创建一个输入张量
+input_tensor = torch.randn(3, 10)  # 形状为 (batch_size, in_features)
+
+# 进行前向传播，自动推断输入特征数并初始化权重
+output_tensor = lazy_linear(input_tensor)
+
+print("Input Tensor:\n", input_tensor)
+print("Output Tensor:\n", output_tensor)
+print("Weight Shape:", lazy_linear.weight.shape)
+print("Bias Shape:", lazy_linear.bias.shape)
+```
+
+在上面的代码中，我们定义了一个 LazyLinear 层 lazy_linear，输出特征数为 5。然后我们创建了一个形状为 (3, 10) 的输入张量 input_tensor，并通过 lazy_linear 进行前向传播。由于 LazyLinear 层是延迟初始化的，不需要指定输入特征数，它会在第一次输入数据时自动推断输入特征数，并初始化权重和偏置。
+
+代码输出如下：
+```
+3]
+0 秒
+output_tensor = lazy_linear(input_tensor)
+
+print("Input Tensor:\n", input_tensor)
+print("Output Tensor:\n", output_tensor)
+print("Weight Shape:", lazy_linear.weight.shape)
+print("Bias Shape:", lazy_linear.bias.shape)
+Input Tensor:
+ tensor([[ 0.9465,  0.2032, -0.9759,  0.2553,  1.0981, -0.6491,  0.7495,  0.3235,
+         -1.2605,  0.0932],
+        [ 0.9067,  0.7694,  1.9935,  1.1480, -1.8206,  0.4429,  0.6787,  0.9024,
+         -1.0095,  0.4598],
+        [-1.9434, -0.7695,  1.7412, -0.8570,  2.4540,  0.3592, -1.0942, -0.6389,
+         -1.7951, -0.1588]])
+Output Tensor:
+ tensor([[ 0.4927, -0.2000, -0.4663,  0.1465, -0.0747],
+        [-1.5104,  0.4840, -0.3354, -0.0209, -0.9627],
+        [ 0.8565,  0.3604,  0.6518,  1.4731, -0.1947]],
+       grad_fn=<AddmmBackward0>)
+Weight Shape: torch.Size([5, 10])
+Bias Shape: torch.Size([5])
+```
 
 ## 第十章 卷积神经网络
 
@@ -10623,6 +11515,28 @@ $ (I * K)(i, j) = \sum_{m=0}^{k_h-1} \sum_{n=0}^{k_w-1} I(i+m, j+n) \cdot K(m, n
 在这个例子中，卷积核在输入图像上滑动，并计算点积以生成输出特征图。
 
 通过卷积核的滑动和计算，卷积神经网络能够有效地提取输入数据的局部特征，进而进行更高层次的特征学习和模式识别。
+
+#### 10.1.3 池化层
+
+池化层（Pooling Layer）是卷积神经网络（Convolutional Neural Network，CNN）中的一种常用层类型，主要用于减小特征图（feature map）的尺寸，同时保留重要的特征信息。池化层通过下采样（subsampling）操作减少计算量，控制过拟合，并提高模型的鲁棒性。
+
+池化层主要有两种类型：
+
+- 最大池化（Max Pooling）：选取池化窗口内的最大值作为池化结果。
+- 平均池化（Average Pooling）：计算池化窗口内所有值的平均值作为池化结果。
+
+池化层通常有以下几个参数：
+
+- 池化窗口大小（kernel size）：定义池化操作的窗口大小，如 2×2 或 3×3。
+- 步幅（stride）：定义池化窗口在特征图上滑动的步长。
+- 填充（padding）：定义池化操作是否在特征图边缘填充额外的值，通常是零填充（zero padding）。
+
+池化层的作用
+
+- 降维和减少计算量：池化层通过下采样操作减小了特征图的尺寸，从而减少了后续层的计算量。
+- 控制过拟合：通过降低网络参数的数量，池化层有助于减少过拟合现象。
+- 提高鲁棒性：池化操作保留了重要的特征信息，同时忽略了不重要的细节，使得网络对输入数据的微小变动更加鲁棒。
+- 提取空间不变性：池化层通过下采样保留了特征图的空间分布信息，有助于提取空间不变性特征。
 
 ### 10.2 循环神经网络
 
@@ -11273,9 +12187,263 @@ with open(args.outf, 'w') as outf:
 ![](https://img-blog.csdnimg.cn/img_convert/22805768b1fd646e2e98107d01977012.png)
 
 
-## 第十五章 深度强化学习
+## 第十二章 自然语言处理
 
-### 15.1 什么是强化学习
+目前自然语言处理的主流已经变成大模型，其基本框架是Hugging Face Transformers。
+
+### 12.1 Hugging Face框架基础
+
+这一节我们来学习下预训练模型的封装库，Hugging Face的Transformers库的使用。Hugging Face的库非常活跃，比如支持LLaDA大规型的类，是在本文开始写作的前一天发布的。
+库新到这种程度，而且相应配套的库也在不停修改中，这个时候进入这个领域一定要做好要花时间完善还不成熟的功能，尤其是花较多时间debug问题的思想准备。
+
+另外，还是再提醒大家，大模型算法不是普通编程。模型规模和思维链仍然非常重要。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/CoT.png)
+
+#### 12.1.1 Pipeline编程
+
+Pipeline是transformers库中面向任务的编程方式。比如我们最常用的任务就是文本生成。
+
+我们只需要指定"text-generation"任务，再选择一种模型，就可以了。比如下面这样，我们选择使用gpt2来进行文本生成：
+
+```python
+text_generator = pipeline("text-generation", model="gpt2")
+```
+
+我们来个完整版，除去引用包和设置一个结束符，基本上就是两句话，一句生成pipeline，一句打印结果。
+
+```python
+from transformers import pipeline
+
+text_generator = pipeline("text-generation", model="gpt2", max_new_tokens=250)
+
+text_generator.model.config.pad_token_id = text_generator.model.config.eos_token_id
+
+text = text_generator("I have a dream ")[0]["generated_text"]
+
+print(text)
+```
+
+这是其中一次我运行的结果：
+```
+I have a dream "
+
+The young man's lips parted under a wave of laughter. "My dream!"
+
+Bagel said that "My dream!"
+
+The young man jumped back the moment he got off the train. "Good, good!"
+
+On the other hand, the boy had gotten off. "My dream!"
+
+There he was again in that black and white moment that his soul couldn't shake.
+
+In this youth, the only thing that could stop him from reaching his dream was this.
+
+"Dad, we're here now!"
+
+Bagel didn't know how to react, at his level of maturity, he had to show up before the others to ask him something, if that wasn't his right, then his first duty had always been to save Gung-hye's life. But even so, he didn't understand why Bamboo was being so careful and so slow to respond to him. It turned out that she hadn't sent him one word to the authorities, she had simply told them not to respond.
+
+Of course they wouldn't listen to the question, it was even worse after realizing it, Bamboo had to understand when his next
+```
+
+GPT2是openai的第二代GPT模型。我们可以看到在你个人目录下的.cache\huggingface\hub\models--gpt2目录下面，会有500多M的数据，这就是gpt2模型的大小。
+
+如果觉得gpt2的效果不够好，我们可以换一个更大的gpt-large模型：
+```python
+text_generator = pipeline("text-generation", model="gpt2-large", max_new_tokens=250)
+
+text_generator.model.config.pad_token_id = text_generator.model.config.eos_token_id
+
+text = text_generator("I have a dream ")[0]["generated_text"]
+
+print(text)
+```
+
+.cache\huggingface\hub\models--gpt2-large这个大小就有3G多了。
+
+还不过瘾的话可以使用gpt2-xl，这下子模型大小就有6个G了。
+
+如果C盘空间有限，可以通过指定TRANSFORMERS_CACHE环境变量将其指向D盘或者其它盘。
+
+除了文本生成之外，pipeline支持很多其它的基于文本、语音、图像等任务。
+虽然不推荐，不指定模型的时候，系统其实也会给我们默认配一个模型。
+
+比如我们写一个情感分析的pipeline: 
+```python
+from transformers import pipeline
+
+pipe = pipeline("text-classification")
+result = pipe("这个游戏不错")
+print(result)
+```
+
+系统就默认给我们找了distilbert-base-uncased-finetuned-sst-2-english模型。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/chat.png)
+
+同样，我们也可以搞一个对话的pipeline。唯一的区别是我们需要用Conversation把输入信息包装一下，获取的结果也从Conversation对象中读取。
+比如我们使用facebook的blenderbot模型：
+
+```python
+from transformers import pipeline, Conversation
+
+pipe = pipeline('conversational', model='facebook/blenderbot-1B-distill')
+
+conversation_1 = Conversation("What's your favorite moive?") # 创建一个对话对象
+pipe([conversation_1]) # 传入一个对话对象列表，得到模型的回复
+print(conversation_1.generated_responses) # 打印模型的回复
+conversation_1.add_user_input("Avatar") # 添加用户的输入
+pipe([conversation_1]) # 再次传入对话对象列表，得到模型的回复
+print(conversation_1.generated_responses) # 打印模型的回复
+```
+
+#### 12.1.2 使用分词器和模型
+
+除了使用pipeline之外，我们有更传统一点的用法，就是显示使用分词器和模型的方法。
+
+语言字符串，尤其是像中文和日文这样不使用拉丁字母或者西里尔字母的语言，不方便直接被语言模型所使用，所以我们要先用分词器Tokenizer来编码字符串，推理完成后再用分词器来进行解码。
+一般来说，我们不需要指定分词器的类型，通过AutoTokenizer就可以了：
+
+```
+tokenizer = AutoTokenizer.from_pretrained("gpt2")
+```
+
+我们来个例子来看一下：
+
+```python
+import torch
+from transformers import GPT2LMHeadModel, AutoTokenizer
+
+# 加载预训练模型及对应的分词器
+tokenizer = AutoTokenizer.from_pretrained("gpt2")
+model = GPT2LMHeadModel.from_pretrained("gpt2")
+
+# 使用分词器将文本转换为tokens
+input_tokens = tokenizer.encode("I have a dream ", return_tensors="pt")
+
+model.config.pad_token_id = model.config.eos_token_id
+
+# 使用模型生成文本
+output = model.generate(input_tokens, max_length=250,
+                        num_return_sequences=1, no_repeat_ngram_size=2)
+
+# 将生成的tokens转换回文本
+generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
+
+print(generated_text)
+```
+
+我们还可以更抽象一下，使用语言模型的通用抽象类AutoModelForCausalLM：
+
+```python
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+model = AutoModelForCausalLM.from_pretrained("gpt2")
+
+# 加载预训练模型及对应的分词器
+tokenizer = AutoTokenizer.from_pretrained("gpt2", cache_dir='e:/xulun/models/')
+tokenizer.pad_token_id = tokenizer.eos_token_id
+model = AutoModelForCausalLM.from_pretrained("gpt2", cache_dir='e:/xulun/models/')
+
+# 使用分词器将文本转换为tokens
+input_tokens = tokenizer.encode("I have a dream ", return_tensors="pt")
+
+# 使用模型生成文本
+output = model.generate(input_tokens, max_length=250,
+                        num_return_sequences=1, no_repeat_ngram_size=2)
+
+# 将生成的tokens转换回文本
+generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
+
+print(generated_text)
+```
+
+有了上面的抽象层，我们使用其他大模型就可以照方抓药了。
+不过，LlaMA的模型目前还没有完全能支持，比如LlamaTokenizerFast还处于测试阶段。将来随着更新，我再回来更新本文吧。
+
+```python
+from transformers import LlamaTokenizerFast
+
+tokenizer = LlamaTokenizerFast.from_pretrained("hf-internal-testing/llama-tokenizer")
+print(tokenizer.encode("Hello this is a test"))
+```
+
+#### 12.1.3 执行其它任务的大模型
+
+有了上面的框架之后，我们只要知道有什么模型可以用，我们得来介绍一些预训练模型。
+
+首先第一个肯定是我们已经多次熟悉过的GPT模型了，gpt2我们刚学习过，gpt3的API我们在第二篇中openai API部分介绍过。
+
+第二个值得一提的是Google的T5模型。它的核心思想是基于迁移学习，能够将各种文本任务统一起来。我们可以看下表了解T5在各个子任务上取得的成果。
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/T5.png)
+另外，T5的训练已经使用了1024和TPU v3的加速器。
+
+我们使用large的T5 1.1模型来尝试去写个摘要：
+
+```python
+from transformers import T5Tokenizer, T5ForConditionalGeneration
+
+tokenizer = T5Tokenizer.from_pretrained("google/t5-v1_1-large")
+model = T5ForConditionalGeneration.from_pretrained("google/t5-v1_1-base",max_length=250)
+
+str1 = """
+Summarize:
+We have explored chain-of-thought prompting as a simple and broadly applicable method for enhancing
+reasoning in language models. Through experiments on arithmetic, symbolic, and commonsense
+reasoning, we find that chain-of-thought reasoning is an emergent property of model scale that allows
+sufficiently large language models to perform reasoning tasks that otherwise have flat scaling curves.
+Broadening the range of reasoning tasks that language models can perform will hopefully inspire
+further work on language-based approaches to reasoning.
+"""
+
+input_ids = tokenizer(str1, return_tensors="pt").input_ids
+outputs = model.generate(input_ids)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+```
+
+GPT来自openai，BERT来自Google. Facebook的团队尝试集合二者之所长，推出了BART模型。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/bart.png)
+
+BART的预训练过程包括两个步骤：（1）使用任意的去噪函数对文本进行损坏，例如随机打乱句子顺序或用掩码符号替换文本片段；（2）学习一个模型来重建原始文本。BART使用了一个标准的基于Transformer的神经机器翻译架构，它可以看作是泛化了BERT（由于双向编码器）、GPT（由于左到右解码器）和其他更多最近的预训练方案。
+
+下面我们来个用bart-large-cnn来写摘要的例子：
+
+```python
+from transformers import AutoTokenizer, BartForConditionalGeneration
+
+model = BartForConditionalGeneration.from_pretrained("facebook/bart-large-cnn")
+tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-cnn")
+
+ARTICLE_TO_SUMMARIZE = (
+    """
+    We have explored chain-of-thought prompting as a simple and broadly applicable method for enhancing
+reasoning in language models. Through experiments on arithmetic, symbolic, and commonsense
+reasoning, we find that chain-of-thought reasoning is an emergent property of model scale that allows
+sufficiently large language models to perform reasoning tasks that otherwise have flat scaling curves.
+Broadening the range of reasoning tasks that language models can perform will hopefully inspire
+further work on language-based approaches to reasoning.
+    """
+)
+inputs = tokenizer([ARTICLE_TO_SUMMARIZE],
+                   max_length=1024, return_tensors="pt")
+
+# Generate Summary
+summary_ids = model.generate(
+    inputs["input_ids"], num_beams=2, min_length=0, max_length=100)
+print(tokenizer.batch_decode(summary_ids, skip_special_tokens=True,
+      clean_up_tokenization_spaces=False)[0])
+```
+
+生成的结果如下：
+```
+We find that chain-of-thought reasoning is an emergent property of model scale that allows large language models to perform reasoning tasks. Broadening the range of reasoning tasks that language models can perform will hopefully inspire further work.
+```
+
+## 第十三章 深度强化学习
+
+### 13.1 什么是强化学习
 
 强化学习是机器学习的一个分支,它模仿了人类和动物的学习方式。
 
@@ -11291,9 +12459,10 @@ with open(args.outf, 'w') as outf:
 - 环境：代理与之交互并从中获得奖励或惩罚的世界。
 - 奖励函数：定义代理采取的每个动作的奖励或惩罚。
 
-#### 15.1.1 马尔可夫决策过程
+#### 13.1.1 马尔可夫决策过程
 
 强化学习的数学基础是马尔可夫决策过程（MDP）。MDP是一个五元组，包括：
+
 1. 状态集（States, S)：系统可能处于的所有状态的集合。每个状态 $s \in S$ 描述了系统在某一时刻的情况。
 2. 动作集（Actions, $A$ )：智能体可以在每个状态 \(s\) 下执行的所有可能动作的集合。动作集可以是全局的（对所有状态相同）或局部的（依赖于状态）。
 3. 状态转移概率（State Transition Probabilities, \(P\)）**：
@@ -11908,9 +13077,9 @@ $$
 
 Actor-Critic方法通过将策略梯度和价值估计相结合，显著提高了强化学习算法的效率和稳定性。
 
-### 15.2 深度强化学习
+### 13.2 深度强化学习
 
-#### 15.2.1 DQN算法
+#### 13.2.1 DQN算法
 
 深度Q网络（Deep Q-Network, DQN）结合了Q学习和深度神经网络的优点。DQN算法特别适用于处理高维状态空间，比如游戏中的图像数据。以下是DQN算法的核心概念和步骤：
 
@@ -11954,7 +13123,7 @@ $$
 
 DQN算法在处理复杂环境（如Atari游戏）方面取得了显著成功，是深度强化学习领域的重要里程碑。
 
-#### 15.2.2 TRPO算法
+#### 13.2.2 TRPO算法
 
 TRPO（Trust Region Policy Optimization，信任域策略优化）是基于策略梯度法的算法，旨在确保每次策略更新时不会对策略造成过大的变化，从而提高训练的稳定性和效率。TRPO通过引入信任域约束，避免了策略更新过程中过大的波动。
 
@@ -12007,7 +13176,7 @@ $$
 
 TRPO通过引入信任域约束，显著提高了策略优化的稳定性和效率。尽管计算复杂度较高，但其在处理高维连续动作空间问题时表现尤为出色。
 
-#### 15.2.3 PPO算法
+#### 13.2.3 PPO算法
 
 PPO（Proximal Policy Optimization，近端策略优化）由OpenAI提出，它通过引入新的目标函数和约束，稳定了策略优化过程，提高了样本效率和训练稳定性。PPO算法是一种基于策略梯度的算法，是在TRPO算法的基础上进行改进的。PPO通过引入剪切（Clipping）机制，简化了TRPO的复杂性，避免了计算二阶导数。PPO优化目标函数时，限制策略变化的幅度，以防止策略更新过大。
 
@@ -12027,11 +13196,11 @@ $$
 2. 剪切机制（Clipping）：
 
 - 剪切机制通过限制策略更新的比例，确保策略不会偏离旧策略太远。
-- 具体实现是限制 $ r_t(\theta) $ 的值在 $[1 - \epsilon, 1 + \epsilon]$ 范围内。
+- 具体实现是限制 $r_t(\theta)$ 的值在 $[1 - \epsilon, 1 + \epsilon]$ 范围内。
 
 3. 优势函数估计：
 
-- 优势函数 $ \hat{A}_t $ 用于衡量当前动作相对于平均水平的好坏。
+- 优势函数 $\hat{A}_t$ 用于衡量当前动作相对于平均水平的好坏。
 - 可以使用广义优势估计（Generalized Advantage Estimation, GAE）来计算。
 
 4. 训练过程：
@@ -12045,38 +13214,33 @@ PPO算法流程如下：
 1. 初始化策略参数和价值函数参数。
 2. 在每个训练周期：
     1. 与环境交互，收集一批数据（状态、动作、奖励、下一状态）。
-    2. 计算优势函数 $ \hat{A}_t $。
-    3. 使用剪切目标函数 $ L^{CLIP}(\theta) $ 更新策略参数。
+    2. 计算优势函数 $\hat{A}_t$。
+    3. 使用剪切目标函数 $L^{CLIP}(\theta)$ 更新策略参数。
     4. 更新价值函数参数，以最小化预测值与实际回报之间的差异。
 3. 重复上述过程，直到策略收敛或达到预定的训练步数。
 
 PPO算法在实践中表现出色，具有较高的样本效率和训练稳定性，已被广泛应用于各种强化学习任务中。
 
-#### 15.2.4 A3C算法
+#### 13.2.4 A3C算法
 
 A3C（Asynchronous Advantage Actor-Critic，异步优势行为者-评论者）是一种由DeepMind提出的改进Actor-Critic算法。A3C通过并行执行多个代理（agent），加快了训练过程，并提高了策略的稳定性和样本效率。
 
 算法步骤
 
-1. **全局网络与本地网络**：
+1. 全局网络与本地网络：
     - 全局网络存储共享的策略和价值函数参数。
     - 每个代理拥有一个本地网络，本地网络与全局网络参数相同，但在每个代理内独立更新。
 
-2. **与环境交互**：
+2. 与环境交互：
     - 每个代理与环境互动，收集状态、动作、奖励、下一状态等数据。
 
-3. **计算优势函数**：
-    - 优势函数可以基于状态值函数 $ V(s) $ 和动作值函数 $ Q(s, a) $ 计算：
+3. 计算优势函数：
+    - 优势函数可以基于状态值函数 $V(s)$ 和动作值函数 $Q(s, a)$ 计算：$\hat{A}(s, a) = Q(s, a) - V(s)$
 
-$$
-\hat{A}(s, a) = Q(s, a) - V(s)
-$$
-
-4. **更新本地网络参数**：
+4. 更新本地网络参数：
     - 通过梯度下降法，使用本地数据更新本地网络参数。
 
-5. **异步更新全局网络参数**：
-    - 将本地网络的梯度异步应用到全局网络，更新全局参数。
+5. 异步更新全局网络参数：将本地网络的梯度异步应用到全局网络，更新全局参数。
 
 算法流程
 
@@ -12084,7 +13248,7 @@ $$
 2. 启动多个代理，每个代理执行以下步骤：
     1. 初始化本地策略参数 $\theta'$ 和本地价值函数参数 $\theta_v'$，并从全局网络复制参数。
     2. 与环境交互，收集一批数据（状态、动作、奖励、下一状态）。
-    3. 计算优势函数 $ \hat{A}(s, a)$。
+    3. 计算优势函数 $\hat{A}(s, a)$。
     4. 使用本地数据更新本地策略参数 $\theta'$ 和本地价值函数参数 $\theta_v'$。
     5. 将本地网络的梯度异步应用到全局网络，更新全局参数 $\theta$ 和 $\theta_v$。
 3. 重复上述过程，直到策略收敛或达到预定的训练步数。
@@ -12113,19 +13277,8 @@ DDPG使用经验回放缓冲区（replay buffer）存储代理与环境交互的
     5. 计算目标值 $y_i$：$y_i = r_i + \gamma Q'(s_{i+1}, \mu'(s_{i+1}|\theta^{\mu'})|\theta^{Q'})$
     6. 最小化Critic的损失：$L = \frac{1}{N} \sum_i (y_i - Q(s_i, a_i|\theta^Q))^2$
     7. 使用梯度下降法更新Critic网络参数 $\theta^Q$。
-    8. 使用策略梯度法更新Actor网络参数 $\theta^{\mu}$：
-$
-    \nabla_{\theta^{\mu}} J \approx \frac{1}{N} \sum_i \nabla_a Q(s, a|\theta^Q)|_{s=s_i, a=\mu(s_i)} \nabla_{\theta^{\mu}} \mu(s|\theta^{\mu})|_{s_i}
-$
-    9. 软更新目标网络参数：
-
-$
-    \theta^{Q'} \leftarrow \tau \theta^Q + (1 - \tau) \theta^{Q'}
-$
-
-$
-    \theta^{\mu'} \leftarrow \tau \theta^{\mu} + (1 - \tau) \theta^{\mu'}
-$
+    8. 使用策略梯度法更新Actor网络参数 $\theta^{\mu}$：$\nabla_{\theta^{\mu}} J \approx \frac{1}{N} \sum_i \nabla_a Q(s, a|\theta^Q)|_{s=s_i, a=\mu(s_i)} \nabla_{\theta^{\mu}} \mu(s|\theta^{\mu})|_{s_i}$
+    9. 软更新目标网络参数：$\theta^{Q'} \leftarrow \tau \theta^Q + (1 - \tau) \theta^{Q'}$ $\theta^{\mu'} \leftarrow \tau \theta^{\mu} + (1 - \tau) \theta^{\mu'}$
 其中，$\tau$ 是一个小常数，通常设为0.001。
 
 #### 15.2.6 TD3算法
@@ -12768,7 +13921,606 @@ ffmpeg -i rl-video-episode-0.mp4  output.apng
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/rl1.apng)
 
-### 15.5 stable_baselines3库源码分析
+## 第十四章 在网页和手机里运行机器学习
 
-## 第十六章 机器学习工程
+### 14.1 TensorFlow.js
+
+Python确实在机器学习和深度学习领域有着不可替代的生态优势，不过，放到浏览器端和手机端，Python的生态优势好像就发挥不出来了。不管是Android手机还是iOS手机，默认都没有Python运行环境，也写不了Python应用。浏览器里和小程序里，就更没Python什么事儿了。
+
+在浏览器里，可以直接使用TensorFlow.js库，尽管可能会有性能的问题，但是至少是从0到1的突破。
+
+![](https://img-blog.csdnimg.cn/img_convert/5e72f38de1714c77a25374648884d534.png)
+
+我们看个例子：
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta encoding="UTF-8"/>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.6.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <div id="tf-display"></div>
+        <script>
+            let a = tf.tensor1d([1.0]);
+            let d1 = document.getElementById("tf-display");
+            d1.innerText = a;
+        </script>
+    </body>
+</html>
+```
+
+可以看到，在浏览器里显示了一个值为1.0的张量的值。我们的第一个TensorFlow.js(以下简称tf.js)应用就算是跑通了。通过引用tf.js的库，我们就可以调用tf下面的函数。
+
+下面我们修改一下，看看tf.js是靠什么技术在运行的。我们通过tf.getBackend()函数来查看支持tf.js
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta encoding="UTF-8"/>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.6.0/dist/tf.min.js"></script>
+    </head>
+    <body>
+        <div id="tf-display"></div>
+        <div id="tf-backend"></div>
+        <script>
+            let a = tf.tensor1d([1.0,2.0,3.0]);
+            let d1 = document.getElementById("tf-display");
+            d1.innerText = a;
+
+            let backend = tf.getBackend();
+            let div_backend = document.getElementById("tf-backend");
+            div_backend.innerText = backend;
+        </script>
+    </body>
+</html>
+```
+
+在我的浏览器里，tf.js是使用webgl来进行计算的。
+
+#### 16.1.1 运行在node里的tfjs
+
+作为一个js库，tf.js当然也可以运行在node环境里。我们可以通过
+```
+npm install @tensorflow/tfjs
+```
+来安装tf.js库。
+
+然后把上面网页里面的代码移值过来：
+```js
+const tf = require('@tensorflow/tfjs');
+
+let a = tf.tensor1d([1.0,2.0,3.0]);
+console.log(a);
+
+console.log(tf.getBackend());
+```
+
+在我的电脑里执行，这个getBackend()返回的是'cpu'. 
+tf.js还会给tfjs-node做个广告：
+```
+============================
+Hi there 👋. Looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, which binds to TensorFlow C++, by running npm i @tensorflow/tfjs-node, or npm i @tensorflow/tfjs-node-gpu if you have CUDA. Then call require('@tensorflow/tfjs-node'); (-gpu suffix for CUDA) at the start of your program. Visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+```
+
+听人劝吃饱饭，那我们就换成tfjs-node吧：
+
+```js
+const tf = require('@tensorflow/tfjs-node');
+
+let a = tf.tensor1d([1.0,2.0,3.0]);
+console.log(a);
+
+console.log(tf.getBackend());
+```
+
+记得要
+```
+npm install @tensorflow/tfjs-node
+```
+
+现在，后端从cpu换成了tensorflow。
+
+还有更凶残的，我们还可以换成tfjs-node-gpu来使用GPU：
+```js
+const tf = require('@tensorflow/tfjs-node-gpu');
+
+let a = tf.tensor1d([1.0,2.0,3.0]);
+console.log(a);
+
+console.log(tf.getBackend());
+```
+在没有GPU的机器上，会使用CPU版的tensorflow作为后端，不会报错。
+
+#### 16.1.2 JavaScript的数组操作
+
+js是一门动态语言，js的数组是动态数组，没有定长数组越界这一说法的。
+
+比如说我们要给一个空数组的第2个元素赋值，这是没有任何问题的：
+```javascript
+let a1 = [];
+a1[2] = 3;
+console.log(a1);
+```
+输出结果为：
+```
+[ <2 empty items>, 3 ]
+```
+
+我们可以毫无压力地用这样的数组去生成张量：
+```js
+let a1_t = tf.tensor1d(a1);
+a1_t.print();
+```
+
+tf.js会给我们甩出两个NaN出来：
+```
+Tensor
+    [NaN, NaN, 3]
+```
+
+不但是空数组随便添加元素，我们用new Array生成一个长度的数组后，仍然可以说话不算话，随意给赋值。比如我们new 5个元素的Array，给第9个赋值：
+```js
+let a2 = new Array(5);
+a2[9] = 10;
+console.log(a2);
+
+
+let a2_t = tf.tensor1d(a2);
+a2_t.print();
+```
+
+tf.js照例给我们补9个NaN出来：
+```
+[ <9 empty items>, 10 ]
+Tensor
+    [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10]
+```
+
+如果懒得数一共多少个元素，就想在数组的末尾添加新元素，可以使用push方法，参数个数不限，push几个元素都可以：
+```js
+let a3 = new Array();
+a3.push(1,2,3);
+a3.push(4,5);
+
+let a3_t = tf.tensor1d(a3);
+a3_t.print();
+```
+
+输出为：
+```
+Tensor
+    [1, 2, 3, 4, 5]
+```
+
+如果想从头添加新元素，可以使用unshift方法：
+```js
+let a3 = new Array();
+a3.push(1,2,3);
+a3.push(4,5);
+a3.unshift(6);
+
+let a3_t = tf.tensor1d(a3);
+a3_t.print();
+```
+
+输出为：
+```
+Tensor
+    [6, 1, 2, 3, 4, 5]
+```
+
+同时我们复习一下，与push相对的，删除最后一个元素的是pop方法；而与unshift相对的是shift方法。
+
+比如我们对上面的a3进行pop：
+```javascript
+let a4 = a3;
+let a00 = a3.pop();
+console.log(a00);
+console.log(a4);
+```
+
+所得结果为：
+```
+5
+[ 6, 1, 2, 3, 4 ]
+```
+
+最后，我们还有强大的splice方法，可以在任意位置添加与删除。
+
+splice方法的第一个参数是起始位置，第二个参数是要删除的个数。
+我们来看个例子，我们先生成10个元素的数组，然后把前5个空元素都删掉：
+
+```js
+let a5 = []
+a5.length = 10;
+a5[5] = 100;
+console.log(a5);
+a5.splice(0,5);
+console.log(a5);
+```
+
+输出结果为：
+```
+[ <5 empty items>, 100, <4 empty items> ]
+[ 100, <4 empty items> ]
+```
+
+如果不删除，想要添加元素的话，我们可以给第二个参数置0，然后后面是要添加的元素。比如我们给上面的a5在100后面增加三个新元素1.5, 2.5, 3.5：
+
+```js
+a5.splice(1,0,1.5,2.5,3.5);
+console.log(a5);
+```
+
+输出如下：
+
+```
+[ 100, 1.5, 2.5, 3.5, <4 empty items> ]
+```
+
+记住是要给元素值，而不是给个数组啊，否则的话就变成二维数组了：
+
+```js
+a5.splice(1,0,[1.5,2.5,3.5]);
+console.log(a5);
+```
+
+结果为：
+```
+[ 100, [ 1.5, 2.5, 3.5 ], 1.5, 2.5, 3.5, <4 empty items> ]
+```
+
+好，复习至此，我们来看tf.js中的张量
+
+#### 16.1.1 tf.js中的张量
+
+![](https://img-blog.csdnimg.cn/img_convert/44330be11dcbd3bb90158082c62d1345.png)
+
+##### 16.1.2.1 一维张量
+
+tfjs支持从1d到6d一共6维张量构造函数，当然7维以上没有专用函数了还是可以reshape出来。
+
+最简单的张量是一维的，我们可以用tf.tensor1d：
+```js
+let t1d = tf.tensor1d([1, 2, 3]);
+t1d.print();
+```
+
+输出为：
+```
+Tensor
+    [1, 2, 3]
+```
+
+当然，还可以指定数据类型：
+```js
+const t1d_f = tf.tensor1d([1.0,2.0,3.0],'float32')
+t1d_f.print();
+```
+
+输出结果为：
+```
+Tensor
+    [1, 2, 3]
+```
+
+数据类型可用值为：
+- 'float32'
+- 'int32'
+- 'bool'
+- 'complex64'
+- 'string'
+
+可以通过linspace函数来生成一维序列，其原型为：
+```js
+tf.linspace (start, stop, num)
+```
+其中
+- start为起始值
+- end为结束值
+- num为生成的序列的元素个数
+
+例： 
+```js
+tf.linspace(1, 10, 10).print();
+```
+
+输出结果为：
+```
+Tensor
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+
+如果想用指定步长的方式来生成，可以使用range函数：
+```
+tf.range(start, stop, step?, dtype?)
+```
+
+我们来看个例子：
+```js
+tf.range(0, 9, 2).print();
+```
+
+输出结果为：
+```
+Tensor
+    [0, 2, 4, 6, 8]
+```
+
+##### 3.3.2.2 二维张量
+
+![](https://img-blog.csdnimg.cn/img_convert/4365deb8f649e8abd84166268ae61863.png)
+
+二维张量可以用二维数组来定义：
+```js
+let t2d = tf.tensor2d([[0,0],[0,1]]);
+t2d.print();
+```
+
+不过tf.js的二维张量必须是矩阵，而js的二维数组是可以不等长的，这点尤其要注意。
+
+因为二维张量主要用于存放矩阵，有生成矩阵的方法可供调用。
+
+比如我们可以使用tf.eye来生成单位矩阵：
+```js
+const t_eye = tf.eye(4);
+t_eye.print();
+```
+ 
+输出结果为：
+```
+Tensor
+    [[1, 0, 0, 0],
+     [0, 1, 0, 0],
+     [0, 0, 1, 0],
+     [0, 0, 0, 1]]
+```
+
+我们也可以将一维向量转化为以其为对角向量的二维向量：
+```js
+const x1 = tf.tensor1d([1, 2, 3, 4, 5, 6, 7, 8]);
+tf.diag(x1).print();
+```
+
+输出结果为：
+```
+Tensor
+    [[1, 0, 0, 0, 0, 0, 0, 0],
+     [0, 2, 0, 0, 0, 0, 0, 0],
+     [0, 0, 3, 0, 0, 0, 0, 0],
+     [0, 0, 0, 4, 0, 0, 0, 0],
+     [0, 0, 0, 0, 5, 0, 0, 0],
+     [0, 0, 0, 0, 0, 6, 0, 0],
+     [0, 0, 0, 0, 0, 0, 7, 0],
+     [0, 0, 0, 0, 0, 0, 0, 8]]
+```
+
+从二维张量开始，我们可以指定张量的形状了。
+
+比如我们用一维数组给定值，然后指定[2,2]的形状：
+```js
+let t2d2 = tf.tensor2d([1,2,3,4],[2,2],'float32');
+t2d2.print();
+```
+
+输出结果如下：
+```
+Tensor
+    [[1, 2],
+     [3, 4]]
+```
+
+##### 3.3.2.3 高维向量
+
+![](https://img-blog.csdnimg.cn/img_convert/c3848ff76853c32941b21bf53df27160.png)
+
+从三维开始，用高维数组来表示张量值的可读性就越来越差了。比如：
+```js
+tf.tensor3d([[[1], [2]], [[3], [4]]]).print();
+```
+
+输出结果为：
+```
+Tensor
+    [[[1],
+      [2]],
+
+     [[3],
+      [4]]]
+```
+
+我们可以还是先指定一维数组，然后再指定形状：
+```js
+tf.tensor3d([1,2,3,4,5,6,7,8],[2,2,2],'int32').print();
+```
+
+输出如下：
+```
+Tensor
+    [[[1, 2],
+      [3, 4]],
+
+     [[5, 6],
+      [7, 8]]]
+```
+
+我们向4，5，6维挺进：
+```js
+tf.tensor4d([[[[1], [2]], [[3], [4]]]]).print();
+tf.tensor5d([[[[[1],[2]],[[3],[4]]],[[[5],[6]],[[7],[8]]]]]).print();
+tf.tensor6d([[[[[[1],[2]],[[3],[4]]],[[[5],[6]],[[7],[8]]]]]]).print();
+```
+
+输出如下：
+```
+Tensor
+    [[[[1],
+       [2]],
+
+      [[3],
+       [4]]]]
+Tensor
+    [[[[[1],
+        [2]],
+
+       [[3],
+        [4]]],
+
+
+      [[[5],
+        [6]],
+
+       [[7],
+        [8]]]]]
+Tensor
+    [[[[[[1],
+         [2]],
+
+        [[3],
+         [4]]],
+
+
+       [[[5],
+         [6]],
+
+        [[7],
+         [8]]]]]]
+```
+
+此时，指定形状的优势就更加明显了。
+
+我们可以用tf.zeros函数生成全是0的任意维的张量：
+```js
+tf.zeros([2,2,2,2,2,2]).print();
+```
+
+也可以通过tf.ones将所有值置为1:
+```js
+tf.ones([3,3,3]).print();
+```
+
+还可以通过tf.fill函数生成为指定值的张量：
+```js
+tf.fill([4,4,4],255).print();
+```
+
+比起序列值和固定值，生成符合正态分布的随机值可能是更常用的场景。其原型为：
+```js
+tf.truncatedNormal(shape, mean?, stdDev?, dtype?, seed?)
+```
+其中：
+- shape是张量形状
+- mean是平均值
+- stdDev是标准差
+- dtype是数据类型，整形和浮点形在此差别可能很大
+- seed是随机数种子
+
+我们看个例子：
+```js
+tf.truncatedNormal([3,3,3],1,1,"float32",123).print();
+tf.truncatedNormal([2,2,2],1,1,"int32",99).print();
+```
+
+输出如下：
+```
+Tensor
+    [[[0.9669023 , 0.2715541 , 0.6810297 ],
+      [-0.8329115, -0.7022814, 1.4331075 ],
+      [1.8136243 , 1.8001028 , -0.3285823]],
+
+     [[1.381816  , 1.1050107 , 0.7487067 ],
+      [1.9785664 , 0.9248876 , -0.9470147],
+      [0.0489896 , 0.3297685 , 0.8626058 ]],
+
+     [[0.3341007 , 1.1067212 , 0.4879217 ],
+      [2.1620302 , 1.3034405 , 0.2832415 ],
+      [1.3012471 , 1.0853187 , 1.9235317 ]]]
+Tensor
+    [[[0, 1],
+      [1, 0]],
+
+     [[0, 0],
+      [1, 2]]]
+```
+
+####  3.3.3 将张量转换成js数组
+
+![](https://img-blog.csdnimg.cn/img_convert/740e72498f836a96ad4321dc9e6d3fe1.png)
+
+前面我们学习了很多种张量的生成方法。但是，不知道你意识到了没有，很多时候还是转回到js数组更容易进行一些高阶的操作。
+
+将张量转换成为数组有两种方式，一种是按照原形状转换成数组。异步的可以使用Tensor.array()方法，同步的可以使用Tensor.arraySync()方法。
+
+我们来将上节生成的随机数的向量转回成js的数组：
+```js
+let t7 = tf.truncatedNormal([2,2,2],1,1,"int32",99);
+let a7 = t7.arraySync();
+console.log(a7);
+```
+
+输出结果为：
+```
+[ [ [ 0, 1 ], [ 1, 0 ] ], [ [ 0, 0 ], [ 1, 2 ] ] ]
+```
+
+记得这是一个高维数组啊，每个元素都是数组。
+比如：
+```js
+a7.forEach(
+    (x) => { console.log(x);}
+);
+```
+
+输出将是两个数组元素：
+```
+[ [ 0, 1 ], [ 1, 0 ] ]
+[ [ 0, 0 ], [ 1, 2 ] ]
+```
+
+如果不想要形状，可以用data()或者dataSync()方法将张量转换成TypedArray.
+
+```js
+let t5 = tf.truncatedNormal([2,2,2],1,1,"int32",99);
+let a5 = t5.dataSync();
+console.log(a5);
+```
+
+输出结果如下：
+```
+Int32Array(8) [
+  0, 1, 1, 0,
+  0, 0, 1, 2
+]
+```
+
+如果对TypedArray进行forEach操作：
+```js
+a5.forEach(
+    (x) => { console.log(x);}
+);
+```
+获取的结果就是线性的了：
+```
+0
+1
+1
+0
+0
+0
+1
+2
+```
+
+拍平成一维的之后，我们就可以用every和some等来进行元素的判断了。
+比如我们看a5是不是所有元素都是0，是不是有元素为0：
+```js
+console.log(a5.every((x) => { return(x===0)}));
+console.log(a5.some((x) => { return(x===0)}));
+```
+
+因为不全为0，所以every的值为假，而some为真。
+
 
