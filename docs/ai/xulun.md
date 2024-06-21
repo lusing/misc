@@ -520,7 +520,7 @@ AGE	SEX	BMI	BP	S1	S2	S3	S4	S5	S6	Y
 50	1	23	101	192	125.4	52	4	4.2905	80	135
 ```
 
-#### 2.1.2 自己生成数据集
+#### 2.1.3 自己生成数据集
 
 除了加载现成的数据集，我们还可以自己生成数据集。在机器学习中，我们经常需要生成一些模拟数据来测试算法的性能。比如，我们可以生成一些符合正态分布的数据，然后用机器学习算法来拟合这些数据。
 
@@ -649,7 +649,7 @@ for k, p, p_w in zip(["red", "blue", "yellow"], p_c, p_w_c.T):
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/n_labels.png)
 
-#### 2.1.3 训练集和测试集
+#### 2.1.4 训练集和测试集
 
 在机器学习中，我们通常将数据集分为训练集和测试集。训练集用于训练模型，测试集用于评估模型的性能。
 常用的划分方法有：
@@ -676,6 +676,7 @@ print("测试集标签：", y_test)
 ```
 
 参数解释
+
 - X 和 y：分别是特征矩阵和标签向量。
 - test_size：测试集的比例。比如 test_size=0.2 表示 20% 的数据将用作测试集，80% 的数据将用作训练集。你也可以传入一个整数，表示测试集的样本数量。
 - random_state：随机种子，确保每次运行划分结果一致。设置相同的 random_state 值可以重现相同的划分结果。
@@ -830,6 +831,76 @@ plt.show()
 画出来的曲线如下图所示：
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/roc.png)
+
+#### 2.2.3 过拟合与欠拟合
+
+过拟合（Overfitting）与欠拟合（Underfitting）是机器学习模型在训练和预测过程中常见的问题。它们分别指模型在训练数据和未见数据上的表现差异。
+
+过拟合是指模型在训练数据上表现非常好，但在测试数据或新数据上表现较差。过拟合的模型过于复杂，以至于捕捉到了训练数据中的噪声和随机性，而不是数据的普遍规律。
+
+过拟合的特征为：
+
+- 训练误差低，测试误差高：模型在训练数据上有很高的准确度或很低的误差，但在测试数据上表现不佳。
+- 模型复杂：模型可能有过多的参数，或选择了高复杂度的假设空间（例如，高阶多项式回归）。
+- 高方差：模型对训练数据的变化非常敏感，对新数据的泛化能力差。
+
+欠拟合是指模型在训练数据和测试数据上都表现不佳。欠拟合的模型过于简单，无法捕捉到数据中的复杂模式或规律。
+
+欠拟合的特征为：
+
+- 训练误差高，测试误差高**：模型在训练数据和测试数据上都表现不理想，误差较高。
+- 模型简单：模型可能过于简单，无法充分利用数据中的信息（例如，线性回归应用于非线性数据）。
+- 高偏差：模型对数据的规律性认识不足，无法准确描述数据的关系。
+
+过拟合的解决方法为：
+
+- 正则化：通过引入正则化项（如 L1 或 L2 正则化）来惩罚过大的模型参数，限制模型的复杂度。
+- 交叉验证：使用交叉验证技术来选择模型参数，确保模型在不同的数据子集上表现一致。
+- 简化模型：选择更简单的模型，减少模型的参数数量或降低假设空间的复杂度。
+- 增加训练数据：更多的数据可以帮助模型学习更普遍的规律，而不是捕捉到训练数据中的噪声。
+
+欠拟合的解决方法为：
+
+- 增加模型复杂度：选择更复杂的模型，增加模型的参数数量或选择更丰富的假设空间（例如，从线性回归扩展到多项式回归）。
+- 特征工程：引入更多的特征或进行特征变换，以提高模型的表达能力。
+- 减少正则化：如果模型使用了正则化，适当减少正则化项的权重，使模型可以更充分地拟合数据。
+- 提高训练时间：增加训练迭代次数或使用更高效的优化算法，以确保模型充分学习数据。
+
+
+### 2.3 PAC学习理论
+
+PAC（Probably Approximately Correct）学习理论是计算学习理论中的一部分，由 Leslie Valiant 在 1984 年提出。它为机器学习提供了一个框架，用于分析学习算法的性能，特别是从有限样本中学习的有效性和可靠性。
+
+概念（Concept）是指需要学习的目标函数，通常表示为$c$。
+
+假设空间（Hypothesis Space）是候选假设的集合，表示为$H$，其中每个假设$h$都是一个可能的目标函数。
+
+可分布性（Distribution）是指数据的样本遵循某个未知的概率分布$D$. 
+
+误差（Error）可分为两种：实际误差和经验误差。
+
+实际误差（True Error）是指假设$h$与目标概念$c$之间的误差，表示为$\text{error}_D(h)$，即在分布$D$下$h$和$c$不一致的概率。
+
+经验误差（Empirical Error）是指在训练样本上 $h$ 和 $c$ 不一致的比例。
+
+如果对于任何$\epsilon > 0$和$\delta > 0$，存在一个算法，能够在多项式时间内找到一个假设$h $，使得 $\text{error}_D(h) \leq \epsilon$ 并且这种情况发生的概率至少为 $1 - \delta$，我们就称假设空间$h$为 $(\epsilon, \delta)$-PAC 可学习的。
+
+假设目标概念 $c$ 是从某个假设空间 $H$ 中学习的，那么样本复杂度通常可以表示为：$m = O\left(\frac{1}{\epsilon} \log \frac{|H|}{\delta}\right)$
+
+这里的$m$是样本数量，$\epsilon$是误差容忍度， $\delta$是置信度参数， $|H|$ 是假设空间的大小。
+
+在很多实际情况中，假设空间的大小 $|H|$ 可能非常大甚至是无限的，这时用假设空间的 VC 维度（Vapnik-Chervonenkis Dimension）来代替 $|H|$ 更为合适。VC 维度 $d_{VC}$是衡量假设空间复杂性的一个参数。
+
+在这种情况下，样本复杂度可以表示为：$m = O\left(\frac{d_{VC}}{\epsilon} \log \frac{1}{\epsilon} + \frac{1}{\epsilon} \log \frac{1}{\delta}\right)$
+
+VC 维度定义如下：假设空间 $H$的 VC 维度 $d_{VC}$ 是能够被 $H$ 完全分割（shatter）的一组点的最大数量。如果存在一组点 $\{x_1, x_2, \ldots, x_d\} $，对于这组点的任意标签组合，假设空间 $H$ 中总能找到一个假设使其完全正确分类这组点，那么 $H$ 就 shatter 这组点，并且 $d$ 是 VC 维度。
+
+我们来看两个VC维度的例子来加深理解：
+
+- 线性分类器（二维空间中的线性分割）：假设空间 $H$ 是二维平面上的所有直线。VC 维度为 3，因为最多可以找到三个点，使得通过不同直线能够对这三个点的所有可能的标记组合（即 $2^3 = 8$ 种组合）进行正确分类。但无法找到四个点使直线对其所有可能的标记组合进行正确分类。
+- 一维空间上的阈值：在一维空间中，假设空间 $H$ 是所有可能的阈值函数。VC 维度为 1，因为任意两个点的所有可能标记组合不能被一个阈值函数完全正确分类。
+
+
 
 ## 第三章 机器学习编程基础
 
@@ -3991,6 +4062,7 @@ plt.show()
 ```
 
 简单解释下上面的代码：
+
 - 加载数据：我们使用Keras中的boston_housing数据集，并将其分为训练集和测试集。
 - 分割训练集：将训练集进一步分割为训练集和验证集。
 - 特征标准化：使用StandardScaler对特征进行标准化处理，以提高模型性能。
@@ -4353,6 +4425,7 @@ plt.show()
 ```
 
 简单解释一下代码：
+
 - 加载波士顿房价数据集：使用keras.datasets中的boston_housing.load_data()函数加载数据集。
 - 数据标准化：使用StandardScaler对特征进行标准化，以确保不同特征在同一尺度上。
 - 定义核函数：使用常量核（ConstantKernel）和RBF（径向基函数）核的乘积。常量核用来表示整体的幅度，RBF核用来表示输入点之间的相似性。
@@ -11332,6 +11405,187 @@ Weight Shape: torch.Size([5, 10])
 Bias Shape: torch.Size([5])
 ```
 
+#### 9.5 JAX实现神经网络
+
+PyTorch的封装做得太好，往往让我们看不清底层的实现。下面我们用JAX写一个不那么封装的，但是其实代码量也没有增加多少。
+
+```python
+# 定义神经网络模型
+def relu(x):
+    return jnp.maximum(0, x)
+
+def predict(params, X):
+    hidden = relu(jnp.dot(X, params['W1']) + params['b1'])
+    logits = jnp.dot(hidden, params['W2']) + params['b2']
+    return logits
+
+# 定义损失函数
+def loss_fn(params, X, y):
+    logits = predict(params, X)
+    log_probs = jax.nn.log_softmax(logits)
+    loss = -jnp.mean(jnp.sum(log_probs * y, axis=1))
+    return loss
+
+# 梯度下降
+grad_fn = jax.jit(jax.grad(loss_fn))
+```
+
+relu的本质我们前面介绍过了，所以它就是maximum(0,x). 
+
+下面是计算隐藏层：
+
+`jnp.dot(X, params['W1'])`：计算输入数据 X 与权重矩阵 W1 的矩阵乘法，结果是一个矩阵，其中每一行是一个样本的隐藏层线性组合。
+
+`+ params['b1']`：将偏置 b1 加到每个样本的隐藏层线性组合中。
+
+`relu(...)`：对上述结果应用 ReLU（Rectified Linear Unit）激活函数。ReLU 是一种非线性激活函数，它将所有负值变为零，正值保持不变。
+
+
+我们再看计算输出层的：
+
+`jnp.dot(hidden, params['W2'])`：计算隐藏层输出 hidden 与权重矩阵 W2 的矩阵乘法，结果是一个矩阵，其中每一行是一个样本的输出层线性组合。
+`+ params['b2']`：将偏置 b2 加到每个样本的输出层线性组合中。这一步的结果称为 logits。
+
+网络输出的未归一化的概率分布（logits）。在分类问题中，这些 logits 通常会被进一步处理，例如通过 softmax 函数转换为概率分布。
+
+损失函数就是预测的结果和真实结果的交叉熵。
+
+我们加上用梯度下降进行训练的部分：
+
+```python
+# 训练模型
+learning_rate = 0.01
+epochs = 1000
+
+for epoch in range(epochs):
+    grads = grad_fn(params, X_train, y_train)
+    params = jax.tree_util.tree_map(lambda p, g: p - learning_rate * g, params, grads)
+
+    if epoch % 100 == 0:
+        loss = loss_fn(params, X_train, y_train)
+        print(f"Epoch {epoch}, Loss: {loss}")
+```
+
+这里面tree_map需要解释下。
+
+`jax.tree_util.tree_map` 是一个便利函数，它可以对树状结构（如字典或命名元组）中的每个元素应用一个函数。
+在这里，`lambda p, g: p - learning_rate * g` 是一个匿名函数，用于更新每个参数 p，减去其对应的梯度 g 乘以学习率。
+这个操作会将所有参数更新为新的值，以便在下一次迭代中使用。
+
+看起来唬人，其实就是参数减去学习率乘以梯度。
+
+我们用鸢尾花数据集来将上面的代码串在一起：
+
+```python
+import jax
+import jax.numpy as jnp
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载鸢尾花数据集
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+
+# 数据预处理
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# One-hot 编码目标变量
+encoder = OneHotEncoder(sparse=False)
+y = encoder.fit_transform(y.reshape(-1, 1))
+
+# 分割数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 初始化参数
+key = jax.random.PRNGKey(0)
+input_dim = X_train.shape[1]
+hidden_dim = 10
+output_dim = y_train.shape[1]
+
+def init_params(key):
+    params = {
+        'W1': jax.random.normal(key, (input_dim, hidden_dim)),
+        'b1': jnp.zeros(hidden_dim),
+        'W2': jax.random.normal(key, (hidden_dim, output_dim)),
+        'b2': jnp.zeros(output_dim)
+    }
+    return params
+
+params = init_params(key)
+
+# 定义神经网络模型
+def relu(x):
+    return jnp.maximum(0, x)
+
+def predict(params, X):
+    hidden = relu(jnp.dot(X, params['W1']) + params['b1'])
+    logits = jnp.dot(hidden, params['W2']) + params['b2']
+    return logits
+
+# 定义损失函数
+def loss_fn(params, X, y):
+    logits = predict(params, X)
+    log_probs = jax.nn.log_softmax(logits)
+    loss = -jnp.mean(jnp.sum(log_probs * y, axis=1))
+    return loss
+
+# 梯度下降
+grad_fn = jax.jit(jax.grad(loss_fn))
+
+# 训练模型
+learning_rate = 0.01
+epochs = 1000
+
+for epoch in range(epochs):
+    grads = grad_fn(params, X_train, y_train)
+    params = jax.tree_util.tree_map(lambda p, g: p - learning_rate * g, params, grads)
+
+    if epoch % 100 == 0:
+        loss = loss_fn(params, X_train, y_train)
+        print(f"Epoch {epoch}, Loss: {loss}")
+
+# 测试模型
+logits_train = predict(params, X_train)
+logits_test = predict(params, X_test)
+
+y_pred_train = jnp.argmax(logits_train, axis=1)
+y_pred_test = jnp.argmax(logits_test, axis=1)
+
+y_train_labels = jnp.argmax(y_train, axis=1)
+y_test_labels = jnp.argmax(y_test, axis=1)
+
+train_accuracy = accuracy_score(y_train_labels, y_pred_train)
+test_accuracy = accuracy_score(y_test_labels, y_pred_test)
+
+print(f"Train Accuracy: {train_accuracy}")
+print(f"Test Accuracy: {test_accuracy}")
+```
+
+运行结果如下：
+```
+Epoch 0, Loss: 1.8908624649047852
+Epoch 100, Loss: 0.6700484156608582
+Epoch 200, Loss: 0.4600417912006378
+Epoch 300, Loss: 0.3555840849876404
+Epoch 400, Loss: 0.29059529304504395
+Epoch 500, Loss: 0.24826818704605103
+Epoch 600, Loss: 0.21808886528015137
+Epoch 700, Loss: 0.19502606987953186
+Epoch 800, Loss: 0.17778009176254272
+Epoch 900, Loss: 0.1645180732011795
+Train Accuracy: 0.9333333333333333
+Test Accuracy: 1.0
+```
+
+
 ## 第十章 卷积神经网络
 
 ### 10.1 卷积神经网络简介
@@ -11516,6 +11770,108 @@ $ (I * K)(i, j) = \sum_{m=0}^{k_h-1} \sum_{n=0}^{k_w-1} I(i+m, j+n) \cdot K(m, n
 
 通过卷积核的滑动和计算，卷积神经网络能够有效地提取输入数据的局部特征，进而进行更高层次的特征学习和模式识别。
 
+在PyTorch中，可以使用 `torch.nn.Conv2d` 类创建卷积层。下面是一个简单的示例：
+
+```python
+import torch
+import torch.nn as nn
+
+# 创建一个简单的卷积层
+# 参数说明：
+# - in_channels: 输入通道数，例如灰度图像是1，RGB图像是3
+# - out_channels: 输出通道数，也就是卷积核的数量
+# - kernel_size: 卷积核的大小，可以是单个整数或者一个表示高和宽的元组
+# - stride: 卷积的步幅，默认为1
+# - padding: 填充，默认为0
+conv_layer = nn.Conv2d(in_channels=1, out_channels=3, kernel_size=3, stride=1, padding=1)
+
+# 创建一个输入张量（例如一个1通道的28x28图像）
+# .unsqueeze(0) 用于添加一个维度，表示批次大小(batch size)，这里是1
+input_tensor = torch.randn(1, 1, 28, 28)
+
+# 应用卷积层
+output_tensor = conv_layer(input_tensor)
+
+# 输出张量的形状
+print(f"Output tensor shape: {output_tensor.shape}")
+```
+
+而在JAX中，没有现成的卷积层，我们需要自己实现。下面是一个简单的卷积操作的实现：
+
+```python
+import jax
+import jax.numpy as jnp
+from jax import random
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+def conv2d(x, W, b, strides=(1, 1), padding='VALID'):
+    # 使用 jax.lax.conv_general_dilated 进行卷积操作
+    return jax.lax.conv_general_dilated(
+        x, W, window_strides=strides, padding=padding,
+        dimension_numbers=('NHWC', 'HWIO', 'NHWC')
+    ) + b
+
+# 初始化卷积层参数
+def initialize_conv_params(rng, input_channels, output_channels, kernel_size):
+    k1, k2 = random.split(rng)
+    W = random.normal(k1, (kernel_size, kernel_size, input_channels, output_channels))
+    b = jnp.zeros(output_channels)
+    return W, b
+
+# 设置随机种子
+rng = random.PRNGKey(0)
+
+# 初始化卷积层参数
+input_channels = 1  # 输入通道数，例如灰度图像是1，RGB图像是3
+output_channels = 3  # 输出通道数，也就是卷积核的数量
+kernel_size = 3  # 卷积核的大小
+
+W, b = initialize_conv_params(rng, input_channels, output_channels, kernel_size)
+
+# 创建一个输入张量（例如一个1通道的28x28图像）
+input_tensor = random.normal(rng, (1, 28, 28, 1))
+
+# 应用卷积层
+output_tensor = conv2d(input_tensor, W, b, strides=(1, 1), padding='SAME')
+
+# 输出张量的形状
+print(f"Output tensor shape: {output_tensor.shape}")
+```
+
+`jax.lax.conv_general_dilated` 是 JAX 提供的一个低级接口，用于执行高度可定制的卷积操作。它非常灵活，可以支持各种卷积变体，包括普通卷积、池化、跨步卷积和空洞卷积。
+
+conv_general_dilated的参数如下：
+
+```python
+jax.lax.conv_general_dilated(
+    lhs,  # 左侧输入张量
+    rhs,  # 右侧卷积核张量
+    window_strides,  # 步幅
+    padding,  # 填充方式
+    lhs_dilation=None,  # 输入张量的扩张
+    rhs_dilation=None,  # 卷积核的扩张
+    dimension_numbers=None,  # 维度顺序
+    feature_group_count=1,  # 特征组的数量（用于分组卷积）
+    batch_group_count=1,  # 批次组的数量
+    precision=None  # 运算的精度
+)
+```
+
+参数解释
+
+- lhs：输入张量，通常是图像或特征图。
+- rhs：卷积核张量。
+- window_strides：卷积的步幅。
+- padding：填充方式，可以是 'VALID' 或 'SAME'，也可以是一个具体的填充元组。
+- lhs_dilation：输入张量的扩张因子，用于空洞卷积。
+- rhs_dilation：卷积核的扩张因子，用于空洞卷积。
+- dimension_numbers：指定输入、卷积核和输出的维度顺序。
+- feature_group_count：特征组的数量，用于分组卷积。
+- batch_group_count：批次组的数量。
+- precision：运算的精度。
+
 #### 10.1.3 池化层
 
 池化层（Pooling Layer）是卷积神经网络（Convolutional Neural Network，CNN）中的一种常用层类型，主要用于减小特征图（feature map）的尺寸，同时保留重要的特征信息。池化层通过下采样（subsampling）操作减少计算量，控制过拟合，并提高模型的鲁棒性。
@@ -11538,6 +11894,101 @@ $ (I * K)(i, j) = \sum_{m=0}^{k_h-1} \sum_{n=0}^{k_w-1} I(i+m, j+n) \cdot K(m, n
 - 提高鲁棒性：池化操作保留了重要的特征信息，同时忽略了不重要的细节，使得网络对输入数据的微小变动更加鲁棒。
 - 提取空间不变性：池化层通过下采样保留了特征图的空间分布信息，有助于提取空间不变性特征。
 
+
+在PyTorch中，提供了最大池化层、平均池化层和全局平均池化层等池化层。
+
+- 最大池化层：最大池化层在每个池化窗口内选择最大值，从而减小特征图的尺寸。
+
+```python
+import torch
+import torch.nn as nn
+
+# 创建一个最大池化层
+max_pool = nn.MaxPool2d(kernel_size=2, stride=2)
+
+# 创建一个示例输入张量
+input_tensor = torch.tensor([[[[1, 2, 3, 4],
+                               [5, 6, 7, 8],
+                               [9, 10, 11, 12],
+                               [13, 14, 15, 16]]]], dtype=torch.float32)
+
+# 应用最大池化层
+output_tensor = max_pool(input_tensor)
+
+print(output_tensor)
+```
+
+- 平均池化层: 平均池化层在每个池化窗口内计算平均值，从而减少特征图的尺寸。
+
+```python
+import torch
+import torch.nn as nn
+
+# 创建一个平均池化层
+avg_pool = nn.AvgPool2d(kernel_size=2, stride=2)
+
+# 创建一个示例输入张量
+input_tensor = torch.tensor([[[[1, 2, 3, 4],
+                               [5, 6, 7, 8],
+                               [9, 10, 11, 12],
+                               [13, 14, 15, 16]]]], dtype=torch.float32)
+
+# 应用平均池化层
+output_tensor = avg_pool(input_tensor)
+
+print(output_tensor)
+```
+
+- 全局平均池化层:全局平均池化层计算特征图的全局平均值，通常用于将二维特征图转换为一维特征向量。
+
+```python
+
+import torch
+import torch.nn as nn
+
+# 创建一个示例输入张量
+input_tensor = torch.tensor([[[[1, 2, 3, 4],
+                               [5, 6, 7, 8],
+                               [9, 10, 11, 12],
+                               [13, 14, 15, 16]]]], dtype=torch.float32)
+
+# 使用自适应平均池化层实现全局平均池化
+global_avg_pool = nn.AdaptiveAvgPool2d((1, 1))
+
+# 应用全局平均池化层
+output_tensor = global_avg_pool(input_tensor)
+
+print(output_tensor)
+```
+
+在JAX中，池化的操作叫做窗口归约：jax.lax.reduce_window。
+
+其定义如下：
+
+```python
+jax.lax.reduce_window(
+    operand,  # 输入张量
+    init_value,  # 初始值
+    computation,  # 归约操作
+    window_dimensions,  # 窗口大小
+    window_strides,  # 窗口步幅
+    padding,  # 填充方式
+    base_dilation=None,  # 输入张量的扩张因子
+    window_dilation=None  # 窗口的扩张因子
+)
+```
+
+参数解释
+
+- operand：输入张量。
+- init_value：归约操作的初始值，例如，对于最大池化，初始值可以是 -inf。
+- computation：归约操作，例如 jax.lax.max、jax.lax.add 等。
+- window_dimensions：窗口大小的元组。
+- window_strides：窗口移动的步幅。
+- padding：填充方式，可以是 'VALID' 或 'SAME'，也可以是一个具体的填充元组。
+- base_dilation：输入张量的扩张因子（可选）。
+- window_dilation：窗口的扩张因子（可选）。
+
 ### 10.2 循环神经网络
 
 #### 10.2.1 循环神经网络的基本概念
@@ -11546,30 +11997,30 @@ $ (I * K)(i, j) = \sum_{m=0}^{k_h-1} \sum_{n=0}^{k_w-1} I(i+m, j+n) \cdot K(m, n
 
 一个典型的RNN单元包含以下部分：
 
-1. **输入层**：接受当前时间步的输入 $ x_t $。
-2. **隐藏层**：维护一个隐藏状态 $ h_t $，该状态根据当前输入 $ x_t $ 和前一时间步的隐藏状态 $ h_{t-1} $ 更新。
-3. **输出层**：生成当前时间步的输出 $ y_t $。
+1. 输入层：接受当前时间步的输入 $x_t$。
+2. 隐藏层：维护一个隐藏状态 $h_t$，该状态根据当前输入 $x_t$ 和前一时间步的隐藏状态 $h_{t-1}$ 更新。
+3. 输出层：生成当前时间步的输出 $y_t$。
 
 RNN的核心计算可以表示为以下公式：
 
-1. **隐藏状态更新**：
+1. 隐藏状态更新：
 $h_t = \sigma(W_{xh} x_t + W_{hh} h_{t-1} + b_h)$
-其中，$ \sigma $ 是激活函数（如tanh或ReLU），$ W_{xh} $ 是输入到隐藏状态的权重矩阵，$ W_{hh} $ 是隐藏状态到隐藏状态的权重矩阵，$ b_h $ 是隐藏层的偏置。
+其中，$\sigma$ 是激活函数（如tanh或ReLU），$W_{xh}$ 是输入到隐藏状态的权重矩阵，$W_{hh}$ 是隐藏状态到隐藏状态的权重矩阵，$b_h$ 是隐藏层的偏置。
 
-2. **输出计算**：
+2. 输出计算：
 $y_t = W_{hy} h_t + b_y$
 
-其中，$ W_{hy} $ 是隐藏状态到输出的权重矩阵，$ b_y $ 是输出层的偏置。
+其中，$W_{hy}$ 是隐藏状态到输出的权重矩阵，$b_y$ 是输出层的偏置。
 
 特点和优势
 
-- **时间依赖性**：RNN能够处理序列数据，捕捉到数据的时间依赖性，适用于时间序列预测、自然语言处理等任务。
-- **参数共享**：在不同时间步上共享相同的参数，使得模型能够有效地处理不同长度的序列。
+- 时间依赖性：RNN能够处理序列数据，捕捉到数据的时间依赖性，适用于时间序列预测、自然语言处理等任务。
+- 参数共享：在不同时间步上共享相同的参数，使得模型能够有效地处理不同长度的序列。
 
 RNN在实际应用中面临一些挑战，包括：
 
-- **梯度消失和梯度爆炸**：在长序列训练过程中，梯度可能会逐渐消失或爆炸，导致训练困难。
-- **长距离依赖**：标准RNN难以捕捉长序列中的长距离依赖关系。
+- 梯度消失和梯度爆炸：在长序列训练过程中，梯度可能会逐渐消失或爆炸，导致训练困难。
+- 长距离依赖：标准RNN难以捕捉长序列中的长距离依赖关系。
 
 为了克服这些问题，提出了几种改进的RNN变体，如：
 
@@ -11580,6 +12031,11 @@ RNN在实际应用中面临一些挑战，包括：
 
 长短期记忆网络（Long Short-Term Memory, LSTM）是一种特殊的循环神经网络（RNN），设计用于解决标准RNN在处理长序列时遇到的梯度消失和梯度爆炸问题。LSTM通过引入门机制来控制信息的流动，能够更好地捕捉长时间依赖关系。
 
+LSTM的特点和优势有：
+
+- 捕捉长时间依赖：LSTM通过门机制能够有效地捕捉序列中长时间的依赖关系。
+- 解决梯度消失问题：通过细胞状态的线性变化，LSTM能够避免梯度消失问题，从而在长序列数据上表现良好。
+
 LSTM单元比标准RNN单元复杂得多，包含三个主要的门：输入门、遗忘门和输出门。这些门通过控制细胞状态（cell state）来决定应该记住什么、遗忘什么和输出什么。以下是LSTM的核心组件：
 
 1. 细胞状态（Cell State）：类似于RNN中的隐藏状态，但它可以携带长时间的信息。
@@ -11587,30 +12043,369 @@ LSTM单元比标准RNN单元复杂得多，包含三个主要的门：输入门�
 3. 输入门（Input Gate）：控制当前输入的信息如何影响细胞状态。
 4. 输出门（Output Gate）：控制细胞状态中哪些信息应该输出。
 
-公式表示
-
 LSTM的核心计算可以表示为以下公式：
 
-1. **遗忘门**：
+1. 遗忘门：
 $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$
-其中，\( \sigma \) 是 sigmoid 激活函数，\( W_f \) 是权重矩阵，\( b_f \) 是偏置。
+其中，$\sigma$ 是 sigmoid 激活函数，$W_f$ 是权重矩阵，$b_f$ 是偏置。
 
-2. **输入门**：
+2. 输入门：
+
 $i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)$
-$\tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C)$
-其中，$ \tanh $ 是双曲正切激活函数，$ W_i $ 和 $ W_C $ 是权重矩阵，$ b_i $ 和 $ b_C $ 是偏置。
 
-3. **更新细胞状态**：
+$\tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C)$
+
+其中，$\tanh$ 是双曲正切激活函数，$W_i$ 和 $W_C$ 是权重矩阵，$b_i$ 和 $b_C$ 是偏置。
+
+3. 更新细胞状态：
+
 $C_t = f_t \cdot C_{t-1} + i_t \cdot \tilde{C}_t$
 
-4. **输出门**：
+4. 输出门：
 $o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)$
 $h_t = o_t \cdot \tanh(C_t)$
 
-LSTM的特点和优势有：
+JAX没有现成的LSTM层，我们需要自己实现。正好结合上面的公式我们来实现一下。
 
-- 捕捉长时间依赖：LSTM通过门机制能够有效地捕捉序列中长时间的依赖关系。
-- 解决梯度消失问题：通过细胞状态的线性变化，LSTM能够避免梯度消失问题，从而在长序列数据上表现良好。
+```python
+def lstm_cell(params, h, c, x):
+    w_i, w_f, w_c, w_o, b_i, b_f, b_c, b_o = params
+    input_and_h = jnp.concatenate([x, h], axis=-1)
+    
+    i = jax.nn.sigmoid(jnp.dot(input_and_h, w_i) + b_i)
+    f = jax.nn.sigmoid(jnp.dot(input_and_h, w_f) + b_f)
+    g = jnp.tanh(jnp.dot(input_and_h, w_c) + b_c)
+    o = jax.nn.sigmoid(jnp.dot(input_and_h, w_o) + b_o)
+    
+    new_c = f * c + i * g
+    new_h = o * jnp.tanh(new_c)
+    
+    return new_h, new_c
+```
+
+我们先看遗忘门公式：$f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$
+
+对应的代码：
+
+```python
+f = jax.nn.sigmoid(jnp.dot(input_and_h, w_f) + b_f)
+```
+
+input_and_h就是 $[h_{t-1}, x_t]$，然后通过矩阵乘法和偏置，再通过sigmoid激活函数，就得到了遗忘门的输出。
+
+再看输入门的公式：$i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)$
+
+对应的代码：
+
+```python
+i = jax.nn.sigmoid(jnp.dot(input_and_h, w_i) + b_i)
+```
+
+$\tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C)$ 对应于代码中的g:
+
+```python
+g = jnp.tanh(jnp.dot(input_and_h, w_c) + b_c)
+```
+
+输出门：$o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)$
+
+对应代码：
+
+```python
+o = jax.nn.sigmoid(jnp.dot(input_and_h, w_o) + b_o)
+```
+
+细胞状态更新：$C_t = f_t \cdot C_{t-1} + i_t \cdot \tilde{C}_t$
+
+对应了new_c的计算：
+
+```python
+new_c = f * c + i * g
+```
+
+历史状态更新：$h_t = o_t \cdot \tanh(C_t)$
+
+对应于new_h的计算：
+
+```python
+new_h = o * jnp.tanh(new_c)
+```
+
+然后我们写个LSTM结构将LSTM细胞串起来：
+
+```python
+def lstm_forward(params, x):
+    batch_size, seq_len, input_size = x.shape
+    num_layers = len(params) - 2  # 减去全连接层的参数
+    hidden_size = params[0][0].shape[1]
+
+    h = jnp.zeros((num_layers, batch_size, hidden_size))
+    c = jnp.zeros((num_layers, batch_size, hidden_size))
+    
+    for t in range(seq_len):
+        x_t = x[:, t, :]
+        for l in range(num_layers):
+            new_h, new_c = lstm_cell(params[l], h[l], c[l], x_t)
+            h = h.at[l].set(new_h)
+            c = c.at[l].set(new_c)
+            x_t = new_h
+    
+    fc_w, fc_b = params[-2], params[-1]
+    output = jnp.dot(h[-1], fc_w) + fc_b
+    return output
+```
+
+对于序列中的每个时间步 t，以及每一层 l，调用 lstm_cell 函数计算新的隐藏状态和细胞状态，并更新 h 和 c。同时，将新的隐藏状态作为下一层的输入。
+
+我们再看下损失函数：
+
+```python
+def mse_loss(params, x, y):
+    preds = lstm_forward(params, x)
+    return jnp.mean((preds - y) ** 2)
+```
+
+这里我们使用均方误差作为损失函数。
+
+下面我们来看下训练过程：
+
+```python
+optimizer = optax.adam(learning_rate=0.001)
+opt_state = optimizer.init(params)
+
+@jax.jit
+def update(params, opt_state, x, y):
+    loss, grads = jax.value_and_grad(mse_loss)(params, x, y)
+    updates, opt_state = optimizer.update(grads, opt_state)
+    new_params = optax.apply_updates(params, updates)
+    return new_params, opt_state, loss
+```
+
+这里有个新出场的库，optax，它是JAX的优化库，提供了一些常用的优化器的封装。Optax 专为 JAX 设计，充分利用了 JAX 的自动微分和硬件加速特性。
+
+具体地说，optax.apply_updates 的作用是将优化器计算出的 updates 应用到模型的现有参数 params 上，生成新的参数 new_params。这个过程通常包括以下步骤：
+
+- 计算梯度：通过反向传播或其他方法计算损失函数相对于每个参数的梯度。
+- 计算更新量：使用优化器（如 Adam、SGD 等）根据梯度计算每个参数的更新量。
+- 应用更新量：将更新量应用到现有参数上，得到新的参数。
+
+
+下面我们把JAX实现LSTM的代码串到一起：
+
+```python
+import jax
+import jax.numpy as jnp
+from jax import random
+import optax
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+def lstm_cell(params, h, c, x):
+    w_i, w_f, w_c, w_o, b_i, b_f, b_c, b_o = params
+    input_and_h = jnp.concatenate([x, h], axis=-1)
+    
+    i = jax.nn.sigmoid(jnp.dot(input_and_h, w_i) + b_i)
+    f = jax.nn.sigmoid(jnp.dot(input_and_h, w_f) + b_f)
+    g = jnp.tanh(jnp.dot(input_and_h, w_c) + b_c)
+    o = jax.nn.sigmoid(jnp.dot(input_and_h, w_o) + b_o)
+    
+    new_c = f * c + i * g
+    new_h = o * jnp.tanh(new_c)
+    
+    return new_h, new_c
+
+def init_lstm_params(key, input_size, hidden_size):
+    k1, k2, k3, k4 = random.split(key, 4)
+    w_i = random.normal(k1, (input_size + hidden_size, hidden_size))
+    w_f = random.normal(k2, (input_size + hidden_size, hidden_size))
+    w_c = random.normal(k3, (input_size + hidden_size, hidden_size))
+    w_o = random.normal(k4, (input_size + hidden_size, hidden_size))
+    b_i = jnp.zeros(hidden_size)
+    b_f = jnp.zeros(hidden_size)
+    b_c = jnp.zeros(hidden_size)
+    b_o = jnp.zeros(hidden_size)
+    return (w_i, w_f, w_c, w_o, b_i, b_f, b_c, b_o)
+
+def lstm_forward(params, x):
+    batch_size, seq_len, input_size = x.shape
+    num_layers = len(params) - 2  # 减去全连接层的参数
+    hidden_size = params[0][0].shape[1]
+
+    h = jnp.zeros((num_layers, batch_size, hidden_size))
+    c = jnp.zeros((num_layers, batch_size, hidden_size))
+    
+    for t in range(seq_len):
+        x_t = x[:, t, :]
+        for l in range(num_layers):
+            new_h, new_c = lstm_cell(params[l], h[l], c[l], x_t)
+            h = h.at[l].set(new_h)
+            c = c.at[l].set(new_c)
+            x_t = new_h
+    
+    fc_w, fc_b = params[-2], params[-1]
+    output = jnp.dot(h[-1], fc_w) + fc_b
+    return output
+
+key = random.PRNGKey(0)
+input_size = 10
+hidden_size = 20
+output_size = 1
+num_layers = 2
+
+keys = random.split(key, num_layers + 1)
+params = [init_lstm_params(k, input_size if i == 0 else hidden_size, hidden_size) for i, k in enumerate(keys[:-1])]
+fc_w = random.normal(keys[-1], (hidden_size, output_size))
+fc_b = jnp.zeros(output_size)
+params.append(fc_w)
+params.append(fc_b)
+
+def mse_loss(params, x, y):
+    preds = lstm_forward(params, x)
+    return jnp.mean((preds - y) ** 2)
+
+optimizer = optax.adam(learning_rate=0.001)
+opt_state = optimizer.init(params)
+
+@jax.jit
+def update(params, opt_state, x, y):
+    loss, grads = jax.value_and_grad(mse_loss)(params, x, y)
+    updates, opt_state = optimizer.update(grads, opt_state)
+    new_params = optax.apply_updates(params, updates)
+    return new_params, opt_state, loss
+
+num_epochs = 100
+batch_size = 32
+
+# 生成示例数据
+key = random.PRNGKey(1)
+X_train = random.normal(key, (1000, 5, 10))  # 1000 个样本，每个样本包含 5 个时间步，每个时间步有 10 个特征
+y_train = random.normal(key, (1000, 1))  # 1000 个样本的标签
+
+# 将数据分成批次
+def get_batches(X, y, batch_size):
+    n_batches = len(X) // batch_size
+    for i in range(n_batches):
+        X_batch = X[i * batch_size:(i + 1) * batch_size]
+        y_batch = y[i * batch_size:(i + 1) * batch_size]
+        yield X_batch, y_batch
+
+# 初始化参数
+params = [init_lstm_params(k, input_size if i == 0 else hidden_size, hidden_size) for i, k in enumerate(keys[:-1])]
+params.append(fc_w)
+params.append(fc_b)
+
+for epoch in range(num_epochs):
+    for X_batch, y_batch in get_batches(X_train, y_train, batch_size):
+        params, opt_state, loss = update(params, opt_state, X_batch, y_batch)
+    
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss:.4f}')
+
+# 生成示例测试数据
+X_test = random.normal(key, (200, 5, 10))  # 200 个测试样本
+y_test = random.normal(key, (200, 1))
+
+# 评估模型
+predictions = lstm_forward(params, X_test)
+test_loss = mse_loss(params, X_test, y_test)
+print(f'Test Loss: {test_loss:.4f}')
+```
+
+在这个示例中，我们首先定义了一个 LSTM 单元 lstm_cell，然后使用 init_lstm_params 函数初始化 LSTM 的参数。接着，我们定义了 lstm_forward 函数，用于前向传播 LSTM。然后，我们定义了损失函数 mse_loss，这里使用均方误差作为损失函数。接下来，我们使用 optax.adam 初始化了 Adam 优化器，并定义了 update 函数，用于更新参数。最后，我们训练模型并评估模型的性能。
+
+输出结果如下：
+
+```
+Epoch [10/100], Loss: 0.9156
+Epoch [20/100], Loss: 0.5790
+Epoch [30/100], Loss: 0.3752
+Epoch [40/100], Loss: 0.2221
+Epoch [50/100], Loss: 0.1113
+Epoch [60/100], Loss: 0.0516
+Epoch [70/100], Loss: 0.0227
+Epoch [80/100], Loss: 0.0133
+Epoch [90/100], Loss: 0.0062
+Epoch [100/100], Loss: 0.0049
+Test Loss: 2.3987
+```
+
+PyTorch中包含了LSTM的实现，可以通过 `torch.nn.LSTM` 类创建LSTM层。以下是一个简单的示例：
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+class LSTMModel(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, output_size):
+        super(LSTMModel, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        
+        # 定义LSTM层
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        
+        # 定义全连接层
+        self.fc = nn.Linear(hidden_size, output_size)
+        
+    def forward(self, x):
+        # 初始化 LSTM 的隐藏状态和细胞状态
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
+        
+        # 前向传播 LSTM
+        out, _ = self.lstm(x, (h0, c0))
+        
+        # 取出 LSTM 最后一个时间步的输出
+        out = out[:, -1, :]
+        
+        # 通过全连接层
+        out = self.fc(out)
+        return out
+
+input_size = 10  # 输入特征的维度
+hidden_size = 20  # 隐藏层的维度
+num_layers = 2  # LSTM 层数
+output_size = 1  # 输出特征的维度（例如回归任务中的一个值）
+
+model = LSTMModel(input_size, hidden_size, num_layers, output_size)
+
+criterion = nn.MSELoss()  # 例如用于回归任务的均方误差损失
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# 生成一些示例数据
+X_train = torch.rand((100, 5, input_size))  # 100 个样本，每个样本包含 5 个时间步，每个时间步有 input_size 个特征
+y_train = torch.rand((100, output_size))  # 100 个样本的标签
+
+num_epochs = 100
+
+for epoch in range(num_epochs):
+    model.train()
+    
+    # 前向传播
+    outputs = model(X_train)
+    loss = criterion(outputs, y_train)
+    
+    # 反向传播和优化
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+    
+    if (epoch+1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+model.eval()
+with torch.no_grad():
+    X_test = torch.rand((20, 5, input_size))  # 20 个测试样本
+    y_test = torch.rand((20, output_size))
+    
+    predictions = model(X_test)
+    test_loss = criterion(predictions, y_test)
+    print(f'Test Loss: {test_loss.item():.4f}')
+```
+
+
 
 #### 10.2.3 门控循环单元（GRU）
 
@@ -11621,26 +12416,170 @@ GRU单元包含两个主要的门：重置门（Reset Gate）和更新门（Upda
 1. 重置门（Reset Gate）：控制前一时间步的隐藏状态对当前计算的影响。
 2. 更新门（Update Gate）：控制当前隐藏状态和前一时间步隐藏状态的混合程度。
 
-GRU的核心计算可以表示为以下公式：
-
-1. **更新门**：
-$z_t = \sigma(W_z \cdot [h_{t-1}, x_t] + b_z)$
-其中，$ \sigma $ 是 sigmoid 激活函数，$ W_z $ 是权重矩阵，$ b_z $ 是偏置。
-
-2. **重置门**：
-$r_t = \sigma(W_r \cdot [h_{t-1}, x_t] + b_r)$
-
-3. **候选隐藏状态**：
-$\tilde{h}_t = \tanh(W \cdot [r_t \cdot h_{t-1}, x_t] + b)$
-
-4. **隐藏状态更新**：
-$h_t = (1 - z_t) \cdot h_{t-1} + z_t \cdot \tilde{h}_t$
-
 GRU的特点和优势有：
 
-- **结构简单**：GRU相比LSTM结构更简单，只有两个门，因此计算效率更高。
-- **性能优越**：在某些任务上，GRU的性能与LSTM相当甚至更优。
-- **捕捉长时间依赖**：通过门机制，GRU能够有效地捕捉序列中长时间的依赖关系。
+- 结构简单：GRU相比LSTM结构更简单，只有两个门，因此计算效率更高。
+- 性能优越：在某些任务上，GRU的性能与LSTM相当甚至更优。
+- 捕捉长时间依赖：通过门机制，GRU能够有效地捕捉序列中长时间的依赖关系。
+
+
+GRU的核心计算可以表示为以下公式：
+
+1. 更新门：
+$z_t = \sigma(W_z \cdot [h_{t-1}, x_t] + b_z)$
+
+其中，$\sigma$ 是 sigmoid 激活函数，$W_z$ 是权重矩阵，$b_z$ 是偏置。
+
+2. 重置门：
+$r_t = \sigma(W_r \cdot [h_{t-1}, x_t] + b_r)$
+
+3. 候选隐藏状态：
+$\tilde{h}_t = \tanh(W \cdot [r_t \cdot h_{t-1}, x_t] + b)$
+
+4. 隐藏状态更新：
+$h_t = (1 - z_t) \cdot h_{t-1} + z_t \cdot \tilde{h}_t$
+
+```python
+def gru_cell(params, h, x):
+    # Extract parameters
+    wxz, whz, bz = params['wxz'], params['whz'], params['bz']
+    wxr, whr, br = params['wxr'], params['whr'], params['br']
+    wxh, whh, bh = params['wxh'], params['whh'], params['bh']
+
+    # 更新门
+    z = sigmoid(jnp.dot(x, wxz) + jnp.dot(h, whz) + bz)
+
+    # 重置门
+    r = sigmoid(jnp.dot(x, wxr) + jnp.dot(h, whr) + br)
+
+    # 候选隐藏状态
+    h_tilde = tanh(jnp.dot(x, wxh) + jnp.dot(r * h, whh) + bh)
+
+    # 隐藏状态更新
+    h_new = (1 - z) * h + z * h_tilde
+
+    return h_new
+```
+
+然后我们把GRU细胞串起来：
+
+```python
+def gru_forward(params, h0, xs):
+    def scan_fn(h, x):
+        h_new = gru_cell(params, h, x)
+        return h_new, h_new
+
+    _, hs = jax.lax.scan(scan_fn, h0, xs)
+    return hs
+```
+
+这里我们又引用新工具了。jax.lax.scan 是 JAX 提供的一个高效的循环工具，用于在 JIT 编译的环境中进行循环操作。它能够在序列上高效地执行循环计算，并自动进行向量化和优化。
+
+
+我们就不写训练和验证的过程了，把上面的代码串起来，这样代码看起来更简洁易于理解：
+
+```python
+import jax
+import jax.numpy as jnp
+from jax import random
+from jax.nn import sigmoid, tanh
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+def gru_cell(params, h, x):
+    # Extract parameters
+    wxz, whz, bz = params['wxz'], params['whz'], params['bz']
+    wxr, whr, br = params['wxr'], params['whr'], params['br']
+    wxh, whh, bh = params['wxh'], params['whh'], params['bh']
+
+    # Update gate
+    z = sigmoid(jnp.dot(x, wxz) + jnp.dot(h, whz) + bz)
+
+    # Reset gate
+    r = sigmoid(jnp.dot(x, wxr) + jnp.dot(h, whr) + br)
+
+    # New hidden state
+    h_tilde = tanh(jnp.dot(x, wxh) + jnp.dot(r * h, whh) + bh)
+
+    # Final hidden state
+    h_new = (1 - z) * h + z * h_tilde
+
+    return h_new
+
+
+def init_gru_params(input_dim, hidden_dim, key):
+    k1, k2, k3, k4, k5, k6, k7 = random.split(key, 7)
+    params = {
+        'wxz': random.normal(k1, (input_dim, hidden_dim)),
+        'whz': random.normal(k2, (hidden_dim, hidden_dim)),
+        'bz': jnp.zeros(hidden_dim),
+        'wxr': random.normal(k3, (input_dim, hidden_dim)),
+        'whr': random.normal(k4, (hidden_dim, hidden_dim)),
+        'br': jnp.zeros(hidden_dim),
+        'wxh': random.normal(k5, (input_dim, hidden_dim)),
+        'whh': random.normal(k6, (hidden_dim, hidden_dim)),
+        'bh': jnp.zeros(hidden_dim)
+    }
+    return params
+
+def gru_forward(params, h0, xs):
+    def scan_fn(h, x):
+        h_new = gru_cell(params, h, x)
+        return h_new, h_new
+
+    _, hs = jax.lax.scan(scan_fn, h0, xs)
+    return hs
+
+# 定义维度
+input_dim = 10
+hidden_dim = 20
+seq_len = 5
+
+# 初始化随机种子
+key = random.PRNGKey(0)
+
+# 初始化 GRU 参数
+params = init_gru_params(input_dim, hidden_dim, key)
+
+# 生成随机输入序列和初始隐藏状态
+xs = random.normal(key, (seq_len, input_dim))
+h0 = random.normal(key, (hidden_dim,))
+
+# 计算 GRU 前向传播
+hs = gru_forward(params, h0, xs)
+
+print("Output hidden states:", hs)
+```
+
+PyTorch对于GRU同样有封装，可以通过 `torch.nn.GRU` 类创建GRU层。以下是一个简单的示例：
+
+```python
+class GRUModel(nn.Module):
+    def __init__(self, input_dim, hidden_dim, output_dim, num_layers=1):
+        super(GRUModel, self).__init__()
+        self.hidden_dim = hidden_dim
+        self.num_layers = num_layers
+        
+        # 定义 GRU 层
+        self.gru = nn.GRU(input_dim, hidden_dim, num_layers, batch_first=True)
+        # 定义全连接层
+        self.fc = nn.Linear(hidden_dim, output_dim)
+    
+    def forward(self, x):
+        # 初始化隐藏状态
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_dim).to(x.device)
+        
+        # 前向传播 GRU
+        out, _ = self.gru(x, h0)
+        
+        # 取最后一个时间步的输出
+        out = out[:, -1, :]
+        
+        # 全连接层
+        out = self.fc(out)
+        return out
+```
 
 ## 第十一章 注意力机制与预训练模型
 
@@ -11655,7 +12594,7 @@ GRU的特点和优势有：
 如果我们不管与别的语句的注意力，只关注一句话或一段话中某个词与其他词之间的注意力关系，这被称为自注意力。
 
 我们看一个例子：
-![Attention](https://img-blog.csdnimg.cn/img_convert/53c7bddec1c5c5dfe42b68d6a6cbe12d.png)
+![Attention](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/attention_vis.png)
 
 通过训练，我们发现，句子中的making一词，跟后面的more和difficult之间的关系更紧密，所以它们之间的权重更高。
 
@@ -11663,7 +12602,7 @@ GRU的特点和优势有：
 
 为了减少计算量，我们采用点积做为主要的算法，这种结构叫做缩放点积注意力模块：
 
-![缩放点积注意力](https://img-blog.csdnimg.cn/img_convert/27235fad9f900bedae4605df075eee3f.png)
+![缩放点积注意力](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/scale_dot_attention.png)
 
 如图所示，我们把一个词变换成三种东西：Q, K, V. 其中Q代表Query查询，K代表Key键，它们先进行矩阵乘，然后进行缩放，再进行Softmask，所取得的结果再与V既Value之间再进行矩阵乘。
 
@@ -11695,7 +12634,7 @@ GRU的特点和优势有：
 
 缩放点积注意力只是一个词对另一个词的注意力，要计算每一个词，我们还得将其组合起来，变成一个更大的自注意力模块：多头自注意力模块。
 
-![多头注意力](https://img-blog.csdnimg.cn/img_convert/0277aaab13c6556713d2f3308c3ee119.png)
+![多头注意力](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/multi_head_attention.png)
 
 所谓多头，就是有h个缩放点积注意力最终拼接在一起。
 
@@ -11851,7 +12790,7 @@ class SelfAttention {
 
 有了多头注意力模块，剩下就是搭积木的工作了，我们看下面的图：
 
-[![Transformer的架构图](https://img-blog.csdnimg.cn/img_convert/d38f603a7069847687b4454849a90313.png)](https://imgse.com/i/ppHnX8I)
+![Transformer的架构图](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/transformer.png)
 
 input上面是编码器，target上面的是解码器。可以两个一起用，也可以只用编码器或者只用解码器。
 
@@ -11879,6 +12818,7 @@ class PositionalEncoding(nn.Module):
 ```
 
 我们再来看下TensorFlow.js的实现：
+
 ```javascript
 class PositionalEncoding {
   constructor(dModel) {
@@ -11904,6 +12844,31 @@ class PositionalEncoding {
 }
 ```
 
+JAX的实现如下：
+```python
+import jax.numpy as jnp
+import math
+
+def get_positional_encoding(seq_len, d_model):
+    """
+    获取位置编码矩阵
+
+    参数:
+        seq_len (int): 序列长度
+        d_model (int): 词嵌入维度
+
+    返回:
+        jnp.ndarray: 位置编码矩阵，形状为 (seq_len, d_model)
+    """
+    position = jnp.arange(seq_len)[:, jnp.newaxis]
+    div_term = jnp.exp(jnp.arange(0, d_model, 2) * -(math.log(10000.0) / d_model))
+
+    pe = jnp.zeros((seq_len, d_model))
+    pe = pe.at[:, 0::2].set(jnp.sin(position * div_term))
+    pe = pe.at[:, 1::2].set(jnp.cos(position * div_term))
+
+    return pe
+```
 
 PyTorch为我们封装好了Transformer的编码器和解码器的模块，我们构成多层编码器和解码器组成的Transformers模型，就用封装好的模块就可以了，不需要再像上面一样自己手工写了.
 
@@ -12059,7 +13024,8 @@ class TransformerModel {
 
 下面我们来一个真实的用Transformer来学习wiki文本，然后根据学习的语言模型让它来生成胡说八道的句子的例子。
 
-我们使用PyTorch官方的例子，因为它为我们准备好了数据和脚本。blog也没有稿费，我们不水这么多代码了。
+我们使用PyTorch官方的例子，以节省往篇幅。
+
 下载方法：
 ```
 git clone https://github.com/pytorch/examples
@@ -12178,20 +13144,7 @@ with open(args.outf, 'w') as outf:
 
 基本原理就是根据当前情况下的最大概率值来生成文本。
 
-### 11.4 改进Transformer
-
-刚刚入门就讲Transformer的变体实在是有点烧脑，但是我们要知道，Transformer并不只有这一种方式，虽然主流编程库就支持上面的这一种。
-
-我们从下面的图可以看到，Transformer这么基本的模块，研究者们动了各种脑筋试图去优化它。
-
-![](https://img-blog.csdnimg.cn/img_convert/22805768b1fd646e2e98107d01977012.png)
-
-
-## 第十二章 自然语言处理
-
-目前自然语言处理的主流已经变成大模型，其基本框架是Hugging Face Transformers。
-
-### 12.1 Hugging Face框架基础
+### 11.4 用Hugging Face进行预训练模型的编程
 
 这一节我们来学习下预训练模型的封装库，Hugging Face的Transformers库的使用。Hugging Face的库非常活跃，比如支持LLaDA大规型的类，是在本文开始写作的前一天发布的。
 库新到这种程度，而且相应配套的库也在不停修改中，这个时候进入这个领域一定要做好要花时间完善还不成熟的功能，尤其是花较多时间debug问题的思想准备。
@@ -12200,7 +13153,7 @@ with open(args.outf, 'w') as outf:
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/CoT.png)
 
-#### 12.1.1 Pipeline编程
+#### 11.4.1 Pipeline编程
 
 Pipeline是transformers库中面向任务的编程方式。比如我们最常用的任务就是文本生成。
 
@@ -12298,7 +13251,7 @@ pipe([conversation_1]) # 再次传入对话对象列表，得到模型的回复
 print(conversation_1.generated_responses) # 打印模型的回复
 ```
 
-#### 12.1.2 使用分词器和模型
+#### 11.4.2 使用分词器和模型
 
 除了使用pipeline之外，我们有更传统一点的用法，就是显示使用分词器和模型的方法。
 
@@ -12369,7 +13322,7 @@ tokenizer = LlamaTokenizerFast.from_pretrained("hf-internal-testing/llama-tokeni
 print(tokenizer.encode("Hello this is a test"))
 ```
 
-#### 12.1.3 执行其它任务的大模型
+#### 11.4.3 执行其它任务的大模型
 
 有了上面的框架之后，我们只要知道有什么模型可以用，我们得来介绍一些预训练模型。
 
@@ -12441,9 +13394,17 @@ print(tokenizer.batch_decode(summary_ids, skip_special_tokens=True,
 We find that chain-of-thought reasoning is an emergent property of model scale that allows large language models to perform reasoning tasks. Broadening the range of reasoning tasks that language models can perform will hopefully inspire further work.
 ```
 
-## 第十三章 深度强化学习
+## 第十二章 深度强化学习
 
-### 13.1 什么是强化学习
+深度强化学习是深度学习领域的第二次革命，一举在游戏水平上大部分超越人类的水平。
+
+下图是发表在自然杂志上的DeepMind的DQN算法在雅达利游戏上的表现，可以看到在大部分游戏上，DQN的表现已经超越了人类的水平。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/dqn_atari.png)
+
+下面我们就学习，亲手完成这样水平的强化学习算法。
+
+### 12.1 什么是强化学习
 
 强化学习是机器学习的一个分支,它模仿了人类和动物的学习方式。
 
@@ -12459,7 +13420,7 @@ We find that chain-of-thought reasoning is an emergent property of model scale t
 - 环境：代理与之交互并从中获得奖励或惩罚的世界。
 - 奖励函数：定义代理采取的每个动作的奖励或惩罚。
 
-#### 13.1.1 马尔可夫决策过程
+#### 12.1.1 马尔可夫决策过程
 
 强化学习的数学基础是马尔可夫决策过程（MDP）。MDP是一个五元组，包括：
 
@@ -12501,7 +13462,7 @@ Q^\pi(s, a) = R(s, a) + \gamma \sum_{s' \in S} P(s'|s, a) \sum_{a' \in A} \pi(a'
 $$
 
 
-#### 15.1.2 贝尔曼最优方程
+#### 12.1.2 贝尔曼最优方程
 
 在 MDP 中，策略优化的目标是找到最优策略 \(\pi^*\)，使得对于所有状态 \(s \in S\)，\(V^{\pi^*}(s)\) 最大化。
 
@@ -12545,25 +13506,25 @@ $$
 \pi_{k+1}(s) = \arg\max_{a \in A} \sum_{s' \in S} P(s' | s, a) [R(s, a) + \gamma V^{\pi_k}(s')]
 $$
 
-#### 15.1.3 动态规划
+#### 12.1.3 动态规划
 
 动态规划（Dynamic Programming）是一种用于解决最优化问题的算法设计方法，特别适用于具有重叠子问题和最优子结构性质的问题。它通过将复杂问题分解为更小的子问题，并存储其结果以避免重复计算，从而提高效率。
 
 动态规划的核心思想包括以下几个方面：
 
-1. **重叠子问题**：问题可以分解为相互重叠的子问题，即子问题在问题求解过程中被多次计算。
-2. **最优子结构**：问题的最优解包含其子问题的最优解。
-3. **子问题重用**：通过存储子问题的解来避免重复计算，通常使用一个表格（数组或矩阵）来存储子问题的解。
+1. 重叠子问题：问题可以分解为相互重叠的子问题，即子问题在问题求解过程中被多次计算。
+2. 最优子结构：问题的最优解包含其子问题的最优解。
+3. 子问题重用：通过存储子问题的解来避免重复计算，通常使用一个表格（数组或矩阵）来存储子问题的解。
 
 动态规划的步骤
 
 解决动态规划问题通常包含以下几个步骤：
 
-1. **定义子问题**：明确如何将原问题分解为子问题。
-2. **递归关系**：找出子问题之间的关系，通过递归公式描述问题的解。
-3. **边界条件**：确定基本的边界条件（初始条件）。
-4. **计算顺序**：决定计算子问题的顺序，通常是从小到大。
-5. **存储和重用**：使用表格（如数组）存储子问题的解，防止重复计算。
+1. 定义子问题：明确如何将原问题分解为子问题。
+2. 递归关系：找出子问题之间的关系，通过递归公式描述问题的解。
+3. 边界条件：确定基本的边界条件（初始条件）。
+4. 计算顺序：决定计算子问题的顺序，通常是从小到大。
+5. 存储和重用：使用表格（如数组）存储子问题的解，防止重复计算。
 
 斐波那契数列是动态规划的经典例子。斐波那契数列的递推公式为：$F(n) = F(n-1) + F(n-2)$
 边界条件为：$F(0) = 0, \quad F(1) = 1$
@@ -12590,7 +13551,7 @@ def fib_dp(n):
     return dp[n]
 ```
 
-#### 15.1.4 蒙特卡洛方法
+#### 12.1.4 蒙特卡洛方法
 
 蒙特卡罗方法（Monte Carlo Methods）是一类基于随机采样的算法，用于求解各种数值问题。在强化学习中，蒙特卡罗方法通过模拟多个从起始状态到终止状态的轨迹（episodes），然后利用这些轨迹的数据来估计状态值或行动值，从而求解马尔科夫决策过程（MDP）。
 
@@ -12694,7 +13655,7 @@ def monte_carlo_control(env, num_episodes, gamma=1.0, epsilon=0.1, alpha=0.1):
     - 延迟更新：蒙特卡罗方法仅在一整条轨迹结束后才进行更新，这意味着在长轨迹中，更新的反馈会有较大的延迟。这与基于时间差分（TD）的方法不同，后者可以在每一步之后立即进行更新。
     - 不适用于非马尔科夫环境：蒙特卡罗方法假设环境满足马尔科夫性质（即当前状态和动作完全决定未来的状态和回报），如果环境不满足这个假设，估计结果的准确性会受到影响。
 
-#### 15.1.5 时序差分学习
+#### 12.1.5 时序差分学习
 
 时序差分法（Temporal Difference, 简称TD）是一种重要的强化学习方法，它结合了蒙特卡罗方法和动态规划的思想。TD方法通过在每一步更新值函数，利用当前状态和下一状态的估计值之间的差异（即时序差分误差）来逐步改进策略。
 
@@ -12702,9 +13663,7 @@ TD方法的核心在于利用 **引导回报（Bootstrapping）**，即通过当
 
 在TD方法中，时序差分误差（Temporal Difference Error, $\delta$）是更新值函数的关键。对于状态值函数 $V(s)$，时序差分误差定义为：
 
-$$
-\delta = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)
-$$
+$\delta = R_{t+1} + \gamma V(S_{t+1}) - V(S_t)$
 
 其中：
 - $R_{t+1}$ 是从状态 $S_t$ 采取动作 $A_t$ 得到的即时奖励。
@@ -12773,7 +13732,7 @@ def td_0(env, num_episodes, alpha=0.1, gamma=1.0):
     - 需要良好的探索策略：为了确保状态空间的充分探索，TD方法通常需要结合有效的探索策略（如ϵ-贪婪策略）。不良的探索策略可能会导致欠探索，从而影响学习效果。
 
 
-#### 15.1.6 SARSA算法
+#### 12.1.6 SARSA算法
 
 这一节我们介绍时序差分法中的一种经典算法：SARSA算法。SARSA算法是一种基于策略的时序差分学习方法，用于估计当前策略下的行动值函数 $Q(s, a)$。SARSA算法的目标是找到最优策略，使得在每个状态下选择的动作序列能够最大化累积奖励。
 
@@ -12843,7 +13802,7 @@ SARSA算法的优点和缺点为：
     - 依赖探索策略：SARSA的性能高度依赖于探索策略的选择，𝜖值的设置对结果有显著影响。
     - 可能陷入次优策略：如果探索不足，SARSA可能会陷入次优策略，难以找到全局最优解。
 
-#### 15.1.7 Q-Learning算法
+#### 12.1.7 Q-Learning算法
 
 Q-learning是一种无模型（model-free）的强化学习算法，用于找到一个马尔可夫决策过程（MDP）的最优策略。该算法通过学习一个动作值函数 \(Q(s, a)\) 来指导智能体选择最优的动作。Q-learning是一种 **off-policy** 方法，这意味着它通过学习一个独立于当前策略的行为策略，从而估算最优策略的值。
 
@@ -12910,7 +13869,7 @@ Q-learning算法的优点和缺点为：
     - 存储需求高：需要为每个状态-动作对存储一个值，当状态空间和动作空间较大时，存储需求会显著增加。
     - 探索策略依赖：Q-learning的性能高度依赖于探索策略，ϵ值的设置对结果有显著影响。
 
-#### 15.1.8 策略梯度法
+#### 12.1.8 策略梯度法
 
 策略梯度法（Policy Gradient Methods）是强化学习中的一种方法，通过直接优化策略的参数来最大化累计奖励。与基于值函数的方法（如Q-learning和SARSA）不同，策略梯度法不显式地估计状态值函数或动作值函数，而是直接优化策略。
 
@@ -13003,7 +13962,7 @@ def reinforce(env, num_episodes, alpha=0.01, gamma=0.99):
     - 计算成本高：由于需要对策略参数进行更新，策略梯度方法的计算成本较高，特别是在大规模问题中。
     - 局部最优：策略梯度法优化容易陷入局部最优，特别是在复杂的策略空间中。
 
-#### 15.1.9 Actor-Critic方法
+#### 12.1.9 Actor-Critic方法
 
 Actor-Critic方法是一种用于强化学习的算法，它结合了策略优化（Policy Optimization）和价值估计（Value Estimation）的优点。该方法同时使用两个模型：Actor（行为者）和Critic（评论者），分别负责策略的更新和价值的评估。
 
@@ -13017,17 +13976,17 @@ Actor-Critic方法是一种用于强化学习的算法，它结合了策略优�
 
 Actor-Critic算法步骤为
 
-1. **策略表示**：
+1. 策略表示：
     - 策略 $\pi_{\theta}(a|s)$ 表示在状态 $s$ 下选择动作 $a$ 的概率，由参数 $\theta$ 控制。
 
-2. **状态值函数**：
+2. 状态值函数：
     - 价值函数 $V(s)$ 表示在状态 $s$ 下的预期累积奖励。
 
-3. **优势函数**：
+3. 优势函数：
     - 优势函数 $A(s, a)$ 衡量特定动作 $a$ 相对于状态 $s$ 的平均水平的好坏。
     - 通常，优势函数可以表示为 $A(s, a) = Q(s, a) - V(s)$。
 
-4. **策略更新**：
+4. 策略更新：
     - 使用策略梯度法更新Actor的参数：
 
 $$
@@ -13036,7 +13995,7 @@ $$
 
 其中，$\alpha$ 是学习率。
 
-5. **价值更新**：
+5. 价值更新：
     - 使用TD误差（Temporal Difference Error）更新Critic的参数：
 
 $$
@@ -13045,7 +14004,7 @@ $$
 
 其中，$r$ 是即时奖励，$\gamma$ 是折扣因子，$s'$ 是下一状态。
 
-6. **同步更新**：
+6. 同步更新：
     - 在每个时间步，Actor和Critic交替更新，Actor根据Critic的反馈调整策略，Critic根据Actor的策略调整价值估计。
 
 算法流程
@@ -13077,9 +14036,9 @@ $$
 
 Actor-Critic方法通过将策略梯度和价值估计相结合，显著提高了强化学习算法的效率和稳定性。
 
-### 13.2 深度强化学习
+### 12.2 深度强化学习
 
-#### 13.2.1 DQN算法
+#### 12.2.1 DQN算法
 
 深度Q网络（Deep Q-Network, DQN）结合了Q学习和深度神经网络的优点。DQN算法特别适用于处理高维状态空间，比如游戏中的图像数据。以下是DQN算法的核心概念和步骤：
 
@@ -13088,7 +14047,7 @@ Actor-Critic方法通过将策略梯度和价值估计相结合，显著提高�
 
 算法步骤
 
-1. 经验回放（Experience Replay）**：
+1. 经验回放（Experience Replay）：
     - 代理（Agent）在环境中与环境交互，并将每次交互（状态、动作、奖励、下一个状态）存储在一个回放缓冲区（Replay Buffer）中。
     - 从回放缓冲区中随机抽取小批量的经验进行训练，打破了数据的时间相关性，提高了训练的稳定性。
 
@@ -13114,7 +14073,7 @@ $$
 - 初始化在线网络和目标网络的参数。
 - 初始化回放缓冲区。
 - 在每个时间步：
-    - 根据当前状态，使用在线网络选择动作（通常用 \(\epsilon\)-贪婪策略）。
+    - 根据当前状态，使用在线网络选择动作（通常用 $\epsilon$-贪婪策略）。
     - 执行动作，观测奖励和下一个状态。
     - 将经验（状态、动作、奖励、下一个状态）存储到回放缓冲区。
     - 从回放缓冲区中随机抽取小批量经验进行训练。
@@ -13123,7 +14082,541 @@ $$
 
 DQN算法在处理复杂环境（如Atari游戏）方面取得了显著成功，是深度强化学习领域的重要里程碑。
 
-#### 13.2.2 TRPO算法
+我们下面来用PyTorch实现一个DQN网络。
+
+首先我们定义一个Q网络：
+
+```python
+# 定义 Q 网络
+class QNetwork(nn.Module):
+    def __init__(self, state_size, action_size, seed):
+        super(QNetwork, self).__init__()
+        self.seed = torch.manual_seed(seed)
+        self.fc1 = nn.Linear(state_size, 64)
+        self.fc2 = nn.Linear(64, 64)
+        self.fc3 = nn.Linear(64, action_size)
+
+    def forward(self, state):
+        x = torch.relu(self.fc1(state))
+        x = torch.relu(self.fc2(x))
+        return self.fc3(x)
+```
+
+这个网络的作用是为给定的状态估计每个动作的Q值，即在遵循当前策略的情况下，采取每个动作所能获得的预期回报。在强化学习中，这样的网络可以帮助智能体学习在给定状态下选择最佳动作。
+
+下面我们实现回放缓冲区，解释我直接写在代码里了：
+
+```python
+class ReplayBuffer:
+    def __init__(self, action_size, buffer_size, batch_size, seed):
+        self.action_size = action_size
+        self.memory = deque(maxlen=buffer_size)
+        self.batch_size = batch_size
+        self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done"])
+        self.seed = random.seed(seed)
+    
+    # 用于向回放缓冲区添加新的经验
+    def add(self, state, action, reward, next_state, done):
+        e = self.experience(state, action, reward, next_state, done)
+        self.memory.append(e)
+    
+    # 用于从回放缓冲区中随机采样一批经验
+    def sample(self):
+        experiences = random.sample(self.memory, k=self.batch_size)
+        
+        states = torch.from_numpy(np.vstack([e.state for e in experiences if e is not None])).float()
+        actions = torch.from_numpy(np.vstack([e.action for e in experiences if e is not None])).long()
+        rewards = torch.from_numpy(np.vstack([e.reward for e in experiences if e is not None])).float()
+        next_states = torch.from_numpy(np.vstack([e.next_state for e in experiences if e is not None])).float()
+        dones = torch.from_numpy(np.vstack([e.done for e in experiences if e is not None]).astype(np.uint8)).float()
+        
+        return (states, actions, rewards, next_states, dones)
+    
+    # 返回回放缓冲区中存储的经验数量
+    def __len__(self):
+        return len(self.memory)
+```
+
+经验回放缓冲区的主要目的是打破经验之间的相关性，并更有效地利用过去的经验来训练智能体。通过随机采样，可以减少训练过程中的方差，从而提高学习的稳定性。
+
+最后我们实现DQN算法：
+
+```python
+def dqn(n_episodes=1000, max_t=300, gamma=0.99, epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=0.995, tau=1e-3):
+    scores = []
+    scores_window = deque(maxlen=100)
+    epsilon = epsilon_start
+    
+    for i_episode in range(1, n_episodes+1):
+        state = env.reset()
+        score = 0
+        
+        for t in range(max_t):
+            action = select_action(state, epsilon)
+            next_state, reward, done, _ = env.step(action)
+            replay_buffer.add(state, action, reward, next_state, done)
+            
+            state = next_state
+            score += reward
+            
+            if len(replay_buffer) > batch_size:
+                experiences = replay_buffer.sample()
+                learn(experiences, gamma, tau)
+            
+            if done:
+                break
+        
+        scores_window.append(score)
+        scores.append(score)
+        epsilon = max(epsilon_end, epsilon_decay * epsilon)
+        
+        print(f'\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}', end="")
+        if i_episode % 100 == 0:
+            print(f'\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}')
+        if np.mean(scores_window) >= 195.0:
+            print(f'\nEnvironment solved in {i_episode-100} episodes!\tAverage Score: {np.mean(scores_window):.2f}')
+            torch.save(qnetwork_local.state_dict(), 'checkpoint.pth')
+            break
+
+    return scores
+```
+
+我们还需要写一个函数，用于结合探索（exploration）和利用（exploitation）的策略，通过一个参数epsilon来平衡两者。
+
+```python
+def select_action(state, epsilon):
+    state = torch.from_numpy(state).float().unsqueeze(0)
+    qnetwork_local.eval()
+    with torch.no_grad():
+        action_values = qnetwork_local(state)
+    qnetwork_local.train()
+
+    if random.random() > epsilon:
+        return np.argmax(action_values.cpu().data.numpy())
+    else:
+        return random.choice(np.arange(action_size))
+```
+
+下面我们来看下如何实现学习过程：
+
+```python
+def learn(experiences, gamma, tau):
+    states, actions, rewards, next_states, dones = experiences
+    
+    # 计算下一个状态的Q值，并取最大值作为下一个状态的最佳Q值。detach()用于防止梯度传播到目标网络。
+    q_targets_next = qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
+    # 计算目标Q值，它是即时奖励加上折扣后的最佳未来奖励。
+    q_targets = rewards + (gamma * q_targets_next * (1 - dones))
+    
+    # 计算当前策略下的预期Q值，即对于给定的状态和动作，网络预测的Q值。
+    q_expected = qnetwork_local(states).gather(1, actions)
+    
+    # 计算预期Q值和目标Q值之间的均方误差损失
+    loss = nn.MSELoss()(q_expected, q_targets)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+    
+    soft_update(qnetwork_local, qnetwork_target, tau)
+
+# 这个函数用于平滑地更新目标网络的参数，以防止训练过程中的不稳定
+def soft_update(local_model, target_model, tau):
+    # 对于目标网络和本地网络的每一对参数，使用tau比例更新目标网络的参数，保持1-tau比例的原参数。
+    for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
+        target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data
+```
+
+下面我们看下完整的代码：
+
+```python
+import gym
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import random
+from collections import namedtuple, deque
+
+# 定义 Q 网络
+class QNetwork(nn.Module):
+    def __init__(self, state_size, action_size, seed):
+        super(QNetwork, self).__init__()
+        self.seed = torch.manual_seed(seed)
+        self.fc1 = nn.Linear(state_size, 64)
+        self.fc2 = nn.Linear(64, 64)
+        self.fc3 = nn.Linear(64, action_size)
+
+    def forward(self, state):
+        x = torch.relu(self.fc1(state))
+        x = torch.relu(self.fc2(x))
+        return self.fc3(x)
+
+# 创建环境
+env = gym.make('CartPole-v1')
+
+# 设置参数
+state_size = env.observation_space.shape[0]
+action_size = env.action_space.n
+seed = 0
+
+# 初始化 Q 网络
+qnetwork_local = QNetwork(state_size, action_size, seed)
+qnetwork_target = QNetwork(state_size, action_size, seed)
+optimizer = optim.Adam(qnetwork_local.parameters(), lr=0.001)
+
+# 设置随机种子
+np.random.seed(seed)
+env.seed(seed)
+torch.manual_seed(seed)
+
+class ReplayBuffer:
+    def __init__(self, action_size, buffer_size, batch_size, seed):
+        self.action_size = action_size
+        self.memory = deque(maxlen=buffer_size)
+        self.batch_size = batch_size
+        self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done"])
+        self.seed = random.seed(seed)
+    
+    def add(self, state, action, reward, next_state, done):
+        e = self.experience(state, action, reward, next_state, done)
+        self.memory.append(e)
+    
+    def sample(self):
+        experiences = random.sample(self.memory, k=self.batch_size)
+        
+        states = torch.from_numpy(np.vstack([e.state for e in experiences if e is not None])).float()
+        actions = torch.from_numpy(np.vstack([e.action for e in experiences if e is not None])).long()
+        rewards = torch.from_numpy(np.vstack([e.reward for e in experiences if e is not None])).float()
+        next_states = torch.from_numpy(np.vstack([e.next_state for e in experiences if e is not None])).float()
+        dones = torch.from_numpy(np.vstack([e.done for e in experiences if e is not None]).astype(np.uint8)).float()
+        
+        return (states, actions, rewards, next_states, dones)
+    
+    def __len__(self):
+        return len(self.memory)
+
+# 初始化经验回放缓冲区
+buffer_size = int(1e5)
+batch_size = 64
+replay_buffer = ReplayBuffer(action_size, buffer_size, batch_size, seed)
+
+def dqn(n_episodes=1000, max_t=300, gamma=0.99, epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=0.995, tau=1e-3):
+    scores = []
+    scores_window = deque(maxlen=100)
+    epsilon = epsilon_start
+    
+    for i_episode in range(1, n_episodes+1):
+        state = env.reset()
+        score = 0
+        
+        for t in range(max_t):
+            action = select_action(state, epsilon)
+            next_state, reward, done, _ = env.step(action)
+            replay_buffer.add(state, action, reward, next_state, done)
+            
+            state = next_state
+            score += reward
+            
+            if len(replay_buffer) > batch_size:
+                experiences = replay_buffer.sample()
+                learn(experiences, gamma, tau)
+            
+            if done:
+                break
+        
+        scores_window.append(score)
+        scores.append(score)
+        epsilon = max(epsilon_end, epsilon_decay * epsilon)
+        
+        print(f'\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}', end="")
+        if i_episode % 100 == 0:
+            print(f'\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}')
+        if np.mean(scores_window) >= 195.0:
+            print(f'\nEnvironment solved in {i_episode-100} episodes!\tAverage Score: {np.mean(scores_window):.2f}')
+            torch.save(qnetwork_local.state_dict(), 'checkpoint.pth')
+            break
+
+    return scores
+
+def select_action(state, epsilon):
+    state = torch.from_numpy(state).float().unsqueeze(0)
+    qnetwork_local.eval()
+    with torch.no_grad():
+        action_values = qnetwork_local(state)
+    qnetwork_local.train()
+
+    if random.random() > epsilon:
+        return np.argmax(action_values.cpu().data.numpy())
+    else:
+        return random.choice(np.arange(action_size))
+
+def learn(experiences, gamma, tau):
+    states, actions, rewards, next_states, dones = experiences
+    
+    q_targets_next = qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
+    q_targets = rewards + (gamma * q_targets_next * (1 - dones))
+    
+    q_expected = qnetwork_local(states).gather(1, actions)
+    
+    loss = nn.MSELoss()(q_expected, q_targets)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+    
+    soft_update(qnetwork_local, qnetwork_target, tau)
+
+def soft_update(local_model, target_model, tau):
+    for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
+        target_param.data.copy_(tau * local_param.data + (1.0 - tau) * target_param.data)
+
+# 训练 DQN 代理
+scores = dqn()
+```
+
+运行结果如下：
+
+```
+Episode 100	Average Score: 18.26
+Episode 200	Average Score: 34.83
+Episode 300	Average Score: 128.78
+Episode 400	Average Score: 148.33
+Episode 486	Average Score: 195.24
+Environment solved in 386 episodes!	Average Score: 195.24
+```
+
+针对图像的游戏环境，我们可以使用卷积神经网络（CNN）来提取图像特征，然后连接到全连接层来估计Q值。
+
+```python
+
+# 定义CNN模型
+class DQN(nn.Module):
+    def __init__(self, input_shape, num_actions):
+        super(DQN, self).__init__()
+        self.conv1 = nn.Conv2d(input_shape[0], 32, kernel_size=8, stride=4)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=4, stride=2)
+        self.conv3 = nn.Conv2d(64, 64, kernel_size=3, stride=1)
+        self.fc1 = nn.Linear(self.feature_size(input_shape), 512)
+        self.fc2 = nn.Linear(512, num_actions)
+
+    def feature_size(self, input_shape):
+        with torch.no_grad():
+            return self.conv3(self.conv2(self.conv1(torch.zeros(1, *input_shape)))).view(1, -1).size(1)
+
+    def forward(self, x):
+        x = torch.relu(self.conv1(x))
+        x = torch.relu(self.conv2(x))
+        x = torch.relu(self.conv3(x))
+        x = x.view(x.size(0), -1)
+        x = torch.relu(self.fc1(x))
+        return self.fc2(x)
+```
+
+除了CNN之前，我们也可以对图像通过CV预处理，比如裁剪、缩放、灰度化等，以提高模型的性能。
+
+```python
+# 图像预处理函数
+def preprocess_observation(obs):
+    if not isinstance(obs, np.ndarray):
+        obs = np.array(obs)
+    if obs.shape[-1] == 3:  # 确保输入是RGB图像
+        obs = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
+    obs = cv2.resize(obs, (84, 84), interpolation=cv2.INTER_AREA)
+    obs = np.expand_dims(obs, axis=0)  # 增加一个维度以匹配卷积神经网络的输入
+    return obs / 255.0  # 归一化图像数据
+```
+
+我们来看一下CNN策略的完整的代码：
+
+```python
+import gymnasium as gym
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+from collections import namedtuple, deque
+import random
+import cv2
+
+# 定义设备
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# 定义CNN模型
+class DQN(nn.Module):
+    def __init__(self, input_shape, num_actions):
+        super(DQN, self).__init__()
+        self.conv1 = nn.Conv2d(input_shape[0], 32, kernel_size=8, stride=4)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=4, stride=2)
+        self.conv3 = nn.Conv2d(64, 64, kernel_size=3, stride=1)
+        self.fc1 = nn.Linear(self.feature_size(input_shape), 512)
+        self.fc2 = nn.Linear(512, num_actions)
+
+    def feature_size(self, input_shape):
+        with torch.no_grad():
+            return self.conv3(self.conv2(self.conv1(torch.zeros(1, *input_shape)))).view(1, -1).size(1)
+
+    def forward(self, x):
+        x = torch.relu(self.conv1(x))
+        x = torch.relu(self.conv2(x))
+        x = torch.relu(self.conv3(x))
+        x = x.view(x.size(0), -1)
+        x = torch.relu(self.fc1(x))
+        return self.fc2(x)
+
+# 定义经验回放缓冲区
+Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
+
+class ReplayBuffer:
+    def __init__(self, capacity):
+        self.buffer = deque(maxlen=capacity)
+
+    def push(self, *args):
+        self.buffer.append(Transition(*args))
+
+    def sample(self, batch_size):
+        return random.sample(self.buffer, batch_size)
+
+    def __len__(self):
+        return len(self.buffer)
+
+# 定义DQN智能体
+class DQNAgent:
+    def __init__(self, input_shape, num_actions, gamma=0.99, epsilon_start=1.0, epsilon_end=0.1, epsilon_decay=500):
+        self.gamma = gamma
+        self.epsilon_start = epsilon_start
+        self.epsilon_end = epsilon_end
+        self.epsilon_decay = epsilon_decay
+        self.epsilon = epsilon_start
+        self.num_actions = num_actions
+
+        self.policy_net = DQN(input_shape, num_actions).to(device)
+        self.target_net = DQN(input_shape, num_actions).to(device)
+        self.target_net.load_state_dict(self.policy_net.state_dict())
+        self.target_net.eval()
+
+        self.optimizer = optim.Adam(self.policy_net.parameters())
+        self.memory = ReplayBuffer(10000)
+        self.steps_done = 0
+
+    def select_action(self, state):
+        self.epsilon = self.epsilon_end + (self.epsilon_start - self.epsilon_end) * np.exp(-1. * self.steps_done / self.epsilon_decay)
+        self.steps_done += 1
+        if random.random() > self.epsilon:
+            with torch.no_grad():
+                return self.policy_net(state).max(1)[1].view(1, 1)
+        else:
+            return torch.tensor([[random.randrange(self.num_actions)]], device=device, dtype=torch.long)
+
+    def optimize_model(self, batch_size):
+        if len(self.memory) < batch_size:
+            return
+        transitions = self.memory.sample(batch_size)
+        batch = Transition(*zip(*transitions))
+
+        non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)), device=device, dtype=torch.bool)
+        non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
+        state_batch = torch.cat(batch.state)
+        action_batch = torch.cat(batch.action)
+        reward_batch = torch.cat(batch.reward)
+
+        state_action_values = self.policy_net(state_batch).gather(1, action_batch)
+
+        next_state_values = torch.zeros(batch_size, device=device)
+        next_state_values[non_final_mask] = self.target_net(non_final_next_states).max(1)[0].detach()
+
+        expected_state_action_values = (next_state_values * self.gamma) + reward_batch
+
+        loss = nn.functional.smooth_l1_loss(state_action_values, expected_state_action_values.unsqueeze(1))
+
+        self.optimizer.zero_grad()
+        loss.backward()
+        for param in self.policy_net.parameters():
+            param.grad.data.clamp_(-1, 1)
+        self.optimizer.step()
+
+# 图像预处理函数
+def preprocess_observation(obs):
+    if not isinstance(obs, np.ndarray):
+        obs = np.array(obs)
+    if obs.shape[-1] == 3:  # 确保输入是RGB图像
+        obs = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
+    obs = cv2.resize(obs, (84, 84), interpolation=cv2.INTER_AREA)
+    obs = np.expand_dims(obs, axis=0)  # 增加一个维度以匹配卷积神经网络的输入
+    return obs / 255.0  # 归一化图像数据
+
+# 主训练循环
+def train_dqn(env_name, num_episodes, batch_size):
+    env = gym.make(env_name)
+    input_shape = (1, 84, 84)
+    num_actions = env.action_space.n
+    agent = DQNAgent(input_shape, num_actions)
+
+    for episode in range(num_episodes):
+        obs = env.reset()
+        obs = preprocess_observation(obs[0])
+        state = torch.tensor([obs], device=device, dtype=torch.float32)
+        sum = 0
+
+        for t in range(10000):
+            action = agent.select_action(state)
+            next_obs, reward, done, _, _ = env.step(action.item())
+            sum = sum + reward
+            reward = torch.tensor([reward], device=device)
+
+            if not done:
+                next_obs = preprocess_observation(next_obs)
+                next_state = torch.tensor([next_obs], device=device, dtype=torch.float32)
+            else:
+                next_state = None
+
+            agent.memory.push(state, action, next_state, reward)
+
+            state = next_state
+
+            agent.optimize_model(batch_size)
+
+            if done:
+                print(f"Episode {episode} finished after {t+1} timesteps")
+                print(sum)
+                break
+
+        if episode % 10 == 0:
+            agent.target_net.load_state_dict(agent.policy_net.state_dict())
+
+    env.close()
+
+# 训练DQN
+if __name__ == "__main__":
+    train_dqn("PongNoFrameskip-v4", num_episodes=500, batch_size=32)
+```
+
+运行结果如下：
+```
+Episode 0 finished after 3243 timesteps
+-21.0
+Episode 1 finished after 3879 timesteps
+-21.0
+Episode 2 finished after 3408 timesteps
+-21.0
+Episode 3 finished after 3056 timesteps
+-21.0
+Episode 4 finished after 3775 timesteps
+-19.0
+Episode 5 finished after 3748 timesteps
+-19.0
+Episode 6 finished after 3304 timesteps
+-21.0
+Episode 7 finished after 3056 timesteps
+-21.0
+Episode 8 finished after 3607 timesteps
+-20.0
+Episode 9 finished after 3131 timesteps
+-21.0
+Episode 10 finished after 3853 timesteps
+-20.0
+...
+```
+
+#### 12.2.2 TRPO算法
 
 TRPO（Trust Region Policy Optimization，信任域策略优化）是基于策略梯度法的算法，旨在确保每次策略更新时不会对策略造成过大的变化，从而提高训练的稳定性和效率。TRPO通过引入信任域约束，避免了策略更新过程中过大的波动。
 
@@ -13176,7 +14669,7 @@ $$
 
 TRPO通过引入信任域约束，显著提高了策略优化的稳定性和效率。尽管计算复杂度较高，但其在处理高维连续动作空间问题时表现尤为出色。
 
-#### 13.2.3 PPO算法
+#### 12.2.3 PPO算法
 
 PPO（Proximal Policy Optimization，近端策略优化）由OpenAI提出，它通过引入新的目标函数和约束，稳定了策略优化过程，提高了样本效率和训练稳定性。PPO算法是一种基于策略梯度的算法，是在TRPO算法的基础上进行改进的。PPO通过引入剪切（Clipping）机制，简化了TRPO的复杂性，避免了计算二阶导数。PPO优化目标函数时，限制策略变化的幅度，以防止策略更新过大。
 
@@ -13221,7 +14714,312 @@ PPO算法流程如下：
 
 PPO算法在实践中表现出色，具有较高的样本效率和训练稳定性，已被广泛应用于各种强化学习任务中。
 
-#### 13.2.4 A3C算法
+要实现PPO算法，我们先定义一个ActorCritic网络，使用卷积神经网络以便获取图像特征。
+
+```python
+class ActorCritic(nn.Module):
+    def __init__(self, input_channels, action_dim):
+        super(ActorCritic, self).__init__()
+        self.conv1 = nn.Conv2d(input_channels, 32, 8, 4)
+        self.conv2 = nn.Conv2d(32, 64, 4, 2)
+        self.conv3 = nn.Conv2d(64, 64, 3, 1)
+        self.fc1 = nn.Linear(2304, 512)  
+        self.fc_pi = nn.Linear(512, action_dim)
+        self.fc_v = nn.Linear(512, 1)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = x.view(x.size(0), -1)  # 展平
+      
+        x = F.relu(self.fc1(x))
+        pi = self.fc_pi(x)
+        v = self.fc_v(x)
+        return pi, v
+```
+
+下面我们实现PPO中的截断操作：
+
+```python
+class PPO:
+    def __init__(self, actor_critic, lr=2.5e-4, gamma=0.99, eps_clip=0.2, K_epochs=4):
+        self.actor_critic = actor_critic
+        self.optimizer = optim.Adam(actor_critic.parameters(), lr=lr)
+        self.gamma = gamma
+        self.eps_clip = eps_clip # 这是截断项，用于限制策略更新的步长
+        self.K_epochs = K_epochs
+
+    # 用于根据当前状态选择一个动作
+    def select_action(self, state):
+        state = torch.FloatTensor(state).unsqueeze(0).to(next(self.actor_critic.parameters()).device)
+        policy, value = self.actor_critic(state)
+        dist = Categorical(logits=policy) # 创建一个类别分布，用于从策略中采样动作
+        action = dist.sample() # 从分布中随机采样一个动作
+        return action.item(), dist.log_prob(action), value
+
+    # 用于根据记忆库中的数据更新模型
+    def update(self, memory):
+        rewards = []
+        discounted_reward = 0
+        for reward, is_terminal in zip(reversed(memory.rewards), reversed(memory.is_terminals)):
+            if is_terminal:
+                discounted_reward = 0
+            discounted_reward = reward + (self.gamma * discounted_reward)
+            rewards.insert(0, discounted_reward)
+
+        rewards = torch.tensor(rewards, dtype=torch.float32).to(next(self.actor_critic.parameters()).device)
+        old_states = torch.cat(memory.states).detach().to(next(self.actor_critic.parameters()).device)
+        old_actions = torch.cat(memory.actions).detach().to(next(self.actor_critic.parameters()).device)
+        old_logprobs = torch.cat(memory.logprobs).detach().to(next(self.actor_critic.parameters()).device)
+
+        for _ in range(self.K_epochs):
+            # 获取旧状态的策略和价值估计
+            policy, values = self.actor_critic(old_states) 
+            dist = Categorical(logits=policy)
+            logprobs = dist.log_prob(old_actions)
+            dist_entropy = dist.entropy() # 计算分布的熵
+            state_values = values.squeeze()
+
+            ratios = torch.exp(logprobs - old_logprobs) # 计算新旧策略的概率比率
+            advantages = rewards - state_values.detach() # 计算优势函数
+            surr1 = ratios * advantages # 计算第一个截断项
+            surr2 = torch.clamp(ratios, 1 - self.eps_clip, 1 + self.eps_clip) * advantages # 计算第二个截断项
+            # 计算策略损失
+            loss = -torch.min(surr1, surr2) + 0.5 * nn.MSELoss()(state_values, rewards) - 0.01 * dist_entropy
+
+            self.optimizer.zero_grad() # 梯度清零
+            loss.mean().backward() # 反向传播
+            self.optimizer.step() # 更新参数
+```
+
+按惯例，我们定义一个记忆库，用于存储交互数据：
+
+```python
+class Memory:
+    def __init__(self):
+        self.actions = []
+        self.states = []
+        self.logprobs = []
+        self.rewards = []
+        self.is_terminals = []
+
+    def clear_memory(self):
+        del self.actions[:]
+        del self.states[:]
+        del self.logprobs[:]
+        del self.rewards[:]
+        del self.is_terminals[:]
+```
+
+另外，我们要对图像进行一些处理。
+
+```python
+import cv2
+import numpy as np
+
+# 这个函数用于预处理单个游戏帧
+def preprocess(frame):
+    if isinstance(frame, tuple) and len(frame) == 2:
+        frame = frame[0]  # 假设需要第一个元素
+    frame = np.array(frame)  # 确保 frame 是一个 NumPy 数组
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)  # 转灰度
+    frame = cv2.resize(frame, (80, 80))  # 缩放到 80x80
+    frame = frame / 255.0  # 归一化
+    return frame
+
+# 这个函数用于将多个游戏帧堆叠起来，形成一个四帧的序列，这是许多强化学习算法中常用的输入格式
+def stack_frames(stacked_frames, frame, is_new_episode):
+    if is_new_episode:
+        stacked_frames = np.stack([frame] * 4, axis=0)
+    else:
+        stacked_frames = np.concatenate((stacked_frames[1:, :, :], np.expand_dims(frame, 0)), axis=0)
+    return stacked_frames
+```
+
+最后我们将所有部分组合起来，实现PPO算法：
+
+```python
+import gym
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.distributions import Categorical
+import torch.nn.functional as F
+
+class ActorCritic(nn.Module):
+    def __init__(self, input_channels, action_dim):
+        super(ActorCritic, self).__init__()
+        self.conv1 = nn.Conv2d(input_channels, 32, 8, 4)
+        self.conv2 = nn.Conv2d(32, 64, 4, 2)
+        self.conv3 = nn.Conv2d(64, 64, 3, 1)
+        self.fc1 = nn.Linear(2304, 512)  
+        self.fc_pi = nn.Linear(512, action_dim)
+        self.fc_v = nn.Linear(512, 1)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = x.view(x.size(0), -1)  # 展平
+      
+        x = F.relu(self.fc1(x))
+        pi = self.fc_pi(x)
+        v = self.fc_v(x)
+        return pi, v
+
+class PPO:
+    def __init__(self, actor_critic, lr=2.5e-4, gamma=0.99, eps_clip=0.2, K_epochs=4):
+        self.actor_critic = actor_critic
+        self.optimizer = optim.Adam(actor_critic.parameters(), lr=lr)
+        self.gamma = gamma
+        self.eps_clip = eps_clip
+        self.K_epochs = K_epochs
+
+    def select_action(self, state):
+        state = torch.FloatTensor(state).unsqueeze(0).to(next(self.actor_critic.parameters()).device)
+        policy, value = self.actor_critic(state)
+        dist = Categorical(logits=policy)
+        action = dist.sample()
+        return action.item(), dist.log_prob(action), value
+
+    def update(self, memory):
+        rewards = []
+        discounted_reward = 0
+        for reward, is_terminal in zip(reversed(memory.rewards), reversed(memory.is_terminals)):
+            if is_terminal:
+                discounted_reward = 0
+            discounted_reward = reward + (self.gamma * discounted_reward)
+            rewards.insert(0, discounted_reward)
+
+        rewards = torch.tensor(rewards, dtype=torch.float32).to(next(self.actor_critic.parameters()).device)
+        old_states = torch.cat(memory.states).detach().to(next(self.actor_critic.parameters()).device)
+        old_actions = torch.cat(memory.actions).detach().to(next(self.actor_critic.parameters()).device)
+        old_logprobs = torch.cat(memory.logprobs).detach().to(next(self.actor_critic.parameters()).device)
+
+        for _ in range(self.K_epochs):
+            policy, values = self.actor_critic(old_states)
+            dist = Categorical(logits=policy)
+            logprobs = dist.log_prob(old_actions)
+            dist_entropy = dist.entropy()
+            state_values = values.squeeze()
+
+            ratios = torch.exp(logprobs - old_logprobs)
+            advantages = rewards - state_values.detach()
+            surr1 = ratios * advantages
+            surr2 = torch.clamp(ratios, 1 - self.eps_clip, 1 + self.eps_clip) * advantages
+            loss = -torch.min(surr1, surr2) + 0.5 * nn.MSELoss()(state_values, rewards) - 0.01 * dist_entropy
+
+            self.optimizer.zero_grad()
+            loss.mean().backward()
+            self.optimizer.step()
+
+class Memory:
+    def __init__(self):
+        self.actions = []
+        self.states = []
+        self.logprobs = []
+        self.rewards = []
+        self.is_terminals = []
+
+    def clear_memory(self):
+        del self.actions[:]
+        del self.states[:]
+        del self.logprobs[:]
+        del self.rewards[:]
+        del self.is_terminals[:]
+
+import cv2
+import numpy as np
+
+def preprocess(frame):
+    if isinstance(frame, tuple) and len(frame) == 2:
+        frame = frame[0]  # 假设需要第一个元素
+    frame = np.array(frame)  # 确保 frame 是一个 NumPy 数组
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)  # 转灰度
+    frame = cv2.resize(frame, (80, 80))  # 缩放到 80x80
+    frame = frame / 255.0  # 归一化
+    return frame
+
+def stack_frames(stacked_frames, frame, is_new_episode):
+    if is_new_episode:
+        stacked_frames = np.stack([frame] * 4, axis=0)
+    else:
+        stacked_frames = np.concatenate((stacked_frames[1:, :, :], np.expand_dims(frame, 0)), axis=0)
+    return stacked_frames
+
+def main():
+    env = gym.make('PongNoFrameskip-v4')
+    input_channels = 4
+    action_dim = env.action_space.n
+    
+    memory = Memory()
+    actor_critic = ActorCritic(input_channels, action_dim).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    ppo = PPO(actor_critic)
+    
+    max_episodes = 1000
+    max_timesteps = 10000
+    update_timestep = 2000
+    timestep = 0
+    
+    for episode in range(max_episodes):
+        state = env.reset()
+        state = preprocess(state)
+        stacked_frames = stack_frames(None, state, True)
+        
+        for t in range(max_timesteps):
+            timestep += 1
+            
+            action, log_prob, value = ppo.select_action(stacked_frames)
+            new_state, reward, done, _ = env.step(action)
+            new_state = preprocess(new_state)
+            stacked_frames = stack_frames(stacked_frames, new_state, False)
+            
+            # 确保输入形状为 [batch_size, channels, height, width]
+            input_tensor = torch.tensor(stacked_frames, dtype=torch.float32).unsqueeze(0)  # 添加 batch 维度
+            memory.states.append(input_tensor)
+            memory.actions.append(torch.tensor([action]))
+            memory.logprobs.append(log_prob)
+            memory.rewards.append(reward)
+            memory.is_terminals.append(done)
+            
+            if timestep % update_timestep == 0:
+                ppo.update(memory)
+                memory.clear_memory()
+                timestep = 0
+                
+            if done:
+                break
+        
+        print(f"Episode: {episode}, Reward: {sum(memory.rewards)}")
+
+if __name__ == '__main__':
+    main()
+```
+
+运行结果如下：
+
+```
+Episode: 0, Reward: -10.0
+Episode: 1, Reward: -7.0
+Episode: 2, Reward: -14.0
+Episode: 3, Reward: -7.0
+Episode: 4, Reward: -1.0
+Episode: 5, Reward: -8.0
+Episode: 6, Reward: -1.0
+Episode: 7, Reward: -9.0
+Episode: 8, Reward: -2.0
+Episode: 9, Reward: -10.0
+Episode: 10, Reward: -3.0
+...
+```
+
+下面是原论文中PPO算法在Atari游戏上的实验结果：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/ppo_atari.png)
+
+#### 12.2.4 A3C算法
 
 A3C（Asynchronous Advantage Actor-Critic，异步优势行为者-评论者）是一种由DeepMind提出的改进Actor-Critic算法。A3C通过并行执行多个代理（agent），加快了训练过程，并提高了策略的稳定性和样本效率。
 
@@ -13253,7 +15051,7 @@ A3C（Asynchronous Advantage Actor-Critic，异步优势行为者-评论者）�
     5. 将本地网络的梯度异步应用到全局网络，更新全局参数 $\theta$ 和 $\theta_v$。
 3. 重复上述过程，直到策略收敛或达到预定的训练步数。
 
-#### 15.2.5 DDPG算法
+#### 12.2.5 DDPG算法
 
 DDPG（Deep Deterministic Policy Gradient，深度确定性策略梯度）也是一种基于Actor-Critic框架的算法，适用于连续动作空间。它结合了确定性策略梯度和深度Q网络的优点，能够有效处理高维连续动作空间问题。
 
@@ -13281,7 +15079,7 @@ DDPG使用经验回放缓冲区（replay buffer）存储代理与环境交互的
     9. 软更新目标网络参数：$\theta^{Q'} \leftarrow \tau \theta^Q + (1 - \tau) \theta^{Q'}$ $\theta^{\mu'} \leftarrow \tau \theta^{\mu} + (1 - \tau) \theta^{\mu'}$
 其中，$\tau$ 是一个小常数，通常设为0.001。
 
-#### 15.2.6 TD3算法
+#### 12.2.6 TD3算法
 
 TD3（Twin Delayed Deep Deterministic Policy Gradient）是是对DDPG（Deep Deterministic Policy Gradient）算法的改进，旨在缓解DDPG中存在的一些问题，如过估计和训练不稳定性。TD3通过以下几个关键策略来增强稳定性和性能：
 
@@ -13343,7 +15141,7 @@ for each iteration do
 
 TD3在许多连续控制任务中表现出色，如OpenAI Gym的Mujoco环境，显示出比DDPG更稳定和高效的性能。
 
-#### 15.2.7 SAC算法
+#### 12.2.7 SAC算法
 
 SAC（Soft Actor-Critic）旨在通过在策略优化过程中引入熵正则化来实现更好的探索和平衡。它在连续动作空间任务中表现出色，因其稳定性和高效性而受到广泛关注。
 
@@ -13401,7 +15199,7 @@ for each iteration do
         θ1' ← τθ1 + (1-τ)θ1'
 ```
 
-### 15.3 强化学习编程基础
+### 12.3 强化学习编程基础
 
 强化学习中最经常使用的环境工具是OpenAI的Gym。Gym是一个用于开发和比较强化学习算法的工具包。它提供了一个简单的接口，可以在不同的环境中测试代理。2021年，是gym升级为gymnasium库，它提供了更多的环境和功能。
 
@@ -13414,7 +15212,7 @@ for each iteration do
 
 下面我们就来尝试不使用任何强化学习算法，而手工写一个代理程序。
 
-#### 15.3.1 实现第一个代理
+#### 12.3.1 实现第一个代理
 
 总体来说，对于gymnasium我们只需要做两件事情：一个是初始化环境，另一个就是通过step函数不停地给环境做输入，然后观察对应的结果。
 
@@ -13577,7 +15375,7 @@ for _ in range(1000):
 env.close()
 ```
 
-#### 15.3.2 Atari游戏环境
+#### 12.3.2 Atari游戏环境
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/Atari.png)
 
@@ -13632,7 +15430,7 @@ env.close()
 
 完整的游戏支持列表可以在https://gymnasium.farama.org/environments/atari/ 官方文档中查到。
 
-### 15.4 通过stable-baselines3库训练强化学习模型
+### 12.4 通过stable-baselines3库训练强化学习模型
 
 我们可以通过调用库的方式，不编写一行自己的强化学习代码，就可以训练一个强化学习模型。
 
@@ -13645,7 +15443,7 @@ pip install gymnasium[accept-rom-license]
 pip install stable_baselines3
 ```
 
-#### 15.4.1 用DQN算法实现强化学习
+#### 12.4.1 用DQN算法实现强化学习
 
 我们以乒乓球游戏为例。乒乓球游戏的规则大家都能理解，在游戏里，我们可以控制球拍上下移动，目标是让球拍击中球，不让球飞出边界。这个操作我们称为"动作"。
 
@@ -13794,7 +15592,7 @@ time_cost = datetime.now() - start_date
 print('time cost=', time_cost)
 ```
 
-#### 15.4.2 PPO算法
+#### 12.4.2 PPO算法
 
 有了上面的框架之后，我们把DQN算法换成PPO算法，就可以让PPO算法来玩乒乓球游戏了。
 
@@ -13877,7 +15675,7 @@ time_cost = datetime.now() - start_date
 print('time cost=', time_cost)
 ```
 
-#### 15.4.3 视频输出 - 从Monitor到RecordVideo
+#### 12.4.3 视频输出 - 从Monitor到RecordVideo
 
 有时候我们希望把游戏的视频输出出来，gym曾经使用Monitor来实现。现在gymnasium则改用RecordVideo来实现。
 
@@ -13921,9 +15719,1166 @@ ffmpeg -i rl-video-episode-0.mp4  output.apng
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/rl1.apng)
 
+### 12.5 基于人类反馈的强化学习
+
+基于人类反馈的强化学习（Reinforcement Learning from Human Feedback, RLHF）是一种利用人类反馈来训练和优化智能体或模型的强化学习方法。RLHF通过直接引入人类的偏好、评价或指导，帮助智能体更有效地学习和执行任务。与传统的强化学习方法相比，RLHF能够更好地处理复杂任务、稀疏奖励环境以及需要安全性和伦理性保障的情景。
+
+RLHF的向个关键概念
+
+- 人类反馈：指人类通过各种形式（如偏好、评分、演示、指导等）提供给智能体的信息，用以指导智能体的行为和决策。
+- 偏好模型：一个根据人类反馈数据训练的模型，用来预测智能体行为的优劣。这通常是一个监督学习模型，能够根据人类提供的偏好数据进行优化。
+- 奖励函数优化：通过人类反馈来优化或设计奖励函数，使得智能体的行为更符合人类的期望和标准。
+- 策略改进：智能体使用优化后的奖励函数或偏好模型，通过强化学习算法（如DQN、PPO等）不断改进其策略。
+
+RLHF的工作流程为
+
+- 收集人类反馈：从人类用户或专家处收集反馈数据。这些反馈可以是对智能体行为的偏好比较、评分、建议或演示。
+- 训练偏好模型：使用收集到的反馈数据训练一个偏好模型，该模型能够预测不同行为的优劣。
+- 优化奖励函数：根据偏好模型的输出，优化或设计智能体的奖励函数，使其更符合人类的期望。
+- 强化学习训练：智能体使用优化后的奖励函数，通过强化学习算法进行训练，不断改进其策略。
+- 迭代改进：通过不断收集新的反馈数据和更新偏好模型，迭代改进智能体的表现。
+
+## 第十三章 JAX机器学习编程
+
+我们前面介绍了很多直接调用sci-kit learn等库的机器学习方法。一方面是帮助大家快速上手，另一方面是可以让大家直接使用这些库来解决实际问题。
+
+但是，如果我们想要更深入地了解机器学习的原理，或者想要实现一些新的机器学习算法，那么我们就需要了解一些更底层的知识。JAX是一个用于高性能机器学习的库，它没有提供过多的封装，只是提供了底层的一些工具。这就给我们加速实现算法的同时，可以学到更多的底层原理。
+
+### 13.1 JAX的计算图
+
+JAX 通过函数变换（function transformations）来构造计算图，而不是显式地构建计算图。这种方式使得计算图的构建过程更加灵活和动态。以下是 JAX 如何构造和处理计算图的详细解释。
+
+在 JAX 中，计算图的构造主要通过 jax.jit、jax.grad、jax.vmap 等函数变换来实现。这些函数变换会对输入的 Python 函数进行转换，生成对应的计算图。
+
+jax.jit（Just-In-Time compilation，即时编译）用于将 Python 函数编译为高效的 XLA（Accelerated Linear Algebra）代码。它会将函数的计算图编译成高效的机器代码。
+
+```python
+import jax
+import jax.numpy as jnp
+
+def f(x):
+    return jnp.sin(x) + jnp.cos(x)
+
+jit_f = jax.jit(f)
+
+x = jnp.array([1.0, 2.0, 3.0])
+y = jit_f(x)
+print(y)
+```
+
+在上面例子中，jax.jit 会将 f 的计算图编译为高效的机器代码。调用 jit_f 时，JAX 会使用这个编译好的计算图来进行计算。
+
+jax.grad 用于计算函数的梯度。它会根据输入函数自动生成对数值进行反向传播所需的计算图。
+
+```python
+def f(x):
+    return x**2 + 3 * x + 2
+
+dfdx = jax.grad(f)
+
+x = 3.0
+grad = dfdx(x)
+print(grad)
+```
+
+在上面例子中，jax.grad 会根据 f 构建一个计算其梯度的计算图。
+
+jax.vmap（vectorized map）用于将函数向量化，使其可以批量处理输入数据。它会生成一个新的函数，这个函数在批量数据上应用原始函数。
+
+```python
+def f(x):
+    return x ** 2
+
+vmap_f = jax.vmap(f)
+
+x = jnp.array([1.0, 2.0, 3.0])
+y = vmap_f(x)
+print(y)
+```
+
+在上面例子中，jax.vmap 会生成一个向量化的 f 函数，使其能够批量处理输入的数组。
+
+JAX 的计算图是动态构建的，这意味着计算图会在函数变换时被构建和优化。与 TensorFlow 或 PyTorch 的静态计算图不同，JAX 的这种动态方式使得它更接近于普通的 Python 编程体验。
+
+JAX 使用 XLA（Accelerated Linear Algebra）作为后端编译器。XLA 是一个用于加速线性代数计算的编译器框架，最初由 Google 开发。JAX 会将计算图转换为 XLA 操作，并利用 XLA 的优化和编译能力生成高效的机器代码。
+
+另外，JAX还支持jax.pmap函数，用于在多个设备上并行地执行函数。这使得 JAX 可以在多个设备上并行地执行函数，从而加速计算。
+
+```python
+import jax
+import jax.numpy as jnp
+
+# 定义一个简单的函数
+def f(x):
+    return jnp.sin(x) + jnp.cos(x)
+
+# 使用 jax.pmap 进行并行计算
+pmap_f = jax.pmap(f)
+
+# 创建输入数据
+x = jnp.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
+
+# 将计算分配到多个 TPU 核上执行
+y = pmap_f(x)
+print(y)
+```
+
+### 13.2 JAX线性回归与逻辑回归
+
+我们先看来如何用JAX来实现波士顿房价预测。
+
+```python
+import jax
+import jax.numpy as jnp
+from keras.datasets import boston_housing
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载波士顿房价数据集
+(X_train, y_train), (X_test, y_test) = boston_housing.load_data()
+
+# 数据预处理
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 初始化参数
+key = jax.random.PRNGKey(0)
+w = jax.random.normal(key, (X_train.shape[1],))
+b = 0.0
+
+# 定义线性回归模型
+def predict(w, b, X):
+    return jnp.dot(X, w) + b
+
+# 定义损失函数
+def loss_fn(w, b, X, y):
+    preds = predict(w, b, X)
+    return jnp.mean((preds - y) ** 2)  # 均方误差
+
+# 梯度下降
+grad_fn = jax.jit(jax.grad(loss_fn, argnums=(0, 1)))
+
+# 训练模型
+learning_rate = 0.01
+epochs = 1000
+
+for epoch in range(epochs):
+    grads_w, grads_b = grad_fn(w, b, X_train, y_train)
+    w -= learning_rate * grads_w
+    b -= learning_rate * grads_b
+
+    if epoch % 100 == 0:
+        loss = loss_fn(w, b, X_train, y_train)
+        print(f"Epoch {epoch}, Loss: {loss}")
+
+# 测试模型
+y_pred_train = predict(w, b, X_train)
+y_pred_test = predict(w, b, X_test)
+
+# 计算训练和测试的均方误差
+train_mse = mean_squared_error(y_train, y_pred_train)
+test_mse = mean_squared_error(y_test, y_pred_test)
+
+print(f"Train MSE: {train_mse}")
+print(f"Test MSE: {test_mse}")
+
+# 可视化
+plt.scatter(y_test, y_pred_test)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Actual vs Predicted Prices")
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)
+plt.show()
+```
+
+在上面的代码中，我们首先加载波士顿房价数据集，并对数据进行标准化处理。然后我们初始化模型参数 w 和 b，并定义了线性回归模型 predict 和损失函数 loss_fn。接着我们使用梯度下降法训练模型，最后计算训练和测试的均方误差，并进行可视化。
+
+输出的结果如下：
+```
+Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/boston_housing.npz
+57026/57026 [==============================] - 0s 0us/step
+Epoch 0, Loss: 674.8168334960938
+Epoch 100, Loss: 33.74641418457031
+Epoch 200, Loss: 23.55044174194336
+Epoch 300, Loss: 22.765607833862305
+Epoch 400, Loss: 22.442581176757812
+Epoch 500, Loss: 22.27152442932129
+Epoch 600, Loss: 22.176055908203125
+Epoch 700, Loss: 22.120210647583008
+Epoch 800, Loss: 22.085887908935547
+Epoch 900, Loss: 22.06372833251953
+Train MSE: 22.048864804304124
+Test MSE: 23.05307299071211
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/boston_jax.png)
+
+有些代码头次见不熟悉没关系。我们对一些代码进行下解释。
+
+```python
+grad_fn = jax.jit(jax.grad(loss_fn, argnums=(0, 1)))
+```
+
+jax.grad 函数用于计算标量函数（如损失函数）相对于其参数的梯度。这里的 loss_fn 是损失函数，它的参数有 w（权重）和 b（偏置）。
+
+`argnums=(0, 1)` 指定了对 loss_fn 的前两个参数（即 w 和 b）计算梯度。
+
+jax.jit 是一个装饰器，它通过将 Python 函数编译成高效的 XLA（加速线性代数）代码来加速函数的执行。
+
+`jax.jit(jax.grad(...))` 将梯度计算函数 grad_fn 编译成高效的机器代码，以提高梯度计算的性能。
+
+训练部分：
+
+```python
+learning_rate = 0.01
+epochs = 1000
+
+for epoch in range(epochs):
+    grads_w, grads_b = grad_fn(w, b, X_train, y_train)
+    w -= learning_rate * grads_w
+    b -= learning_rate * grads_b
+
+    if epoch % 100 == 0:
+        loss = loss_fn(w, b, X_train, y_train)
+        print(f"Epoch {epoch}, Loss: {loss}")
+```
+
+通过 grad_fn 计算当前权重 w 和偏置 b 对于训练数据 X_train 和 y_train 的梯度 grads_w 和 grads_b。
+
+然后按照梯度下降算法的规则，使用学习率 learning_rate 更新权重 w 和偏置 b。具体来说，从当前的 w 和 b 中减去梯度乘以学习率。
+
+举一反三一下，大家练习写一下用JAX实现糖尿病预测。
+
+```python
+import jax
+import jax.numpy as jnp
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载糖尿病数据集
+diabetes = datasets.load_diabetes()
+X = diabetes.data
+y = diabetes.target
+
+# 数据预处理
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# 分割数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 初始化参数
+key = jax.random.PRNGKey(0)
+w = jax.random.normal(key, (X_train.shape[1],))
+b = 0.0
+
+# 定义线性回归模型
+def predict(w, b, X):
+    return jnp.dot(X, w) + b
+
+# 定义损失函数
+def loss_fn(w, b, X, y):
+    preds = predict(w, b, X)
+    return jnp.mean((preds - y) ** 2)  # 均方误差 (MSE)
+
+# 梯度下降
+grad_fn = jax.jit(jax.grad(loss_fn, argnums=(0, 1)))
+
+# 训练模型
+learning_rate = 0.01
+epochs = 1000
+
+for epoch in range(epochs):
+    grads_w, grads_b = grad_fn(w, b, X_train, y_train)
+    w -= learning_rate * grads_w
+    b -= learning_rate * grads_b
+
+    if epoch % 100 == 0:
+        loss = loss_fn(w, b, X_train, y_train)
+        print(f"Epoch {epoch}, Loss: {loss}")
+
+# 测试模型
+y_pred_train = predict(w, b, X_train)
+y_pred_test = predict(w, b, X_test)
+
+# 计算训练和测试的均方误差
+train_mse = mean_squared_error(y_train, y_pred_train)
+test_mse = mean_squared_error(y_test, y_pred_test)
+
+print(f"Train MSE: {train_mse}")
+print(f"Test MSE: {test_mse}")
+
+# 可视化
+plt.scatter(y_test, y_pred_test)
+plt.xlabel("Actual Progression")
+plt.ylabel("Predicted Progression")
+plt.title("Actual vs Predicted Progression")
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)
+plt.show()
+```
+
+运行结果如下：
+```
+Epoch 0, Loss: 28351.634765625
+Epoch 100, Loss: 3299.47705078125
+Epoch 200, Loss: 2906.1142578125
+Epoch 300, Loss: 2896.913818359375
+Epoch 400, Loss: 2895.6103515625
+Epoch 500, Loss: 2894.594970703125
+Epoch 600, Loss: 2893.633544921875
+Epoch 700, Loss: 2892.711669921875
+Epoch 800, Loss: 2891.8271484375
+Epoch 900, Loss: 2890.977294921875
+Train MSE: 2890.165822611412
+Test MSE: 2884.9462571982144
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/jax_diabetes.png)
+
+
+### 13.3 JAX实现朴素贝叶斯算法
+
+没有封装的库，我们仍然可以使用JAX这样的通用库来实现机器学习的算法。
+
+比如我们来看一下如何用JAX实现朴素贝叶斯算法。
+
+```python
+# 计算每个类的先验概率和高斯分布参数
+def compute_gaussian_parameters(X, y):
+    classes = jnp.unique(y)
+    n_classes = len(classes)
+    n_features = X.shape[1]
+    
+    means = jnp.zeros((n_classes, n_features))
+    variances = jnp.zeros((n_classes, n_features))
+    priors = jnp.zeros(n_classes)
+    
+    for cls in classes:
+        X_cls = X[y == cls]
+        means = means.at[cls].set(jnp.mean(X_cls, axis=0))
+        variances = variances.at[cls].set(jnp.var(X_cls, axis=0) + 1e-6)  # Add a small value to avoid division by zero
+        priors = priors.at[cls].set(len(X_cls) / len(X))
+    
+    return means, variances, priors
+
+means, variances, priors = compute_gaussian_parameters(X_train, y_train)
+```
+
+在上面的代码中，我们定义了一个 compute_gaussian_parameters 函数，用于计算每个类的先验概率、均值和方差。
+
+千万不要被先验概率这样的名词吓到，就是该类别样本数占总样本数的比例而己。
+
+我们复习下高斯分布概率密度函数公式：
+
+$f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$
+
+其中：
+- $\mu$是均值（mean）。
+- $\sigma^2$ 是方差（variance）。
+- $x$是要计算概率密度的点。
+
+然后我们按公式用代码实现：
+
+```python
+# 计算高斯分布的概率密度函数
+def gaussian_pdf(x, mean, var):
+    coeff = 1.0 / jnp.sqrt(2 * jnp.pi * var)
+    exponent = jnp.exp(-((x - mean) ** 2) / (2 * var))
+    return coeff * exponent
+```
+
+高斯朴素贝叶斯分类器的工作原理分为三步：
+
+- 先验概率：反映类别出现的先验信息。
+- 似然：反映在给定类别条件下，特征值出现的概率。
+- 后验概率：结合先验概率和似然，计算样本属于某类别的概率。高斯朴素贝叶斯分类器假设特征之间相互独立，因此可以将各特征的似然相乘（在对数空间相加）。
+
+下面我们算似然。
+
+我们用`gaussian_pdf(X, means[cls], variances[cls])` 计算样本在该类别下的概率密度。
+
+然后用 `jnp.log` 取对数。
+
+再用 `jnp.sum(..., axis=1)` 对特征求和，得到每个样本的对数似然。
+
+接着将对数先验概率和对数似然相加，得到对数后验概率，并存储在 `log_probs` 的相应位置。
+
+最后 `jnp.argmax(log_probs, axis=1)` 找出每个样本的最大对数概率对应的类别索引，即预测的类别。
+
+写出来如下：
+
+```python
+# 预测函数
+def predict(X, means, variances, priors):
+    n_samples = X.shape[0]
+    n_classes = means.shape[0]
+    
+    log_probs = jnp.zeros((n_samples, n_classes))
+    
+    for cls in range(n_classes):
+        log_prior = jnp.log(priors[cls])
+        log_likelihood = jnp.sum(jnp.log(gaussian_pdf(X, means[cls], variances[cls])), axis=1)
+        log_probs = log_probs.at[:, cls].set(log_prior + log_likelihood)
+    
+    return jnp.argmax(log_probs, axis=1)
+```
+
+最后我们把代码串起来：
+
+```python
+import jax
+import jax.numpy as jnp
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载鸢尾花数据集
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+
+# 数据预处理
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# 分割数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 计算每个类的先验概率和高斯分布参数
+def compute_gaussian_parameters(X, y):
+    classes = jnp.unique(y)
+    n_classes = len(classes)
+    n_features = X.shape[1]
+    
+    means = jnp.zeros((n_classes, n_features))
+    variances = jnp.zeros((n_classes, n_features))
+    priors = jnp.zeros(n_classes)
+    
+    for cls in classes:
+        X_cls = X[y == cls]
+        means = means.at[cls].set(jnp.mean(X_cls, axis=0))
+        variances = variances.at[cls].set(jnp.var(X_cls, axis=0) + 1e-6)  # Add a small value to avoid division by zero
+        priors = priors.at[cls].set(len(X_cls) / len(X))
+    
+    return means, variances, priors
+
+means, variances, priors = compute_gaussian_parameters(X_train, y_train)
+
+# 计算高斯分布的概率密度函数
+def gaussian_pdf(x, mean, var):
+    coeff = 1.0 / jnp.sqrt(2 * jnp.pi * var)
+    exponent = jnp.exp(-((x - mean) ** 2) / (2 * var))
+    return coeff * exponent
+
+# 预测函数
+def predict(X, means, variances, priors):
+    n_samples = X.shape[0]
+    n_classes = means.shape[0]
+    
+    log_probs = jnp.zeros((n_samples, n_classes))
+    
+    for cls in range(n_classes):
+        log_prior = jnp.log(priors[cls])
+        log_likelihood = jnp.sum(jnp.log(gaussian_pdf(X, means[cls], variances[cls])), axis=1)
+        log_probs = log_probs.at[:, cls].set(log_prior + log_likelihood)
+    
+    return jnp.argmax(log_probs, axis=1)
+
+# 训练集上的预测
+y_train_pred = predict(X_train, means, variances, priors)
+train_accuracy = accuracy_score(y_train, y_train_pred)
+print(f"Train Accuracy: {train_accuracy}")
+
+# 测试集上的预测
+y_test_pred = predict(X_test, means, variances, priors)
+test_accuracy = accuracy_score(y_test, y_test_pred)
+print(f"Test Accuracy: {test_accuracy}")
+```
+
+运行结果如下：
+
+```
+Train Accuracy: 0.95
+Test Accuracy: 1.0
+```
+
+### 13.4 JAX实现K近邻算法
+
+趁机我们再复习下k近邻算法。
+
+首先是计算距离：
+
+```python
+def euclidean_distance(point1, point2):
+    return jnp.sqrt(jnp.sum((point1 - point2) ** 2))
+```
+
+然后把最近的邻居找出来：
+
+```python
+# KNN 分类函数
+def knn_classify(train_data, train_labels, query_point, k):
+    distances = vmap(lambda point: euclidean_distance(point, query_point))(train_data)
+    nearest_neighbors_idx = jnp.argsort(distances)[:k]
+    nearest_labels = train_labels[nearest_neighbors_idx]
+
+    # 计算每个标签的频率
+    num_classes = jnp.max(train_labels) + 1
+    counts = jnp.zeros(num_classes)
+    counts = counts.at[nearest_labels].add(1)
+
+    # 返回出现次数最多的标签
+    return jnp.argmax(counts)
+```
+
+我们用到了vmap，还有jax.numpy的argsort排序。这样既显得代码简洁，也可以有效利用JAX的并行计算能力。
+
+同样，预测函数也是用vmap搞定：
+
+```python
+# 对测试数据进行预测
+def predict(test_data, train_data, train_labels, k):
+    predictions = vmap(lambda point: knn_classify(train_data, train_labels, point, k))(test_data)
+    return predictions
+```
+
+最后我们把代码串起来：
+
+```python
+import jax
+import jax.numpy as jnp
+from jax import vmap
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载 Iris 数据集
+iris = datasets.load_iris()
+data = iris.data
+labels = iris.target
+
+# 将数据分为训练集和测试集
+train_data, test_data, train_labels, test_labels = train_test_split(data, labels, test_size=0.2, random_state=42)
+
+# 将数据转换为 JAX 数组
+train_data = jnp.array(train_data)
+test_data = jnp.array(test_data)
+train_labels = jnp.array(train_labels)
+test_labels = jnp.array(test_labels)
+
+# 欧氏距离函数
+def euclidean_distance(point1, point2):
+    return jnp.sqrt(jnp.sum((point1 - point2) ** 2))
+
+# KNN 分类函数
+def knn_classify(train_data, train_labels, query_point, k):
+    distances = vmap(lambda point: euclidean_distance(point, query_point))(train_data)
+    nearest_neighbors_idx = jnp.argsort(distances)[:k]
+    nearest_labels = train_labels[nearest_neighbors_idx]
+
+    # 计算每个标签的频率
+    num_classes = jnp.max(train_labels) + 1
+    counts = jnp.zeros(num_classes)
+    counts = counts.at[nearest_labels].add(1)
+
+    # 返回出现次数最多的标签
+    return jnp.argmax(counts)
+
+# 对测试数据进行预测
+def predict(test_data, train_data, train_labels, k):
+    predictions = vmap(lambda point: knn_classify(train_data, train_labels, point, k))(test_data)
+    return predictions
+
+# 设置 k 的值
+k = 3
+
+# 对测试数据进行预测
+test_predictions = predict(test_data, train_data, train_labels, k)
+
+# 计算准确率
+accuracy = jnp.mean(test_predictions == test_labels)
+print(f'Accuracy: {accuracy * 100:.2f}%')
+```
+
+### 13.5 JAX实现简易决策树算法
+
+篇幅所限，我们只实现一个简单的决策树算法，对于剪枝高级功能，暂时不涉及。
+
+我们首先介绍下基尼不纯度（Gini Impurity）。基尼不纯度是一个用于衡量分类问题中数据集纯度的指标。它表示了一个数据集中随机选取两个样本，其类别不同的概率。基尼不纯度越低，数据集越纯净。
+
+基尼不纯度的公式
+对于一个包含$n$个类别的数据集，基尼不纯度 G 定义为：
+
+$G=1-\sum_{i=1}^n(p_i)^2$
+
+其中：$p_i$是第$i$类的概率(即第i类样本数占总样本数的比例)。
+
+我们将其翻译成代码：
+
+```python
+def gini_impurity(labels):
+    _, counts = jnp.unique(labels, return_counts=True)
+    probabilities = counts / counts.sum()
+    return 1 - jnp.sum(probabilities ** 2)
+```
+
+将左右树的基尼不纯度加权求和，得到当前划分的基尼系数：
+
+```python
+gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
+```
+
+以此为依据，我们就可以写一个完整的树的划分：
+
+```python
+def find_best_split(dataset, labels):
+    best_gini = float('inf')
+    best_feature = None
+    best_threshold = None
+
+    n_features = dataset.shape[1]
+    for feature in range(n_features):
+        thresholds = jnp.unique(dataset[:, feature])
+        for threshold in thresholds:
+            _, left_labels, _, right_labels = split_dataset(dataset, labels, feature, threshold)
+            if len(left_labels) == 0 or len(right_labels) == 0:
+                continue
+            gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
+            if gini < best_gini:
+                best_gini = gini
+                best_feature = feature
+                best_threshold = threshold
+
+    return best_feature, best_threshold
+```
+
+首先，初始化最佳基尼不纯度 `best_gini` 为无穷大，最佳特征 `best_feature` 和最佳阈值 `best_threshold` 为 None。
+
+然后，遍历每个特征，对于每个特征，找出所有可能的阈值。然后，对于每个阈值，使用 `split_dataset` 函数将数据集分割成左右两个子集，并获取对应的标签。
+
+如果所有的标签都相同，或者达到了最大深度限制，那么返回出现次数最多的标签。
+
+如果没有，则使用 find_best_split 函数找到最佳的分割特征和阈值。
+
+如果没有找到有效的分割特征，那么返回出现次数最多的标签。
+
+如果找到了，使用找到的最佳分割特征和阈值将数据集分割成左右两个子集，并获取对应的标签。
+
+我们再看一下如何划分左右数据集，解释我直接写在代码里了：
+
+```python
+def split_dataset(dataset, labels, feature, threshold):
+    # 创建一个布尔掩码 left_mask，其中的每个元素表示对应的数据点是否应该被分到左子集。如果数据点在指定特征上的值小于或等于阈值，那么这个元素就是 True。
+    left_mask = dataset[:, feature] <= threshold
+    # 创建另一个布尔掩码 right_mask，其中的每个元素表示对应的数据点是否应该被分到右子集。这是通过取 left_mask 的逻辑非来实现的。
+    right_mask = ~left_mask
+    return dataset[left_mask], labels[left_mask], dataset[right_mask], labels[right_mask]
+```
+
+以划分数据为基础，我们就可以写出决策树的训练函数，这是一个递归的过程：
+
+```python
+    def fit(self, dataset, labels, depth=0):
+        if len(jnp.unique(labels)) == 1 or (self.max_depth is not None and depth >= self.max_depth):
+            return jnp.argmax(jnp.bincount(labels))
+
+        feature, threshold = find_best_split(dataset, labels)
+        if feature is None:
+            return jnp.argmax(jnp.bincount(labels))
+
+        left_dataset, left_labels, right_dataset, right_labels = split_dataset(dataset, labels, feature, threshold)
+        left_subtree = self.fit(left_dataset, left_labels, depth + 1)
+        right_subtree = self.fit(right_dataset, right_labels, depth + 1)
+
+        return (feature, threshold, left_subtree, right_subtree)
+```
+
+训练之后，我们就可以用决策树进行单点预测：
+
+```python
+    def predict_one(self, x, tree):
+        if not isinstance(tree, tuple):
+            return tree
+
+        feature, threshold, left_subtree, right_subtree = tree
+        return jax.lax.cond(
+            x[feature] <= threshold,
+            lambda _: self.predict_one(x, left_subtree),
+            lambda _: self.predict_one(x, right_subtree),
+            operand=None
+        )
+```
+
+跟排序算法有点像，如果数据点在指定特征上的值小于或等于阈值，那么递归地对左子树进行预测；否则，递归地对右子树进行预测。operand=None 表示条件判断的结果不需要额外的操作数。
+
+最后，我们再来个vmap，对每个数据进行预测：
+
+```python
+    def predict(self, dataset):
+        return vmap(lambda x: self.predict_one(x, self.tree))(dataset)
+```
+
+最后我们把决策树串起来：
+
+```python
+import jax
+import jax.numpy as jnp
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载 Iris 数据集
+iris = datasets.load_iris()
+data = iris.data
+labels = iris.target
+
+# 将数据分为训练集和测试集
+train_data, test_data, train_labels, test_labels = train_test_split(data, labels, test_size=0.2, random_state=42)
+
+# 将数据转换为 JAX 数组
+train_data = jnp.array(train_data)
+test_data = jnp.array(test_data)
+train_labels = jnp.array(train_labels)
+test_labels = jnp.array(test_labels)
+
+def gini_impurity(labels):
+    _, counts = jnp.unique(labels, return_counts=True)
+    probabilities = counts / counts.sum()
+    return 1 - jnp.sum(probabilities ** 2)
+
+def split_dataset(dataset, labels, feature, threshold):
+    left_mask = dataset[:, feature] <= threshold
+    right_mask = ~left_mask
+    return dataset[left_mask], labels[left_mask], dataset[right_mask], labels[right_mask]
+
+def find_best_split(dataset, labels):
+    best_gini = float('inf')
+    best_feature = None
+    best_threshold = None
+
+    n_features = dataset.shape[1]
+    for feature in range(n_features):
+        thresholds = jnp.unique(dataset[:, feature])
+        for threshold in thresholds:
+            _, left_labels, _, right_labels = split_dataset(dataset, labels, feature, threshold)
+            if len(left_labels) == 0 or len(right_labels) == 0:
+                continue
+            gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
+            if gini < best_gini:
+                best_gini = gini
+                best_feature = feature
+                best_threshold = threshold
+
+    return best_feature, best_threshold
+
+class DecisionTree:
+    def __init__(self, max_depth=None):
+        self.max_depth = max_depth
+        self.tree = None
+
+    def fit(self, dataset, labels, depth=0):
+        if len(jnp.unique(labels)) == 1 or (self.max_depth is not None and depth >= self.max_depth):
+            return jnp.argmax(jnp.bincount(labels))
+
+        feature, threshold = find_best_split(dataset, labels)
+        if feature is None:
+            return jnp.argmax(jnp.bincount(labels))
+
+        left_dataset, left_labels, right_dataset, right_labels = split_dataset(dataset, labels, feature, threshold)
+        left_subtree = self.fit(left_dataset, left_labels, depth + 1)
+        right_subtree = self.fit(right_dataset, right_labels, depth + 1)
+
+        return (feature, threshold, left_subtree, right_subtree)
+
+    def predict_one(self, x, tree):
+        if not isinstance(tree, tuple):
+            return tree
+
+        feature, threshold, left_subtree, right_subtree = tree
+        return jax.lax.cond(
+            x[feature] <= threshold,
+            lambda _: self.predict_one(x, left_subtree),
+            lambda _: self.predict_one(x, right_subtree),
+            operand=None
+        )
+
+    def predict(self, dataset):
+        return vmap(lambda x: self.predict_one(x, self.tree))(dataset)
+
+# 创建决策树分类器实例
+tree = DecisionTree(max_depth=3)
+
+# 训练模型
+tree.tree = tree.fit(train_data, train_labels)
+
+# 对测试数据进行预测
+test_predictions = tree.predict(test_data)
+
+# 计算准确率
+accuracy = jnp.mean(test_predictions == test_labels)
+print(f'Accuracy: {accuracy * 100:.2f}%')
+```
+
+### 13.6 用JAX实现高斯混合模型
+
+我们先复习下高斯混合模型的实现方法。GMM 使用期望最大化 (EM) 算法来估计模型参数，包括均值、方差和混合系数。
+
+实现步骤为：
+
+- 初始化模型参数。
+- 实现 E 步骤：计算每个数据点属于每个高斯成分的后验概率。
+- 实现 M 步骤：根据后验概率更新模型参数。
+- 定义训练循环，反复执行 E 步骤和 M 步骤，直到收敛。
+
+我们还是以鸢尾花为例，看看如何用JAX实现高斯混合模型.
+
+首先我们来写E步骤:
+
+```python
+# E步骤：计算后验概率
+def e_step(params, data):
+    means, covs, weights = params
+    responsibilities = jnp.array([
+        weights[i] * multivariate_normal.pdf(data, means[i], covs[i])
+        for i in range(num_components)
+    ]).T
+    responsibilities /= responsibilities.sum(axis=1, keepdims=True)
+    return responsibilities
+```
+
+在高斯混合模型中，数据被假设为由多个高斯分布混合而成，每个高斯分布称为一个组件（component）。E步骤的目的是为了计算每个数据点属于各个组件的后验概率，也就是责任度（responsibilities）。
+
+具体来看这段代码：
+
+- params是一个包含所有模型参数的元组，其中means是每个组件的均值，covs是每个组件的协方差矩阵，weights是每个组件的权重。
+- data是观测到的数据点集合。
+- 代码首先将参数解构为means, covs, 和 weights。
+- 接着，使用列表推导式和multivariate_normal.pdf函数计算每个数据点在每个组件下的概率密度值。multivariate_normal.pdf函数计算的是多元正态分布的概率密度函数值。
+- 这些概率密度值乘以对应的组件权重weights[i]，得到初步的责任度。
+- 最后，为了得到正规化的责任度，需要将每一行的责任度除以其总和，确保每行的和为1。这是通过responsibilities.sum(axis=1, keepdims=True)实现的，它计算了每一行的和，并通过设置keepdims=True保留了结果的二维性质以便进行广播除法。
+- 函数返回正规化后的责任度矩阵，这个矩阵的每一行对应一个数据点，每一列对应一个组件，值表示该数据点属于对应组件的后验概率。
+
+
+下面我们再写M步骤：
+
+```python
+# M步骤：更新参数
+def m_step(responsibilities, data):
+    N_k = responsibilities.sum(axis=0)
+    weights = N_k / N_k.sum()
+    means = (responsibilities.T @ data) / N_k[:, None]
+    covs = jnp.array([
+        (responsibilities[:, i][:, None] * (data - means[i])).T @ (data - means[i])
+        / N_k[i]
+        for i in range(num_components)
+    ])
+    return means, covs, weights
+```
+
+在GMM中，M步骤负责根据E步骤计算出的责任度来更新模型参数，包括每个组件的均值、协方差矩阵和权重。
+
+具体来看这段代码：
+
+responsibilities是由E步骤计算得到的每个数据点属于各个组件的后验概率矩阵。
+
+data是观测到的数据点集合。
+
+首先，计算每个组件的样本数量N_k，即每个组件的责任度之和。
+
+然后，更新组件的权重weights，它是每个组件的样本数量除以总样本数量，以确保所有权重的和为1。
+
+接下来，更新每个组件的均值means。对于每个组件，其均值是该组件的所有数据点的加权平均，权重就是相应的责任度。
+
+最后，更新每个组件的协方差矩阵covs。对于每个组件，其协方差矩阵的计算考虑了数据点与组件均值的偏差，以及相应的责任度。具体来说，对于每个组件，计算所有数据点与该组件均值的偏差向量，然后乘以相应的责任度，最后求这些向量的加权平均并除以该组件的样本数量。
+
+函数返回更新后的均值、协方差矩阵和权重。
+
+训练循环就是将E步骤和M步骤交替执行，直到收敛。
+
+```python
+# 训练循环
+def train_gmm(data, params, num_iters=100):
+    for _ in range(num_iters):
+        responsibilities = e_step(params, data)
+        params = m_step(responsibilities, data)
+    return params
+```
+
+最后我们把代码串起来：
+
+```python
+import jax
+import jax.numpy as jnp
+from jax.scipy.stats import multivariate_normal
+from jax import jit
+from sklearn import datasets
+from sklearn.preprocessing import StandardScaler
+
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载和预处理鸢尾花数据集
+iris = datasets.load_iris()
+data = iris.data
+scaler = StandardScaler()
+data = scaler.fit_transform(data)
+
+# 设置随机种子
+key = jax.random.PRNGKey(0)
+
+# 初始化参数
+num_components = 3
+dim = data.shape[1]
+
+def init_params(key, num_components, dim):
+    key, subkey = jax.random.split(key)
+    means = jax.random.normal(subkey, (num_components, dim))
+    key, subkey = jax.random.split(key)
+    covs = jnp.stack([jnp.eye(dim) for _ in range(num_components)])
+    weights = jnp.ones(num_components) / num_components
+    return means, covs, weights
+
+params = init_params(key, num_components, dim)
+
+# E步骤：计算后验概率
+def e_step(params, data):
+    means, covs, weights = params
+    responsibilities = jnp.array([
+        weights[i] * multivariate_normal.pdf(data, means[i], covs[i])
+        for i in range(num_components)
+    ]).T
+    responsibilities /= responsibilities.sum(axis=1, keepdims=True)
+    return responsibilities
+
+# M步骤：更新参数
+def m_step(responsibilities, data):
+    N_k = responsibilities.sum(axis=0)
+    weights = N_k / N_k.sum()
+    means = (responsibilities.T @ data) / N_k[:, None]
+    covs = jnp.array([
+        (responsibilities[:, i][:, None] * (data - means[i])).T @ (data - means[i])
+        / N_k[i]
+        for i in range(num_components)
+    ])
+    return means, covs, weights
+
+# 训练循环
+def train_gmm(data, params, num_iters=100):
+    for _ in range(num_iters):
+        responsibilities = e_step(params, data)
+        params = m_step(responsibilities, data)
+    return params
+
+# 使用 JIT 编译加速训练过程
+train_gmm_jit = jit(train_gmm)
+
+# 训练模型
+params = train_gmm_jit(data, params)
+means, covs, weights = params
+
+print("Estimated means:", means)
+print("Estimated covariances:", covs)
+print("Estimated weights:", weights)
+
+# 计算每个数据点的类别
+responsibilities = e_step(params, data)
+predicted_classes = jnp.argmax(responsibilities, axis=1)
+print("Predicted classes:", predicted_classes)
+```
+
+运行结果如下：
+
+```
+Estimated means: [[-1.0153617   0.8529423  -1.3056443  -1.2539248 ]
+ [ 0.35022977 -0.5207465   0.5594692   0.4952543 ]
+ [ 1.3369247   0.06840447  1.1437105   1.3245293 ]]
+Estimated covariances: [[[ 0.17859381  0.27103153  0.01103067  0.01617385]
+  [ 0.27103153  0.7455524   0.01495313  0.02759757]
+  [ 0.01103067  0.01495313  0.00955066  0.00445562]
+  [ 0.01617983  0.0276229   0.00445651  0.01889936]]
+
+ [[ 0.5475562   0.34272918  0.25402954  0.19825369]
+  [ 0.3427626   0.60489476  0.17605983  0.1934371 ]
+  [ 0.25404882  0.1760487   0.19194616  0.1836516 ]
+  [ 0.19822091  0.19330631  0.1835907   0.24718682]]
+
+ [[ 0.3029113  -0.17866114  0.11537373 -0.07810485]
+  [-0.1792758   0.16232526 -0.057357    0.07562156]
+  [ 0.11569946 -0.05736061  0.06861536 -0.03457049]
+  [-0.07810654  0.07544895 -0.03448259  0.05892238]]]
+Estimated weights: [0.3333284  0.5605666  0.10610501]
+Predicted classes: [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 2 1 2 1 1 1
+ 1 2 1 1 2 1 1 1 1 2 1 2 1 1 1 1 1 1 1 2 1 1 1 1 2 2 1 1 2 2 2 1 2 2 2 1 1
+ 2 1]
+```
+
+### 13.7 用Flax实现DQN算法
+
+flax是一个基于JAX的深度学习库，它提供了高级的神经网络模型和训练API，可以帮助我们更方便地实现深度学习模型。
+flax.linen是flax的一个子模块，提供了一些预定义的神经网络层和模型，可以帮助我们更快地搭建神经网络。
+
+我们以CartPole游戏为例，看看如何用JAX和Flax实现DQN算法：
+
+```python
+import gym
+import numpy as np
+import jax
+import jax.numpy as jnp
+import flax.linen as nn
+from flax.training import train_state
+import optax
+from collections import namedtuple, deque
+import random
+
+# 创建环境
+env = gym.make('CartPole-v1')
+
+# 设置随机种子
+key = jax.random.PRNGKey(0)
+np.random.seed(0)
+env.seed(0)
+
+# 定义 Q 网络
+class QNetwork(nn.Module):
+    action_size: int
+
+    @nn.compact
+    def __call__(self, x):
+        x = nn.relu(nn.Dense(128)(x))
+        x = nn.relu(nn.Dense(128)(x))
+        x = nn.Dense(self.action_size)(x)
+        return x
+
+def create_train_state(rng, learning_rate, action_size):
+    q_net = QNetwork(action_size=action_size)
+    params = q_net.init(rng, jnp.ones([1, env.observation_space.shape[0]]))['params']
+    tx = optax.adam(learning_rate)
+    return train_state.TrainState.create(apply_fn=q_net.apply, params=params, tx=tx)
+
+# 初始化 Q 网络
+rng, init_rng = jax.random.split(key)
+learning_rate = 1e-3
+state = create_train_state(init_rng, learning_rate, env.action_space.n)
+target_state = state
+
+# 经验回放缓冲区
+class ReplayBuffer:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.buffer = []
+        self.position = 0
+
+    def add(self, state, action, reward, next_state, done):
+        if len(self.buffer) < self.capacity:
+            self.buffer.append(None)
+        self.buffer[self.position] = (state, action, reward, next_state, done)
+        self.position = (self.position + 1) % self.capacity
+
+    def sample(self, batch_size):
+        batch = random.sample(self.buffer, batch_size)
+        state, action, reward, next_state, done = zip(*batch)
+        return np.array(state), np.array(action), np.array(reward), np.array(next_state), np.array(done)
+
+    def __len__(self):
+        return len(self.buffer)
+
+# 设定折扣因子
+gamma = 0.99
+
+def q_loss(params, target_params, states, actions, rewards, next_states, dones):
+    q_values = state.apply_fn({'params': params}, states)
+    next_q_values = target_state.apply_fn({'params': target_params}, next_states)
+    next_q_values = jnp.max(next_q_values, axis=1)
+    target_q_values = rewards + gamma * next_q_values * (1 - dones)
+    
+    action_q_values = q_values[jnp.arange(q_values.shape[0]), actions]
+    
+    loss = jnp.mean((action_q_values - target_q_values) ** 2)
+    return loss
+
+
+# 更新函数
+@jax.jit
+def update(state, target_state, states, actions, rewards, next_states, dones):
+    loss, grads = jax.value_and_grad(q_loss)(state.params, target_state.params, states, actions, rewards, next_states, dones)
+    state = state.apply_gradients(grads=grads)
+    return state, loss
+
+def select_action(obs, params, epsilon):
+    if np.random.rand() < epsilon:
+        return env.action_space.sample()
+    else:
+        q_values = state.apply_fn({'params': params}, obs[None, :])
+        return int(jnp.argmax(q_values))
+
+num_episodes = 500
+batch_size = 32
+buffer_capacity = 10000
+epsilon_start = 1.0
+epsilon_end = 0.1
+epsilon_decay = 0.995
+
+replay_buffer = ReplayBuffer(buffer_capacity)
+
+for episode in range(num_episodes):
+    obs = env.reset()
+    total_reward = 0
+    epsilon = max(epsilon_end, epsilon_start * (epsilon_decay ** episode))
+    
+    while True:
+        action = select_action(obs, state.params, epsilon)
+        next_obs, reward, done, _ = env.step(action)
+        total_reward += reward
+        
+        replay_buffer.add(obs, action, reward, next_obs, done)
+        obs = next_obs
+        
+        if len(replay_buffer) >= batch_size:
+            states, actions, rewards, next_states, dones = replay_buffer.sample(batch_size)
+            states = jnp.array(states)
+            actions = jnp.array(actions)
+            rewards = jnp.array(rewards)
+            next_states = jnp.array(next_states)
+            dones = jnp.array(dones)
+            
+            # 更新 Q 网络
+            state, loss = update(state, target_state, states, actions, rewards, next_states, dones)
+        
+        if done:
+            print(f"Episode {episode}: Total Reward = {total_reward}")
+            break
+
+    # 定期更新目标网络
+    if episode % 10 == 0:
+        target_state = state
+
+print("训练完成")
+```
+
 ## 第十四章 在网页和手机里运行机器学习
 
-### 14.1 TensorFlow.js
+### 14.1 TensorFlow.js的基本使用
 
 Python确实在机器学习和深度学习领域有着不可替代的生态优势，不过，放到浏览器端和手机端，Python的生态优势好像就发挥不出来了。不管是Android手机还是iOS手机，默认都没有Python运行环境，也写不了Python应用。浏览器里和小程序里，就更没Python什么事儿了。
 
@@ -13979,7 +16934,7 @@ Python确实在机器学习和深度学习领域有着不可替代的生态优�
 
 在我的浏览器里，tf.js是使用webgl来进行计算的。
 
-#### 16.1.1 运行在node里的tfjs
+#### 14.1.1 运行在node里的tfjs
 
 作为一个js库，tf.js当然也可以运行在node环境里。我们可以通过
 ```
@@ -14034,7 +16989,7 @@ console.log(tf.getBackend());
 ```
 在没有GPU的机器上，会使用CPU版的tensorflow作为后端，不会报错。
 
-#### 16.1.2 JavaScript的数组操作
+#### 14.1.2 JavaScript的数组操作
 
 js是一门动态语言，js的数组是动态数组，没有定长数组越界这一说法的。
 
@@ -14175,11 +17130,11 @@ console.log(a5);
 
 好，复习至此，我们来看tf.js中的张量
 
-#### 16.1.1 tf.js中的张量
+#### 14.1.3 tf.js中的张量
 
 ![](https://img-blog.csdnimg.cn/img_convert/44330be11dcbd3bb90158082c62d1345.png)
 
-##### 16.1.2.1 一维张量
+##### 14.1.3.1 一维张量
 
 tfjs支持从1d到6d一共6维张量构造函数，当然7维以上没有专用函数了还是可以reshape出来。
 
@@ -14250,7 +17205,7 @@ Tensor
     [0, 2, 4, 6, 8]
 ```
 
-##### 3.3.2.2 二维张量
+##### 14.1.3.2 二维张量
 
 ![](https://img-blog.csdnimg.cn/img_convert/4365deb8f649e8abd84166268ae61863.png)
 
@@ -14313,7 +17268,7 @@ Tensor
      [3, 4]]
 ```
 
-##### 3.3.2.3 高维向量
+##### 14.1.3.4 高维向量
 
 ![](https://img-blog.csdnimg.cn/img_convert/c3848ff76853c32941b21bf53df27160.png)
 
@@ -14446,7 +17401,7 @@ Tensor
       [1, 2]]]
 ```
 
-####  3.3.3 将张量转换成js数组
+####  14.1.4 将张量转换成js数组
 
 ![](https://img-blog.csdnimg.cn/img_convert/740e72498f836a96ad4321dc9e6d3fe1.png)
 
@@ -14523,4 +17478,535 @@ console.log(a5.some((x) => { return(x===0)}));
 
 因为不全为0，所以every的值为假，而some为真。
 
+### 14.2 用TensorFlow.js进行机器学习编程
 
+#### 14.2.1 用TensorFlow.js处理鸢尾花
+
+温故而知新，我们学习用Tensorflow.js的第一步还是从鸢尾花开始。
+
+首先我们加载鸢尾花的数据：
+
+```javascript
+async function loadIrisData() {
+  const response = await fetch('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data');
+  const data = await response.text();
+  
+  const parsedData = data.trim().split('\n').map(line => {
+    const [sepalLength, sepalWidth, petalLength, petalWidth, species] = line.split(',');
+    const speciesMap = { 'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2 };
+    return [parseFloat(sepalLength), parseFloat(sepalWidth), parseFloat(petalLength), parseFloat(petalWidth), speciesMap[species]];
+  });
+
+  const xs = parsedData.map(row => row.slice(0, 4));
+  const ys = parsedData.map(row => row[4]);
+
+  return { xs, ys };
+}
+```
+
+TensorFlow.js没有提供数据集，我们需要自己加载数据集。这里我们加载了鸢尾花数据集，然后将数据集分成特征和标签。
+我们使用 fetch API 发起一个网络请求，获取鸢尾花数据集文件。await 关键字用于等待异步操作（即网络请求）完成，并获取响应对象。
+然后我们将响应对象转换为文本格式，即获取到数据集的内容。
+接着我们对数据进行预处理：首先使用 trim() 方法去除字符串两端的空白字符，然后使用 split('\n') 将数据分割成单独的行。接着，使用 map 方法遍历每一行数据，将每行数据按逗号分隔，得到五个字段：萼片长度、萼片宽度、花瓣长度、花瓣宽度和物种名称。
+
+下一步我们需要将数据转换成TensorFlow.js中的张量：
+
+```javascript
+async function prepareData() {
+  const { xs, ys } = await loadIrisData();
+
+  const inputTensor = tf.tensor2d(xs);
+  const labelTensor = tf.tensor1d(ys, 'int32');
+
+  const oneHotLabels = tf.oneHot(labelTensor, 3);
+
+  return { inputTensor, oneHotLabels };
+}
+```
+
+我们使用 tf.tensor2d() 创建一个二维张量，用于存储特征数据。我们使用 tf.tensor1d() 创建一个一维张量，用于存储标签数据。然后我们使用 tf.oneHot() 方法将标签数据转换为独热编码。
+
+这里借机会讲一下独热编码。独热编码（One-Hot Encoding）是一种常用的将类别型数据转换为数值型数据的编码方式。在机器学习和数据处理过程中，独热编码可以将分类变量（Categorical Variables）转换为可以直接用于模型训练的数值格式。在处理分类数据时，直接使用类别标签（如“红色”、“蓝色”、“绿色”）会让模型误认为这些类别之间存在大小或顺序关系。独热编码通过将每个类别转换为一个二进制向量，可以避免这种误解。
+
+数据就绪，我们来创建模型：
+
+```javascript
+function createModel() {
+  const model = tf.sequential();
+  model.add(tf.layers.dense({ inputShape: [4], units: 10, activation: 'relu' }));
+  model.add(tf.layers.dense({ units: 3, activation: 'softmax' }));
+  return model;
+}
+```
+
+我们使用 tf.sequential() 创建一个序贯模型。然后我们使用 model.add() 方法添加两个全连接层。第一个全连接层有 10 个神经元，激活函数为 relu。第二个全连接层有 3 个神经元，激活函数为 softmax。
+
+下面我们来写训练的部分：
+
+```javascript
+async function trainModel(model, inputs, labels) {
+  model.compile({
+    optimizer: tf.train.adam(),
+    loss: 'categoricalCrossentropy',
+    metrics: ['accuracy']
+  });
+
+  const batchSize = 32;
+  const epochs = 50;
+
+  return await model.fit(inputs, labels, {
+    batchSize,
+    epochs,
+    shuffle: true,
+    callbacks: {
+      onEpochEnd: (epoch, logs) => {
+        console.log(`Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(4)}, accuracy = ${logs.acc.toFixed(4)}`);
+      }
+    }
+  });
+}
+```
+
+我们使用 model.compile() 方法配置模型, 使用 tf.train.adam() 作为优化器，使用 categoricalCrossentropy 作为损失函数，使用 accuracy 作为评估指标。然后我们使用 model.fit() 方法训练模型。我们设置 batchSize 为 32，epochs 为 50。我们使用 shuffle: true 来打乱数据集。最后，我们使用 callbacks 参数来设置回调函数，当每个 epoch 结束时，我们输出损失和准确率。
+
+最后我们写一个函数将上面的过程串联起来：
+
+```javascript
+async function run() {
+  const { inputTensor, oneHotLabels } = await prepareData();
+
+  const model = createModel();
+  await trainModel(model, inputTensor, oneHotLabels);
+
+  // 预测示例数据
+  const testData = tf.tensor2d([[5.1, 3.5, 1.4, 0.2]]);
+  const prediction = model.predict(testData);
+  const predictedClass = prediction.argMax(-1).dataSync()[0];
+
+  console.log(`Predicted class: ${predictedClass}`); // 0: Iris-setosa, 1: Iris-versicolor, 2: Iris-virginica
+}
+
+run();
+```
+
+运行结果如下，中间的过程为了简洁我们省略了大部分：
+
+```
+Epoch 1 / 50
+eta=0.0  acc=0...eta=0.0  
+240ms 1599us/step - acc=0.333 loss=1.32 
+Epoch 1: loss = 1.3157, accuracy = 0.3333
+Epoch 2 / 50
+eta=0.0  acc=0...eta=0.0  
+141ms 938us/step - acc=0.353 loss=1.26 
+Epoch 2: loss = 1.2607, accuracy = 0.3533
+Epoch 3 / 50
+eta=0.0  acc=0...eta=0.0  
+120ms 800us/step - acc=0.493 loss=1.21 
+Epoch 3: loss = 1.2096, accuracy = 0.4933
+...
+Epoch 49 / 50
+eta=0.0  acc=0....eta=0.0  
+47ms 315us/step - acc=0.900 loss=0.540 
+Epoch 49: loss = 0.5401, accuracy = 0.9000
+Epoch 50 / 50
+eta=0.0  acc=0....eta=0.0  
+59ms 391us/step - acc=0.907 loss=0.535 
+Epoch 50: loss = 0.5348, accuracy = 0.9067
+Predicted class: 0
+```
+
+其中预测结果这个代码我们来讲一下，初学的读者可能不容易理解。
+
+```javascript
+const predictedClass = prediction.argMax(-1).dataSync()[0];
+```
+
+从预测结果中找到最大值的索引，这代表了模型预测的类别。argMax(-1) 表示在最后一个维度上找到最大值的索引，dataSync() 方法将张量转换为 JavaScript 数组，[0] 表示取数组的第一个元素。
+
+小知识：为什么预测结果中最大值的索引代表了模型预测的类别？
+
+在机器学习中，特别是在分类任务中，模型的输出通常是各个类别的概率分布。这意味着模型会为每个可能的类别输出一个概率值，表示该样本属于该类别的置信度。当使用 softmax 激活函数或类似的机制时，所有类别的概率之和等于1。
+
+当我们想要从这样的概率分布中得到一个具体的类别预测时，我们需要选择一个类别。一种常见的方法是选择具有最高概率的类别，因为在概率最高的类别上，模型对其预测最为自信。这就是为什么我们会取概率分布中的最大值所对应的索引作为预测的类别。
+
+具体来说，如果我们有一个由模型输出的概率分布数组，例如 [0.1, 0.3, 0.6]，这个数组表示模型认为样本属于第一个类别的概率是10%，第二个类别的概率是30%，第三个类别的概率是60%。在这个例子中，第三个类别的概率最高，因此我们取索引为2的类别作为模型的预测结果。
+
+#### 14.2.2 用TensorFlow.js实现朴素贝叶斯算法
+
+离开了Scikit-learn的封装，我们不能失去了机器学习的编程能力。比如TensorFlow.js并没有提供朴素贝叶斯算法，我们可以自己实现。
+
+注释我直接写在代码里了：
+
+```javascript
+function calculateProbabilities(xs, ys) {
+  const numClasses = 3; // 鸢尾花数据集有3个类别
+  const numFeatures = xs[0].length; // 特征的数量（在鸢尾花数据集中是4个）
+
+  // 初始化各种统计量
+  const classCounts = new Array(numClasses).fill(0); // 用于存储每个类别的样本数量
+  const featureSums = Array.from({ length: numClasses }, () => new Array(numFeatures).fill(0)); // 用于存储每个类别中每个特征的和
+  const featureSquares = Array.from({ length: numClasses }, () => new Array(numFeatures).fill(0)); // 用于存储每个类别中每个特征的平方和
+
+  // 遍历每个样本，更新统计量
+  ys.forEach((label, i) => {
+    classCounts[label]++; // 增加该类别的样本计数
+    xs[i].forEach((value, j) => {
+      featureSums[label][j] += value; // 增加该类别中该特征的值
+      featureSquares[label][j] += value * value; // 增加该类别中该特征的平方值
+    });
+  });
+
+  // 计算先验概率
+  const priors = classCounts.map(count => count / ys.length); // 每个类别的样本数量除以总样本数量，得到先验概率
+
+  // 计算均值
+  const means = featureSums.map((sums, c) => sums.map(sum => sum / classCounts[c])); // 每个类别中每个特征的和除以该类别的样本数量，得到均值
+
+  // 计算方差
+  const variances = featureSquares.map((squares, c) =>
+    squares.map((square, j) => square / classCounts[c] - means[c][j] ** 2) // 每个类别中每个特征的平方和除以该类别的样本数量，再减去该特征均值的平方，得到方差
+  );
+
+  return { priors, means, variances }; // 返回先验概率、均值和方差
+}
+```
+
+我们再总结下上面代码的步骤：
+
+- 初始化统计量：
+    - classCounts：用于存储每个类别的样本数量。
+    - featureSums 和 featureSquares：分别用于存储每个类别中每个特征的和和平方和。
+- 更新统计量：
+    - 使用 ys.forEach 遍历每个样本的标签 label 和索引 i。
+    - 对于每个样本，增加该类别的样本计数，并更新对应特征的和和平方和。
+- 计算先验概率：先验概率表示每个类别在数据集中出现的频率，即 classCounts 中每个类别的样本数量除以总样本数量。
+- 计算均值：均值是每个类别中每个特征的平均值，即 featureSums 中每个类别和特征的和除以该类别的样本数量。
+- 计算方差：方差是每个类别中每个特征的离散程度，即 featureSquares 中每个类别和特征的平方和除以该类别的样本数量，再减去该特征均值的平方。
+
+下面我们来写预测的函数：
+
+```javascript
+// 预测函数
+function predict(xs, priors, means, variances) {
+  const numClasses = priors.length; // 类别的数量
+  const numFeatures = xs[0].length; // 特征的数量
+  const predictions = []; // 存储预测结果
+
+  xs.forEach(x => {
+    // 计算每个类别的概率
+    const probabilities = priors.map((prior, c) => {
+      let probability = Math.log(prior); // 先验概率的对数
+      for (let j = 0; j < numFeatures; j++) {
+        const mean = means[c][j]; // 第 c 类别的第 j 个特征的均值
+        const variance = variances[c][j]; // 第 c 类别的第 j 个特征的方差
+        const value = x[j]; // 当前样本的第 j 个特征值
+        probability += -0.5 * Math.log(2 * Math.PI * variance) - (value - mean) ** 2 / (2 * variance);
+      }
+      return probability;
+    });
+
+    // 找出概率最大的类别
+    const predictedClass = probabilities.indexOf(Math.max(...probabilities));
+    predictions.push(predictedClass);
+  });
+
+  return predictions; // 返回所有样本的预测结果
+}
+```
+
+我们再梳理下预测部分的步骤：
+1. **初始化变量**：
+   - `numClasses`：类别的数量，从 `priors` 的长度得到。
+   - `numFeatures`：特征的数量，从 `xs` 中任意一个样本的长度得到。
+   - `predictions`：用于存储对每个样本的预测结果。
+
+2. **遍历每个样本**：
+   - 使用 `xs.forEach` 遍历每个样本 `x`。
+
+3. **计算每个类别的概率**：
+   - 对于每个类别 `c`，初始化 `probability` 为该类别的先验概率的对数 `Math.log(prior)`。
+   - 遍历该样本的每个特征 `j`，根据朴素贝叶斯的公式，计算该类别的条件概率：
+     - `Math.log(2 * Math.PI * variance)`：方差的对数部分。
+     - `(value - mean) ** 2 / (2 * variance)`：特征值与均值的差平方除以方差的部分。
+   - 将对数概率累加到 `probability` 中。
+
+4. **选择最大概率的类别**：
+   - 使用 `Math.max(...probabilities)` 找出所有类别中概率最大值。
+   - 使用 `probabilities.indexOf` 找出该最大值对应的类别索引 `predictedClass`。
+
+5. **存储预测结果**：
+   - 将 `predictedClass` 添加到 `predictions` 数组中。
+
+6. **返回预测结果**：
+   - 最终返回 `predictions` 数组，它包含了对所有输入样本的预测类别。
+
+
+原理部分如果忘记的话我们简单回顾一下：
+
+朴素贝叶斯分类器基于贝叶斯定理，其假设特征之间是条件独立的。给定一个样本 $x$，其属于类别 $c$ 的概率 $P(c|x)$ 可以表示为：
+
+$P(c|x) \propto P(c) \prod_{j=1}^{n} P(x_j|c)$
+
+其中 $P(c)$ 是先验概率，$P(x_j|c)$ 是在类别 $c$ 下特征 $x_j$ 的条件概率。由于概率计算中的乘法容易导致数值下溢，所以在代码中使用对数形式：
+
+$\log P(c|x) = \log P(c) + \sum_{j=1}^{n} \log P(x_j|c)$
+
+对于正态分布，条件概率 $P(x_j|c)$ 的对数形式为：
+
+$\log P(x_j|c) = -0.5 \log(2 \pi \sigma^2) - \frac{(x_j - \mu)^2}{2 \sigma^2}$
+
+其中 $\mu$ 和 $\sigma^2$ 分别是特征的均值和方差。
+
+小知识：数值下溢
+
+数值下溢（Numerical Underflow）是指在计算机进行浮点数运算时，结果小于计算机所能表示的最小正数，从而导致结果被近似为零或被舍入为零的现象。计算机在处理非常小的浮点数时，可能会遇到这种情况。
+
+对数函数（尤其是自然对数）可以将乘法转换为加法。例如，概率值通常是介于0和1之间的非常小的数，直接相乘会导致数值下溢。而对数转换后，这些小数变成了负数（对数结果），这些负数相加后，结果仍然在计算机可以处理的范围内。
+
+在贝叶斯分类器中，我们需要计算多个特征值的联合概率。这通常会涉及将许多小概率值相乘。如果不使用对数，这些小数的乘积会迅速变得非常接近零，甚至超出计算机的表示能力。而使用对数后，相乘的操作变为相加，从而有效避免了这些极小数相乘的问题。
+
+### 14.3 其它JavaScript机器学习库
+
+TensorFlow.js并不是唯一的JavaScript机器学习库。在 JavaScript 生态系统中，还有很多其他优积的机器学习库,不是所有算法都要自己手写,比如我们可以用ml-cart来做决策树.
+
+可以这样写：
+```javascript
+const fetch = require('node-fetch');
+const { DecisionTreeClassifier } = require('ml-cart');
+
+async function loadIrisData() {
+  const response = await fetch('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data');
+  const data = await response.text();
+  
+  const parsedData = data.trim().split('\n').map(line => {
+    const [sepalLength, sepalWidth, petalLength, petalWidth, species] = line.split(',');
+    const speciesMap = { 'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2 };
+    return [parseFloat(sepalLength), parseFloat(sepalWidth), parseFloat(petalLength), parseFloat(petalWidth), speciesMap[species]];
+  });
+
+  const xs = parsedData.map(row => row.slice(0, 4));
+  const ys = parsedData.map(row => row[4]);
+
+  return { xs, ys };
+}
+
+async function run() {
+  const { xs, ys } = await loadIrisData();
+
+  // 创建决策树分类器
+  const decisionTree = new DecisionTreeClassifier();
+
+  // 训练模型
+  decisionTree.train(xs, ys);
+
+  // 进行预测
+  const testSample = [5.1, 3.5, 1.4, 0.2];  // 一个示例数据
+  const prediction = decisionTree.predict([testSample]);
+
+  console.log(`Predicted class: ${prediction}`); // 输出预测类别
+}
+
+run();
+```
+
+我们可以发现，就像使用了Scikit-learn一样，我们可以使用ml-cart的DecisionTreeClassifier来进行决策树分类。
+
+## 第十五章 机器学习应用初步
+
+### 15.1 推荐算法
+
+推荐算法是机器学习中的一个重要应用领域。推荐算法的目标是根据用户的历史行为和偏好，向用户推荐可能感兴趣的物品。推荐算法在电商、社交网络、音乐、视频等领域都有广泛的应用。
+
+推荐算法的核心是协同过滤（Collaborative Filtering）技术。协同过滤是一种基于用户行为数据的推荐算法，它通过分析用户的历史行为，发现用户之间的相似性，从而向用户推荐可能感兴趣的物品。
+
+协同过滤算法主要有两种类型：基于用户的协同过滤和基于物品的协同过滤。基于用户的协同过滤是通过分析用户之间的相似性，向用户推荐和他们相似的用户喜欢的物品。基于物品的协同过滤是通过分析物品之间的相似性，向用户推荐和他们喜欢的物品相似的物品。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/movie_r.png)
+
+本节我们以MovieLens数据集为例，介绍如何使用Python实现基于用户的协同过滤推荐算法。
+
+MovieLens 数据集是一系列由GroupLens Research实验室收集和维护的电影评分数据集，主要用于研究和开发推荐系统。这些数据集包含了用户对电影的评分、用户的观影记录以及电影的元数据信息，如电影类型、导演、演员等。
+
+MovieLens 数据集有多个版本，不同的版本包含不同数量的用户、电影和评分数据。以下是一些常见的MovieLens数据集版本及其特点：
+
+ml-100k：包含100,000个评分，涉及1,000名用户和1,700部电影。
+ml-1m：包含1,000,000个评分，涉及6,000名用户和4,000部电影。
+ml-10m：包含10,000,000个评分，涉及72,000名用户和10,000部电影。
+ml-20m：包含20,000,000个评分，涉及138,000名用户和27,000部电影。
+ml-25m：包含25,000,000个评分，涉及的用户和电影数量更多。
+MovieLens 数据集通常用于评估和比较不同的推荐算法，因为它们提供了丰富的用户行为数据和电影特征信息。这些数据集对于研究个性化推荐、协同过滤、矩阵分解等技术非常有价值。
+
+我们以ml-100k数据集为例，介绍如何使用Python实现基于用户的协同过滤推荐算法。
+
+ml-100k的数据的格式如下：
+
+```
+user_id	item_id	rating	timestamp
+0	0	0	3	881250949
+1	1	1	3	891717742
+2	2	2	1	878887116
+3	3	3	2	880606923
+4	4	4	1	886397596
+5	5	5	4	884182806
+6	6	6	2	881171488
+7	7	7	5	891628467
+8	8	8	3	886324817
+9	9	9	3	883603013
+```
+
+其中，user_id是用户的ID，item_id是电影的ID，rating是用户对电影的评分，timestamp是评分的时间戳。
+
+首先，我们加载数据集：
+
+```python
+import pandas as pd
+import numpy as np
+import torch
+from torch.utils.data import Dataset, DataLoader
+
+# 下载和加载 MovieLens 数据集
+url = 'http://files.grouplens.org/datasets/movielens/ml-100k/u.data'
+df = pd.read_csv(url, sep='\t', names=['user_id', 'item_id', 'rating', 'timestamp'])
+
+# 将用户ID和物品ID转换为从0开始的索引
+user_ids = df['user_id'].unique()
+item_ids = df['item_id'].unique()
+user2idx = {user: idx for idx, user in enumerate(user_ids)}
+item2idx = {item: idx for idx, item in enumerate(item_ids)}
+
+df['user_id'] = df['user_id'].apply(lambda x: user2idx[x])
+df['item_id'] = df['item_id'].apply(lambda x: item2idx[x])
+
+# 创建一个自定义数据集
+class MovieLensDataset(Dataset):
+    def __init__(self, dataframe):
+        self.df = dataframe
+
+    def __len__(self):
+        return len(self.df)
+
+    def __getitem__(self, idx):
+        user = self.df.iloc[idx, 0]
+        item = self.df.iloc[idx, 1]
+        rating = self.df.iloc[idx, 2]
+        return torch.tensor(user, dtype=torch.long), torch.tensor(item, dtype=torch.long), torch.tensor(rating, dtype=torch.float)
+
+dataset = MovieLensDataset(df)
+dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
+```
+
+然后我们定义一个简单的矩阵分解模型，其中包括用户和物品的嵌入（embedding）。矩阵分解（Matrix Factorization）算法，这是一种常用于推荐系统的技术。矩阵分解的目标是将用户-物品评分矩阵分解为两个低秩矩阵：用户因子矩阵和物品因子矩阵，从而可以预测缺失的评分。
+
+代码讲解我写在注释里了：
+
+```python
+import torch.nn as nn
+import torch.nn.functional as F
+
+class MatrixFactorization(nn.Module):
+    def __init__(self, n_users, n_items, n_factors=20):
+        super(MatrixFactorization, self).__init__()
+        # 这是一个嵌入层，用于将用户ID映射到一个低维度的向量（即用户因子）。n_users是用户的总数，n_factors是每个用户因子的维度。
+        self.user_factors = nn.Embedding(n_users, n_factors)   
+        # 这也是一个嵌入层，用于将物品ID映射到一个低维度的向量（即物品因子）。n_items是物品的总数，n_factors是每个物品因子的维度。
+        self.item_factors = nn.Embedding(n_items, n_factors)  
+
+    def forward(self, user, item):
+        user_embedding = self.user_factors(user)
+        item_embedding = self.item_factors(item)
+        # 计算用户因子向量和物品因子向量的逐元素乘积，并对结果向量沿第一个维度（即每个样本的评分）求和，得到最终的评分预测
+        return (user_embedding * item_embedding).sum(1)
+```
+
+这种矩阵分解方法的基本思想是，如果某个用户对一个物品的评分较高，那么这个用户的因子向量和这个物品的因子向量在某种度量下应该是相似的。通过这种方式，我们可以预测用户对未评分的物品的喜好程度。
+
+然后我们训练这个模型：
+    
+```python
+def train(dataloader, model, loss_fn, optimizer, device):
+    model.train()
+    total_loss = 0
+    for user, item, rating in dataloader:
+        user, item, rating = user.to(device), item.to(device), rating.to(device)
+        optimizer.zero_grad()
+        prediction = model(user, item)
+        loss = loss_fn(prediction, rating)
+        loss.backward()
+        optimizer.step()
+        total_loss += loss.item()
+    return total_loss / len(dataloader)
+
+# 初始化模型
+n_users = len(user_ids)
+n_items = len(item_ids)
+n_factors = 20
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+model = MatrixFactorization(n_users, n_items, n_factors).to(device)
+loss_fn = nn.MSELoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+
+# 训练模型
+n_epochs = 10
+for epoch in range(n_epochs):
+    train_loss = train(dataloader, model, loss_fn, optimizer, device)
+    print(f'Epoch {epoch+1}/{n_epochs}, Loss: {train_loss:.4f}')
+```
+
+最后我们可以使用训练好的模型进行预测：
+
+```python
+from sklearn.metrics import mean_squared_error
+
+def evaluate(dataloader, model, device):
+    model.eval()
+    actuals = []
+    predictions = []
+    with torch.no_grad():
+        for user, item, rating in dataloader:
+            user, item, rating = user.to(device), item.to(device), rating.to(device)
+            prediction = model(user, item)
+            actuals.extend(rating.cpu().numpy())
+            predictions.extend(prediction.cpu().numpy())
+    mse = mean_squared_error(actuals, predictions)
+    return mse
+
+test_mse = evaluate(dataloader, model, device)
+print(f'Test MSE: {test_mse:.4f}')
+```
+
+运行结果如下：
+
+```
+Epoch 1/10, Loss: 18.9122
+Epoch 2/10, Loss: 2.2563
+Epoch 3/10, Loss: 1.1144
+Epoch 4/10, Loss: 0.9866
+Epoch 5/10, Loss: 0.9637
+Epoch 6/10, Loss: 0.9208
+Epoch 7/10, Loss: 0.8711
+Epoch 8/10, Loss: 0.8352
+Epoch 9/10, Loss: 0.8078
+Epoch 10/10, Loss: 0.7798
+Test MSE: 0.6653
+```
+
+这里我们使用均方误差（Mean Squared Error，MSE）作为评估指标，MSE 是预测值和真实值之间差值的平方和的均值。MSE 越小，模型的预测效果越好。
+
+
+## 参考文献
+
+1. 周志华. 机器学习. 北京：清华大学出版社, 2016
+2. 李航. 机器学习方法。北京：清华大学出版社, 2022
+3. Tom M. Mitchell 著 曾华军 张银奎 等译. 机器学习. 北京：机械工业出版社, 2011
+4. Richard S. Sutton, Andrew G. Barto著，俞凯等译. 强化学习（第2版），北京：电子工业出版社，2019
+5. 诸葛越 主编，葫芦娃 著，百面机器学习，北京：人民邮电出版社，2018
+6. 王贺、刘鹏、钱乾，机器学习算法竞赛实战，北京：人民邮电出版社，2021
+7. Vaswani Ashish, Shazeer Noam, Parmar Niki, Uszkoreit Jakob, Jones Llion, Gomez Aidan N., Kaiser Łukasz, and Polosukhin Illia. 2017. Attention is all you need. In Advances in Neural Information Processing Systems. 5998–6008.
+8. Paul F. Christiano, Jan Leike, Tom B. Brown, Miljan Martic, Shane Legg, and Dario Amodei. Deep reinforcement learning from human preferences. In Advances in Neural Information Processing Systems 30: Annual Conference on Neural Information Processing Systems 2017, December 4-9, 2017, Long Beach, CA, USA, pages 4302-4310, 2017.
+9. Schulman J, Wolski F, Dhariwal P, Radford A, Klimov O. Proximal policy optimization algorithms. arXiv preprint arXiv:1707.06347. 2017
+10. Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., Graves, A.,
+Riedmiller, M., Fidjeland, A. K., Ostrovski, G., Petersen, S., Beattie, C., Sadik, A., Antonoglou,
+I., King, H., Kumaran, D., Wierstra, D., Legg, S., and Hassabis, D. (2015). Human-level control
+through deep reinforcement learning. Nature, 518(7540):529–533.
