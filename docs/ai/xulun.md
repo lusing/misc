@@ -386,6 +386,8 @@ Matplotlib 的主要特点
 
 首先，我们来看一些常用的数据集。数据集是机器学习的基础，是机器学习算法的输入。
 
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/datasets.png)
+
 #### 2.1.1 鸢尾花数据集
 
 鸢尾花数据集是机器学习领域中最著名的数据集之一，由英国统计学家和生物学家罗纳德·艾尔默·费雪在1936年收集整理。数据集包含了150个样本，分为3类，每类50个样本，每个样本包含4个特征：花萼长度、花萼宽度、花瓣长度、花瓣宽度。数据集的目标是根据这4个特征对鸢尾花进行分类。
@@ -1395,7 +1397,7 @@ matrix([[ 0.8125 , -0.125  ,  0.     ],
         [ 0.     ,  0.     ,  2.     ]])
 ```
 
-### 3.2 NumPy的GPU和TPU加速
+### 3.2 JAX - NumPy的GPU和TPU加速
 
 #### 3.2.1 矩阵
 
@@ -1509,7 +1511,10 @@ print(a8)
 - 无穷范数：向量中各个元素绝对值的最大值。
 需要注意的是，L0范数并不是严格意义上的范数，因为它违反了齐次性。但是在机器学习中，L0范数常用于衡量向量中非零元素的个数，因此也被称为“伪范数”。
 
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/norm.png)
+
 我们先从计算一个一维向量的L1范数开始，不要L1范数这个名字给吓到，其实就是绝对值之和：
+
 ```python
 norm10_1 = jnp.linalg.norm(a10,ord=1)
 print(norm10_1)
@@ -1612,6 +1617,8 @@ print(inv1)
 导数是一个函数在某点处的变化率，用于描述函数在该点处的变化率。导数可以表示函数在该点处的斜率，即函数在该点处的陡峭程度。
 
 梯度(gradient)是一个向量，表示函数在该点处的方向导数沿着该方向取得最大值。梯度可以表示函数在该点处的变化最快和变化率最大的方向。在单变量的实值函数中，梯度可以简单理解为导数。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/grad.png)
 
 JAX作为支持深度学习的框架，对于梯度的支持是被优先考虑的。我们可以使用jax.grad函数来计算梯度。针对一个一元函数，梯度就是导数。我们可以用下面的代码来计算sin函数在x=1.0处的梯度：
 
@@ -1735,7 +1742,7 @@ $$
 H(X) = - \sum_{x \in X} p(x) \log_2 p(x)
 $$
 
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/440px-Entropy_flip_2_coins.jpg)
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/prop.png)
 
 ```python
 import jax.numpy as jnp
@@ -2153,6 +2160,7 @@ weighted avg       1.00      1.00      1.00        45
 决策树是一种用于分类和回归任务的监督学习算法。它通过一系列的二元（是/否）决策将数据划分为不同的类别或预测连续值。决策树模型通过递归地分割数据空间来构建树形结构，其中每个节点代表一个决策点或分裂点。
 
 决策树由三个主要部分组成：
+
 - 根节点（Root Node）：树的起点，包含整个数据集的所有样本。从这里开始，数据被逐步分裂。
 - 内部节点（Internal Nodes）：每个内部节点表示对某个特征的决策或测试。根据特征值，将数据分成两个或多个分支。
 - 叶节点（Leaf Nodes）：叶节点表示最终的分类或回归结果。不再进一步分裂。
@@ -3288,11 +3296,11 @@ plt.show()
 
 最简单的数值预测方法就是用一条直线来拟合现有的数据。
 
-假设我们有一组数据点 $(x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n)$，并希望找到一个函数 $f(x)$ 来拟合这些数据点。最小二乘法的目标是找到函数 $f(x)$ 的参数，使得以下目标函数最小：$ S = \sum_{i=1}^{n} [y_i - f(x_i)]^2 $
+假设我们有一组数据点 $(x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n)$，并希望找到一个函数 $f(x)$ 来拟合这些数据点。最小二乘法的目标是找到函数 $f(x)$ 的参数，使得以下目标函数最小：$S = \sum_{i=1}^{n} [y_i - f(x_i)]^2$
 
 其中，$S$ 是误差平方和。
 
-在线性回归中，拟合函数通常是一个线性函数，即：$ f(x) = \beta_0 + \beta_1 x $
+在线性回归中，拟合函数通常是一个线性函数，即：$f(x) = \beta_0 + \beta_1 x$
 
 此时，最小二乘法通过求解以下方程组来找到最佳参数 $\beta_0$ 和 $\beta_1$：
 
@@ -3769,22 +3777,22 @@ print(f'测试集均方误差: {test_mse}')
 
 ### 5.3 岭回归
 
-岭回归(Ridge Regression)，是一种在普通最小二乘法（Ordinary Least Squares, OLS）回归的基础上引入 $ L2 $ 正则化的线性回归方法。它通过对回归系数施加惩罚，控制模型复杂性，从而减小过拟合的风险，特别是在存在多重共线性的情况下。上节我们介绍的Lasso回归是$L1$正则化。
+岭回归(Ridge Regression)，是一种在普通最小二乘法（Ordinary Least Squares, OLS）回归的基础上引入 $L2$ 正则化的线性回归方法。它通过对回归系数施加惩罚，控制模型复杂性，从而减小过拟合的风险，特别是在存在多重共线性的情况下。上节我们介绍的Lasso回归是$L1$正则化。
 
 岭回归的目标函数如下：$\min_{\beta} \left( \frac{1}{2n} \sum_{i=1}^n (y_i - X_i \beta)^2 + \alpha \|\beta\|_2^2 \right)$
 
 其中：
-- $ y_i $ 是第 $ i $ 个样本的真实值。
-- $ X_i $ 是第 $ i $ 个样本的特征向量。
-- $ \beta $ 是回归系数向量。
-- $ n $ 是样本数量。
-- $ \alpha $ 是正则化参数，控制正则化项的强度。
-- $ \|\beta\|_2^2 $ 是回归系数的 $ L2 $ 范数的平方，即所有系数的平方和。
+- $y_i$ 是第 $i$ 个样本的真实值。
+- $X_i$ 是第 $i$ 个样本的特征向量。
+- $\beta$ 是回归系数向量。
+- $n$ 是样本数量。
+- $\alpha$ 是正则化参数，控制正则化项的强度。
+- $\|\beta\|_2^2$ 是回归系数的 $L2$ 范数的平方，即所有系数的平方和。
 
 岭回归的主要特点有：
 
-- 处理多重共线性：多重共线性是指特征矩阵中的特征彼此高度相关，这会导致 OLS 回归系数估计不稳定。岭回归通过引入 \( L2 \) 正则化，增加对回归系数的约束，从而稳定估计。
-- 减少模型复杂性：正则化项 $ \alpha \|\beta\|_2^2 $ 使得回归系数更加保守，减少了模型的复杂性，防止过拟合。
+- 处理多重共线性：多重共线性是指特征矩阵中的特征彼此高度相关，这会导致 OLS 回归系数估计不稳定。岭回归通过引入$L2$正则化，增加对回归系数的约束，从而稳定估计。
+- 减少模型复杂性：正则化项 $\alpha \|\beta\|_2^2$ 使得回归系数更加保守，减少了模型的复杂性，防止过拟合。
 - 不会产生稀疏解：Lasso 不同，岭回归不会将回归系数缩减为零。因此，它不会进行特征选择，而是减小所有系数值。
 
 下面我们看看如何用岭回归来预测波士顿房价：
@@ -3838,16 +3846,13 @@ print(f'测试集均方误差: {test_mse}')
     3. 使用训练集训练模型。
     4. 用验证集评估模型性能，记录误差或评分。
 
-假设数据集有 $ n $ 个样本 $( X_1, y_1 ), ( X_2, y_2 ), \ldots, ( X_n, y_n )$。
+假设数据集有 $n$ 个样本 $( X_1, y_1 ), ( X_2, y_2 ), \ldots, ( X_n, y_n )$。
 
-1. 对于第 $ i $ 个样本：
-
-    - 训练集：$ \{( X_1, y_1 ), \ldots, ( X_{i-1}, y_{i-1} ), ( X_{i+1}, y_{i+1} ), \ldots, ( X_n, y_n )\} $
-    - 验证集：$ ( X_i, y_i ) $
-
-2. 训练模型并计算在验证集上的误差 $ e_i $。
-
-3. 最终误差为所有 $ e_i $ 的平均值：$ \text{LOOCV Error} = \frac{1}{n} \sum_{i=1}^n e_i $
+1. 对于第$i$ 个样本：
+    - 训练集：$\{( X_1, y_1 ), \ldots, ( X_{i-1}, y_{i-1} ), ( X_{i+1}, y_{i+1} ), \ldots, ( X_n, y_n )\}$
+    - 验证集：$( X_i, y_i )$
+2. 训练模型并计算在验证集上的误差 $e_i$。
+3. 最终误差为所有 $e_i$ 的平均值：$\text{LOOCV Error} = \frac{1}{n} \sum_{i=1}^n e_i$
 
 scikit learn框架为提供了 LeaveOneOut 类来实现只留交叉验证：
 
@@ -3944,7 +3949,7 @@ print(f'测试集均方误差: {test_mse}')
 
 Kernel Ridge Regression（核岭回归）是一种结合了核方法和岭回归（Ridge Regression）的回归技术。它在处理非线性数据和高维数据时非常有效。
 
-核岭回归结合了核方法和岭回归，通过在核函数计算的高维特征空间中进行岭回归。其目标函数如下：$ \text{Loss} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{i=1}^{n} \alpha_i^2 $
+核岭回归结合了核方法和岭回归，通过在核函数计算的高维特征空间中进行岭回归。其目标函数如下：$\text{Loss} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{i=1}^{n} \alpha_i^2$
 
 其中，$\alpha_i$ 是模型参数，$\lambda$ 是正则化参数。
 
@@ -4544,14 +4549,14 @@ print(f'均方误差: {mse:.2f}')
 
 奇异值分解 (Singular Value Decomposition, SVD)是一种在线性代数中广泛应用的矩阵分解技术。它将一个矩阵分解为三个特定矩阵的乘积，用于揭示原始矩阵的许多重要属性和结构。
 
-对于一个给定的矩阵 $ A $（大小为 $ m \times n $），SVD 将其分解为三个矩阵的乘积：
-$ A = U \Sigma V^T $
+对于一个给定的矩阵 $A$（大小为 $ m \times n $），SVD 将其分解为三个矩阵的乘积：
+$A = U \Sigma V^T$
 
 其中：
 
-- $ U $ 是一个 $ m \times m $ 的正交矩阵，称为左奇异向量矩阵。
-- $ \Sigma $ 是一个 $ m \times n $ 的对角矩阵，称为奇异值矩阵，其对角线上的元素是奇异值，按降序排列。
-- $ V $ 是一个 $ n \times n $ 的正交矩阵，称为右奇异向量矩阵，$ V^T $ 是 $ V $ 的转置矩阵。
+- $U$ 是一个 $m \times m$ 的正交矩阵，称为左奇异向量矩阵。
+- $\Sigma$ 是一个 $m \times n$ 的对角矩阵，称为奇异值矩阵，其对角线上的元素是奇异值，按降序排列。
+- $V$ 是一个 $n \times n$ 的正交矩阵，称为右奇异向量矩阵，$V^T$ 是 $V$ 的转置矩阵。
 
 PLSSVD 的主要目的是通过奇异值分解技术，找到一对投影矩阵，使得两个数据集之间的投影具有最大的协方差。它通过以下步骤实现：
 
@@ -6175,7 +6180,7 @@ AdaBoost 的工作原理
 
 1. 初始化样本权重：初始时，每个训练样本的权重是相等的，设为 $\frac{1}{N}$，其中 $N$ 是训练样本的数量。
 
-2. **迭代过程**：
+2. 迭代过程：
    - 对于每一轮迭代 $t$，执行以下步骤：
      1. **训练弱分类器**：根据当前样本权重分布，训练一个弱分类器 $h_t$。
      2. **计算分类误差**：计算弱分类器在训练集上的误差率 $\epsilon_t$，即错分样本的权重之和。
@@ -6189,11 +6194,8 @@ AdaBoost 的工作原理
        $
        其中，$y_i$ 是样本 $i$ 的真实标签（取值为 $\pm 1$），$x_i$ 是样本特征，$Z_t$ 是规范化因子，确保权重和为 1。
 
-3. **构建最终分类器**：
-   - 最终分类器是所有弱分类器加权投票的结果，公式为：
-     $
-     H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right)
-     $
+3. 构建最终分类器：
+   - 最终分类器是所有弱分类器加权投票的结果，公式为：$H(x) = \text{sign}\left(\sum_{t=1}^{T} \alpha_t h_t(x)\right)$
      其中，$T$ 是迭代次数。
 
 AdaBoost 的优点和缺点
@@ -6444,7 +6446,19 @@ XGBoost的优点和缺点
 
 ### 8.1 CPU上的多任务编程
 
-![Flow](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/pipeline.png)
+![Flow](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/CPU_flow.png)
+
+其实，CPU上的多任务编程是被摩尔定律失效逼迫出来的。
+
+摩尔定律是由英特尔联合创始人戈登·摩尔在1965年提出的一条经验法则。摩尔定律预测，集成电路上可容纳的晶体管数量每两年将增加一倍，而成本则减少一半。这一规律推动了半导体工业的快速发展，带来了计算能力的指数级增长。然而，随着技术的发展和物理极限的逼近，摩尔定律逐渐面临失效的挑战。
+
+随着晶体管尺寸的不断缩小，已经接近物理极限。当前，晶体管的尺寸已经缩小到纳米级别（少于10纳米），这带来了诸多不可忽视的物理问题：
+
+- 量子效应：在极小的尺度下，量子效应变得显著，导致电子行为难以预测和控制。
+- 隧道效应：电流可能会通过绝缘层隧穿，从而产生泄漏电流，增加能耗和热量。
+- 热管理：更高的晶体管密度会产生更多的热量，难以有效散热。
+
+此外，制造更小、更密集的晶体管变得越来越复杂和昂贵。因此，摩尔定律逐渐失效，传统的单核CPU已经无法满足日益增长的计算需求。
 
 #### 8.1.1 从多线程说起
 
@@ -6628,7 +6642,31 @@ endif()
 
 虽然我们抱怨Intel是牙膏厂，每年的进步越来越有限。不过，还总是有新的指令增加到新的架构中来。这其中就有越来越强大的SIMD指令。
 
-SIMD就是一条机器指令可以实现多条数据的操作。在Intel平台上，早在1997年就推出了64位的MMX指令集。1999年又有了128位的SSE指令集。2011年，又推出了256位的AVX(Advanced Vector Extensions)指令，我们来个例子看看：
+SIMD就是一条机器指令可以实现多条数据的操作。
+
+Intel CPU的SIMD发展史如下：
+
+- MMX（MultiMedia eXtensions）:
+    - 推出时间：1997年
+    - 主要特点：使用64位的MM0 ~ MM7寄存器，能一次性操作1个64位的数据、或者两个32位的数据、或者4个16位的数据、或者8个8位的数据。
+- SSE（Streaming SIMD Extensions）:
+    - 推出时间：1999年
+    - 主要特点：引入了独立的XMM0 ~ XMM7寄存器组，大小为128位。新增了用于处理整型和浮点型数据的指令，能同时处理多个数据。
+- SSE2（Streaming SIMD Extensions 2）:
+    - 推出时间：2000年
+    - 主要特点：允许128位的XMM寄存器组存储整型数据，扩展了浮点数据的处理指令，支持64位的Double-Precision浮点数。
+- SSE3（Streaming SIMD Extensions 3）:
+    - 推出时间：2004年
+    - 主要特点：增加了13条新指令，包括浮点水平算术运算和水平复制移动等。
+- SSE4（Streaming SIMD Extensions 4）:
+    - 推出时间：2006年
+    - 主要特点：分为SSE4.1、SSE4.2和SSE4a三个子集，用于提升音视频、图像、字符串等方面的数据处理性能。
+- AVX（Advanced Vector eXtentions）:
+    - 推出时间：2008年
+    - 主要特点：对XMM寄存器做了扩展，从128位扩展到256位，提供更灵活的指令集。
+
+
+我们来个例子看看：
 
 ```cpp
 #include <iostream>
@@ -7154,8 +7192,6 @@ int main() {
 ```
 
 #### 8.2.4 Vulkan
-
-![Vulkan](https://img-blog.csdnimg.cn/f9ea847fe25045b0babfa8eca8cd4c56.png#pic_center)
 
 Vulkan由Khronos Group牵头制定和管理标准，是OpenGL的继任者。它最早的技术来自于AMD。
 Vulkan是一种用于编写跨平台的图形和计算程序的框架，支持使用C和C++语言编写代码，可以在多种处理器和操作系统上运行，如CPU, GPU, DSP, FPGA等。
@@ -8063,10 +8099,8 @@ int main() {
 }
 ```
 
-
-
 当然，上面的只是个例子，没有做错误处理，这样是不对的。
-我们参考官方的例子：
+我们参考官方的例子，注释我直接写在代码中了：
 
 ```cpp
 #include <stdio.h>
@@ -8081,7 +8115,7 @@ int main() {
 /* Matrix size */
 #define N (275)
 
-/* Host implementation of a simple version of sgemm */
+//单精度通用矩阵乘法
 static void simple_sgemm(int n, float alpha, const float *A, const float *B,
                          float beta, float *C) {
   int i;
@@ -8090,19 +8124,20 @@ static void simple_sgemm(int n, float alpha, const float *A, const float *B,
 
   for (i = 0; i < n; ++i) {
     for (j = 0; j < n; ++j) {
-      float prod = 0;
+      float prod = 0; // 这个嵌套循环遍历矩阵C的所有元素。对于每个元素，我们初始化乘积prod为0。
 
       for (k = 0; k < n; ++k) {
-        prod += A[k * n + i] * B[j * n + k];
+        prod += A[k * n + i] * B[j * n + k]; //这个内层循环计算矩阵A的第i行和矩阵B的第j列的点积，并将结果累加到prod中。
       }
 
-      C[j * n + i] = alpha * prod + beta * C[j * n + i];
+      C[j * n + i] = alpha * prod + beta * C[j * n + i]; //我们将计算出的乘积乘以alpha，再加上beta乘以矩阵C的当前元素，然后将结果存储回矩阵C的相应位置
     }
   }
 }
 
 /* Main */
 int main(int argc, char **argv) {
+  //h_A, h_B, h_C是主机（CPU）内存中的矩阵，d_A, d_B, d_C是设备（GPU）内存中的矩阵。alpha和beta是矩阵乘法的标量系数。n2是矩阵的大小。error_norm和ref_norm用于计算误差。handle是CUBLAS库的句柄。
   cublasStatus_t status;
   float *h_A;
   float *h_B;
@@ -8120,7 +8155,7 @@ int main(int argc, char **argv) {
   float diff;
   cublasHandle_t handle;
 
-  /* Initialize CUBLAS */
+  // 初始化CUBLAS库并检查是否成功
   printf("simpleCUBLAS test running..\n");
 
   status = cublasCreate(&handle);
@@ -8130,8 +8165,10 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  /* Allocate host memory for the matrices */
+  
   h_A = reinterpret_cast<float *>(malloc(n2 * sizeof(h_A[0])));
+
+  //为矩阵A、B和C在主机内存中分配空间，并检查是否分配成功。
 
   if (h_A == 0) {
     fprintf(stderr, "!!!! host memory allocation error (A)\n");
@@ -8152,14 +8189,14 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  /* Fill the matrices with test data */
+  // 使用随机数填充矩阵A、B和C
   for (i = 0; i < n2; i++) {
     h_A[i] = rand() / static_cast<float>(RAND_MAX);
     h_B[i] = rand() / static_cast<float>(RAND_MAX);
     h_C[i] = rand() / static_cast<float>(RAND_MAX);
   }
 
-  /* Allocate device memory for the matrices */
+  /* 为矩阵A、B和C在设备内存中分配空间，并检查是否分配成功 */
   if (cudaMalloc(reinterpret_cast<void **>(&d_A), n2 * sizeof(d_A[0])) !=
       cudaSuccess) {
     fprintf(stderr, "!!!! device memory allocation error (allocate A)\n");
@@ -8178,7 +8215,7 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  /* Initialize the device matrices with the host matrices */
+  /* 将主机内存中的矩阵A、B和C复制到设备内存中 */
   status = cublasSetVector(n2, sizeof(h_A[0]), h_A, 1, d_A, 1);
 
   if (status != CUBLAS_STATUS_SUCCESS) {
@@ -8200,11 +8237,11 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  /* Performs operation using plain C code */
+  /* 使用CPU进行矩阵乘法计算并将结果保存到h_C_ref中 */
   simple_sgemm(N, alpha, h_A, h_B, beta, h_C);
   h_C_ref = h_C;
 
-  /* Performs operation using cublas */
+  /* 使用CUBLAS库在GPU上进行矩阵乘法计算 */
   status = cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, N, N, N, &alpha, d_A,
                        N, d_B, N, &beta, d_C, N);
 
@@ -8221,7 +8258,7 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  /* Read the result back */
+  /* 为结果分配主机内存，并将设备内存中的结果读取回主机内存 */
   status = cublasGetVector(n2, sizeof(h_C[0]), d_C, 1, h_C, 1);
 
   if (status != CUBLAS_STATUS_SUCCESS) {
@@ -8229,7 +8266,7 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  /* Check result against reference */
+  /* 计算误差并与参考结果进行比较 */
   error_norm = 0;
   ref_norm = 0;
 
@@ -8284,6 +8321,34 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 }
+```
+
+上面代码的流程图如下：
+
+```
+开始  
+│  
+├──> 初始化CUBLAS库  
+│     └──> 检查CUBLAS初始化是否成功  
+│         ├──> 成功 -> 分配主机内存给矩阵A、B、C  
+│         │       ├──> 分配成功 -> 填充矩阵A、B、C  
+│         │       │   └──> 填充成功 -> 分配设备内存给矩阵A、B、C  
+│         │       │       ├──> 分配成功 -> 将主机内存中的矩阵复制到设备内存  
+│         │       │       │   └──> 复制成功 -> 使用CPU进行矩阵乘法计算  
+│         │       │       │       └──> 计算成功 -> 使用CUBLAS在GPU上进行矩阵乘法计算  
+│         │       │       │           └──> 计算成功 -> 为结果分配主机内存  
+│         │       │       │               └──> 分配成功 -> 将设备内存中的结果读取回主机内存  
+│         │       │       │                   └──> 读取成功 -> 计算误差并与参考结果进行比较  
+│         │       │       │                       ├──> 参考范数不为0 -> 清理内存  
+│         │       │       │                       │   └──> 清理成功 -> 关闭CUBLAS库  
+│         │       │       │                       │       └──> 关闭成功 -> 检查误差是否在可接受范围内  
+│         │       │       │                       │           ├──> 在可接受范围内 -> 打印通过测试信息 -> 结束  
+│         │       │       │                       │           └──> 不在可接受范围内 -> 打印失败测试信息 -> 结束  
+│         │       │       │                       └──> 参考范数为0 -> 打印错误信息 -> 结束  
+│         │       │       └──> 复制失败 -> 打印错误信息 -> 结束  
+│         │       └──> 分配失败 -> 打印错误信息 -> 结束  
+│         └──> 失败 -> 打印错误信息 -> 结束  
+└──> 失败 -> 打印错误信息 -> 结束  
 ```
 
 #### 8.3.5 一些更高级的特性
@@ -8348,7 +8413,7 @@ static __device__ __forceinline__ unsigned int __qsflo(unsigned int word) {
 
 #### 8.4.1 初识PTX与SASS
 
-![](https://docs.nvidia.com/cuda/cuda-c-programming-guide/_images/gpu-devotes-more-transistors-to-data-processing.png)
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/gpu-devotes-more-transistors-to-data-processing.png)
 
 从上图我们可以看到，CPU的架构是复杂的几个核组合在一起。而GPU的架构是大量的简单的核组合在一起。因为GPU的每个单元架构都很简单，所以我们需要用CPU去控制GPU的每个单元，让它们协同工作。CPU上的控制代码，我们称为host代码，而GPU每个单元上运行的代码，我们称为device代码。
 
@@ -9060,233 +9125,7 @@ $L__BB4_8:
 }
 ```
 
-而sass实现不负重望地又搞出来一个slowpath函数：
-```sass
-testSin(double&):
- LDC R1, c[0x0][0x28] 
- LDC.64 R12, c[0x0][0x210] 
- ULDC.64 UR4, c[0x0][0x208] 
- IADD3 R1, R1, -0x30, RZ 
- LDG.E.64 R10, desc[UR4][R12.64] 
- ULDC UR6, c[0x0][0x20] 
- IADD3 R14, R1, UR6, RZ 
- LOP3.LUT R0, R11, 0x7fffffff, RZ, 0xc0, !PT 
- ISETP.EQ.AND P1, PT, R10, RZ, PT 
- ISETP.NE.AND P0, PT, R0, 0x7ff00000, PT 
- @!P0 BRA P1, `(.L_x_0) 
- UMOV UR6, 0x6dc9c883 
- UMOV UR7, 0x3fe45f30 
- DSETP.GE.AND P0, PT, |R10|.reuse, 2.14748364800000000000e+09, PT 
- DMUL R4, R10, UR6 
- UMOV UR6, 0x54442d18 
- UMOV UR7, 0x3ff921fb 
- F2I.F64 R0, R4 
- I2F.F64 R6, R0 
- STL [R1], R0 
- DFMA R2, -R6, UR6, R10 
- UMOV UR6, 0x33145c00 
- UMOV UR7, 0x3c91a626 
- DFMA R2, -R6, UR6, R2 
- UMOV UR6, 0x252049c0 
- UMOV UR7, 0x397b839a 
- DFMA R2, -R6, UR6, R2 
- @!P0 BRA `(.L_x_1) 
- MOV R16, 0x1e0 
- CALL.REL.NOINC `($testSin(double&)$__internal_trig_reduction_slowpathd) 
- LDL R0, [R1] 
- BRA `(.L_x_1) 
-.L_x_0:
- DMUL R2, RZ, R10 
- IMAD.MOV.U32 R0, RZ, RZ, RZ 
-.L_x_1:
- IMAD.SHL.U32 R6, R0, 0x8, RZ 
- MOV R4, 32@lo(__cudart_sin_cos_coeffs) 
- MOV R5, 32@hi(__cudart_sin_cos_coeffs) 
- LOP3.LUT R19, R6, 0x8, RZ, 0xc0, !PT 
- IMAD.WIDE R18, R19, 0x8, R4 
- LDG.E.64.CONSTANT R20, desc[UR4][R18.64+0x8] 
- LDG.E.64.CONSTANT R16, desc[UR4][R18.64+0x10] 
- LDG.E.64.CONSTANT R14, desc[UR4][R18.64+0x18] 
- LDG.E.64.CONSTANT R10, desc[UR4][R18.64+0x20] 
- LDG.E.64.CONSTANT R4, desc[UR4][R18.64+0x28] 
- LDG.E.64.CONSTANT R6, desc[UR4][R18.64+0x30] 
- R2P PR, R0, 0x3 
- IMAD.MOV.U32 R22, RZ, RZ, 0x79785eba 
- DMUL R8, R2, R2 
- IMAD.MOV.U32 R0, RZ, RZ, 0x3de5db65 
- FSEL R22, -R22, 4.2945490664224492434e-19, !P0 
- FSEL R23, R0, -0.082518599927425384521, !P0 
- DFMA R20, R8, R22, R20 
- DFMA R16, R8, R20, R16 
- DFMA R14, R8, R16, R14 
- DFMA R10, R8, R14, R10 
- DFMA R4, R8, R10, R4 
- DFMA R4, R8, R4, R6 
- DFMA R2, R4, R2, R2 
- @P0 DFMA R2, R8, R4, 1 
- @P1 DFMA R2, R2, -1, RZ 
- STG.E.64 desc[UR4][R12.64], R2 
- EXIT 
-$testSin(double&)$__internal_trig_reduction_slowpathd:
- SHF.R.U32.HI R0, RZ, 0x14, R11.reuse 
- IMAD.MOV.U32 R2, RZ, RZ, R10 
- IMAD.MOV.U32 R17, RZ, RZ, R11 
- LOP3.LUT R0, R0, 0x7ff, RZ, 0xc0, !PT 
- ISETP.NE.AND P0, PT, R0, 0x7ff, PT 
- @!P0 BRA `(.L_x_2) 
- IADD3 R0, R0, -0x400, RZ 
- CS2R R18, SRZ 
- IADD3 R7, R1, 0x8, RZ 
- SHF.R.U32.HI R3, RZ, 0x6, R0 
- LOP3.LUT P2, R15, R0, 0x3f, RZ, 0xc0, !PT 
- IADD3 R5, -R3, 0x10, RZ 
- IADD3 R4, -R3, 0x13, RZ 
- ISETP.GT.AND P0, PT, R5, 0xe, PT 
- IADD3 R6, -R3, 0xf, RZ 
- SEL R4, R4, 0x12, !P0 
- IMAD.MOV.U32 R9, RZ, RZ, R6 
- ISETP.GT.AND P0, PT, R5, R4, PT 
- @P0 BRA `(.L_x_3) 
- MOV R8, 32@lo(__cudart_i2opi_d) 
- IMAD.MOV R3, RZ, RZ, -R3 
- MOV R9, 32@hi(__cudart_i2opi_d) 
- IMAD.SHL.U32 R5, R2.reuse, 0x800, RZ 
- SHF.L.U64.HI R17, R2, 0xb, R17 
- IMAD.MOV.U32 R21, RZ, RZ, R7 
- ULDC.64 UR6, c[0x0][0x208] 
- IMAD.WIDE R8, R3, 0x8, R8 
- LOP3.LUT R17, R17, 0x80000000, RZ, 0xfc, !PT 
- IADD3 R0, P0, R8, 0x78, RZ 
- IMAD.X R23, RZ, RZ, R9, P0 
- IMAD.MOV.U32 R9, RZ, RZ, R6 
-.L_x_4:
- IMAD.MOV.U32 R2, RZ, RZ, R0 
- IMAD.MOV.U32 R3, RZ, RZ, R23 
- LDG.E.64.CONSTANT R2, desc[UR6][R2.64] 
- IADD3 R9, R9, 0x1, RZ 
- IMAD.WIDE.U32 R18, P3, R2, R5, R18 
- IMAD R25, R2.reuse, R17.reuse, RZ 
- IMAD.HI.U32 R8, R2, R17, RZ 
- IADD3 R19, P0, R25, R19, RZ 
- IMAD R20, R3.reuse, R5.reuse, RZ 
- IMAD.HI.U32 R25, R3, R5, RZ 
- IADD3 R19, P1, R20, R19, RZ 
- IMAD.X R8, RZ, RZ, R8, P3 
- ISETP.GE.AND P3, PT, R9, R4, PT 
- IMAD.HI.U32 R2, R3, R17.reuse, RZ 
- STL.64 [R21], R18 
- IADD3.X R8, P0, R25, R8, RZ, P0, !PT 
- IMAD R3, R3, R17, RZ 
- IMAD.X R2, RZ, RZ, R2, P0 
- IADD3.X R8, P1, R3, R8, RZ, P1, !PT 
- IADD3 R0, P0, R0, 0x8, RZ 
- IMAD.X R3, RZ, RZ, R2, P1 
- IADD3 R21, R21, 0x8, RZ 
- IMAD.X R23, RZ, RZ, R23, P0 
- IMAD.MOV.U32 R18, RZ, RZ, R8 
- IMAD.MOV.U32 R19, RZ, RZ, R3 
- @!P3 BRA `(.L_x_4) 
-.L_x_3:
- IMAD.IADD R6, R9, 0x1, -R6 
- IMAD R17, R6, 0x8, R7 
- STL.64 [R17], R18 
- LDL.64 R2, [R1+0x18] 
- @P2 LDL.64 R6, [R1+0x10] 
- LDL.64 R4, [R1+0x20] 
- @P2 IADD3 R0, -R15, 0x40, RZ 
- ULDC UR6, c[0x0][0x20] 
- @P2 SHF.L.U32 R9, R2, R15, RZ 
- @P2 SHF.R.U64 R10, R2, R0.reuse, R3 
- @P2 SHF.R.U64 R6, R6, R0.reuse, R7 
- @P2 SHF.L.U64.HI R8, R2, R15, R3 
- @P2 LOP3.LUT R2, R6, R9, RZ, 0xfc, !PT 
- @P2 SHF.L.U32 R9, R4, R15.reuse, RZ 
- @P2 SHF.R.U32.HI R7, RZ, R0, R7 
- IMAD.SHL.U32 R6, R2, 0x4, RZ 
- @P2 SHF.L.U64.HI R15, R4, R15, R5 
- @P2 SHF.R.U32.HI R0, RZ, R0, R3 
- @P2 LOP3.LUT R4, R9, R10, RZ, 0xfc, !PT 
- @P2 LOP3.LUT R3, R7, R8, RZ, 0xfc, !PT 
- @P2 LOP3.LUT R5, R15, R0, RZ, 0xfc, !PT 
- IMAD.SHL.U32 R17, R4, 0x4, RZ 
- SHF.L.U64.HI R7, R2, 0x2, R3.reuse 
- SHF.R.U32.HI R2, RZ, 0x1e, R3 
- IADD3 RZ, P0, RZ, -R6, RZ 
- LOP3.LUT R0, RZ, R7, RZ, 0x33, !PT 
- LOP3.LUT R17, R2, R17, RZ, 0xfc, !PT 
- SHF.L.U64.HI R8, R4, 0x2, R5 
- IADD3.X R4, P0, RZ, R0, RZ, P0, !PT 
- LOP3.LUT R2, RZ, R17, RZ, 0x33, !PT 
- LOP3.LUT R3, RZ, R8, RZ, 0x33, !PT 
- IADD3.X R2, P0, RZ, R2, RZ, P0, !PT 
- SHF.R.U32.HI R0, RZ, 0x1d, R5 
- IMAD.X R3, RZ, RZ, R3, P0 
- LOP3.LUT P1, RZ, R0.reuse, 0x1, RZ, 0xc0, !PT 
- LOP3.LUT R0, R0, 0x1, RZ, 0xc0, !PT 
- SEL R3, R8, R3, !P1 
- SEL R17, R17, R2, !P1 
- ISETP.NE.U32.AND P0, PT, R3, RZ, PT 
- SEL R4, R7, R4, !P1 
- SEL R8, R17, R3, !P0 
- @P1 IMAD.MOV R6, RZ, RZ, -R6 
- LEA.HI R0, R5, R0, RZ, 0x2 
- FLO.U32 R8, R8 
- IMAD.MOV R5, RZ, RZ, -R0 
- IADD3 R9, -R8.reuse, 0x1f, RZ 
- IADD3 R2, -R8, 0x3f, RZ 
- @P0 IMAD.MOV R2, RZ, RZ, R9 
- ISETP.NE.U32.AND P0, PT, R2.reuse, RZ, PT 
- IADD3 R7, -R2, 0x40, RZ 
- ISETP.NE.AND.EX P0, PT, RZ, RZ, PT, P0 
- SHF.L.U32 R9, R17.reuse, R2.reuse, RZ 
- SHF.R.U64 R6, R6, R7, R4 
- SHF.L.U64.HI R15, R17, R2, R3 
- SHF.R.U32.HI R4, RZ, R7, R4 
- IMAD.MOV.U32 R7, RZ, RZ, RZ 
- @P0 LOP3.LUT R17, R6, R9, RZ, 0xfc, !PT 
- @P0 LOP3.LUT R3, R4, R15, RZ, 0xfc, !PT 
- IMAD.WIDE.U32 R8, R17, 0x2168c235, RZ 
- IMAD.MOV.U32 R6, RZ, RZ, R9 
- IADD3 RZ, P0, R8, R8, RZ 
- IMAD.HI.U32 R4, R3, -0x36f0255e, RZ 
- IMAD.WIDE.U32 R6, R17, -0x36f0255e, R6 
- IMAD R9, R3.reuse, -0x36f0255e, RZ 
- IMAD.WIDE.U32 R6, P2, R3, 0x2168c235, R6 
- IMAD.X R3, RZ, RZ, R4, P2 
- IADD3 R4, P2, R9, R7, RZ 
- IADD3.X RZ, P0, R6, R6, RZ, P0, !PT 
- ISETP.GT.U32.AND P3, PT, R4.reuse, RZ, PT 
- IMAD.X R3, RZ, RZ, R3, P2 
- IADD3.X R7, P2, R4, R4, RZ, P0, !PT 
- ISETP.GT.AND.EX P0, PT, R3.reuse, RZ, PT, P3 
- IMAD.X R6, R3, 0x1, R3, P2 
- LOP3.LUT P2, RZ, R11, 0x80000000, RZ, 0xc0, !PT 
- SEL R7, R7, R4, P0 
- SEL R4, R6, R3, P0 
- IMAD.MOV.U32 R6, RZ, RZ, RZ 
- IADD3 R3, P3, R7, 0x1, RZ 
- IADD3 R7, R14, -UR6, RZ 
- LOP3.LUT R11, R11, 0x80000000, RZ, 0xc0, !PT 
- IMAD.X R4, RZ, RZ, R4, P3 
- @P2 IMAD.MOV.U32 R0, RZ, RZ, R5 
- SEL R5, RZ, 0x1, !P0 
- SHF.R.U64 R3, R3, 0xa, R4 
- STL [R7], R0 
- IMAD.IADD R5, R5, 0x1, R2 
- IADD3 R3, P2, R3, 0x1, RZ 
- @P1 LOP3.LUT R11, R11, 0x80000000, RZ, 0x3c, !PT 
- LEA.HI.X R4, R4, RZ, RZ, 0x16, P2 
- SHF.R.U64 R3, R3, 0x1, R4.reuse 
- SHF.R.U32.HI R4, RZ, 0x1, R4 
- IADD3 R2, P0, P2, R3, RZ, -R6 
- IMAD.SHL.U32 R3, R5, 0x100000, RZ 
- IADD3.X R4, R4, 0x3fe00000, ~R3, P0, P2 
- LOP3.LUT R17, R4, R11, RZ, 0xfc, !PT 
-.L_x_2:
- IMAD.MOV.U32 R3, RZ, RZ, R17 
- IMAD.MOV.U32 R17, RZ, RZ, 0x0 
- RET.REL.NODEC R16 `(testSin(double&)) 
-```
+而sass实现不负重望地又搞出来一个slowpath函数，代码太长，这里从略。
 
 ### 8.5 剪枝和量化
 
@@ -11586,7 +11425,7 @@ Test Accuracy: 1.0
 ```
 
 
-## 第十章 卷积神经网络
+## 第十章 卷积神经网络和循环神经网络
 
 ### 10.1 卷积神经网络简介
 
@@ -12581,6 +12420,395 @@ class GRUModel(nn.Module):
         return out
 ```
 
+### 10.3 PyTorch Ignite
+
+PyTorch Ignite是一个高级库，旨在简化和扩展PyTorch在训练和评估神经网络方面的功能。它提供了一套工具，包括引擎、事件、处理器、指标等，使得开发者能够更加灵活和透明地构建和运行他们的机器学习模型。
+
+以下是PyTorch Ignite的一些关键特性：
+
+- 引擎（Engines）‌：Ignite提供了一个抽象的Engine类，它可以用来定义训练和评估循环。开发者可以通过定义事件处理程序来控制这些循环的行为。
+- 事件（Events）‌：Ignite定义了一系列的事件，如EPOCH_STARTED、ITERATION_STARTED等，可以在这些事件上挂载自定义的处理器（Handlers）。
+- 处理器（Handlers）‌：处理器是与特定事件关联的函数，可以用来执行诸如数据加载、模型更新、日志记录等操作。
+- 指标（Metrics）‌：Ignite提供了一系列内置的指标，如准确率、损失等，用于评估模型的性能。这些指标可以在线计算，无需存储整个模型的输出历史。
+- 分布式支持：Ignite还支持分布式训练，可以与PyTorch的分布式包一起使用，以实现在多个GPU或多个机器上的训练。
+- 灵活性：Ignite的设计允许开发者轻松地插入自己的代码，无论是添加新的事件处理器还是自定义指标，都可以无缝集成。
+- 文档和社区资源：Ignite有详细的文档和教程，以及活跃的社区支持，帮助开发者快速上手和使用这个库。
+
+我们需要通过pip安装PyTorch Ignite：
+
+```bash
+pip install pytorch-ignite
+```
+
+下面我们用PyTorch Ignite来处理MNIST手写数字识别任务：
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from torchvision.datasets import MNIST
+from torchvision.transforms import ToTensor, Normalize, Compose
+from ignite.engine import Events, create_supervised_trainer, create_supervised_evaluator
+from ignite.metrics import Accuracy, Loss
+from ignite.handlers import ModelCheckpoint, EarlyStopping
+
+# 定义数据预处理
+transform = Compose([ToTensor(), Normalize((0.1307,), (0.3081,))])
+
+# 下载和加载数据集
+train_dataset = MNIST(root='.', train=True, download=True, transform=transform)
+test_dataset = MNIST(root='.', train=False, download=True, transform=transform)
+
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+```
+
+首先，代码导入了必要的库，包括PyTorch的核心模块、优化器、数据加载器，以及用于图像处理的torchvision库。此外，还导入了PyTorch Ignite的相关组件，用于创建训练和评估引擎、定义指标和处理器。
+
+接着，定义了数据预处理流程transform，这里使用了Compose来组合多个预处理步骤。ToTensor()将图像转换为PyTorch张量，Normalize((0.1307,), (0.3081,))则对图像进行标准化处理，其中(0.1307,)和(0.3081,)分别是MNIST数据集的全局平均值和标准差。
+
+然后，使用MNIST类从torchvision.datasets模块下载并加载MNIST数据集。指定train=True和download=True来获取训练集，并自动下载数据（如果尚未下载）。对于测试集，设置train=False。两者都应用了之前定义的transform预处理。
+
+最后，使用DataLoader类创建训练和测试的数据加载器。这里设置了批量大小batch_size=64，并且对训练数据集启用了随机打乱shuffle=True以提高模型的泛化能力，而对测试数据集则不进行打乱shuffle=False。
+
+这样，数据就被准备好并加载到了训练和测试加载器中，可以用于后续的模型训练和评估过程。
+
+下面我们定义一个CNN模型：
+
+```python
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super(SimpleCNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
+        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = self.pool(torch.relu(self.conv1(x)))
+        x = self.pool(torch.relu(self.conv2(x)))
+        x = x.view(-1, 64 * 7 * 7)
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+model = SimpleCNN()
+```
+
+然后，还是老规矩，定义损失函数和优化器：
+
+```python
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+```
+
+下面我们使用PyTorch Ignite来训练和评估模型：
+
+```python
+trainer = create_supervised_trainer(model, optimizer, criterion, device='cuda' if torch.cuda.is_available() else 'cpu')
+evaluator = create_supervised_evaluator(model, metrics={'accuracy': Accuracy(), 'loss': Loss(criterion)}, device='cuda' if torch.cuda.is_available() else 'cpu')
+```
+
+上面代码使用了PyTorch Ignite库来创建一个训练器（trainer）和一个评估器（evaluator），这两个对象分别用于训练和评估一个神经网络模型。
+
+首先，create_supervised_trainer函数用于创建一个训练器。它接受四个参数：
+
+- model：要训练的神经网络模型。
+- optimizer：用于模型参数优化的优化器。
+- criterion：用于计算损失的损失函数。
+- device：指定训练应该在哪个设备上进行，可以是CPU或GPU。这里通过torch.cuda.is_available()检查CUDA是否可用，如果可用，则使用GPU（'cuda'），否则使用CPU（'cpu'）。
+
+训练器负责管理训练过程，包括前向传播、计算损失、反向传播和参数更新。
+
+然后，create_supervised_evaluator函数用于创建一个评估器。它接受三个参数：
+
+- model：要评估的神经网络模型。
+- metrics：一个字典，指定要在评估过程中计算的指标。在这个例子中，计算准确率和损失。Accuracy()用于计算准确率，Loss(criterion)用于计算损失，其中criterion是之前定义的损失函数。
+- device：指定评估应该在哪个设备上进行，与训练器的device参数相同。
+
+评估器负责在验证集或测试集上评估模型的性能，计算指定的指标。
+
+这两个对象创建后，可以使用PyTorch Ignite的事件和处理器来控制训练和评估的过程，例如在每个epoch结束时进行评估，或者在满足某些条件时保存模型的检查点。
+
+下面，我们添加事件处理器：
+
+```python
+@trainer.on(Events.EPOCH_COMPLETED)
+def log_training_results(trainer):
+    evaluator.run(train_loader)
+    metrics = evaluator.state.metrics
+    print(f"Training Results - Epoch: {trainer.state.epoch}  Avg accuracy: {metrics['accuracy']:.2f} Avg loss: {metrics['loss']:.2f}")
+
+@trainer.on(Events.EPOCH_COMPLETED)
+def log_validation_results(trainer):
+    evaluator.run(test_loader)
+    metrics = evaluator.state.metrics
+    print(f"Validation Results - Epoch: {trainer.state.epoch}  Avg accuracy: {metrics['accuracy']:.2f} Avg loss: {metrics['loss']:.2f}")
+
+# 添加模型检查点
+checkpointer = ModelCheckpoint('models', 'mnist_cnn', n_saved=2, create_dir=True, save_as_state_dict=True)
+trainer.add_event_handler(Events.EPOCH_COMPLETED, checkpointer, {'model': model})
+
+# 添加早停机制
+early_stopping = EarlyStopping(patience=5, score_function=lambda engine: -engine.state.metrics['loss'], trainer=trainer)
+evaluator.add_event_handler(Events.COMPLETED, early_stopping)
+```
+
+首先，定义了两个事件处理程序，它们分别在每个epoch完成时被触发。
+
+log_training_results函数在每个epoch结束时运行，它使用训练数据加载器train_loader来评估模型，并打印出平均准确率和平均损失。这是通过调用评估器evaluator的run方法实现的，该方法返回一个包含所有指标的字典metrics。
+log_validation_results函数也在每个epoch结束时运行，但它使用测试数据加载器test_loader来评估模型，并打印出验证阶段的平均准确率和平均损失。
+接下来，代码添加了模型检查点。ModelCheckpoint处理器在每个epoch结束时保存模型的状态字典。这里指定了保存目录为'models'，文件名为'mnist_cnn'，最多保存2个模型副本，并确保创建目录。
+
+最后，代码添加了早停机制。EarlyStopping处理器在验证阶段完成后检查模型的性能，如果在连续5个epoch内没有改善（即损失没有减少），则停止训练。这里的score_function是一个lambda函数，它返回负的损失值，因为早停机制是在损失不再减小时停止训练。
+
+现在，我们可以开始训练模型：
+
+```python
+trainer.run(train_loader, max_epochs=20)
+```
+
+下面我们把完整的代码串起来：
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from torchvision.datasets import MNIST
+from torchvision.transforms import ToTensor, Normalize, Compose
+from ignite.engine import Events, create_supervised_trainer, create_supervised_evaluator
+from ignite.metrics import Accuracy, Loss
+from ignite.handlers import ModelCheckpoint, EarlyStopping
+
+# 定义数据预处理
+transform = Compose([ToTensor(), Normalize((0.1307,), (0.3081,))])
+
+# 下载和加载数据集
+train_dataset = MNIST(root='.', train=True, download=True, transform=transform)
+test_dataset = MNIST(root='.', train=False, download=True, transform=transform)
+
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super(SimpleCNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
+        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = self.pool(torch.relu(self.conv1(x)))
+        x = self.pool(torch.relu(self.conv2(x)))
+        x = x.view(-1, 64 * 7 * 7)
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+model = SimpleCNN()
+
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model.to(device)
+
+trainer = create_supervised_trainer(model, optimizer, criterion, device='cuda' if torch.cuda.is_available() else 'cpu')
+evaluator = create_supervised_evaluator(model, metrics={'accuracy': Accuracy(), 'loss': Loss(criterion)}, device='cuda' if torch.cuda.is_available() else 'cpu')
+
+@trainer.on(Events.EPOCH_COMPLETED)
+def log_training_results(trainer):
+    evaluator.run(train_loader)
+    metrics = evaluator.state.metrics
+    print(f"Training Results - Epoch: {trainer.state.epoch}  Avg accuracy: {metrics['accuracy']:.2f} Avg loss: {metrics['loss']:.2f}")
+
+@trainer.on(Events.EPOCH_COMPLETED)
+def log_validation_results(trainer):
+    evaluator.run(test_loader)
+    metrics = evaluator.state.metrics
+    print(f"Validation Results - Epoch: {trainer.state.epoch}  Avg accuracy: {metrics['accuracy']:.2f} Avg loss: {metrics['loss']:.2f}")
+
+# 添加模型检查点
+checkpointer = ModelCheckpoint(
+    dirname='models', 
+    filename_prefix='mnist_cnn', 
+    n_saved=2, 
+    create_dir=True, 
+    require_empty=False  # 如果目录不为空，允许覆盖
+)
+trainer.add_event_handler(Events.EPOCH_COMPLETED, checkpointer, {'model': model})
+
+# 添加早停机制
+early_stopping = EarlyStopping(patience=5, score_function=lambda engine: -engine.state.metrics['loss'], trainer=trainer)
+evaluator.add_event_handler(Events.COMPLETED, early_stopping)
+
+trainer.run(train_loader, max_epochs=20)
+```
+
+运行结果如下：
+
+```
+Training Results - Epoch: 1  Avg accuracy: 0.98 Avg loss: 0.05
+Validation Results - Epoch: 1  Avg accuracy: 0.98 Avg loss: 0.05
+Training Results - Epoch: 2  Avg accuracy: 0.99 Avg loss: 0.03
+Validation Results - Epoch: 2  Avg accuracy: 0.99 Avg loss: 0.04
+Training Results - Epoch: 3  Avg accuracy: 0.99 Avg loss: 0.02
+Validation Results - Epoch: 3  Avg accuracy: 0.99 Avg loss: 0.03
+Training Results - Epoch: 4  Avg accuracy: 1.00 Avg loss: 0.01
+Validation Results - Epoch: 4  Avg accuracy: 0.99 Avg loss: 0.03
+Training Results - Epoch: 5  Avg accuracy: 1.00 Avg loss: 0.01
+Validation Results - Epoch: 5  Avg accuracy: 0.99 Avg loss: 0.03
+Training Results - Epoch: 6  Avg accuracy: 1.00 Avg loss: 0.01
+Validation Results - Epoch: 6  Avg accuracy: 0.99 Avg loss: 0.03
+Training Results - Epoch: 7  Avg accuracy: 1.00 Avg loss: 0.00
+Validation Results - Epoch: 7  Avg accuracy: 0.99 Avg loss: 0.03
+Training Results - Epoch: 8  Avg accuracy: 1.00 Avg loss: 0.01
+Validation Results - Epoch: 8  Avg accuracy: 0.99 Avg loss: 0.04
+Training Results - Epoch: 9  Avg accuracy: 1.00 Avg loss: 0.01
+2024-06-22 14:18:12,841 ignite.handlers.early_stopping.EarlyStopping INFO: EarlyStopping: Stop training
+Validation Results - Epoch: 9  Avg accuracy: 0.99 Avg loss: 0.04
+State:
+	iteration: 8442
+	epoch: 9
+	epoch_length: 938
+	max_epochs: 20
+	output: 1.5570223695249297e-05
+	batch: <class 'list'>
+	metrics: <class 'dict'>
+	dataloader: <class 'torch.utils.data.dataloader.DataLoader'>
+	seed: <class 'NoneType'>
+	times: <class 'dict'>
+```
+
+### 10.4 TorchInductor
+
+TorchInductor 是 PyTorch 的一个动态编译后端，旨在通过自动代码生成和优化来提高深度学习模型的性能。TorchInductor 可以将高层次的 PyTorch 操作转换为高效的底层代码，从而充分利用现代硬件的计算能力。
+
+TorchInductor是默认的torch.compile后端，可以通过设置环境变量`TORCH_USE_TORCHINDUCTOR=1`来启用。
+
+我们来看一个使用TorchInductor的例子：
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+import torch._dynamo
+torch._dynamo.config.suppress_errors = True
+
+# 定义一个简单的模型
+class SimpleModel(nn.Module):
+    def __init__(self):
+        super(SimpleModel, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, 3, 1)
+        self.fc1 = nn.Linear(32 * 26 * 26, 128)  # 修正后的输入尺寸
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = torch.relu(x)
+        x = torch.flatten(x, 1)  # 保证展平后的尺寸正确
+        x = self.fc1(x)
+        x = torch.relu(x)
+        x = self.fc2(x)
+        return x
+
+# 创建模型实例
+model = SimpleModel()
+
+# 使用 TorchInductor 编译模型
+compiled_model = torch.compile(model)
+
+# 定义损失函数和优化器
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(compiled_model.parameters(), lr=0.01, momentum=0.9)
+
+# 创建一些伪造的输入数据
+inputs = torch.randn(32, 1, 28, 28)  # batch_size=32, channels=1, height=28, width=28
+targets = torch.randint(0, 10, (32,))  # batch_size=32, num_classes=10
+
+# 训练循环
+for epoch in range(10):
+    optimizer.zero_grad()
+    outputs = compiled_model(inputs)
+    loss = criterion(outputs, targets)
+    loss.backward()
+    optimizer.step()
+    print(f"Epoch [{epoch+1}/10], Loss: {loss.item():.4f}")
+
+print(compiled_model)
+```
+
+我们可以看到打印出的优化后的模型：
+
+```
+OptimizedModule(
+  (_orig_mod): SimpleModel(
+    (conv1): Conv2d(1, 32, kernel_size=(3, 3), stride=(1, 1))
+    (fc1): Linear(in_features=21632, out_features=128, bias=True)
+    (fc2): Linear(in_features=128, out_features=10, bias=True)
+  )
+)
+```
+
+我们还可以打印更多的参数信息：
+
+```python
+# 查看模型参数
+for name, param in compiled_model.named_parameters():
+    print(f"Parameter name: {name}")
+    print(f"Parameter shape: {param.shape}")
+    print(f"Parameter requires_grad: {param.requires_grad}")
+    print()
+```
+
+运行结果如下：
+
+```
+Parameter name: _orig_mod.conv1.weight
+Parameter shape: torch.Size([32, 1, 3, 3])
+Parameter requires_grad: True
+
+Parameter name: _orig_mod.conv1.bias
+Parameter shape: torch.Size([32])
+Parameter requires_grad: True
+
+Parameter name: _orig_mod.fc1.weight
+Parameter shape: torch.Size([128, 21632])
+Parameter requires_grad: True
+
+Parameter name: _orig_mod.fc1.bias
+Parameter shape: torch.Size([128])
+Parameter requires_grad: True
+
+Parameter name: _orig_mod.fc2.weight
+Parameter shape: torch.Size([10, 128])
+Parameter requires_grad: True
+
+Parameter name: _orig_mod.fc2.bias
+Parameter shape: torch.Size([10])
+Parameter requires_grad: True
+```
+
+通过安装torchviz，我们可以将编译后的模型输出成图形：
+
+```python
+outputs = compiled_model(inputs)
+
+# 生成计算图
+dot = make_dot(outputs, params=dict(compiled_model.named_parameters()))
+
+# 保存计算图为 png 文件
+dot.render("compiled_model_graph", format="png")
+```
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/compiled_model_graph.png)
+
 ## 第十一章 注意力机制与预训练模型
 
 ### 11.1 注意力机制
@@ -12707,6 +12935,33 @@ print(y.shape)
 ```
 torch.Size([2 ,3 ,16])
 ```
+
+我们来看看编译后的结构图：
+
+```python
+# 使用 TorchInductor 编译模型
+compiled_model = torch.compile(model)
+
+# 查看模型结构
+print(compiled_model)
+
+# 查看模型参数
+for name, param in compiled_model.named_parameters():
+    print(f"Parameter name: {name}")
+    print(f"Parameter shape: {param.shape}")
+    print(f"Parameter requires_grad: {param.requires_grad}")
+    print()
+
+# 生成计算图
+dot = make_dot(y, params=dict(compiled_model.named_parameters()))
+
+# 保存计算图为 png 文件
+dot.render("attention_graph", format="png")
+```
+
+生成的attention_graph.png如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/attention_graph.png)
 
 我们再看看用TensorFlow.js如何实现：
 ```javascript
@@ -13425,25 +13680,22 @@ We find that chain-of-thought reasoning is an emergent property of model scale t
 强化学习的数学基础是马尔可夫决策过程（MDP）。MDP是一个五元组，包括：
 
 1. 状态集（States, S)：系统可能处于的所有状态的集合。每个状态 $s \in S$ 描述了系统在某一时刻的情况。
-2. 动作集（Actions, $A$ )：智能体可以在每个状态 \(s\) 下执行的所有可能动作的集合。动作集可以是全局的（对所有状态相同）或局部的（依赖于状态）。
-3. 状态转移概率（State Transition Probabilities, \(P\)）**：
-    - 描述在特定状态 \(s\) 下执行某个动作 \(a\) 后转移到下一个状态 \(s'\) 的概率。记作 $P(s' | s, a)$。
-
-4. 奖励函数（Reward Function, $R$)：描述在特定状态 \(s\) 下执行动作 \(a\) 所获得的即时奖励。记作 \(R(s, a)\)。
-
-5. **折扣因子（Discount Factor, ($\gamma$：一个介于 0 和 1 之间的值，用于度量未来奖励的当前价值。折扣因子 \(\gamma\) 越接近 1，智能体越关注长期回报；越接近 0，智能体越关注即时回报。
+2. 动作集（Actions, $A$ )：智能体可以在每个状态 $s$ 下执行的所有可能动作的集合。动作集可以是全局的（对所有状态相同）或局部的（依赖于状态）。
+3. 状态转移概率（State Transition Probabilities, $P$）：描述在特定状态 $s$ 下执行某个动作 $a$ 后转移到下一个状态 $s'$ 的概率。记作 $P(s' | s, a)$。
+4. 奖励函数（Reward Function, $R$)：描述在特定状态 $s$ 下执行动作 $a$ 所获得的即时奖励。记作 $R(s, a)$。
+5. 折扣因子（Discount Factor, ($\gamma$：一个介于 0 和 1 之间的值，用于度量未来奖励的当前价值。折扣因子 $\gamma$ 越接近 1，智能体越关注长期回报；越接近 0，智能体越关注即时回报。
 
 MDP 的目标是找到一个策略（Policy, $\pi$），该策略能够最大化累积奖励。策略 $\pi(a|s)$ 是从状态 s 选择动作 a 的概率分布。
 
 为了评估策略的优劣，引入了价值函数：
 
-1. **状态价值函数（State Value Function, $V^\pi(s)$)**：表示在策略 $\pi$ 下，从状态s开始的预期累积奖励。
+1. 状态价值函数（State Value Function, $V^\pi(s)$)**：表示在策略 $\pi$ 下，从状态s开始的预期累积奖励。
 
 $$
 V^\pi(s) = \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \bigg| s_0 = s \right]
 $$
 
-2. **状态-动作价值函数（Action Value Function, $Q^\pi(s, a)$）**：表示在策略 $\pi$ 下，从状态s执行动作a后的预期累积奖励。
+2. 状态-动作价值函数（Action Value Function, $Q^\pi(s, a)$）：表示在策略 $\pi$ 下，从状态s执行动作a后的预期累积奖励。
 
 $$
 Q^\pi(s, a) = \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \bigg| s_0 = s, a_0 = a \right]
@@ -13515,8 +13767,6 @@ $$
 1. 重叠子问题：问题可以分解为相互重叠的子问题，即子问题在问题求解过程中被多次计算。
 2. 最优子结构：问题的最优解包含其子问题的最优解。
 3. 子问题重用：通过存储子问题的解来避免重复计算，通常使用一个表格（数组或矩阵）来存储子问题的解。
-
-动态规划的步骤
 
 解决动态规划问题通常包含以下几个步骤：
 
@@ -13804,7 +14054,7 @@ SARSA算法的优点和缺点为：
 
 #### 12.1.7 Q-Learning算法
 
-Q-learning是一种无模型（model-free）的强化学习算法，用于找到一个马尔可夫决策过程（MDP）的最优策略。该算法通过学习一个动作值函数 \(Q(s, a)\) 来指导智能体选择最优的动作。Q-learning是一种 **off-policy** 方法，这意味着它通过学习一个独立于当前策略的行为策略，从而估算最优策略的值。
+Q-learning是一种无模型（model-free）的强化学习算法，用于找到一个马尔可夫决策过程（MDP）的最优策略。该算法通过学习一个动作值函数 \(Q(s, a)\) 来指导智能体选择最优的动作。Q-learning是一种 off-policy 方法，这意味着它通过学习一个独立于当前策略的行为策略，从而估算最优策略的值。
 
 
 Q-learning通过更新状态-动作值函数 $Q(s, a)$，不断逼近最优的状态-动作值函数 $Q^*(s, a)$，从而找到最优策略 $\pi^*$。具体来说，Q-learning通过以下更新公式来迭代地改进 $Q(s, a)$：
@@ -13877,9 +14127,7 @@ Q-learning算法的优点和缺点为：
 
 策略梯度法的目标是最大化以下目标函数：
 
-$$
-J(\theta) = \mathbb{E}_{\pi_\theta} \left[ \sum_{t=0}^{T} \gamma^t R_t \right]
-$$
+$J(\theta) = \mathbb{E}_{\pi_\theta} \left[ \sum_{t=0}^{T} \gamma^t R_t \right]$
 
 其中：
 - $\pi_\theta$ 是参数化策略。
@@ -14064,7 +14312,7 @@ $$
 y = r + \gamma \max_{a'} Q'(s', a')
 $$
 
-其中，$ r $ 是奖励，$ \gamma $ 是折扣因子，$ Q' $ 是目标网络的Q值，$ s' $ 和 $ a' $ 分别是下一个状态和动作。
+其中，$r$ 是奖励，$\gamma$ 是折扣因子，$Q'$ 是目标网络的Q值，$s'$ 和 $a'$ 分别是下一个状态和动作。
 
 4. 参数更新：使用梯度下降法来最小化损失函数，更新在线网络的参数。
 
@@ -15592,6 +15840,77 @@ time_cost = datetime.now() - start_date
 print('time cost=', time_cost)
 ```
 
+我们将模型的结构打印出来：
+
+```python
+import torch
+print(model.policy)
+```
+
+```
+CnnPolicy(
+  (q_net): QNetwork(
+    (features_extractor): NatureCNN(
+      (cnn): Sequential(
+        (0): Conv2d(3, 32, kernel_size=(8, 8), stride=(4, 4))
+        (1): ReLU()
+        (2): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2))
+        (3): ReLU()
+        (4): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+        (5): ReLU()
+        (6): Flatten(start_dim=1, end_dim=-1)
+      )
+      (linear): Sequential(
+        (0): Linear(in_features=22528, out_features=512, bias=True)
+        (1): ReLU()
+      )
+    )
+    (q_net): Sequential(
+      (0): Linear(in_features=512, out_features=6, bias=True)
+    )
+  )
+  (q_net_target): QNetwork(
+    (features_extractor): NatureCNN(
+      (cnn): Sequential(
+        (0): Conv2d(3, 32, kernel_size=(8, 8), stride=(4, 4))
+        (1): ReLU()
+        (2): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2))
+        (3): ReLU()
+        (4): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+        (5): ReLU()
+        (6): Flatten(start_dim=1, end_dim=-1)
+      )
+      (linear): Sequential(
+        (0): Linear(in_features=22528, out_features=512, bias=True)
+        (1): ReLU()
+      )
+    )
+    (q_net): Sequential(
+      (0): Linear(in_features=512, out_features=6, bias=True)
+    )
+  )
+)
+```
+
+从结构图中可以看到，这个网络有两个主要部分：q_net和q_net_target。q_net用于估计动作的价值，而q_net_target用于目标价值的估计。
+
+下面是这个神经网络结构的详细解释：
+
+- 输入层：网络接受一个3通道（RGB）的图像作为输入，这通常是在强化学习环境中捕获的屏幕截图。
+- 特征提取器（NatureCNN）：这是一个卷积神经网络（CNN），用于从输入图像中提取特征。它包含以下层：
+    - 第一个Conv2d层：使用8x8的卷积核和步长为4的步长进行卷积操作，输出32个特征图。
+    - 第二个ReLU层：应用线性整流函数（ReLU）作为激活函数，增加非线性。
+    - 第二个Conv2d层：使用4x4的卷积核和步长为2的步长进行卷积操作，输出64个特征图。
+    - 第三个ReLU层：再次应用ReLU激活函数。
+    - 第三个Conv2d层：使用3x3的卷积核和步长为1的步长进行卷积操作，输出64个特征图。
+    - 第四个ReLU层：再次应用ReLU激活函数。
+    - Flatten层：将卷积层的输出展平，以便与全连接层兼容。
+- 全连接层（Linear）：
+    - 第一个Linear层：将展平后的特征图转换为512维的特征向量。
+    - 第二个ReLU层：再次应用ReLU激活函数。
+- Q值估计层（q_net）：第一个Linear层：将512维的特征向量映射到与动作数量相同的维度（在这个例子中是6个动作）。
+- 目标网络（q_net_target）：这个网络与q_net结构相同，但参数不同。在DQN算法中，目标网络用于提供稳定的学习信号，防止过度乐观的估计。
+
 #### 12.4.2 PPO算法
 
 有了上面的框架之后，我们把DQN算法换成PPO算法，就可以让PPO算法来玩乒乓球游戏了。
@@ -15675,6 +15994,102 @@ time_cost = datetime.now() - start_date
 print('time cost=', time_cost)
 ```
 
+我们可以打印PPO.policy来查看PPO的具体网络结构。
+
+```python
+from stable_baselines3 import PPO
+from stable_baselines3.common.env_util import make_atari_env
+from stable_baselines3.common.vec_env import VecFrameStack
+
+# There already exists an environment generator that will make and wrap atari environments correctly.
+env = make_atari_env("PooyanNoFrameskip-v4", n_envs=4, seed=0)
+# Stack 4 frames
+env = VecFrameStack(env, n_stack=4)
+
+model = PPO("CnnPolicy", env, verbose=1)
+model.learn(total_timesteps=100_000)
+
+import torch
+print(model.policy)
+```
+
+输出的结构如下：
+
+```
+ActorCriticCnnPolicy(
+  (features_extractor): NatureCNN(
+    (cnn): Sequential(
+      (0): Conv2d(4, 32, kernel_size=(8, 8), stride=(4, 4))
+      (1): ReLU()
+      (2): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2))
+      (3): ReLU()
+      (4): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+      (5): ReLU()
+      (6): Flatten(start_dim=1, end_dim=-1)
+    )
+    (linear): Sequential(
+      (0): Linear(in_features=3136, out_features=512, bias=True)
+      (1): ReLU()
+    )
+  )
+  (pi_features_extractor): NatureCNN(
+    (cnn): Sequential(
+      (0): Conv2d(4, 32, kernel_size=(8, 8), stride=(4, 4))
+      (1): ReLU()
+      (2): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2))
+      (3): ReLU()
+      (4): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+      (5): ReLU()
+      (6): Flatten(start_dim=1, end_dim=-1)
+    )
+    (linear): Sequential(
+      (0): Linear(in_features=3136, out_features=512, bias=True)
+      (1): ReLU()
+    )
+  )
+  (vf_features_extractor): NatureCNN(
+    (cnn): Sequential(
+      (0): Conv2d(4, 32, kernel_size=(8, 8), stride=(4, 4))
+      (1): ReLU()
+      (2): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2))
+      (3): ReLU()
+      (4): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
+      (5): ReLU()
+      (6): Flatten(start_dim=1, end_dim=-1)
+    )
+    (linear): Sequential(
+      (0): Linear(in_features=3136, out_features=512, bias=True)
+      (1): ReLU()
+    )
+  )
+  (mlp_extractor): MlpExtractor(
+    (policy_net): Sequential()
+    (value_net): Sequential()
+  )
+  (action_net): Linear(in_features=512, out_features=6, bias=True)
+  (value_net): Linear(in_features=512, out_features=1, bias=True)
+)
+```
+
+我们来解释下这个网络结构：
+
+- 特征提取器 (NatureCNN):
+    - 有三个相同的NatureCNN结构：features_extractor, pi_features_extractor, 和 vf_features_extractor。
+    - 每个NatureCNN包含:
+        - 卷积层 (CNN): 3层卷积网络，每层后跟ReLU激活函数
+        - 扁平化层: 将多维输出转为一维
+        - 线性层: 512个神经元的全连接层，后跟ReLU激活函数
+- MLP提取器 (MlpExtractor):包含策略网络和价值网络，但这里都是空的Sequential()
+- 动作网络 (action_net):线性层，输入512维，输出6维（对应6个可能的动作）
+- 价值网络 (value_net): 线性层，输入512维，输出1维（估计状态价值）
+
+工作流程：
+
+- 输入图像（4通道，对应4帧堆叠）经过NatureCNN处理
+- 提取的特征通过MLP提取器（这里是空的）
+- 然后分别输入到动作网络和价值网络
+- 动作网络输出动作概率分布，价值网络输出状态价值估计
+
 #### 12.4.3 视频输出 - 从Monitor到RecordVideo
 
 有时候我们希望把游戏的视频输出出来，gym曾经使用Monitor来实现。现在gymnasium则改用RecordVideo来实现。
@@ -15719,7 +16134,283 @@ ffmpeg -i rl-video-episode-0.mp4  output.apng
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/rl1.apng)
 
-### 12.5 基于人类反馈的强化学习
+
+### 12.5 蒙特卡洛树搜索
+
+蒙特卡洛树搜索（Monte Carlo Tree Search, MCTS）是一种用于决策过程的算法，特别适用于博弈问题（如围棋、国际象棋等）。它结合了蒙特卡洛方法和树搜索方法，通过模拟未来可能的决策路径来评估当前决策的价值。MCTS的核心思想是通过多次随机模拟来估计每个决策的长远价值，从而选择最优的决策。
+
+MCTS 主要由以下四个步骤组成：
+
+- 选择（Selection）：从根节点开始，使用某种策略（如UCB1, Upper Confidence Bound）选择一个子节点，直到找到一个未被完全扩展的节点。
+- 扩展（Expansion）：如果选择的节点不是终局，就根据可能的动作扩展一个或多个子节点。
+- 模拟（Simulation）：从扩展的节点开始，进行一次完整的随机模拟，直到达到终局。模拟过程使用随机策略或其他启发式策略。
+- 回溯（Backpropagation）：将模拟的结果（胜负）从模拟终局向上回溯，更新所有经过的节点的统计信息（如访问次数和胜率）。
+
+在选择步骤中，MCTS 通常使用 UCB1（Upper Confidence Bound）公式来平衡探索（exploration）和利用（exploitation）：
+
+$\text{UCB1}=\frac{w_i}{n_i}+ C\sqrt{\frac{\ln N}{n_i}} $
+
+其中，
+- $w_i$ 是节点 $i$ 的总奖励，
+- $n_i$ 是节点 $i$ 的访问次数，
+- $N$ 是总访问次数，
+- $C$ 是一个探索参数，用于调节探索和利用之间的平衡
+
+我们尝试实现一个简单的蒙特卡洛树搜索算法。
+
+凡是树，首先都是要定义一个节点：
+
+```python
+import math
+import numpy as np
+
+class MCTSNode:
+    def __init__(self, state, parent=None):
+        self.state = state
+        self.parent = parent
+        self.children = []
+        self.visits = 0
+        self.value = 0.0
+
+    def is_leaf(self):
+        return len(self.children) == 0
+
+    def expand(self, game, valid_actions):
+        for action in valid_actions:
+            next_state, reward, done = self.simulate_action(game, action)
+            self.children.append((action, MCTSNode(next_state, parent=self), reward, done))
+
+    def simulate_action(self, game, action):
+        game.env.env.state = self.state
+        state, reward, done, _ = game.step(action)
+        return state, reward, done
+
+    def best_child(self, c_param=1.4):
+        if len(self.children) == 0:
+            return None
+        choices_weights = [
+            (child[1].value / (child[1].visits + 1e-5)) + c_param * math.sqrt((2 * math.log(self.visits + 1) / (child[1].visits + 1e-5)))
+            for child in self.children
+        ]
+        return self.children[np.argmax(choices_weights)][1]
+
+    def update(self, reward):
+        self.visits += 1
+        self.value += reward
+```
+
+每个节点包含以下属性：
+
+- state：当前节点的状态。
+- parent：指向父节点的引用。
+- children：子节点的列表。
+- visits：该节点被访问的次数。
+- value：该节点的价值，通常是根据模拟的结果计算得出的。
+
+MCTSNode类的方法包括：
+
+- is_leaf：判断当前节点是否是叶子节点，即没有子节点。
+- expand：扩展当前节点，创建新的子节点。
+- simulate_action：模拟执行一个行动，返回新的状态、奖励和游戏是否结束的标志。
+- best_child：选择最佳的子节点，根据UCB1公式计算每个子节点的权重。
+- update：更新节点的访问次数和价值。
+
+下面我们实现这个树：
+
+```python
+class MCTS:
+    def __init__(self, num_simulations):
+        self.num_simulations = num_simulations
+
+    def search(self, root_state, game):
+        root = MCTSNode(root_state)
+        for _ in range(self.num_simulations):
+            node = root
+            # Selection
+            while not node.is_leaf() and node.best_child() is not None:
+                node = node.best_child()
+
+            # Expansion
+            if not self.is_terminal(node.state):
+                node.expand(game, [0, 1])  # Blackjack 的动作是 0（保持）和 1（要牌）
+
+            # Simulation
+            reward = self.simulate(game, node.state)
+
+            # Backpropagation
+            self.backpropagate(node, reward)
+
+        best_child_node = root.best_child(c_param=0)
+        return best_child_node.state if best_child_node else root.state
+
+    def simulate(self, game, state):
+        game.env.env.state = state
+        done = False
+        total_reward = 0
+        while not done:
+            action = game.action_space.sample()
+            state, reward, done, _ = game.step(action)
+            total_reward += reward
+        return total_reward
+
+    def backpropagate(self, node, reward):
+        while node is not None:
+            node.update(reward)
+            reward = -reward  # 反转奖励以模拟两玩家对抗
+            node = node.parent
+
+    def is_terminal(self, state):
+        # 假设状态为 None 或者是 done 状态表示游戏结束。可以根据实际情况修改。
+        return state is None or state[2]  # state[2] 是一个布尔值，表示是否游戏结束
+```
+
+MCTS类实现了MCTS算法的主要逻辑。它的方法包括：
+
+- search：执行MCTS搜索，返回最佳的状态。
+- simulate：从给定的状态开始，随机模拟游戏的进行，直到游戏结束，返回总奖励。
+- backpropagate：将模拟得到的奖励反向传播到根节点。
+- is_terminal：判断给定的状态是否是终止状态。
+
+在search方法中，算法首先创建一个根节点，然后进行多次模拟。每次模拟包括四个步骤：
+
+- Selection：从根节点开始，选择最佳的子节点，直到到达一个叶子节点。
+- Expansion：如果叶子节点不是终止状态，就扩展它，创建新的子节点。
+- Simulation：从新的子节点开始，随机模拟游戏的进行，直到游戏结束。
+- Backpropagation：将模拟得到的奖励反向传播到根节点，更新沿途节点的价值和访问次数。
+
+最后，search方法返回具有最高价值的子节点的状态，这代表了在当前状态下最佳的行动。
+
+我们用21点游戏，将上面的代码串起来：
+
+```python
+import gym
+
+class BlackjackEnv:
+    def __init__(self):
+        self.env = gym.make('Blackjack-v1')
+        self.action_space = self.env.action_space
+        self.observation_space = self.env.observation_space
+
+    def reset(self):
+        return self.env.reset()
+
+    def step(self, action):
+        return self.env.step(action)
+
+    def render(self):
+        self.env.render()
+
+    def close(self):
+        self.env.close()
+
+import math
+import numpy as np
+
+class MCTSNode:
+    def __init__(self, state, parent=None):
+        self.state = state
+        self.parent = parent
+        self.children = []
+        self.visits = 0
+        self.value = 0.0
+
+    def is_leaf(self):
+        return len(self.children) == 0
+
+    def expand(self, game, valid_actions):
+        for action in valid_actions:
+            next_state, reward, done = self.simulate_action(game, action)
+            self.children.append((action, MCTSNode(next_state, parent=self), reward, done))
+
+    def simulate_action(self, game, action):
+        game.env.env.state = self.state
+        state, reward, done, _ = game.step(action)
+        return state, reward, done
+
+    def best_child(self, c_param=1.4):
+        if len(self.children) == 0:
+            return None
+        choices_weights = [
+            (child[1].value / (child[1].visits + 1e-5)) + c_param * math.sqrt((2 * math.log(self.visits + 1) / (child[1].visits + 1e-5)))
+            for child in self.children
+        ]
+        return self.children[np.argmax(choices_weights)][1]
+
+    def update(self, reward):
+        self.visits += 1
+        self.value += reward
+
+class MCTS:
+    def __init__(self, num_simulations):
+        self.num_simulations = num_simulations
+
+    def search(self, root_state, game):
+        root = MCTSNode(root_state)
+        for _ in range(self.num_simulations):
+            node = root
+            # Selection
+            while not node.is_leaf() and node.best_child() is not None:
+                node = node.best_child()
+
+            # Expansion
+            if not self.is_terminal(node.state):
+                node.expand(game, [0, 1])  # Blackjack 的动作是 0（保持）和 1（要牌）
+
+            # Simulation
+            reward = self.simulate(game, node.state)
+
+            # Backpropagation
+            self.backpropagate(node, reward)
+
+        best_child_node = root.best_child(c_param=0)
+        return best_child_node.state if best_child_node else root.state
+
+    def simulate(self, game, state):
+        game.env.env.state = state
+        done = False
+        total_reward = 0
+        while not done:
+            action = game.action_space.sample()
+            state, reward, done, _ = game.step(action)
+            total_reward += reward
+        return total_reward
+
+    def backpropagate(self, node, reward):
+        while node is not None:
+            node.update(reward)
+            reward = -reward  # 反转奖励以模拟两玩家对抗
+            node = node.parent
+
+    def is_terminal(self, state):
+        # 假设状态为 None 或者是 done 状态表示游戏结束。可以根据实际情况修改。
+        return state is None or state[2]  # state[2] 是一个布尔值，表示是否游戏结束
+
+def main():
+    game = BlackjackEnv()
+    mcts = MCTS(num_simulations=1000)
+    episodes = 10
+
+    for episode in range(episodes):
+        state = game.reset()
+        done = False
+        total_reward = 0
+        while not done:
+            best_action_state = mcts.search(state, game)
+            game.env.env.state = best_action_state
+            action = game.action_space.sample()  # 选择最佳动作的占位符，可以改为对应动作
+            state, reward, done, _ = game.step(action)
+            total_reward += reward
+            game.render()
+
+        print(f"Episode {episode + 1}: Total Reward = {total_reward}")
+
+    game.close()
+
+if __name__ == "__main__":
+    main()
+```
+
+### 12.6 基于人类反馈的强化学习
 
 基于人类反馈的强化学习（Reinforcement Learning from Human Feedback, RLHF）是一种利用人类反馈来训练和优化智能体或模型的强化学习方法。RLHF通过直接引入人类的偏好、评价或指导，帮助智能体更有效地学习和执行任务。与传统的强化学习方法相比，RLHF能够更好地处理复杂任务、稀疏奖励环境以及需要安全性和伦理性保障的情景。
 
@@ -17995,6 +18686,879 @@ Test MSE: 0.6653
 这里我们使用均方误差（Mean Squared Error，MSE）作为评估指标，MSE 是预测值和真实值之间差值的平方和的均值。MSE 越小，模型的预测效果越好。
 
 
+### 15.2 语音识别
+
+我们首先来看看语音识别模型如使用，我们以Open AI的Whisper模型为例，这是一个基于Transformer的语音识别模型。
+
+#### 15.2.1 语音识别模型Whisper的用法
+
+Whisper是OpenAI开源的模型。它的用法非常简单，只要安装好相关的库，就可以直接用命令行来调用了。
+
+安装就一个库：
+
+```bash
+pip install -U openai-whisper
+```
+
+然后就可以直接用命令行来调用了：
+
+```bash
+whisper va1.mp3 --language Chinese
+```
+
+我们还可以用model参数来选择模型，比如有10GB以上显存就可以选择使用large模型：
+
+```bash
+whisper va2.mp3 --model large --language Chinese
+```
+
+默认是small模型。还可以选择tiny, base, medium, large-v1和large-v2. 
+
+如果是遇到视频的话，那么就用ffmpeg工具将视频中的音频部分提取出来。
+
+比如我们有一个视频02.vob，我们不知道其音频流格式是什么，我们可以通过ffmpeg命令来查看：
+
+```bash
+ffmpeg -i 02.vob
+```
+
+我们可以看到下面的信息：
+
+```
+Input #0, mpeg, from '02.VOB':
+  Duration: 00:34:26.64, start: 0.290633, bitrate: 3807 kb/s
+  Stream #0:0[0x1bf]: Data: dvd_nav_packet
+  Stream #0:1[0x1e0]: Video: mpeg2video (Main), yuv420p(tv, bottom first), 720x576 [SAR 16:15 DAR 4:3], 25 fps, 25 tbr, 90k tbn
+    Side data:
+      cpb: bitrate max/min/avg: 9610000/0/0 buffer size: 1835008 vbv_delay: N/A
+  Stream #0:2[0x1c0]: Audio: mp2, 48000 Hz, stereo, s16p, 224 kb/s
+```
+
+从中可以看到，02.vob总时长为 00:34:26.64，起始时间为 0.290633，比特率为 3807 kb/s。这个文件包含三个流：
+
+流 #0:0 是 DVD 导航数据包。
+流 #0:1 是视频流，编码格式为 MPEG-2，使用了 YUV420P 颜色空间，分辨率为 720x576 像素，采样宽高比（SAR）为 16:15，显示宽高比（DAR）为 4:3。视频帧率为 25 帧/秒，时间基数（tbn）为 90k。
+流 #0:2 是音频流，编码格式为 MP2，采样率为 48000 Hz，立体声，采样位数为 s16p，比特率为 224 kb/s。
+
+既然编码格式为mp2，那么我们就将其保存为mp2格式的音频：
+
+```bash
+ffmpeg -i 02.VOB -vn -acodec copy 02.mp2
+```
+
+输出如下：
+
+```
+ffmpeg version 6.0-full_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers
+  built with gcc 12.2.0 (Rev10, Built by MSYS2 project)
+  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect --enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma --enable-libsnappy --enable-zlib --enable-librist --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-libbluray --enable-libcaca --enable-sdl2 --enable-libaribb24 --enable-libdav1d --enable-libdavs2 --enable-libuavs3d --enable-libzvbi --enable-librav1e --enable-libsvtav1 --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxvid --enable-libaom --enable-libjxl --enable-libopenjpeg --enable-libvpx --enable-mediafoundation --enable-libass --enable-frei0r --enable-libfreetype --enable-libfribidi --enable-liblensfun --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-ffnvcodec --enable-nvdec --enable-nvenc --enable-d3d11va --enable-dxva2 --enable-libvpl --enable-libshaderc --enable-vulkan --enable-libplacebo --enable-opencl --enable-libcdio --enable-libgme --enable-libmodplug --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libshine --enable-libtheora --enable-libtwolame --enable-libvo-amrwbenc --enable-libilbc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex --enable-libvorbis --enable-ladspa --enable-libbs2b --enable-libflite --enable-libmysofa --enable-librubberband --enable-libsoxr --enable-chromaprint
+  libavutil      58.  2.100 / 58.  2.100
+  libavcodec     60.  3.100 / 60.  3.100
+  libavformat    60.  3.100 / 60.  3.100
+  libavdevice    60.  1.100 / 60.  1.100
+  libavfilter     9.  3.100 /  9.  3.100
+  libswscale      7.  1.100 /  7.  1.100
+  libswresample   4. 10.100 /  4. 10.100
+  libpostproc    57.  1.100 / 57.  1.100
+Input #0, mpeg, from '02.VOB':
+  Duration: 00:34:26.64, start: 0.290633, bitrate: 3807 kb/s
+  Stream #0:0[0x1bf]: Data: dvd_nav_packet
+  Stream #0:1[0x1e0]: Video: mpeg2video (Main), yuv420p(tv, bottom first), 720x576 [SAR 16:15 DAR 4:3], 25 fps, 25 tbr, 90k tbn
+    Side data:
+      cpb: bitrate max/min/avg: 9610000/0/0 buffer size: 1835008 vbv_delay: N/A
+  Stream #0:2[0x1c0]: Audio: mp2, 48000 Hz, stereo, s16p, 224 kb/s
+Output #0, mp2, to '02.mp2':
+  Metadata:
+    encoder         : Lavf60.3.100
+  Stream #0:0: Audio: mp2, 48000 Hz, stereo, s16p, 224 kb/s
+Stream mapping:
+  Stream #0:2 -> #0:0 (copy)
+Press [q] to stop, [?] for help
+size=   56510kB time=00:34:26.64 bitrate= 224.0kbits/s speed=76.8x
+video:0kB audio:56510kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.000000%
+```
+
+最后生成02.mp2。我们不用转码，直接用whisper去处理：
+```bash
+whisper 02.mp2 --model large --language Chinese
+```
+
+默认情况下，whisper会输出5种格式的文本，分别是txt纯文本格式的，vtt(Web Video Text Tracks)字幕格式的，srt - SubRip Subtitle字幕格式的，tsv制表符分隔，以及json格式的。我们可以通过`--output_format`来指定。如果全要输出则不用指定，或者指定all.
+
+whisper也可以直接处理wav文件。
+
+我们再看一个从mp4视频中提取aac音频的例子。
+我们有一个mp4文件，信息如下：
+
+```
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '20230801_170327.mp4':
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 0
+    compatible_brands: mp42isom
+    creation_time   : 2023-08-01T09:03:27.000000Z
+  Duration: 00:01:51.00, start: 0.000000, bitrate: 901 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x1080, 762 kb/s, 25.26 fps, 30 tbr, 10k tbn (default)
+    Metadata:
+      creation_time   : 2023-08-01T09:03:27.000000Z
+      vendor_id       : [0][0][0][0]
+      encoder         : JVT/AVC Coding
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 135 kb/s (default)
+    Metadata:
+      creation_time   : 2023-08-01T09:03:27.000000Z
+      vendor_id       : [0][0][0][0]
+```
+
+我们可以知道下面的视频信息：
+
+文件名：'20230801_170327.mp4'
+创建日期：2023年8月1日，UTC时间09:03:27
+视频码率：总体码率为901 kb/s
+视频长度：1分钟51秒
+视频开始时间：从0秒开始
+视频流：
+
+编码：h264 (High)，这是一种常见的视频编码格式
+帧率：大约每秒25.26帧
+分辨率：1920x1080，也就是常说的1080p或全高清
+码率：762 kb/s
+创建日期：2023年8月1日，UTC时间09:03:27
+编码器：JVT/AVC Coding
+音频流：
+
+编码：aac (LC)，这是一种常见的音频编码格式
+采样率：44100 Hz，这是CD质量音频的标准采样率
+音频通道：立体声
+码率：135 kb/s
+创建日期：2023年8月1日，UTC时间09:03:27
+
+
+我们用ffmpeg提取aac音频：
+
+```
+ffmpeg -i 20230801_170327.mp4 -vn -acodec copy 01.aac
+```
+
+输出如下：
+```
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '20230801_170327.mp4':
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 0
+    compatible_brands: mp42isom
+    creation_time   : 2023-08-01T09:03:27.000000Z
+  Duration: 00:01:51.00, start: 0.000000, bitrate: 901 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x1080, 762 kb/s, 25.26 fps, 30 tbr, 10k tbn (default)
+    Metadata:
+      creation_time   : 2023-08-01T09:03:27.000000Z
+      vendor_id       : [0][0][0][0]
+      encoder         : JVT/AVC Coding
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 135 kb/s (default)
+    Metadata:
+      creation_time   : 2023-08-01T09:03:27.000000Z
+      vendor_id       : [0][0][0][0]
+Output #0, adts, to '01.aac':
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 0
+    compatible_brands: mp42isom
+    encoder         : Lavf60.3.100
+  Stream #0:0(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 135 kb/s (default)
+    Metadata:
+      creation_time   : 2023-08-01T09:03:27.000000Z
+      vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:1 -> #0:0 (copy)
+Press [q] to stop, [?] for help
+size=    1865kB time=00:01:50.94 bitrate= 137.7kbits/s speed=2.84e+03x
+video:0kB audio:1833kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 1.782703%
+```
+
+最后，将获取的01.aac文件直接送给Whisper去处理：
+```bash
+whisper 01.aac --model large-v2 --language Chinese --output_format txt
+```
+
+#### 15.2.2 Whisper的原理
+
+虽然从表象上，声音和文本还是非常不同的。但是到了模型这一层，一切又回到了我们熟悉的样子。
+
+首先是层归一化：
+
+```python
+class LayerNorm(nn.LayerNorm):
+    def forward(self, x: Tensor) -> Tensor:
+        return super().forward(x.float()).type(x.dtype)
+```
+
+只做了一件事情，就是将泛型的x转成浮点数再前向计算。
+
+再看它的全连接网络，就是PyTorch的线性网络的一个马甲：
+
+```python
+class Linear(nn.Linear):
+    def forward(self, x: Tensor) -> Tensor:
+        return F.linear(
+            x,
+            self.weight.to(x.dtype),
+            None if self.bias is None else self.bias.to(x.dtype),
+        )
+
+```
+
+这段代码定义了一个名为 Linear 的类，它继承自 nn.Linear 类。这个类重写了父类的 forward 方法，该方法接受一个张量 x 作为输入，并返回一个张量作为输出。
+在 forward 方法中，首先调用了 F.linear 函数，该函数接受三个参数：输入张量 x，权重矩阵 self.weight.to(x.dtype) 和偏置向量 self.bias.to(x.dtype)。其中，权重矩阵和偏置向量都被转换为与输入张量相同的数据类型。
+如果偏置向量为 None，则第三个参数传递的是 None。否则，传递转换后的偏置向量。
+
+然后是对卷积的封装：
+
+```python
+class Conv1d(nn.Conv1d):
+    def _conv_forward(
+        self, x: Tensor, weight: Tensor, bias: Optional[Tensor]
+    ) -> Tensor:
+        return super()._conv_forward(
+            x, weight.to(x.dtype), None if bias is None else bias.to(x.dtype)
+        )
+```
+
+跟上面是一样复刻的，就不多解释了。
+
+接着，熟悉的东西来了，位置嵌入：
+
+```python
+def sinusoids(length, channels, max_timescale=10000):
+    """Returns sinusoids for positional embedding"""
+    assert channels % 2 == 0
+    log_timescale_increment = np.log(max_timescale) / (channels // 2 - 1)
+    inv_timescales = torch.exp(-log_timescale_increment * torch.arange(channels // 2))
+    scaled_time = torch.arange(length)[:, np.newaxis] * inv_timescales[np.newaxis, :]
+    return torch.cat([torch.sin(scaled_time), torch.cos(scaled_time)], dim=1)
+```
+
+代码中使用了一个断言语句来确保 channels 是偶数。然后计算出 log_timescale_increment，它表示对数时间尺度的增量。接下来，使用 torch.exp 函数和 torch.arange 函数计算出逆时间尺度 inv_timescales。
+然后，代码计算出缩放后的时间 scaled_time，它是一个二维张量，其中每一行都是一个时间序列。最后，使用 torch.cat 函数将缩放后的时间的正弦值和余弦值拼接在一起，并返回结果。
+
+再然后，多头注意力果然就登场了：
+
+```python
+class MultiHeadAttention(nn.Module):
+    def __init__(self, n_state: int, n_head: int):
+        super().__init__()
+        self.n_head = n_head
+        self.query = Linear(n_state, n_state)
+        self.key = Linear(n_state, n_state, bias=False)
+        self.value = Linear(n_state, n_state)
+        self.out = Linear(n_state, n_state)
+
+    def forward(
+        self,
+        x: Tensor,
+        xa: Optional[Tensor] = None,
+        mask: Optional[Tensor] = None,
+        kv_cache: Optional[dict] = None,
+    ):
+        q = self.query(x)
+
+        if kv_cache is None or xa is None or self.key not in kv_cache:
+            # hooks, if installed (i.e. kv_cache is not None), will prepend the cached kv tensors;
+            # otherwise, perform key/value projections for self- or cross-attention as usual.
+            k = self.key(x if xa is None else xa)
+            v = self.value(x if xa is None else xa)
+        else:
+            # for cross-attention, calculate keys and values once and reuse in subsequent calls.
+            k = kv_cache[self.key]
+            v = kv_cache[self.value]
+
+        wv, qk = self.qkv_attention(q, k, v, mask)
+        return self.out(wv), qk
+
+    def qkv_attention(
+        self, q: Tensor, k: Tensor, v: Tensor, mask: Optional[Tensor] = None
+    ):
+        n_batch, n_ctx, n_state = q.shape
+        scale = (n_state // self.n_head) ** -0.25
+        q = q.view(*q.shape[:2], self.n_head, -1).permute(0, 2, 1, 3) * scale
+        k = k.view(*k.shape[:2], self.n_head, -1).permute(0, 2, 3, 1) * scale
+        v = v.view(*v.shape[:2], self.n_head, -1).permute(0, 2, 1, 3)
+
+        qk = q @ k
+        if mask is not None:
+            qk = qk + mask[:n_ctx, :n_ctx]
+        qk = qk.float()
+
+        w = F.softmax(qk, dim=-1).to(q.dtype)
+        return (w @ v).permute(0, 2, 1, 3).flatten(start_dim=2), qk.detach()
+```
+
+MultiHeadAttention类的构造函数接受两个参数：n_state和n_head。n_state是每个头的维度，而n_head是头的数量。在初始化过程中，该类创建了四个线性层，分别用于查询（query）、键（key）、值（value）和输出（out）。
+
+forward方法是该类的核心，它接受输入张量x、可选的附加输入xa、掩码mask和键值缓存kv_cache。这个方法首先通过查询线性层处理输入x，得到查询张量q。然后，根据kv_cache和xa的存在与否，决定是重新计算键和值张量，还是从缓存中获取它们。
+
+如果kv_cache为空或者xa为空，或者self.key不在kv_cache中，那么就会计算新的键和值张量。否则，会从kv_cache中获取预先计算的键和值张量。
+
+接下来，调用qkv_attention方法来计算注意力权重和加权后的值张量。这个方法首先对查询、键和值张量进行重塑和转置，以便在每个头上并行计算注意力。然后，计算查询和键的点积，应用掩码（如果提供），并对结果应用softmax函数以获得注意力权重。最后，使用权重对值张量进行加权求和，得到加权后的值张量。
+
+forward方法返回加权后的值张量经过输出线性层的处理结果，以及查询和键的点积（作为额外的输出）。
+
+这个多头注意力机制允许模型在不同的表示子空间中同时关注输入的不同部分，从而提高了模型的表达能力和性能。
+
+然后是将多头注意力封装为残差块。如果不记得什么是残差块的，我们复习一下结构图：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/transformers.png)
+
+```python
+class ResidualAttentionBlock(nn.Module):
+    def __init__(self, n_state: int, n_head: int, cross_attention: bool = False):
+        super().__init__()
+
+        self.attn = MultiHeadAttention(n_state, n_head)
+        self.attn_ln = LayerNorm(n_state)
+
+        self.cross_attn = (
+            MultiHeadAttention(n_state, n_head) if cross_attention else None
+        )
+        self.cross_attn_ln = LayerNorm(n_state) if cross_attention else None
+
+        n_mlp = n_state * 4
+        self.mlp = nn.Sequential(
+            Linear(n_state, n_mlp), nn.GELU(), Linear(n_mlp, n_state)
+        )
+        self.mlp_ln = LayerNorm(n_state)
+
+    def forward(
+        self,
+        x: Tensor,
+        xa: Optional[Tensor] = None,
+        mask: Optional[Tensor] = None,
+        kv_cache: Optional[dict] = None,
+    ):
+        x = x + self.attn(self.attn_ln(x), mask=mask, kv_cache=kv_cache)[0]
+        if self.cross_attn:
+            x = x + self.cross_attn(self.cross_attn_ln(x), xa, kv_cache=kv_cache)[0]
+        x = x + self.mlp(self.mlp_ln(x))
+        return x
+
+```
+
+ResidualAttentionBlock类的构造函数接受三个参数：n_state、n_head和cross_attention。n_state是每个头的维度，n_head是头的数量，cross_attention是一个布尔值，指示是否包含交叉注意力机制。
+
+在初始化过程中，该类创建了一个多头注意力模块self.attn，一个层归一化模块self.attn_ln，一个可选的交叉注意力模块self.cross_attn（如果cross_attention为真），一个可选的层归一化模块self.cross_attn_ln（如果cross_attention为真），以及一个前馈神经网络模块self.mlp。前馈神经网络由两个线性层和一个GELU激活函数组成。
+
+forward方法是该类的核心，它接受输入张量x、可选的附加输入xa、掩码mask和键值缓存kv_cache。这个方法首先通过自注意力模块和层归一化处理输入x，然后将结果与原始输入相加，实现残差连接。
+
+如果存在交叉注意力模块，那么还会对x应用交叉注意力模块和层归一化，并将结果与之前的输出相加。
+
+最后，将输出通过前馈神经网络和层归一化，并将结果与之前的输出相加，再次实现残差连接。
+
+这个ResidualAttentionBlock模块通过残差连接和层归一化增强了模型的训练稳定性，并通过多头注意力和前馈神经网络提供了丰富的表达能力。
+
+Whisper的编码器，编进来的是语音：
+
+```python
+class AudioEncoder(nn.Module):
+    def __init__(
+        self, n_mels: int, n_ctx: int, n_state: int, n_head: int, n_layer: int
+    ):
+        super().__init__()
+        self.conv1 = Conv1d(n_mels, n_state, kernel_size=3, padding=1)
+        self.conv2 = Conv1d(n_state, n_state, kernel_size=3, stride=2, padding=1)
+        self.register_buffer("positional_embedding", sinusoids(n_ctx, n_state))
+
+        self.blocks: Iterable[ResidualAttentionBlock] = nn.ModuleList(
+            [ResidualAttentionBlock(n_state, n_head) for _ in range(n_layer)]
+        )
+        self.ln_post = LayerNorm(n_state)
+
+    def forward(self, x: Tensor):
+        """
+        x : torch.Tensor, shape = (batch_size, n_mels, n_ctx)
+            the mel spectrogram of the audio
+        """
+        x = F.gelu(self.conv1(x))
+        x = F.gelu(self.conv2(x))
+        x = x.permute(0, 2, 1)
+
+        assert x.shape[1:] == self.positional_embedding.shape, "incorrect audio shape"
+        x = (x + self.positional_embedding).to(x.dtype)
+
+        for block in self.blocks:
+            x = block(x)
+
+        x = self.ln_post(x)
+        return x
+```
+
+编码器这边，初始化了2个卷积层conv1和conv2,用于降维和下采样语音数据。
+然后初始化了一个positional_embedding,这是个位置编码,用来表示时间步信息。
+再初始化了多个残差自注意力模块ResidualAttentionBlock,把编码通过自注意力块传递。
+
+forward过程:
+- 将语音数据传入conv1、conv2提取特征
+- 加上positional_embedding表示时间步
+- 传入自注意力ResidualAttentionBlock
+- LayerNorm归一化
+- 输出编码结果
+
+而解码器是输出的文本，就没有卷积网络什么事儿了，就是残差多头注意力块：
+
+```python
+class TextDecoder(nn.Module):
+    def __init__(
+        self, n_vocab: int, n_ctx: int, n_state: int, n_head: int, n_layer: int
+    ):
+        super().__init__()
+
+        self.token_embedding = nn.Embedding(n_vocab, n_state)
+        self.positional_embedding = nn.Parameter(torch.empty(n_ctx, n_state))
+
+        self.blocks: Iterable[ResidualAttentionBlock] = nn.ModuleList(
+            [
+                ResidualAttentionBlock(n_state, n_head, cross_attention=True)
+                for _ in range(n_layer)
+            ]
+        )
+        self.ln = LayerNorm(n_state)
+
+        mask = torch.empty(n_ctx, n_ctx).fill_(-np.inf).triu_(1)
+        self.register_buffer("mask", mask, persistent=False)
+
+    def forward(self, x: Tensor, xa: Tensor, kv_cache: Optional[dict] = None):
+        """
+        x : torch.LongTensor, shape = (batch_size, <= n_ctx)
+            the text tokens
+        xa : torch.Tensor, shape = (batch_size, n_mels, n_audio_ctx)
+            the encoded audio features to be attended on
+        """
+        offset = next(iter(kv_cache.values())).shape[1] if kv_cache else 0
+        x = (
+            self.token_embedding(x)
+            + self.positional_embedding[offset : offset + x.shape[-1]]
+        )
+        x = x.to(xa.dtype)
+
+        for block in self.blocks:
+            x = block(x, xa, mask=self.mask, kv_cache=kv_cache)
+
+        x = self.ln(x)
+        logits = (
+            x @ torch.transpose(self.token_embedding.weight.to(x.dtype), 0, 1)
+        ).float()
+
+        return logits
+```
+
+简而言之，文本解码器由下面几层网络组成：
+
+- 一个将 token 转换为隐藏状态的词嵌入层
+- 一个添加位置信息的 positional embedding 层
+- 一个由 residual attention blocks 组成的堆栈
+- 一个对隐藏状态进行归一化的层 normalization 层
+- 一个计算输出 logits 的线性层
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/whisper1.png)
+
+最后，将音频编码器与文本解码器组合在一起，就是一个Whipser:
+
+```python
+class Whisper(nn.Module):
+    def __init__(self, dims: ModelDimensions):
+        super().__init__()
+        self.dims = dims
+        self.encoder = AudioEncoder(
+            self.dims.n_mels,
+            self.dims.n_audio_ctx,
+            self.dims.n_audio_state,
+            self.dims.n_audio_head,
+            self.dims.n_audio_layer,
+        )
+        self.decoder = TextDecoder(
+            self.dims.n_vocab,
+            self.dims.n_text_ctx,
+            self.dims.n_text_state,
+            self.dims.n_text_head,
+            self.dims.n_text_layer,
+        )
+        # use the last half layers for alignment by default; see `set_alignment_heads()` below
+        all_heads = torch.zeros(
+            self.dims.n_text_layer, self.dims.n_text_head, dtype=torch.bool
+        )
+        all_heads[self.dims.n_text_layer // 2 :] = True
+        self.register_buffer("alignment_heads", all_heads.to_sparse(), persistent=False)
+
+    def set_alignment_heads(self, dump: bytes):
+        array = np.frombuffer(
+            gzip.decompress(base64.b85decode(dump)), dtype=bool
+        ).copy()
+        mask = torch.from_numpy(array).reshape(
+            self.dims.n_text_layer, self.dims.n_text_head
+        )
+        self.register_buffer("alignment_heads", mask.to_sparse(), persistent=False)
+
+    def embed_audio(self, mel: torch.Tensor):
+        return self.encoder(mel)
+
+    def logits(self, tokens: torch.Tensor, audio_features: torch.Tensor):
+        return self.decoder(tokens, audio_features)
+
+    def forward(
+        self, mel: torch.Tensor, tokens: torch.Tensor
+    ) -> Dict[str, torch.Tensor]:
+        return self.decoder(tokens, self.encoder(mel))
+
+    @property
+    def device(self):
+        return next(self.parameters()).device
+
+    @property
+    def is_multilingual(self):
+        return self.dims.n_vocab == 51865
+
+    def install_kv_cache_hooks(self, cache: Optional[dict] = None):
+        cache = {**cache} if cache is not None else {}
+        hooks = []
+
+        def save_to_cache(module, _, output):
+            if module not in cache or output.shape[1] > self.dims.n_text_ctx:
+                # save as-is, for the first token or cross attention
+                cache[module] = output
+            else:
+                cache[module] = torch.cat([cache[module], output], dim=1).detach()
+            return cache[module]
+
+        def install_hooks(layer: nn.Module):
+            if isinstance(layer, MultiHeadAttention):
+                hooks.append(layer.key.register_forward_hook(save_to_cache))
+                hooks.append(layer.value.register_forward_hook(save_to_cache))
+
+        self.decoder.apply(install_hooks)
+        return cache, hooks
+
+    detect_language = detect_language_function
+    transcribe = transcribe_function
+    decode = decode_function
+```
+
+在 __init__ 方法中，首先初始化了一个 AudioEncoder 对象作为音频编码器，并初始化了一个 TextDecoder 对象作为文本解码器。然后创建了一个全零张量，表示所有的注意力头都不用于对齐。接下来，代码将张量的后一半设置为 True，表示默认使用后一半的注意力头进行对齐。最后，将张量注册为稀疏缓冲区。
+
+接下来是 set_alignment_heads 方法，它接受一个字节串作为输入。这个方法用于设置用于对齐的多头注意力。首先使用 base85 解码和 gzip 解压缩对输入字节串进行处理，然后将其转换为布尔型数组。接下来，使用 torch.from_numpy 函数将数组转换为张量，并调整其形状。最后，将张量注册为稀疏缓冲区。
+
+接下来是 embed_audio 方法，它接受一个声音频谱作为输入，并返回音频编码器的输出。然后是 logits 方法，它接受两个张量作为输入：文本令牌和音频特征。这个方法返回文本解码器的输出。
+
+接下来是 forward 方法，它接受两个张量作为输入：声音频谱和文本令牌。这个方法首先使用音频编码器对声音频谱进行编码，然后将结果传递给文本解码器，并返回结果。
+
+最后是一些属性和方法。其中 device 属性返回模型所在的设备；is_multilingual 属性返回模型是否支持多语言；install_kv_cache_hooks 方法用于安装键值缓存钩子；detect_language、transcribe 和 decode 分别是检测语言、转录和解码的函数。
+
+### 15.3 可解释的机器学习
+
+可解释的机器学习（Interpretable Machine Learning，或 Explainable Machine Learning）是指开发和使用能够提供透明且可理解输出的机器学习模型和方法。其主要目标是使模型的预测结果和决策过程对人类用户更加清晰和可理解，从而增加对模型的信任和依赖。这对于许多应用场景尤为重要，例如医疗诊断、金融决策和法律裁决等领域。
+
+深度学习的可解释性一直是一个热门话题。深度学习模型通常被认为是“黑盒”模型，因为它们的内部结构和参数通常非常复杂，难以理解。这使得深度学习模型在某些领域（如医疗和金融）的应用受到了一定的限制。因此，研究人员一直在努力提高深度学习模型的可解释性，以便更好地理解模型的预测结果和决策过程。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/xai.png)
+
+为什么需要可解释的机器学习？
+
+- 信任和透明度：用户和决策者更容易信任那些能够解释其行为的模型。
+- 合规性和法律要求：某些领域（如金融和医疗）对模型的透明度有严格的法律要求。
+- 模型调试：通过理解模型的内部机制，可以更容易地发现和修复模型中的错误。
+- 公平性和偏见检测：通过解释模型，可以识别和纠正模型中的偏见和歧视。
+
+可解释性方法可以分为两类：内生可解释模型和后处理解释方法。
+
+内生可解释模型本身具有透明的结构和易于理解的决策规则。例如：
+
+- 线性回归：模型的系数直接表示特征对预测的影响。
+- 决策树：通过树状结构展示决策路径。
+- 逻辑回归：类似于线性回归，但用于分类问题。
+
+这也是这本书里我们花了这么多时间反复讲解这些模型的用法以及原理的原因。如果可以用简单可解释方法解决问题，那么就不需要用复杂的模型。
+
+后处理解释方法用于解释复杂的、通常是“黑箱”模型（如深度神经网络、随机森林等）的预测结果。例如：
+
+- SHAP (SHapley Additive exPlanations)：基于博弈论的解释方法，分配每个特征对预测的贡献。
+- LIME (Local Interpretable Model-agnostic Explanations)：通过构建局部线性模型来解释模型在某个特定点的预测。
+- Feature Importance：衡量特征对模型预测的重要性，常用于随机森林和梯度提升树等模型。
+- 部分依赖图 (Partial Dependence Plots, PDPs)：展示单个或多特征的变化如何影响预测结果。
+- 对抗性示例 (Adversarial Examples)：通过对输入进行微小的扰动来研究模型的敏感性和稳健性。
+
+下面我们看一个用lime库解释机器学习方法的例子：
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+import lime
+import lime.lime_tabular
+
+# 加载数据
+data = load_iris()
+X = data.data
+y = data.target
+
+# 拆分数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 训练模型
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# 使用 LIME 解释模型
+explainer = lime.lime_tabular.LimeTabularExplainer(X_train, feature_names=data.feature_names, class_names=data.target_names, discretize_continuous=True)
+i = 0 # 选择一个样本进行解释
+exp = explainer.explain_instance(X_test[i], model.predict_proba, num_features=2)
+exp.show_in_notebook(show_all=False)
+```
+
+在这个例子中，我们使用了鸢尾花数据集（iris）来训练一个随机森林分类器，并使用 LIME 来解释模型的预测结果。首先，我们加载数据集并拆分数据集为训练集和测试集。然后，我们训练一个随机森林分类器，并使用 LIME 的 LimeTabularExplainer 类来解释模型的预测结果。最后，我们选择一个样本进行解释，并显示解释结果。
+
+### 15.4 演化学习
+
+演化学习（Evolutionary Learning）是一类受生物演化过程启发的机器学习和优化方法。这些方法通过模拟自然选择和遗传进化的过程来寻找最佳解决方案。演化学习的核心思想是通过选择、交叉和变异等操作逐步改进候选解决方案群体，从而在复杂的搜索空间中找到全局最优解。
+
+演化学习的基本概念
+
+- 个体（Individual）：每个个体表示一个候选解决方案，通常用编码（如二进制串、实数向量等）表示。
+- 种群（Population）：一组个体构成一个种群。
+- 适应度函数（Fitness Function）：用于评估每个个体的优劣程度。
+- 选择（Selection）：按照适应度函数的值从种群中选择优秀的个体，通常采用轮盘赌选择、锦标赛选择等方法。
+- 交叉（Crossover）：通过组合两个或多个个体的部分基因来生成新的个体，模拟生物的生殖过程。
+- 变异（Mutation）：对个体的基因进行随机改变，以增加种群的多样性，防止陷入局部最优。
+- 进化（Evolution）：经过多个世代的选择、交叉和变异，逐步优化种群中的个体。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/genetic.png)
+
+演化学习的主要方法
+
+- 遗传算法（Genetic Algorithm, GA）：一种经典的演化学习方法，通过选择、交叉和变异等操作来优化个体。
+- 遗传编程（Genetic Programming, GP）：将个体表示为程序或表达式，通过演化过程优化程序结构和参数。
+- 差分进化（Differential Evolution, DE）：一种基于向量差分的演化方法，适用于连续优化问题。
+- 进化策略（Evolution Strategies, ES）：另一种演化学习方法，主要通过变异和选择来优化个体。
+- 粒子群优化（Particle Swarm Optimization, PSO）：虽然不严格属于演化算法，但受群体行为启发，通过个体间的协作和信息共享进行优化。
+
+遗传算法的流程
+
+1. 初始化种群：随机生成一定数量的个体，组成初始种群。
+2. 评估适应度：计算每个个体的适应度值。
+3. 选择父母：根据适应度值从种群中选择父母个体，常用的方法有轮盘赌选择、锦标赛选择等。
+4. 交叉：选择若干对父母进行交叉操作，生成新的子代个体。
+5. 变异：对新生成的子代个体进行变异操作。
+6. 生成新种群：将子代个体组成新的种群，替换旧种群。
+7. 重复步骤2-6：迭代进行，直到达到终止条件（如达到最大迭代次数或适应度达到某个阈值）。
+
+下面我们用PyTorch实现一个简单的遗传算法的示例：
+
+```python
+import torch
+import random
+
+# 参数设置
+POPULATION_SIZE = 100
+GENOME_LENGTH = 10
+NUM_GENERATIONS = 50
+MUTATION_RATE = 0.01
+
+# 初始化种群
+def initialize_population(size, genome_length):
+    return torch.randint(0, 2, (size, genome_length), dtype=torch.float32)
+
+# 适应度函数（示例：最大化1的数量）
+def fitness(individual):
+    return individual.sum().item()
+
+# 选择机制（轮盘赌选择）
+def selection(population, fitnesses):
+    total_fitness = sum(fitnesses)
+    probs = [f / total_fitness for f in fitnesses]
+    selected_indices = random.choices(range(len(population)), probs, k=len(population))
+    return population[selected_indices]
+
+# 交叉（单点交叉）
+def crossover(parent1, parent2):
+    point = random.randint(1, len(parent1) - 1)
+    child1 = torch.cat((parent1[:point], parent2[point:]))
+    child2 = torch.cat((parent2[:point], parent1[point:]))
+    return child1, child2
+
+# 变异（逐位变异）
+def mutate(individual, mutation_rate):
+    for i in range(len(individual)):
+        if random.random() < mutation_rate:
+            individual[i] = 1 - individual[i]
+    return individual
+
+# 主进化过程
+def genetic_algorithm():
+    population = initialize_population(POPULATION_SIZE, GENOME_LENGTH)
+    
+    for generation in range(NUM_GENERATIONS):
+        fitnesses = [fitness(ind) for ind in population]
+        
+        # 选择
+        selected_population = selection(population, fitnesses)
+        
+        # 交叉和变异
+        next_population = []
+        for i in range(0, POPULATION_SIZE, 2):
+            parent1, parent2 = selected_population[i], selected_population[i+1]
+            child1, child2 = crossover(parent1, parent2)
+            next_population.extend([mutate(child1, MUTATION_RATE), mutate(child2, MUTATION_RATE)])
+        
+        population = torch.stack(next_population)
+        
+        best_fitness = max(fitnesses)
+        print(f'Generation {generation}: Best Fitness = {best_fitness}')
+    
+    best_individual = population[torch.argmax(torch.tensor(fitnesses))]
+    return best_individual
+
+# 运行遗传算法
+best_solution = genetic_algorithm()
+print(f'Best Solution: {best_solution.numpy()}')
+```
+
+运行结果如下，中间过程有省略：
+
+```
+Generation 0: Best Fitness = 9.0
+Generation 1: Best Fitness = 9.0
+...
+Generation 48: Best Fitness = 10.0
+Generation 49: Best Fitness = 10.0
+Best Solution: [1. 1. 1. 1. 1. 1. 1. 1. 0. 1.]
+```
+
+我们也可以用封装好的库来实现遗传算法，比如DEAP库。
+
+首先我们安装库：
+
+```
+pip install deap
+```
+
+然后导入模块：
+
+```python
+import random  
+from deap import base, creator, tools, algorithms  
+```
+这里导入了必要的模块，包括random用于生成随机数，以及deap库中的几个组件用于创建遗传算法。
+
+定义优化问题：
+
+```python
+creator.create("FitnessMax", base.Fitness, weights=(1.0,))  
+creator.create("Individual", list, fitness=creator.FitnessMax)  
+```
+
+定义遗传算法的两个基本概念：适应度（FitnessMax）和个体（Individual）。适应度是衡量个体好坏的标准，在这里我们希望最大化某个值，因此权重设置为正数（1.0）。个体则是解决方案的表示，这里简单地使用列表来存储一个浮点数。
+
+初始化工具箱：
+
+```python
+toolbox = base.Toolbox()  
+toolbox.register("attr_float", random.uniform, -10, 10)  
+toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_float, 1)  
+toolbox.register("population", tools.initRepeat, list, toolbox.individual)  
+```
+
+
+工具箱（toolbox）用于注册各种遗传算法的操作。这里注册了属性生成器（产生一个在-10到10之间的随机浮点数），个体生成器（创建一个包含单个属性的个体），以及种群生成器（创建一个由多个个体组成的种群）。
+
+定义评估函数：
+
+```python
+def eval_func(individual):  
+    return individual[0]**2,  
+```
+
+这个函数计算个体的适应度，即个体中数值的平方。返回的是一个元组，因为deap要求适应度是一个元组。
+
+注册遗传操作：
+
+```python
+toolbox.register("mate", tools.cxBlend, alpha=0.5)  
+toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)  
+toolbox.register("select", tools.selTournament, tournsize=3)  
+toolbox.register("evaluate", eval_func)  
+```
+
+这里注册了遗传算法中的交叉（mate）、变异（mutate）和选择（select）操作，以及评估函数（evaluate）。交叉操作用cxBlend实现，变异操作用高斯变异实现，选择操作用锦标赛选择实现。
+
+运行遗传算法：
+
+```python
+population = toolbox.population(n=100)  
+NGEN = 40  
+CXPB, MUTPB = 0.5, 0.2  
+
+for gen in range(NGEN):  
+    offspring = algorithms.varAnd(population, toolbox, cxpb=CXPB, mutpb=MUTPB)  
+    fits = map(toolbox.evaluate, offspring)  
+    for fit, ind in zip(fits, offspring):  
+        ind.fitness.values = fit  
+    population = toolbox.select(offspring, k=len(population))  
+```
+
+首先初始化一个大小为100的种群。然后进行40代进化，每一代中进行交叉、变异和选择操作，并重新评估个体的适应度。
+
+输出结果：
+
+```python
+top_ind = tools.selBest(population, k=1)[0]  
+print(f"Best individual: {top_ind}, Fitness: {top_ind.fitness.values[0]}")  
+```
+
+最后，从种群中选择最佳个体并打印出来，显示其值和适应度。
+
+这段代码实现了一个简单的遗传算法，用于找到使函数f(x) = x^2最大化的x值。通过多代进化，算法逐渐向最优解靠拢。
+
+我们看下完整的代码：
+
+```python
+import random
+from deap import base, creator, tools, algorithms
+
+# 定义优化问题：最大化目标函数 f(x) = x^2
+creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+creator.create("Individual", list, fitness=creator.FitnessMax)
+
+toolbox = base.Toolbox()
+toolbox.register("attr_float", random.uniform, -10, 10)
+toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_float, 1)
+toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+def eval_func(individual):
+    return individual[0]**2,
+
+toolbox.register("mate", tools.cxBlend, alpha=0.5)
+toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)
+toolbox.register("select", tools.selTournament, tournsize=3)
+toolbox.register("evaluate", eval_func)
+
+population = toolbox.population(n=100)
+NGEN = 40
+CXPB, MUTPB = 0.5, 0.2
+
+for gen in range(NGEN):
+    offspring = algorithms.varAnd(population, toolbox, cxpb=CXPB, mutpb=MUTPB)
+    fits = map(toolbox.evaluate, offspring)
+    for fit, ind in zip(fits, offspring):
+        ind.fitness.values = fit
+    population = toolbox.select(offspring, k=len(population))
+    
+top_ind = tools.selBest(population, k=1)[0]
+print(f"Best individual: {top_ind}, Fitness: {top_ind.fitness.values[0]}")
+```
+
+运行结果如下：
+
+```
+Best individual: [-1479201.2340890465], Fitness: 2188036290930.558
+```
+
 ## 参考文献
 
 1. 周志华. 机器学习. 北京：清华大学出版社, 2016
@@ -18006,7 +19570,4 @@ Test MSE: 0.6653
 7. Vaswani Ashish, Shazeer Noam, Parmar Niki, Uszkoreit Jakob, Jones Llion, Gomez Aidan N., Kaiser Łukasz, and Polosukhin Illia. 2017. Attention is all you need. In Advances in Neural Information Processing Systems. 5998–6008.
 8. Paul F. Christiano, Jan Leike, Tom B. Brown, Miljan Martic, Shane Legg, and Dario Amodei. Deep reinforcement learning from human preferences. In Advances in Neural Information Processing Systems 30: Annual Conference on Neural Information Processing Systems 2017, December 4-9, 2017, Long Beach, CA, USA, pages 4302-4310, 2017.
 9. Schulman J, Wolski F, Dhariwal P, Radford A, Klimov O. Proximal policy optimization algorithms. arXiv preprint arXiv:1707.06347. 2017
-10. Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., Graves, A.,
-Riedmiller, M., Fidjeland, A. K., Ostrovski, G., Petersen, S., Beattie, C., Sadik, A., Antonoglou,
-I., King, H., Kumaran, D., Wierstra, D., Legg, S., and Hassabis, D. (2015). Human-level control
-through deep reinforcement learning. Nature, 518(7540):529–533.
+10. Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., Graves, A., Riedmiller, M., Fidjeland, A. K., Ostrovski, G., Petersen, S., Beattie, C., Sadik, A., Antonoglou, I., King, H., Kumaran, D., Wierstra, D., Legg, S., and Hassabis, D. (2015). Human-level control through deep reinforcement learning. Nature, 518(7540):529–533.
