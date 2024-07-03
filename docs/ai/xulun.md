@@ -3675,6 +3675,805 @@ Feature 2 <= 0.01
                 └── Leaf: Class 0
 ```
 
+#### 4.3.3 ID3算法
+
+上节我们的决策树算法使用的是CART算法。CART（Classification and Regression Trees）算法是由Breiman等人在1984年提出的一种用于生成决策树的算法。CART算法基于基尼不纯度（Gini Impurity）来选择每个节点的特征。其目标是通过选择能够最小化基尼不纯度的特征，逐步构建决策树。本节和下节我们将介绍另外两种决策树算法：ID3算法和C4.5算法。
+
+ID3（Iterative Dichotomiser 3）算法是由Ross Quinlan在1986年提出的一种用于生成决策树的算法。ID3算法基于信息论中的信息增益（Information Gain）来选择每个节点的特征。其目标是通过选择能够最大化信息增益的特征，逐步构建决策树。
+
+信息增益是衡量选择某一特征进行分割后，数据集的纯度增加的程度。
+
+首先我们计算数据集的熵（Entropy）。熵是数据集纯度的度量，定义为：
+
+$H(D)= -\sum_{i=1}^n p_i \log_2 p_i$
+
+其中，$p_i$ 是第 $i$ 类样本的概率。
+
+我们用代码实现：
+
+```python
+    def _entropy(self, labels):
+        # 使用 NumPy 的 unique 函数找出 labels 中所有不同的标签，并且通过设置 return_counts=True 返回这些不同标签的出现次数（counts）。这里下划线 _ 被用作占位符，表示我们不关心唯一标签的具体值，只关心它们的计数。
+        _, counts = np.unique(labels, return_counts=True)
+        # 计算每个不同标签出现的概率。这是通过将每个标签的出现次数除以标签总数来实现的。
+        probabilities = counts / len(labels)
+        return -np.sum(probabilities * np.log2(probabilities))
+```
+
+然后，我们要计算特征𝐴对数据集𝐷的条件熵。条件熵衡量的是在已知特征𝐴的情况下数据集 𝐷的纯度，定义为：
+
+$H(D|A)=\sum_{v\in \text{Values(A)}} \frac{|D_v|}{|D|} H(D_v)$
+
+其中，$D_v$ 是特征𝐴的第 $v$ 个取值对应的数据子集。Values(A)是特征A的所有可能取值。
+
+最后，我们计算信息增益。信息增益是数据集的熵减去特征𝐴对数据集𝐷的条件熵，定义为：
+
+$Gain(D,A)=H(D)-H(D|A)$
+
+我们来用代码实现：
+
+```python
+    def _information_gain(self, data, labels, feature):
+        # 计算数据集的熵
+        original_entropy = self._entropy(labels)
+        # 使用 NumPy 的 unique 函数找出指定特征列中的所有不同值以及它们出现的次数
+        values, counts = np.unique(data[:, feature], return_counts=True)
+        # 计算特征 A 对数据集 D 的条件熵
+        weighted_entropy = sum((counts[i] / np.sum(counts)) * self._entropy(labels[data[:, feature] == values[i]]) for i in range(len(values)))
+        return original_entropy - weighted_entropy
+
+```
+
+下面我们用信息熵增益来寻找最佳划分：
+
+```python
+    def _best_feature_to_split(self, data, labels):
+        best_feature = -1
+        best_gain = -1
+        num_features = data.shape[1] # 获取数据集中特征的数量
+        for feature in range(num_features):
+            # 对当前遍历到的特征，调用 _information_gain 方法计算其信息增益
+            gain = self._information_gain(data, labels, feature)
+            if gain > best_gain:
+                best_gain = gain
+                best_feature = feature
+        return best_feature
+```
+
+有了最佳划分算法之后，我们来构建决策树：
+
+```python
+    def _build_tree(self, data, labels):
+        # 检查当前数据集的标签是否全部相同，如果是，说明已经到达叶节点，可以直接返回该标签
+        if len(np.unique(labels)) == 1:
+            return labels[0]
+
+        # 检查当前数据集的特征是否为空，如果是，说明没有更多的特征可以用来进一步划分数据，此时返回出现次数最多的标签作为叶节点的预测结果
+        if data.shape[1] == 0:
+            return np.bincount(labels).argmax()
+
+        # 调用 _best_feature_to_split 方法找到当前数据集的最佳划分特征
+        best_feature = self._best_feature_to_split(data, labels)
+        # 创建一个以最佳特征为键的字典，用于存储决策树的节点
+        tree = {best_feature: {}}
+        # 获取最佳特征的所有唯一值，这些值将用于划分数据集
+        values = np.unique(data[:, best_feature])
+
+        for value in values:
+            sub_data = data[data[:, best_feature] == value] # 根据当前特征值筛选出子数据集
+            sub_labels = labels[data[:, best_feature] == value] # 同时筛选出对应的子标签集
+            # 递归调用 _build_tree 方法构建子树，注意在递归调用时需要删除已经使用过的特征，以避免重复划分
+            subtree = self._build_tree(np.delete(sub_data, best_feature, axis=1), sub_labels)
+            # 将构建好的子树添加到当前节点的字典中，键为特征值，值为子树
+            tree[best_feature][value] = subtree
+        return tree
+```
+
+下面我们来写预测函数：
+
+```python
+    def _predict_instance(self, instance, tree):
+        # 检查当前的树节点是否是字典类型，如果不是，说明已经到达叶节点，直接返回节点的值作为预测结果
+        if not isinstance(tree, dict):
+            return tree
+
+        # 获取当前树节点的特征
+        feature = next(iter(tree))
+        # 获取当前实例在当前特征上的值
+        value = instance[feature]
+        # 根据特征值获取对应的子树，如果不存在，则返回 None
+        subtree = tree[feature].get(value, None)
+
+        # 如果子树不存在，说明在训练集中没有遇到这样的特征值组合，此时返回训练集标签中出现次数最多的标签作为预测结果
+        if subtree is None:
+            return np.bincount(labels).argmax()
+        
+        # 如果子树存在，递归调用 _predict_instance 方法，继续沿着决策树进行预测，注意在递归调用时需要删除已经使用过的特征，以避免重复判断
+        return self._predict_instance(np.delete(instance, feature), subtree)
+
+    def predict(self, data):
+        # 使用列表推导式，对数据集中的每个实例调用 _predict_instance 方法进行预测，并将预测结果收集到一个列表中
+        predictions = [self._predict_instance(instance, self.tree) for instance in data]
+        # 将预测结果列表转换为 NumPy 数组并返回
+        return np.array(predictions)
+```
+
+我们把代码串起来：
+
+```python
+import numpy as np
+import pandas as pd
+
+class ID3:
+    def __init__(self):
+        self.tree = {}
+
+    def fit(self, data, labels):
+        self.tree = self._build_tree(data, labels)
+        return self.tree
+
+    def _entropy(self, labels):
+        _, counts = np.unique(labels, return_counts=True)
+        probabilities = counts / len(labels)
+        return -np.sum(probabilities * np.log2(probabilities))
+
+    def _information_gain(self, data, labels, feature):
+        original_entropy = self._entropy(labels)
+        values, counts = np.unique(data[:, feature], return_counts=True)
+        weighted_entropy = sum((counts[i] / np.sum(counts)) * self._entropy(labels[data[:, feature] == values[i]]) for i in range(len(values)))
+        return original_entropy - weighted_entropy
+
+    def _best_feature_to_split(self, data, labels):
+        best_feature = -1
+        best_gain = -1
+        num_features = data.shape[1]
+        for feature in range(num_features):
+            gain = self._information_gain(data, labels, feature)
+            if gain > best_gain:
+                best_gain = gain
+                best_feature = feature
+        return best_feature
+
+    def _build_tree(self, data, labels):
+        if len(np.unique(labels)) == 1:
+            return labels[0]
+
+        if data.shape[1] == 0:
+            return np.bincount(labels).argmax()
+
+        best_feature = self._best_feature_to_split(data, labels)
+        tree = {best_feature: {}}
+        values = np.unique(data[:, best_feature])
+
+        for value in values:
+            sub_data = data[data[:, best_feature] == value]
+            sub_labels = labels[data[:, best_feature] == value]
+            subtree = self._build_tree(np.delete(sub_data, best_feature, axis=1), sub_labels)
+            tree[best_feature][value] = subtree
+
+        return tree
+
+    def predict(self, data):
+        predictions = [self._predict_instance(instance, self.tree) for instance in data]
+        return np.array(predictions)
+
+    def _predict_instance(self, instance, tree):
+        if not isinstance(tree, dict):
+            return tree
+
+        feature = next(iter(tree))
+        value = instance[feature]
+        subtree = tree[feature].get(value, None)
+
+        if subtree is None:
+            return np.bincount(labels).argmax()
+        
+        return self._predict_instance(np.delete(instance, feature), subtree)
+
+# 示例数据集
+data = np.array([
+    [1, 1, 0],
+    [1, 0, 0],
+    [0, 1, 1],
+    [0, 1, 1],
+    [0, 0, 0]
+])
+labels = np.array([0, 0, 1, 1, 0])
+
+# 创建ID3实例并训练
+id3 = ID3()
+tree = id3.fit(data, labels)
+print("Decision Tree:", tree)
+
+# 预测
+test_data = np.array([
+    [1, 1, 0],
+    [0, 0, 0]
+])
+predictions = id3.predict(test_data)
+print("Predictions:", predictions)
+```
+
+运行结果如下：
+
+```
+Decision Tree: {2: {0: 0, 1: 1}}
+Predictions: [0 0]
+```
+
+这里，我们创建了一个包含5个样本的示例数据集。data是一个二维数组，每行代表一个样本，每列代表一个特征。labels是一个一维数组，包含每个样本的标签或类别。
+
+data中的每一行是一个样本：
+第一个样本 [1, 1, 0] 的标签是 0
+第二个样本 [1, 0, 0] 的标签是 0
+第三个样本 [0, 1, 1] 的标签是 1
+第四个样本 [0, 1, 1] 的标签是 1
+第五个样本 [0, 0, 0] 的标签是 0
+
+我们使用训练好的决策树对新的数据进行预测。
+
+test_data包含两个样本：
+第一个测试样本 [1, 1, 0]
+第二个测试样本 [0, 0, 0]
+
+从输出结果上看，预测结果为：
+
+- 第一个测试样本 [1, 1, 1] 被预测为类别 0
+- 第二个测试样本 [0, 0, 0] 被预测为类别 0
+
+这两个结果都完全正确。
+
+#### 4.3.4 C4.5算法
+
+C4.5算法是由Ross Quinlan在1993年提出的一种改进的决策树算法，它是ID3算法的扩展和改进版本。C4.5算法与ID3算法类似，也是一种用于分类的递归决策树生成算法。C4.5在选择特征进行数据分割时，使用了信息增益比（Gain Ratio）作为度量标准，而不是单纯的信息增益。
+
+在C4.5算法中，信息增益比定义为：
+
+$GainRatio(D,A)=\frac{Gain(D,A)}{IV(A)}$
+
+其中，$Gain(D,A)$ 是特征𝐴对数据集𝐷的信息增益，$IV(A)$ 是特征𝐴的固有值（Intrinsic Value），定义为：
+
+$IV(A)=-\sum_{v\in \text{Values(A)}} \frac{|D_v|}{|D|} \log_2 \frac{|D_v|}{|D|}$
+
+我们用代码实现固有值：
+
+```python
+    def _intrinsic_value(self, data, feature):
+        # 使用 NumPy 的 unique 函数找出指定特征列中的所有不同值以及它们出现的次数
+        values, counts = np.unique(data[:, feature], return_counts=True)
+        # 计算每个不同特征值出现的概率。这是通过将每个特征值的出现次数除以数据集的总长度来实现的
+        probabilities = counts / len(data)
+        return -np.sum(probabilities * np.log2(probabilities))
+```
+
+然后我们计算信息增益比：
+
+```python
+    def _gain_ratio(self, data, labels, feature):
+        info_gain = self._information_gain(data, labels, feature)
+        intrinsic_value = self._intrinsic_value(data, feature)
+        if intrinsic_value == 0:
+            return 0
+        return info_gain / intrinsic_value
+```
+
+将代码串起来：
+
+```python
+import numpy as np
+
+class C45:
+    def __init__(self):
+        self.tree = {}
+
+    def fit(self, data, labels):
+        self.tree = self._build_tree(data, labels)
+        return self.tree
+
+    def _entropy(self, labels):
+        _, counts = np.unique(labels, return_counts=True)
+        probabilities = counts / len(labels)
+        return -np.sum(probabilities * np.log2(probabilities))
+
+    def _information_gain(self, data, labels, feature):
+        original_entropy = self._entropy(labels)
+        values, counts = np.unique(data[:, feature], return_counts=True)
+        weighted_entropy = sum((counts[i] / np.sum(counts)) * self._entropy(labels[data[:, feature] == values[i]]) for i in range(len(values)))
+        return original_entropy - weighted_entropy
+
+    def _intrinsic_value(self, data, feature):
+        values, counts = np.unique(data[:, feature], return_counts=True)
+        probabilities = counts / len(data)
+        return -np.sum(probabilities * np.log2(probabilities))
+
+    def _gain_ratio(self, data, labels, feature):
+        info_gain = self._information_gain(data, labels, feature)
+        intrinsic_value = self._intrinsic_value(data, feature)
+        if intrinsic_value == 0:
+            return 0
+        return info_gain / intrinsic_value
+
+    def _best_feature(self, data, labels):
+        n_features = data.shape[1]
+        gain_ratios = [self._gain_ratio(data, labels, feature) for feature in range(n_features)]
+        return np.argmax(gain_ratios)
+
+    def _build_tree(self, data, labels):
+        if len(np.unique(labels)) == 1:
+            return labels[0]
+        if data.shape[1] == 0:
+            return np.bincount(labels).argmax()
+        
+        best_feature = self._best_feature(data, labels)
+        tree = {best_feature: {}}
+        unique_values = np.unique(data[:, best_feature])
+
+        for value in unique_values:
+            subset_data = data[data[:, best_feature] == value]
+            subset_labels = labels[data[:, best_feature] == value]
+            subtree = self._build_tree(np.delete(subset_data, best_feature, axis=1), subset_labels)
+            tree[best_feature][value] = subtree
+
+        return tree
+
+    def predict(self, data):
+        return np.array([self._predict_single(sample, self.tree) for sample in data])
+
+    def _predict_single(self, sample, tree):
+        if not isinstance(tree, dict):
+            return tree
+        feature = next(iter(tree))
+        feature_value = sample[feature]
+        if feature_value in tree[feature]:
+            return self._predict_single(sample, tree[feature][feature_value])
+        else:
+            return np.bincount(list(tree[feature].values())).argmax()
+
+# 示例数据集
+data = np.array([
+    [1, 1, 0],
+    [1, 0, 0],
+    [0, 1, 1],
+    [0, 1, 1],
+    [0, 0, 0]
+])
+labels = np.array([0, 0, 1, 1, 0])
+
+# 创建C4.5实例并训练
+c45 = C45()
+tree = c45.fit(data, labels)
+print("Decision Tree:", tree)
+
+# 预测
+test_data = np.array([
+    [0, 1, 1],
+    [0, 0, 0]
+])
+predictions = c45.predict(test_data)
+print("Predictions:", predictions)
+```
+
+输出如下：
+```
+Decision Tree: {2: {0: 0, 1: 1}}
+Predictions: [1 0]
+```
+
+可见结果也是正确的。
+
+#### 4.3.5 剪枝
+
+剪枝（Pruning）是决策树算法中防止过拟合的一种重要技术。过拟合是指模型在训练数据上表现很好，但在新数据上表现较差。剪枝通过减少决策树的复杂度来提高模型的泛化能力。决策树剪枝主要有两种方法：预剪枝（Pre-pruning）和后剪枝（Post-pruning）。
+
+预剪枝是在构建决策树的过程中，通过设置一些条件提前停止树的生长，避免生成过于复杂的树。这些条件通常包括：
+
+| 参数名称   | 描述                                                 |
+| ---------- | ---------------------------------------------------- |
+| 最大深度   | 设置树的最大深度，超过这个深度的节点不再分裂。       |
+| 最小样本数 | 设置节点分裂所需的最小样本数，样本数小于这个值的节点不再分裂。 |
+| 最小增益   | 设置分裂所需的最小信息增益或基尼系数增益，增益小于这个值时不再分裂。 |
+
+下面我们就在CART算法中加入预剪枝的三个参数：
+
+```python
+class CART:
+    def __init__(self, max_depth=None, min_samples_split=2, min_gain=0):
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.min_gain = min_gain
+        self.tree = {}
+```
+
+预剪枝并不需要专门的剪枝函数，而是在构建决策树的过程中，通过设置这些参数来控制树的生长。我们在构建决策树的过程中，对每个节点都会检查这些参数，如果满足预剪枝条件，则停止分裂。例如，我们在构建树的过程中，对每个节点都会检查是否达到最大深度，如果达到最大深度，则停止分裂。
+
+```python
+    def _build_tree(self, data, labels, depth):
+        if len(np.unique(labels)) == 1:
+            return labels[0]
+        if self.max_depth is not None and depth >= self.max_depth:
+            return np.bincount(labels).argmax()
+        if len(labels) < self.min_samples_split:
+            return np.bincount(labels).argmax()
+```
+
+我们来看下完整代码：
+
+```python
+import numpy as np
+
+class CART:
+    def __init__(self, max_depth=None, min_samples_split=2, min_gain=0):
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.min_gain = min_gain
+        self.tree = {}
+
+    def fit(self, data, labels):
+        self.tree = self._build_tree(data, labels, depth=0)
+        return self.tree
+
+    def _gini(self, labels):
+        _, counts = np.unique(labels, return_counts=True)
+        probabilities = counts / len(labels)
+        return 1 - np.sum(probabilities ** 2)
+
+    def _best_split(self, data, labels):
+        best_gini = float('inf')
+        best_split = None
+        n_features = data.shape[1]
+
+        for feature in range(n_features):
+            thresholds = np.unique(data[:, feature])
+            for threshold in thresholds:
+                left_mask = data[:, feature] <= threshold
+                right_mask = data[:, feature] > threshold
+                left_labels = labels[left_mask]
+                right_labels = labels[right_mask]
+
+                if len(left_labels) == 0 or len(right_labels) == 0:
+                    continue
+
+                weighted_gini = (len(left_labels) * self._gini(left_labels) + len(right_labels) * self._gini(right_labels)) / len(labels)
+
+                if weighted_gini < best_gini:
+                    best_gini = weighted_gini
+                    best_split = (feature, threshold)
+
+        return best_split
+
+    def _build_tree(self, data, labels, depth):
+        if len(np.unique(labels)) == 1:
+            return labels[0]
+        if self.max_depth is not None and depth >= self.max_depth:
+            return np.bincount(labels).argmax()
+        if len(labels) < self.min_samples_split:
+            return np.bincount(labels).argmax()
+
+        best_split = self._best_split(data, labels)
+        if best_split is None:
+            return np.bincount(labels).argmax()
+
+        feature, threshold = best_split
+        left_mask = data[:, feature] <= threshold
+        right_mask = data[:, feature] > threshold
+        left_data, right_data = data[left_mask], data[right_mask]
+        left_labels, right_labels = labels[left_mask], labels[right_mask]
+
+        if self._gini(labels) - (len(left_labels) * self._gini(left_labels) + len(right_labels) * self._gini(right_labels)) / len(labels) < self.min_gain:
+            return np.bincount(labels).argmax()
+
+        left_branch = self._build_tree(left_data, left_labels, depth + 1)
+        right_branch = self._build_tree(right_data, right_labels, depth + 1)
+        return {feature: {'threshold': threshold, 'left': left_branch, 'right': right_branch}}
+
+    def predict(self, data):
+        return np.array([self._predict_single(sample, self.tree) for sample in data])
+
+    def _predict_single(self, sample, tree):
+        if not isinstance(tree, dict):
+            return tree
+        feature = list(tree.keys())[0]
+        if sample[feature] <= tree[feature]['threshold']:
+            return self._predict_single(sample, tree[feature]['left'])
+        else:
+            return self._predict_single(sample, tree[feature]['right'])
+
+# 示例数据集
+data = np.array([
+    [1, 1, 0],
+    [1, 0, 0],
+    [0, 1, 1],
+    [0, 1, 1],
+    [0, 0, 0]
+])
+labels = np.array([0, 0, 1, 1, 0])
+
+# 创建CART实例并训练
+cart = CART(max_depth=2, min_samples_split=2, min_gain=0.01)
+tree = cart.fit(data, labels)
+print("Decision Tree:", tree)
+
+# 预测
+test_data = np.array([
+    [1, 1, 1],
+    [0, 0, 0]
+])
+predictions = cart.predict(test_data)
+print("Predictions:", predictions)
+```
+
+后剪枝是在构建完整的决策树之后，再对树进行简化。常见的后剪枝策略有：
+
+- 基于验证集的剪枝：将数据集分为训练集和验证集，首先用训练集构建完整的决策树，然后在验证集上进行剪枝，去掉那些对验证集性能贡献不大的节点。
+- 代价复杂度剪枝（Cost Complexity Pruning）：通过引入一个惩罚项来控制树的复杂度。具体做法是：
+    - 对每个非叶子节点计算剪枝后的代价复杂度。
+    - 从最小的代价复杂度开始剪枝，直到树的性能不再提升。
+
+| 剪枝方法  | 描述            |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| 基于验证集的剪枝              | 将数据集分为训练集和验证集，首先用训练集构建完整的决策树，然后在验证集上进行剪枝，去掉那些对验证集性能贡献不大的节点。                       |
+| 代价复杂度剪枝（Cost Complexity Pruning） | 通过引入一个惩罚项来控制树的复杂度。具体做法是：<br>1. 对每个非叶子节点计算剪枝后的代价复杂度。<br>2. 从最小的代价复杂度开始剪枝，直到树的性能不再提升。 |
+
+下面我们实现一个基于验证集的剪枝。这个方法通过递归的方式，不断地评估决策树的每个非叶节点，决定是否将其剪枝为叶节点，以此来优化决策树的性能。
+
+```python
+    # tree 是待剪枝的决策树，validation_data 是验证数据集（用于评估剪枝效果），validation_labels 是对应的验证标签集
+    def _prune_tree(self, tree, validation_data, validation_labels):
+        # 检查当前的树节点是否是字典类型，如果不是，说明已经到达叶节点，直接返回节点的值
+        if not isinstance(tree, dict):
+            return tree
+
+        feature = list(tree.keys())[0]
+        left_tree = tree[feature]['left']
+        right_tree = tree[feature]['right']
+
+        left_mask = validation_data[:, feature] <= tree[feature]['threshold']
+        right_mask = validation_data[:, feature] > tree[feature]['threshold']
+        # 根据当前节点的阈值，生成左右子树的验证数据掩码
+        left_data, right_data = validation_data[left_mask], validation_data[right_mask]
+        left_labels, right_labels = validation_labels[left_mask], validation_labels[right_mask]
+
+        # 如果左子树或右子树的验证数据为空，说明没有足够的样本进行剪枝评估，此时返回验证标签中出现次数最多的标签作为叶节点的预测结果
+        if left_data.size == 0 or right_data.size == 0:
+            return np.bincount(validation_labels).argmax()
+
+        # 递归地对左右子树进行剪枝操作
+        tree[feature]['left'] = self._prune_tree(left_tree, left_data, left_labels)
+        tree[feature]['right'] = self._prune_tree(right_tree, right_data, right_labels)
+
+        # 如果左右子树都已经剪枝为叶节点，进行下一步的剪枝评估
+        if not isinstance(tree[feature]['left'], dict) and not isinstance(tree[feature]['right'], dict):
+            # 获取左右子树的预测结果
+            left_pred = tree[feature]['left']
+            right_pred = tree[feature]['right']
+            # 计算左右子树的预测错误率
+            left_error = np.sum(left_labels != left_pred)
+            right_error = np.sum(right_labels != right_pred)
+            # 计算合并后的错误率
+            combined_error = left_error + right_error
+
+            # 获取将当前节点剪枝为叶节点时的预测结果
+            leaf_pred = np.bincount(validation_labels).argmax()
+            # 计算剪枝为叶节点时的错误率
+            leaf_error = np.sum(validation_labels != leaf_pred)
+
+            # 如果剪枝为叶节点的错误率不大于合并后的错误率，说明剪枝可以提高模型性能，此时返回叶节点的预测结果，完成剪枝
+            if leaf_error <= combined_error:
+                return leaf_pred
+
+        return tree
+```
+
+最后，我们把前后剪枝的代码串起来：
+
+```python
+import numpy as np
+
+class CART:
+    def __init__(self, max_depth=None, min_samples_split=2, min_gain=0):
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.min_gain = min_gain
+        self.tree = {}
+
+    def fit(self, data, labels, validation_data=None, validation_labels=None):
+        self.tree = self._build_tree(data, labels, depth=0)
+        if validation_data is not None and validation_labels is not None:
+            self._prune_tree(self.tree, validation_data, validation_labels)
+        return self.tree
+
+    def _gini(self, labels):
+        _, counts = np.unique(labels, return_counts=True)
+        probabilities = counts / len(labels)
+        return 1 - np.sum(probabilities ** 2)
+
+    def _best_split(self, data, labels):
+        best_gini = float('inf')
+        best_split = None
+        n_features = data.shape[1]
+
+        for feature in range(n_features):
+            thresholds = np.unique(data[:, feature])
+            for threshold in thresholds:
+                left_mask = data[:, feature] <= threshold
+                right_mask = data[:, feature] > threshold
+                left_labels = labels[left_mask]
+                right_labels = labels[right_mask]
+
+                if len(left_labels) == 0 or len(right_labels) == 0:
+                    continue
+
+                weighted_gini = (len(left_labels) * self._gini(left_labels) + len(right_labels) * self._gini(right_labels)) / len(labels)
+
+                if weighted_gini < best_gini:
+                    best_gini = weighted_gini
+                    best_split = (feature, threshold)
+
+        return best_split
+
+    def _build_tree(self, data, labels, depth):
+        if len(np.unique(labels)) == 1:
+            return labels[0]
+        if self.max_depth is not None and depth >= self.max_depth:
+            return np.bincount(labels).argmax()
+        if len(labels) < self.min_samples_split:
+            return np.bincount(labels).argmax()
+
+        best_split = self._best_split(data, labels)
+        if best_split is None:
+            return np.bincount(labels).argmax()
+
+        feature, threshold = best_split
+        left_mask = data[:, feature] <= threshold
+        right_mask = data[:, feature] > threshold
+        left_data, right_data = data[left_mask], data[right_mask]
+        left_labels, right_labels = labels[left_mask], labels[right_mask]
+
+        if self._gini(labels) - (len(left_labels) * self._gini(left_labels) + len(right_labels) * self._gini(right_labels)) / len(labels) < self.min_gain:
+            return np.bincount(labels).argmax()
+
+        left_branch = self._build_tree(left_data, left_labels, depth + 1)
+        right_branch = self._build_tree(right_data, right_labels, depth + 1)
+        return {feature: {'threshold': threshold, 'left': left_branch, 'right': right_branch}}
+
+    def _prune_tree(self, tree, validation_data, validation_labels):
+        if not isinstance(tree, dict):
+            return tree
+
+        feature = list(tree.keys())[0]
+        left_tree = tree[feature]['left']
+        right_tree = tree[feature]['right']
+
+        left_mask = validation_data[:, feature] <= tree[feature]['threshold']
+        right_mask = validation_data[:, feature] > tree[feature]['threshold']
+        left_data, right_data = validation_data[left_mask], validation_data[right_mask]
+        left_labels, right_labels = validation_labels[left_mask], validation_labels[right_mask]
+
+        if left_data.size == 0 or right_data.size == 0:
+            return np.bincount(validation_labels).argmax()
+
+        tree[feature]['left'] = self._prune_tree(left_tree, left_data, left_labels)
+        tree[feature]['right'] = self._prune_tree(right_tree, right_data, right_labels)
+
+        if not isinstance(tree[feature]['left'], dict) and not isinstance(tree[feature]['right'], dict):
+            left_pred = tree[feature]['left']
+            right_pred = tree[feature]['right']
+            left_error = np.sum(left_labels != left_pred)
+            right_error = np.sum(right_labels != right_pred)
+            combined_error = left_error + right_error
+
+            leaf_pred = np.bincount(validation_labels).argmax()
+            leaf_error = np.sum(validation_labels != leaf_pred)
+
+            if leaf_error <= combined_error:
+                return leaf_pred
+
+        return tree
+
+    def predict(self, data):
+        return np.array([self._predict_single(sample, self.tree) for sample in data])
+
+    def _predict_single(self, sample, tree):
+        if not isinstance(tree, dict):
+            return tree
+        feature = list(tree.keys())[0]
+        if sample[feature] <= tree[feature]['threshold']:
+            return self._predict_single(sample, tree[feature]['left'])
+        else:
+            return self._predict_single(sample, tree[feature]['right'])
+
+# 示例数据集
+data = np.array([
+    [1, 1, 0],
+    [1, 0, 0],
+    [0, 1, 1],
+    [0, 1, 1],
+    [0, 0, 0]
+])
+labels = np.array([0, 0, 1, 1, 0])
+
+# 创建验证集
+validation_data = np.array([
+    [1, 1, 1],
+    [0, 0, 1],
+    [1, 0, 1]
+])
+validation_labels = np.array([0, 1, 0])
+
+# 创建CART实例并训练
+cart = CART(max_depth=3, min_samples_split=2, min_gain=0.01)
+tree = cart.fit(data, labels, validation_data, validation_labels)
+print("Decision Tree:", tree)
+
+# 预测
+test_data = np.array([
+    [1, 1, 1],
+    [0, 0, 0]
+])
+predictions = cart.predict(test_data)
+print("Predictions:", predictions)
+```
+
+在测试数据上没问题，那我们换成鸢尾花数据集试试：
+
+```python
+# 加载鸢尾花数据集
+iris = load_iris()
+data, labels = iris.data, iris.target
+
+# 将数据集分为训练集和验证集
+train_data, val_data, train_labels, val_labels = train_test_split(data, labels, test_size=0.2, random_state=42)
+
+# 初始化和训练决策树模型
+model = CART(max_depth=5, min_samples_split=2, min_gain=0.01)
+tree = model.fit(train_data, train_labels, val_data, val_labels)
+
+print("Decision Tree:", tree)
+
+# 预测并评估模型
+predictions = model.predict(val_data)
+accuracy = np.mean(predictions == val_labels)
+print(f"Validation Accuracy: {accuracy:.2f}")
+```
+
+准确率是100%，说明我们做得还不错。
+
+下面我们再挑战一下糖尿病数据集，看看我们的决策树模型的泛化能力：
+
+```python
+# 加载糖尿病数据集
+diabetes = load_diabetes()
+data, labels = diabetes.data, diabetes.target
+
+# 将目标值二值化，以便进行分类任务
+labels = (labels > np.median(labels)).astype(int)
+
+# 将数据集分为训练集和验证集
+train_data, val_data, train_labels, val_labels = train_test_split(data, labels, test_size=0.2, random_state=42)
+
+# 初始化和训练决策树模型
+model = CART(max_depth=5, min_samples_split=2, min_gain=0.01)
+tree=model.fit(train_data, train_labels, val_data, val_labels)
+print("Decision Tree:", tree)
+
+
+# 预测并评估模型
+predictions = model.predict(val_data)
+accuracy = np.mean(predictions == val_labels)
+print(f"Validation Accuracy: {accuracy:.2f}")
+```
+
+运行结果如下：
+
+```
+Decision Tree: {2: {'threshold': 0.008883414898524095, 'left': {8: {'threshold': -0.00422151393810765, 'left': 0, 'right': 1}}, 'right': {3: {'threshold': -0.019441826196154435, 'left': 0, 'right': {0: {'threshold': 0.027178291080364757, 'left': {8: {'threshold': 0.06345271983825305, 'left': {5: {'threshold': 0.09169121572527314, 'left': 1, 'right': 0}}, 'right': 1}}, 'right': 1}}}}}}
+Validation Accuracy: 0.79
+```
+
+准确率是79%，说明我们的决策树模型在糖尿病数据集上的泛化能力还不错。
+
+而且从树结构上看，我们把上节密密麻麻的决策树剪成了一棵小树，而且准确率还有所提升。
+
 ### 4.4 支持向量机
 
 在深度学习流行之前，支持向量机曾经是最有前途的机器学习方向。支持向量机有良好的理论基础，可以解决线性和非线性分类问题，也可以用于回归问题。
