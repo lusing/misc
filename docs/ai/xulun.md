@@ -1,5 +1,9 @@
 # 人工智能学习手册
 
+## 前言
+
+## 内容简介
+
 ## 第一章 机器学习如何快速入门
 
 ### 1.1 机器学习书籍的不可能三角
@@ -2043,7 +2047,7 @@ grad_x = torch.autograd.grad(outputs=y, inputs=x, grad_outputs=torch.ones_like(y
 print(grad_x)  # 输出: (tensor([4.]),)
 ```
 
-## 第四章 监督学习：分类
+## 第四章 监督学习：分类预测
 
 机器学习的主要问题包括两大类：数值预测和分类预测。按理说应该先从数值预测开始讲，但是，一些回归问题用到的工具在分类中先介绍会更容易理解。所以我们先从分类问题开始讲起。
 分类是机器学习中最大的一个分类。很多问题最终都归结到分类问题上。比如手写数字识别，并不是直接识别数字，而是判断这个符号跟哪个数字的分类最接近。
@@ -2067,6 +2071,7 @@ $\sigma(z)=\frac{1}{1+e^{-z}}$​
 逻辑回归模型输出的是样本属于某个类别的概率。例如，对于二分类问题，输出 σ(z) 表示样本属于类别 1 的概率，1−σ(z) 表示样本属于类别 0 的概率。
 
 逻辑回归的实现步骤
+
 - 数据准备：
     - 收集并预处理数据，确保数据质量和格式适合模型训练。
     - 特征缩放和归一化通常是有益的。
@@ -2082,6 +2087,7 @@ $\sigma(z)=\frac{1}{1+e^{-z}}$​
     - 使用训练好的模型对新数据进行分类预测。
 
 逻辑回归在许多领域有广泛的应用，特别适用于二分类问题，但也可以通过一些扩展方法用于多分类问题。
+
 - 医疗诊断：预测病人是否患某种疾病（如糖尿病、心脏病等）。
 - 金融领域：信用评分、贷款违约预测等。
 - 市场营销：客户分类、客户流失预测等。
@@ -2089,21 +2095,20 @@ $\sigma(z)=\frac{1}{1+e^{-z}}$​
 
 
 逻辑回归的优缺点
-- 优点
-    - 简单易理解：逻辑回归模型简单，易于解释和理解。
-    - 计算效率高：训练和预测速度快，适合大规模数据集。
-    - 概率输出：输出的是样本属于某个类别的概率，便于进一步决策。
-    - 特征重要性：模型参数可以解释特征的重要性。
-- 缺点
-    - 线性可分性假设：假设数据是线性可分的，对于非线性关系的分类问题效果不佳。
-    - 过拟合：在特征数量较多的情况下，可能会发生过拟合。
-    - 特征工程要求高：需要对输入特征进行仔细选择和处理。
 
+| 优点                                 | 缺点                                                                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| 简单易理解：逻辑回归模型简单，易于解释和理解。               | 线性可分性假设：假设数据是线性可分的，对于非线性关系的分类问题效果不佳。 |
+| 计算效率高：训练和预测速度快，适合大规模数据集。             | 过拟合：在特征数量较多的情况下，可能会发生过拟合。                       |
+| 概率输出：输出的是样本属于某个类别的概率，便于进一步决策。   | 特征工程要求高：需要对输入特征进行仔细选择和处理。                       |
+| 特征重要性：模型参数可以解释特征的重要性。                   |                                                                           |
 我们可以使用最小二乘法或者梯度下降等方法来求解逻辑回归模型的参数。
 
-#### 4.2.2 用SKlearn实现逻辑回归
+#### 4.1.2 用SKlearn实现逻辑回归
 
 通过sklearn库，我们可以很方便地使用逻辑回归模型。我们只需要调用sklearn.linear_model包中的LogisticRegression类，然后使用fit方法拟合数据，使用predict方法进行预测。
+
+下面我们用LogisticRegression类来分类鸢尾花：
 
 ```python
 # 导入必要的库
@@ -2155,134 +2160,273 @@ print(classification_report(y_test, y_pred, target_names=iris.target_names))
 weighted avg       1.00      1.00      1.00        45
 ```
 
-### 4.2 决策树
+从上述对鸢尾花数据集的分类结果中，可以得出以下结论：
 
-决策树是一种用于分类和回归任务的监督学习算法。它通过一系列的二元（是/否）决策将数据划分为不同的类别或预测连续值。决策树模型通过递归地分割数据空间来构建树形结构，其中每个节点代表一个决策点或分裂点。
+分类器表现非常优秀
 
-决策树由三个主要部分组成：
+- 精确率（precision）、召回率（recall）、和F1-得分（f1-score）均为1.00，表示分类器在所有类别上的性能都是完美的。
+- 精确率为1.00意味着分类器在预测某一类时从未产生误报。
+- 召回率为1.00意味着分类器能够正确识别出所有实际属于某一类的样本。
+- F1-得分为1.00意味着分类器在权衡精确率和召回率时表现出色。
 
-- 根节点（Root Node）：树的起点，包含整个数据集的所有样本。从这里开始，数据被逐步分裂。
-- 内部节点（Internal Nodes）：每个内部节点表示对某个特征的决策或测试。根据特征值，将数据分成两个或多个分支。
-- 叶节点（Leaf Nodes）：叶节点表示最终的分类或回归结果。不再进一步分裂。
+每个类别的分类都很精确：
 
+- 对于setosa、versicolor、virginica三类样本，分类器都能百分之百正确地分类。
+- 支持（support）表示每类样本的数量，setosa有19个样本，versicolor和virginica各有13个样本，分类器在这些样本上的表现均为完美。
+- 整体准确率（accuracy）**为1.00：这表示在45个样本中，分类器没有任何分类错误，所有样本都被正确分类。
 
-决策树通过递归分裂数据集来构建树形模型。常用的分裂标准包括：
+宏平均（macro avg）和加权平均（weighted avg）：
 
-- 信息增益（Information Gain）：基于熵（Entropy）减少的量度。
-- 基尼指数（Gini Index）：衡量数据集的不纯度。
-- 均方误差（Mean Squared Error, MSE）：用于回归问题，衡量预测值与真实值之间的误差。
+- 宏平均（macro avg）为1.00，表示对每个类别的精确率、召回率和F1得分的简单平均。
+- 加权平均（weighted avg）为1.00，表示对每个类别的精确率、召回率和F1得分的加权平均，考虑了每个类别中的样本数量。这进一步说明分类器在所有类别上都表现得非常一致和完美。
 
-具体步骤如下：
+综上所述，分类结果表明，分类器在鸢尾花数据集上的表现是完美的，没有任何分类错误。这通常意味着模型性能极好，但在实际应用中，也需要警惕可能存在的过拟合情况，特别是当样本量较小时。
 
-- 选择最佳分裂特征：
-    - 计算每个特征的分裂标准（如信息增益或基尼指数）。
-    - 选择分裂标准最高的特征。
-- 分裂数据集：根据选择的特征，将数据集分裂成两个或多个子集。
-- 递归构建子树：对每个子集重复步骤1和步骤2，直到满足停止条件（如达到最大树深度或叶节点纯度）。
+可以看到，在完全不了解逻辑回归原理的情况下，我们就可以通过sklearn库来实现逻辑回归模型，而且效果还非常好。
 
-决策树的优缺点
-- 优点
-    - 易于理解和解释：决策树的树形结构直观，决策路径容易理解。
-    - 无需特征缩放：决策树不需要对特征进行归一化或标准化处理。
-    - 处理非线性关系：可以捕捉数据中的复杂非线性关系。
-    - 处理缺失值：可以自然地处理数据中的缺失值。
-- 缺点
-    - 容易过拟合：决策树容易生成过于复杂的模型，从而在训练数据上表现很好，但在测试数据上表现不佳。
-    - 不稳定性：对数据中的微小变化敏感，不同的数据集可能生成完全不同的树。
-    - 偏向于多值特征：在选择分裂特征时，可能偏向于具有更多取值的特征。
+下面我们学习一个可视化工具：DecisionBoundaryDisplay。
 
-决策树的编程与逻辑回归类似，我们只需要调用DecisionTreeClassifier去fit数据就可以了。
+DecisionBoundaryDisplay是sklearn库中的一个工具，用于可视化分类模型的决策边界。它通过绘制决策边界来展示模型在不同类别之间的划分边界，帮助我们理解模型是如何做出分类决策的。
+
+决策边界是指在特征空间中，模型将不同类别的样本划分开的边界。DecisionBoundaryDisplay可以帮助我们直观地了解模型是如何根据输入特征将样本分为不同类别的。通过决策边界的可视化，我们可以观察到哪些特征对于分类起到了关键作用，以及模型可能存在的不足之处。
+
+需要注意的是，DecisionBoundaryDisplay只能绘制二维数据的决策边界，因此在使用时需要确保数据只有两个特征或更少的维度。
+
+下面我们用DecisionBoundaryDisplay来可视化逻辑回归模型在鸢尾花数据集上的决策边界：
 
 ```python
-clf = DecisionTreeClassifier().fit(X, y)
-```
-
-我们还是以鸢尾花数据集为例，来看一下决策树的分类效果，首先我们加载Iris数据集：
-
-```python
-from sklearn.datasets import load_iris
-
-iris = load_iris()
-```
-
-然后我们用决策树来拟合数据：
-
-```python
-import matplotlib.pyplot as plt
+# 导入必要的库
 import numpy as np
-
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.datasets import load_iris
 from sklearn.inspection import DecisionBoundaryDisplay
-from sklearn.tree import DecisionTreeClassifier
 
-# Parameters
-n_classes = 3
-plot_colors = "ryb"
-plot_step = 0.02
+# 加载鸢尾花数据集，数据集的内容我们在第二章已经介绍过了
+iris = load_iris()
+X = iris.data[:, :2]  # 使用前两个特征进行可视化
+y = iris.target
 
+# 将数据集划分为训练集和测试集，在第二章我们也介绍过
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-for pairidx, pair in enumerate([[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]):
-    # We only take the two corresponding features
-    X = iris.data[:, pair]
-    y = iris.target
+# 初始化逻辑回归模型
+log_reg = LogisticRegression(max_iter=200)
 
-    # Train
-    clf = DecisionTreeClassifier().fit(X, y)
+# 训练模型
+log_reg.fit(X_train, y_train)
 
-    # Plot the decision boundary
-    ax = plt.subplot(2, 3, pairidx + 1)
-    plt.tight_layout(h_pad=0.5, w_pad=0.5, pad=2.5)
-    DecisionBoundaryDisplay.from_estimator(
-        clf,
-        X,
-        cmap=plt.cm.RdYlBu,
-        response_method="predict",
-        ax=ax,
-        xlabel=iris.feature_names[pair[0]],
-        ylabel=iris.feature_names[pair[1]],
-    )
+# 使用模型进行预测
+y_pred = log_reg.predict(X_test)
 
-    # Plot the training points
-    for i, color in zip(range(n_classes), plot_colors):
-        idx = np.where(y == i)
-        plt.scatter(
-            X[idx, 0],
-            X[idx, 1],
-            c=color,
-            label=iris.target_names[i],
-            cmap=plt.cm.RdYlBu,
-            edgecolor="black",
-            s=15,
-        )
+# 评估模型
+accuracy = accuracy_score(y_test, y_pred)
+print(f'准确率: {accuracy:.2f}')
 
-plt.suptitle("Decision surface of decision trees trained on pairs of features")
-plt.legend(loc="lower right", borderpad=0, handletextpad=0)
-_ = plt.axis("tight")
-```
+# 打印分类报告
+print("分类报告:")
+print(classification_report(y_test, y_pred, target_names=iris.target_names))
 
+# 绘制决策边界
+plt.figure(figsize=(10, 6))
+DecisionBoundaryDisplay.from_estimator(log_reg, X_train, response_method="predict", alpha=0.5, cmap=plt.cm.RdYlBu)
 
-我们可以看到决策树划分的效果：
-
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/decision_tree.png)
-
-
-我们还可以查看决策树决策过程的结构：
-
-```python
-from sklearn.tree import plot_tree
-from sklearn.tree import DecisionTreeClassifier
-
-plt.figure()
-clf = DecisionTreeClassifier().fit(iris.data, iris.target)
-plot_tree(clf, filled=True)
-plt.title("鸢尾花数据集上决策树的训练过程：",fontproperties=zhfont)
+# 绘制训练数据点
+plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train, edgecolor='k', s=20, cmap=plt.cm.RdYlBu)
+plt.title('Logistic Regression Decision Boundary')
+plt.xlabel(iris.feature_names[0])
+plt.ylabel(iris.feature_names[1])
 plt.show()
 ```
 
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/decision_tree_iris2.png)
+输出的结果如下：
+
+```
+准确率: 0.82
+分类报告:
+              precision    recall  f1-score   support
+
+      setosa       1.00      1.00      1.00        19
+  versicolor       0.78      0.54      0.64        13
+   virginica       0.65      0.85      0.73        13
+
+    accuracy                           0.82        45
+   macro avg       0.81      0.79      0.79        45
+weighted avg       0.83      0.82      0.82        45
+```
+
+小思考：为什么准确率变差了？
+
+刚才说了，分了可视化，我们只取了特征的前两个维度，准确率当然就变差了。
+
+我们来看看绘制的决策边界：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/log_reg_decision_boundary.png)
+
+图中有三种颜色的区域，分别代表逻辑回归模型对不同类别的预测区域。
+- 红色区域：左上角，表示模型预测为第一类（Setosa）。
+- 黄色区域：底部，表示模型预测为第二类（Versicolor）。
+- 蓝色区域：右上角，表示模型预测为第三类（Virginica）。
+
+通过这个图，我们可以看到模型如何依据特征进行分类，以及不同类别之间的分界线位置。这有助于我们理解模型的决策过程，以及哪些特征对分类起到了关键作用。虽然准确率变差了，但是有助于我们直观地了解模型的分类效果。
+
+#### 4.1.3 用逻辑回归来处理糖尿病数据集
+
+再接再厉，我们用逻辑回归来处理糖尿病数据集：
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix
+
+# 加载糖尿病数据集
+diabetes = load_diabetes()
+
+# 创建DataFrame
+X = pd.DataFrame(data=diabetes.data, columns=diabetes.feature_names)
+y = pd.Series(data=diabetes.target, name='target')
+
+# 将目标变量转换为二分类
+# 这里我们假设目标变量大于140视为1（有糖尿病），否则为0（无糖尿病）
+y_binary = (y > 140).astype(int)
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y_binary, test_size=0.2, random_state=42)
+
+# 标准化特征
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# 训练逻辑回归模型
+log_reg = LogisticRegression(max_iter=10000)
+log_reg.fit(X_train_scaled, y_train)
+
+# 进行预测
+y_pred = log_reg.predict(X_test_scaled)
+
+# 输出混淆矩阵和分类报告
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+```
+
+运行结果如下：
+
+```
+Confusion Matrix:
+[[36 13]
+ [11 29]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.77      0.73      0.75        49
+           1       0.69      0.72      0.71        40
+
+    accuracy                           0.73        89
+   macro avg       0.73      0.73      0.73        89
+weighted avg       0.73      0.73      0.73        89
+```
+
+我们首先解释下混淆矩阵的结果：
+
+- 行表示真实类别（实际标签）。
+- 列表示预测类别（模型预测标签）。
+
+|               | 预测为0 | 预测为1 |
+|---------------|---------|---------|
+| 实际为0       | 36      | 13      |
+| 实际为1       | 11      | 29      |
+
+- 36：真实类别为0且预测为0的样本数（真正类，True Negative）。
+- 13：真实类别为0但预测为1的样本数（假阳性，False Positive）。
+- 11：真实类别为1但预测为0的样本数（假阴性，False Negative）。
+- 29：真实类别为1且预测为1的样本数（真正类，True Positive）。
+
+我们再来看几个核心指标：
+
+- precision (精确率): 预测为正类的样本中实际为正类的比例。
+  - 类别0的精确率为0.77。
+  - 类别1的精确率为0.69。
+
+- recall (召回率): 实际为正类的样本中被正确预测为正类的比例。
+  - 类别0的召回率为0.73。
+  - 类别1的召回率为0.72。
+
+- f1-score: 精确率和召回率的调和平均数，用于权衡两者之间的关系。
+  - 类别0的F1得分为0.75。
+  - 类别1的F1得分为0.71。
+
+- support: 每个类别中样本的实际数量。
+  - 类别0有49个样本。
+  - 类别1有40个样本。
+
+- accuracy (准确率): 总体预测正确的比例，为0.73（即73%的准确率）。
+
+- macro avg (宏平均): 各类别指标的简单平均。
+  - 宏平均精确率、召回率和F1得分均为0.73。
+
+- weighted avg (加权平均): 各类别指标的加权平均，权重为每个类别中的样本数量。
+  - 加权平均精确率、召回率和F1得分均为0.73。
+
+下面我们将上面的ROC曲线画出来，代码的详细解释我直接写在对应的代码里：
+
+```python
+# 计算ROC曲线和AUC值
+
+# 使用训练好的逻辑回归模型 log_reg 对标准化后的测试数据 X_test_scaled 进行预测，返回的是每个样本属于各个类别的概率。
+# [:, 1]：选择属于类别1的概率，这些概率将用于计算ROC曲线。
+y_prob = log_reg.predict_proba(X_test_scaled)[:, 1]
+
+# roc_curve(y_test, y_prob)：计算假阳性率（FPR）、真阳性率（TPR）和阈值（thresholds）。FPR 和 TPR 将用于绘制 ROC 曲线。
+fpr, tpr, thresholds = roc_curve(y_test, y_prob)
+# auc(fpr, tpr)：计算ROC曲线下面积（AUC值），用于量化模型的整体性能。
+roc_auc = auc(fpr, tpr)
+
+# 绘制ROC曲线
+
+# 创建一个新的绘图对象。
+plt.figure()
 
 
-### 4.3 随机梯度下降
+# 绘制ROC曲线。
+# - fpr：假阳性率数组。
+# - tpr：真阳性率数组。
+# - color='darkorange'：曲线颜色为深橙色。
+# - lw=2：曲线宽度。
+# - label=f'ROC curve (area = {roc_auc:.2f})'：曲线标签，显示AUC值（保留两位小数）。
+
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+
+# 绘制基线（对角线），表示随机猜测的性能。
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+
+# 设置x轴范围为0到1。
+plt.xlim([0.0, 1.0])
+
+# 设置y轴范围为0到1.05。
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc="lower right")
+plt.show()
+```
+
+绘制出来的结果如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/roc_log_dia.png)
+
+### 4.2 随机梯度下降
 
 在SKlearn库中的文档中也承认，随机梯度下降是一种优化算法，放在监督学习的算法中是不合适的。它是梯度下降的一种变体，通过随机选择样本来估计梯度，从而加快训练速度。与传统的梯度下降法不同，随机梯度下降每次迭代只使用一个样本来更新模型参数，而不是使用所有样本的平均梯度。这种随机性使得随机梯度下降具有更快的收敛速度和更低的计算复杂度。
 
@@ -2310,65 +2454,1226 @@ $\theta = \theta - \eta \nabla_\theta J(\theta; x^{(i)}, y^{(i)})$
 随机梯度下降每次只使用一个样本来更新参数，因此计算速度快，适合大规模数据集。
 
 随机梯度下降的优点和缺点
-- 优点
-    - 计算效率高：每次迭代只处理一个样本，计算速度快，内存占用小。
-    - 适用于大数据集：能够在大规模数据集上高效工作。
-    - 在线学习：可以用于在线学习，适应动态变化的数据。
-- 缺点
-    - 收敛速度慢：由于每次更新的梯度方向波动较大，收敛速度可能慢于批量梯度下降。
-    - 收敛不稳定：可能在最优值附近来回震荡，导致收敛不稳定。
-    - 需要调参：学习率的选择对收敛效果影响较大，需要通过实验调整。
+
+| 优点 | 缺点 |
+| --- | --- |
+| 计算效率高 | 收敛速度慢 |
+| 适用于大数据集 | 收敛不稳定 |
+| 在线学习 | 需要调参 |
 
 为了在计算效率和收敛稳定性之间找到平衡，可以使用 Mini-batch 梯度下降。它在每次迭代时使用一小批量样本（mini-batch）来计算梯度。这种方法结合了标准梯度下降和 SGD 的优点，既提高了计算效率，又减少了梯度的波动。
 
+#### 4.2.1 用SGDClassifier进行分类
+
 下面我们看一下使用随机梯度下降对鸢尾花数据集进行分类的例子：
 
-首先我们导入相关的库：
-
 ```python
-import numpy as np  # 导入NumPy库
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import confusion_matrix, classification_report, roc_curve, auc
+import matplotlib.pyplot as plt
+import numpy as np
 
-from sklearn import datasets  # 从sklearn导入数据集
-from sklearn.linear_model import SGDClassifier  # 从sklearn导入SGD分类器
-```
-
-接着，我们要加载鸢尾花数据集。然后，它选择了数据集的前两个特征，并打乱数据的顺序：
-
-```python
 # 加载鸢尾花数据集
 iris = datasets.load_iris()
-
-# 只取前两个特征
-X = iris.data[:, :2]
+X = iris.data
 y = iris.target
-colors = "bry"  # 定义颜色列表
 
-# 打乱数据顺序
-idx = np.arange(X.shape[0])
-np.random.seed(13)  # 设置随机种子以保证结果可复现
-np.random.shuffle(idx)
-X = X[idx]
-y = y[idx]
+# 数据预处理
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# 分割数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 初始化SGD分类器
+sgd_clf = SGDClassifier(random_state=42)
+
+# 训练模型
+sgd_clf.fit(X_train, y_train)
+
+# 测试模型
+y_pred_train = sgd_clf.predict(X_train)
+y_pred_test = sgd_clf.predict(X_test)
+
+# 计算混淆矩阵
+conf_matrix = confusion_matrix(y_test, y_pred_test)
+print("Confusion Matrix:")
+print(conf_matrix)
+
+# 打印分类报告
+class_report = classification_report(y_test, y_pred_test)
+print("Classification Report:")
+print(class_report)
 ```
 
-接下来，我们需要对特征进行了标准化处理，以消除特征之间的尺度差异：
+我们来看下混淆矩阵和分类报告：
+
+```
+Confusion Matrix:
+[[10  0  0]
+ [ 0  9  0]
+ [ 0  0 11]]
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00        10
+           1       1.00      1.00      1.00         9
+           2       1.00      1.00      1.00        11
+
+    accuracy                           1.00        30
+   macro avg       1.00      1.00      1.00        30
+weighted avg       1.00      1.00      1.00        30
+```
+
+我们可以看到，随机梯度下降在鸢尾花数据集上的分类效果非常好，准确率达到了100%。
+
+下面我们再用SDGClassifier来处理糖尿病数据集：
 
 ```python
-# 标准化特征
-mean = X.mean(axis=0)
-std = X.std(axis=0)
-X = (X - mean) / std
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_curve, auc
+
+# 加载糖尿病数据集
+diabetes = datasets.load_diabetes()
+X = diabetes.data
+y = (diabetes.target > diabetes.target.mean()).astype(int)  # 目标值二值化
+
+# 数据预处理
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# 分割数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 训练模型
+clf = SGDClassifier(loss='log', max_iter=1000, tol=1e-3, random_state=42)
+clf.fit(X_train, y_train)
+
+# 预测结果
+y_pred_train = clf.predict(X_train)
+y_pred_test = clf.predict(X_test)
+
+# 计算准确率
+train_accuracy = accuracy_score(y_train, y_pred_train)
+test_accuracy = accuracy_score(y_test, y_pred_test)
+
+print(f"Train Accuracy: {train_accuracy}")
+print(f"Test Accuracy: {test_accuracy}")
+
+# 计算混淆矩阵
+conf_matrix = confusion_matrix(y_test, y_pred_test)
+print("Confusion Matrix:")
+print(conf_matrix)
+
+# 打印分类报告
+class_report = classification_report(y_test, y_pred_test)
+print("Classification Report:")
+print(class_report)
+
+# 计算 ROC 曲线
+y_pred_prob = clf.predict_proba(X_test)[:, 1]
+fpr, tpr, _ = roc_curve(y_test, y_pred_prob)
+roc_auc = auc(fpr, tpr)
+
+# 绘制 ROC 曲线
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc="lower right")
+plt.show()
 ```
 
-下面使用SGDClassifier创建一个SGD分类器，然后使用fit方法对数据集进行了拟合。
+输出结果如下：
+
+```
+Train Accuracy: 0.71671388101983
+Test Accuracy: 0.7415730337078652
+Confusion Matrix:
+[[40 10]
+ [13 26]]
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.75      0.80      0.78        50
+           1       0.72      0.67      0.69        39
+
+    accuracy                           0.74        89
+   macro avg       0.74      0.73      0.74        89
+weighted avg       0.74      0.74      0.74        89
+```
+
+绘制出来的ROC曲线如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/roc_sgd_dia.png)
+
+#### 4.2.2 用JAX实现逻辑回归
+
+SDGClassifier是sklearn库中的一个工具，我们可以直接使用，但是并不了解其原理。
+下面我们用JAX库来实现逻辑回归模型，这样我们就可以更深入地了解逻辑回归的原理。这部分跟后面要讲到的深度学习关系密切。
 
 ```python
-# 创建SGD分类器并拟合数据
-clf = SGDClassifier(alpha=0.001, max_iter=100).fit(X, y)
+import jax
+import jax.numpy as jnp
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import numpy as np
+
+# 在Jupyter Notebook中使用TPU时的设置
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载糖尿病数据集
+diabetes = datasets.load_diabetes()
+X = diabetes.data
+y = (diabetes.target > diabetes.target.mean()).astype(int)  # 目标值二值化
+
+# 数据预处理
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# 分割数据集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 初始化参数
+key = jax.random.PRNGKey(0)
+w = jax.random.normal(key, (X_train.shape[1],))
+b = 0.0
+
+# 定义逻辑回归模型
+@jax.jit
+def sigmoid(x):
+    return 1 / (1 + jnp.exp(-x))
+
+@jax.jit
+def predict(w, b, X):
+    return sigmoid(jnp.dot(X, w) + b)
+
+# 定义损失函数（对数损失）
+@jax.jit
+def loss_fn(w, b, X, y):
+    preds = predict(w, b, X)
+    loss = -jnp.mean(y * jnp.log(preds) + (1 - y) * jnp.log(1 - preds))
+    return loss
+
+# 梯度计算
+grad_fn = jax.jit(jax.grad(loss_fn, argnums=(0, 1)))
+
+# 训练模型
+learning_rate = 0.1
+epochs = 1000
+
+for epoch in range(epochs):
+    grads_w, grads_b = grad_fn(w, b, X_train, y_train)
+    w -= learning_rate * grads_w
+    b -= learning_rate * grads_b
+
+    if epoch % 100 == 0:
+        loss = loss_fn(w, b, X_train, y_train)
+        print(f"Epoch {epoch}, Loss: {loss}")
+
+# 测试模型
+y_pred_train = predict(w, b, X_train)
+y_pred_test = predict(w, b, X_test)
+
+# 将预测结果转换为分类标签
+y_pred_train_class = (y_pred_train > 0.5).astype(int)
+y_pred_test_class = (y_pred_test > 0.5).astype(int)
+
+# 计算准确率
+train_accuracy = accuracy_score(y_train, y_pred_train_class)
+test_accuracy = accuracy_score(y_test, y_pred_test_class)
+
+print(f"Train Accuracy: {train_accuracy}")
+print(f"Test Accuracy: {test_accuracy}")
+
+# 计算混淆矩阵
+conf_matrix = confusion_matrix(y_test, y_pred_test_class)
+print("Confusion Matrix:")
+print(conf_matrix)
+
+# 打印分类报告
+class_report = classification_report(y_test, y_pred_test_class)
+print("Classification Report:")
+print(class_report)
+
+# 计算 ROC 曲线
+fpr, tpr, _ = roc_curve(y_test, y_pred_test)
+roc_auc = auc(fpr, tpr)
+
+# 绘制 ROC 曲线
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc="lower right")
+plt.show()
 ```
 
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/sgd_iris.png)
+运行结果如下：
+```
+Epoch 0, Loss: 0.8585748076438904
+Epoch 100, Loss: 0.48745399713516235
+Epoch 200, Loss: 0.47592517733573914
+Epoch 300, Loss: 0.4739748537540436
+Epoch 400, Loss: 0.47342705726623535
+Epoch 500, Loss: 0.47317200899124146
+Epoch 600, Loss: 0.4729995131492615
+Epoch 700, Loss: 0.47285935282707214
+Epoch 800, Loss: 0.47273680567741394
+Epoch 900, Loss: 0.4726276397705078
+Train Accuracy: 0.7422096317280453
+Test Accuracy: 0.7303370786516854
+Confusion Matrix:
+[[41  9]
+ [15 24]]
+Classification Report:
+              precision    recall  f1-score   support
 
+           0       0.73      0.82      0.77        50
+           1       0.73      0.62      0.67        39
+
+    accuracy                           0.73        89
+   macro avg       0.73      0.72      0.72        89
+weighted avg       0.73      0.73      0.73        89
+```
+
+这个结果，跟使用SGDClassifier的结果基本一致，说明我们的逻辑回归模型写得还不错。
+
+ROC曲线也是差不多：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/roc_jax_sgd_dia.png)
+
+要理解这部分代码，我们还得复习一下逻辑回归的原理。
+
+4.1节中讲过，Logistic 函数（Sigmoid 函数）的数学表达式为：$\sigma(z)=\frac{1}{1+e^{-z}}$​
+ 
+其中，z是线性回归模型的输出，即：$z=\beta_0+\beta_1 x_1+...+\beta_n x_n$
+
+在上式中，$\beta_0,\beta_1,...,\beta_n$是模型参数，$x_1,...,x_n$是输入特征。
+
+逻辑回归模型输出的是样本属于某个类别的概率。例如，对于二分类问题，输出 σ(z) 表示样本属于类别 1 的概率，1−σ(z) 表示样本属于类别 0 的概率。
+
+于是我们就实现这个sigmoid函数：
+
+```python
+@jax.jit
+def sigmoid(x):
+    return 1 / (1 + jnp.exp(-x))
+```
+
+@jax.jit 是 JAX 的 Just-In-Time 编译器装饰器，通过 JIT 编译可以提升函数的执行效率。
+
+然后定义预测函数：
+
+```python
+@jax.jit
+def predict(w, b, X):
+    return sigmoid(jnp.dot(X, w) + b)
+```
+
+predict 计算输入样本 X 对应的预测概率。具体步骤是先计算线性组合 jnp.dot(X, w) + b，然后应用 sigmoid 函数。
+参数：
+
+- w：模型权重向量。
+- b：模型偏置。
+- X：输入数据矩阵。
+
+下面我们定义损失函数。损失函数（Loss Function），也称为代价函数（Cost Function）或误差函数（Error Function），是用于评估模型预测结果与真实结果之间差异的函数。在机器学习和深度学习中，损失函数的主要作用是为模型提供一个优化目标，使得模型能够逐步调整其参数，以最小化预测误差。
+
+在逻辑回归中，常用的损失函数是对数损失（Log Loss）或二元交叉熵损失（Binary Cross-Entropy Loss）。
+
+二元交叉熵损失（Binary Cross-Entropy Loss），也称为对数损失（Log Loss），是一种用于二分类问题的损失函数。它衡量的是模型预测的概率分布与真实分布之间的差异。具体来说，二元交叉熵损失计算的是每个样本的真实标签与预测标签之间的不确定性（即信息熵）。
+
+计算公式如下：$\text{Loss}=-\frac{1}{N}\sum_{i=1}^N[y_i log(p_i)+(1-y_i)log(1-p_i)]$
+
+代码实现如下，基本就是照搬公式：
+
+```python
+@jax.jit
+def loss_fn(w, b, X, y):
+    preds = predict(w, b, X)
+    loss = -jnp.mean(y * jnp.log(preds) + (1 - y) * jnp.log(1 - preds))
+    return loss
+```
+
+下面是梯度计算：
+
+```python
+grad_fn = jax.jit(jax.grad(loss_fn, argnums=(0, 1)))
+```
+
+grad_fn 计算损失函数 loss_fn 对参数 (w, b) 的梯度。
+
+对应公式$\theta = \theta - \eta \nabla_\theta J(\theta)$中的$\nabla_\theta J(\theta)$。
+
+下面是梯度下降的真正下降过程了，我们按照上面的公式实现：
+
+```python
+learning_rate = 0.1
+epochs = 1000
+
+for epoch in range(epochs):
+    grads_w, grads_b = grad_fn(w, b, X_train, y_train)
+    w -= learning_rate * grads_w
+    b -= learning_rate * grads_b
+```
+
+训练好之后，我们就可以调用模型进行预测：
+
+```python
+y_pred_train = predict(w, b, X_train)
+y_pred_test = predict(w, b, X_test)
+```
+
+predict预测函数返回的是概率，我们可以根据阈值0.5来判断类别。
+
+```python
+y_pred_train_class = (y_pred_train > 0.5).astype(int)
+y_pred_test_class = (y_pred_test > 0.5).astype(int)
+```
+
+到这一节为止，我们终于把逻辑回归的原理彻底讲明白了。
+
+### 4.3 决策树
+
+决策树是一种用于分类和回归任务的监督学习算法。它通过一系列的二元（是/否）决策将数据划分为不同的类别或预测连续值。决策树模型通过递归地分割数据空间来构建树形结构，其中每个节点代表一个决策点或分裂点。
+
+决策树由三个主要部分组成：
+
+- 根节点（Root Node）：树的起点，包含整个数据集的所有样本。从这里开始，数据被逐步分裂。
+- 内部节点（Internal Nodes）：每个内部节点表示对某个特征的决策或测试。根据特征值，将数据分成两个或多个分支。
+- 叶节点（Leaf Nodes）：叶节点表示最终的分类或回归结果。不再进一步分裂。
+
+我们来看一个实际中用决策树判断鸢尾花种类的例子：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/iris_decision_tree.png)
+
+我们来看图中的根节点：
+
+| 决策规则                | 基尼系数 (Gini) | 样本数量 (Samples) | 类别分布 (Value) | 预测类别 (Class) |
+|-------------------------|-----------------|---------------------|------------------|------------------|
+| petal length (cm) <= 2.45 | 0.664           | 105                 | [31, 37, 37]     | versicolor       |
+
+
+根节点表示所有样本的起始点。一共有105个样本，其中31个属于类别0（setosa）、37个属于类别1（versicolor）和37个属于类别2（virginica）。根据 petal length 特征的值是否小于等于2.45，将数据分成两个子集。
+
+下面我们开始树的第一次分裂：
+
+| 节点               | 决策规则                | 基尼系数 | 样本数量 | 类别分布    | 预测类别   |
+|--------------------|-------------------------|----------|----------|-------------|------------|
+| 左子节点（第一级） | petal length (cm) <= 2.45 | 0.0      | 31       | [31, 0, 0]  | setosa     |
+| 右子节点（第一级） | petal length (cm) > 2.45  | 0.5      | 74       | [0, 37, 37] | versicolor |
+
+我们看到，第一级左子节点的基尼系数为0.0，表示该节点是纯的，所有样本都属于类别0（setosa）。因此，该节点不再分裂，直接预测为 setosa。所以，这个节点是叶子节点。
+
+这第一次分类，就已经将三种鸢尾花之中的Setosa（山鸢尾）共31个完部分出来了。后面要么是Versicolor（变色鸢尾），要么是Virginica（维吉尼亚鸢尾）。
+右子树就是内部节点，它包含74个样本，其中37个属于类别1（versicolor）和37个属于类别2（virginica）。
+
+我们再来看右子树的第二次分裂：
+
+| 节点               | 决策规则                | 基尼系数 | 样本数量 | 类别分布    | 预测类别   |
+|--------------------|-------------------------|----------|----------|-------------|------------|
+| 左子节点（第二级） | petal length (cm) <= 4.75 | 0.5      | 33       | [0, 32, 1]  | versicolor |
+| 右子节点（第二级） | petal length (cm) > 4.75  | 0.214    | 41       | [0, 5, 36]  | virginica  |
+
+
+根据这一个条件，左子树将Versicolor（变色鸢尾）中的32个样本完全分出来了，右子树将Virginica（维吉尼亚鸢尾）中的36个样本完全分出来了。左子树只需要再分一次将32个Versicolor（变色鸢尾）与唯一一个Virginica（维吉尼亚鸢尾）分离。而右子树遇到了点困难，需要多分几次。
+
+通过这样的决策树的图，是不是对于鸢尾花的分类特征有了很直观的认识了？
+
+#### 4.3.1 用DecisionTreeClassifier调用决策树
+
+SKlearn库中的决策树分类器是DecisionTreeClassifier，我们可以直接调用这个分类器来训练数据。得到上面的结果非常容易，我们来看代码：
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+
+# 加载鸢尾花数据集
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 数据集划分为训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 定义决策树分类器
+clf = DecisionTreeClassifier(random_state=42)
+
+# 训练模型
+clf.fit(X_train, y_train)
+
+# 预测测试集
+y_pred = clf.predict(X_test)
+
+# 评估模型
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_report = classification_report(y_test, y_pred)
+
+print(f"Accuracy: {accuracy}")
+print("Confusion Matrix:")
+print(conf_matrix)
+print("Classification Report:")
+print(class_report)
+
+# 可视化决策树
+plt.figure(figsize=(20,10))
+plot_tree(clf, feature_names=iris.feature_names, class_names=iris.target_names, filled=True)
+plt.show()
+```
+
+显示出的混淆矩阵和分类报告如下：
+
+```
+Accuracy: 1.0
+Confusion Matrix:
+[[19  0  0]
+ [ 0 13  0]
+ [ 0  0 13]]
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00        19
+           1       1.00      1.00      1.00        13
+           2       1.00      1.00      1.00        13
+
+    accuracy                           1.00        45
+   macro avg       1.00      1.00      1.00        45
+weighted avg       1.00      1.00      1.00        45
+```
+
+分类效果太好，我们也不用画ROC曲线了。
+
+决策树通过递归分裂数据集来构建树形模型。常用的分裂标准包括：
+
+- 信息增益（Information Gain）：基于熵（Entropy）减少的量度。
+- 基尼指数（Gini Index）：衡量数据集的不纯度。
+- 均方误差（Mean Squared Error, MSE）：用于回归问题，衡量预测值与真实值之间的误差。
+
+具体步骤如下：
+
+- 选择最佳分裂特征：
+    - 计算每个特征的分裂标准（如信息增益或基尼指数）。
+    - 选择分裂标准最高的特征。
+- 分裂数据集：根据选择的特征，将数据集分裂成两个或多个子集。
+- 递归构建子树：对每个子集重复步骤1和步骤2，直到满足停止条件（如达到最大树深度或叶节点纯度）。
+
+决策树的优缺点
+
+| 优点                   | 缺点                                                                 |
+|----------------------------|--------------------------------------------------------------------------|
+| 易于理解和解释：决策树的树形结构直观，决策路径容易理解。 | 容易过拟合：决策树容易生成过于复杂的模型，从而在训练数据上表现很好，但在测试数据上表现不佳。 |
+| 无需特征缩放：决策树不需要对特征进行归一化或标准化处理。 | 不稳定性：对数据中的微小变化敏感，不同的数据集可能生成完全不同的树。                |
+| 处理非线性关系：可以捕捉数据中的复杂非线性关系。         | 偏向于多值特征：在选择分裂特征时，可能偏向于具有更多取值的特征。                      |
+| 处理缺失值：可以自然地处理数据中的缺失值。               |                                                                                  |
+
+
+下面我们再用决策树来处理糖尿病数据集：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, roc_curve, auc
+
+# 加载糖尿病数据集
+diabetes = load_diabetes()
+X = diabetes.data
+y = diabetes.target
+
+# 将目标变量转换为二进制分类问题（假设目标变量为0或1）
+# 为简单起见，我们可以将目标变量分为两类：小于150为0，大于等于150为1
+y = np.where(y < 150, 0, 1)
+
+# 划分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 初始化并训练决策树分类器
+clf = DecisionTreeClassifier(random_state=42)
+clf.fit(X_train, y_train)
+
+# 预测测试集
+y_pred = clf.predict(X_test)
+y_pred_proba = clf.predict_proba(X_test)[:, 1]  # 获取预测概率
+
+# 评估模型性能
+accuracy = accuracy_score(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+# 输出结果
+print(f"Accuracy: {accuracy}")
+print("Classification Report:")
+print(classification_rep)
+print("Confusion Matrix:")
+print(conf_matrix)
+
+# 绘制决策树
+plt.figure(figsize=(400, 200))
+plot_tree(clf, filled=True, feature_names=diabetes.feature_names, class_names=['<150', '>=150'], rounded=True)
+plt.show()
+
+# 计算ROC曲线和AUC
+fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+# 绘制ROC曲线
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc='lower right')
+plt.show()
+```
+
+我们来看一下输出结果：
+```
+Accuracy: 0.6179775280898876
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.65      0.65      0.65        49
+           1       0.57      0.57      0.57        40
+
+    accuracy                           0.62        89
+   macro avg       0.61      0.61      0.61        89
+weighted avg       0.62      0.62      0.62        89
+
+Confusion Matrix:
+[[32 17]
+ [17 23]]
+```
+
+综合起来刚刚及格吧。
+
+ROC曲线肯定也不会太好看：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/roc_dia_decision_tree.png)
+
+最后我们来看看决策过程吧：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/dia_decision_tree.png)
+
+密密麻麻看不表吧，这其实就是我想传达的信息，这个模型不但复杂，而且效果不好。
+
+我们取树根部分的局部来看下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/dia_part2.png)
+
+我们还是可以看到分类决策的过程的。
+
+#### 4.3.2 JAX实现简易决策树算法
+
+学会了如何调用库，我们下面学习算法的原理。原理部分我们还是使用JAX来实现。
+
+我们首先介绍下基尼不纯度（Gini Impurity）。基尼不纯度是一个用于衡量分类问题中数据集纯度的指标。它表示了一个数据集中随机选取两个样本，其类别不同的概率。基尼不纯度越低，数据集越纯净。
+
+基尼不纯度的公式
+对于一个包含$n$个类别的数据集，基尼不纯度 G 定义为：
+
+$G=1-\sum_{i=1}^n(p_i)^2$
+
+其中：$p_i$是第$i$类的概率(即第i类样本数占总样本数的比例)。
+
+我们将其翻译成代码：
+
+```python
+def gini_impurity(labels):
+    _, counts = jnp.unique(labels, return_counts=True)
+    probabilities = counts / counts.sum()
+    return 1 - jnp.sum(probabilities ** 2)
+```
+
+将左右树的基尼不纯度加权求和，得到当前划分的基尼系数：
+
+```python
+gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
+```
+
+以此为依据，我们就可以写一个完整的树的划分：
+
+```python
+def find_best_split(dataset, labels):
+    best_gini = float('inf')
+    best_feature = None
+    best_threshold = None
+
+    n_features = dataset.shape[1]
+    for feature in range(n_features):
+        thresholds = jnp.unique(dataset[:, feature])
+        for threshold in thresholds:
+            _, left_labels, _, right_labels = split_dataset(dataset, labels, feature, threshold)
+            if len(left_labels) == 0 or len(right_labels) == 0:
+                continue
+            gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
+            if gini < best_gini:
+                best_gini = gini
+                best_feature = feature
+                best_threshold = threshold
+
+    return best_feature, best_threshold
+```
+
+首先，初始化最佳基尼不纯度 `best_gini` 为无穷大，最佳特征 `best_feature` 和最佳阈值 `best_threshold` 为 None。
+
+然后，遍历每个特征，对于每个特征，找出所有可能的阈值。然后，对于每个阈值，使用 `split_dataset` 函数将数据集分割成左右两个子集，并获取对应的标签。
+
+如果所有的标签都相同，或者达到了最大深度限制，那么返回出现次数最多的标签。
+
+如果没有，则使用 find_best_split 函数找到最佳的分割特征和阈值。
+
+如果没有找到有效的分割特征，那么返回出现次数最多的标签。
+
+如果找到了，使用找到的最佳分割特征和阈值将数据集分割成左右两个子集，并获取对应的标签。
+
+我们再看一下如何划分左右数据集，解释我直接写在代码里了：
+
+```python
+def split_dataset(dataset, labels, feature, threshold):
+    # 创建一个布尔掩码 left_mask，其中的每个元素表示对应的数据点是否应该被分到左子集。如果数据点在指定特征上的值小于或等于阈值，那么这个元素就是 True。
+    left_mask = dataset[:, feature] <= threshold
+    # 创建另一个布尔掩码 right_mask，其中的每个元素表示对应的数据点是否应该被分到右子集。这是通过取 left_mask 的逻辑非来实现的。
+    right_mask = ~left_mask
+    return dataset[left_mask], labels[left_mask], dataset[right_mask], labels[right_mask]
+```
+
+以划分数据为基础，我们就可以写出决策树的训练函数，这是一个递归的过程：
+
+```python
+    def fit(self, dataset, labels, depth=0):
+        if len(jnp.unique(labels)) == 1 or (self.max_depth is not None and depth >= self.max_depth):
+            return jnp.argmax(jnp.bincount(labels))
+
+        feature, threshold = find_best_split(dataset, labels)
+        if feature is None:
+            return jnp.argmax(jnp.bincount(labels))
+
+        left_dataset, left_labels, right_dataset, right_labels = split_dataset(dataset, labels, feature, threshold)
+        left_subtree = self.fit(left_dataset, left_labels, depth + 1)
+        right_subtree = self.fit(right_dataset, right_labels, depth + 1)
+
+        return (feature, threshold, left_subtree, right_subtree)
+```
+
+训练之后，我们就可以用决策树进行单点预测：
+
+```python
+    def predict_one(self, x, tree):
+        if not isinstance(tree, tuple):
+            return tree
+
+        feature, threshold, left_subtree, right_subtree = tree
+        return jax.lax.cond(
+            x[feature] <= threshold,
+            lambda _: self.predict_one(x, left_subtree),
+            lambda _: self.predict_one(x, right_subtree),
+            operand=None
+        )
+```
+
+跟排序算法有点像，如果数据点在指定特征上的值小于或等于阈值，那么递归地对左子树进行预测；否则，递归地对右子树进行预测。operand=None 表示条件判断的结果不需要额外的操作数。
+
+最后，我们再来个vmap，对每个数据进行预测：
+
+```python
+    def predict(self, dataset):
+        return vmap(lambda x: self.predict_one(x, self.tree))(dataset)
+```
+
+决策树的可视化如此重要，我们手动写的也要增加这个功能：
+
+```python
+    def visualize_tree(self, tree=None, depth=0):
+        if tree is None:
+            tree = self.tree
+
+        if not isinstance(tree, tuple):
+            print(f"{'  ' * depth}Leaf: Class {tree}")
+            return
+
+        feature, threshold, left_subtree, right_subtree = tree
+        print(f"{'  ' * depth}Feature {feature} <= {threshold:.2f}")
+        self.visualize_tree(left_subtree, depth + 1)
+        print(f"{'  ' * depth}Feature {feature} > {threshold:.2f}")
+        self.visualize_tree(right_subtree, depth + 1)
+```
+
+最后我们把决策树串起来：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc, confusion_matrix, accuracy_score
+from sklearn.preprocessing import OneHotEncoder
+import jax
+import jax.numpy as jnp
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from jax import vmap
+
+# 初始化 TPU
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载 Iris 数据集
+iris = datasets.load_iris()
+data = iris.data
+labels = iris.target
+
+# 将数据分为训练集和测试集
+train_data, test_data, train_labels, test_labels = train_test_split(data, labels, test_size=0.2, random_state=42)
+
+# 将数据转换为 JAX 数组
+train_data = jnp.array(train_data)
+test_data = jnp.array(test_data)
+train_labels = jnp.array(train_labels)
+test_labels = jnp.array(test_labels)
+
+def gini_impurity(labels):
+    _, counts = jnp.unique(labels, return_counts=True)
+    probabilities = counts / counts.sum()
+    return 1 - jnp.sum(probabilities ** 2)
+
+def split_dataset(dataset, labels, feature, threshold):
+    left_mask = dataset[:, feature] <= threshold
+    right_mask = ~left_mask
+    return dataset[left_mask], labels[left_mask], dataset[right_mask], labels[right_mask]
+
+def find_best_split(dataset, labels):
+    best_gini = float('inf')
+    best_feature = None
+    best_threshold = None
+
+    n_features = dataset.shape[1]
+    for feature in range(n_features):
+        thresholds = jnp.unique(dataset[:, feature])
+        for threshold in thresholds:
+            _, left_labels, _, right_labels = split_dataset(dataset, labels, feature, threshold)
+            if len(left_labels) == 0 or len(right_labels) == 0:
+                continue
+            gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
+            if gini < best_gini:
+                best_gini = gini
+                best_feature = feature
+                best_threshold = threshold
+
+    return best_feature, best_threshold
+
+class DecisionTree:
+    def __init__(self, max_depth=None):
+        self.max_depth = max_depth
+        self.tree = None
+
+    def fit(self, dataset, labels, depth=0):
+        if len(jnp.unique(labels)) == 1 or (self.max_depth is not None and depth >= self.max_depth):
+            return jnp.argmax(jnp.bincount(labels))
+
+        feature, threshold = find_best_split(dataset, labels)
+        if feature is None:
+            return jnp.argmax(jnp.bincount(labels))
+
+        left_dataset, left_labels, right_dataset, right_labels = split_dataset(dataset, labels, feature, threshold)
+        left_subtree = self.fit(left_dataset, left_labels, depth + 1)
+        right_subtree = self.fit(right_dataset, right_labels, depth + 1)
+
+        return (feature, threshold, left_subtree, right_subtree)
+
+    def predict_one(self, x, tree):
+        if not isinstance(tree, tuple):
+            return tree
+
+        feature, threshold, left_subtree, right_subtree = tree
+        return jax.lax.cond(
+            x[feature] <= threshold,
+            lambda _: self.predict_one(x, left_subtree),
+            lambda _: self.predict_one(x, right_subtree),
+            operand=None
+        )
+
+    def predict(self, dataset):
+        return vmap(lambda x: self.predict_one(x, self.tree))(dataset)
+
+    def predict_proba(self, dataset):
+        predictions = self.predict(dataset)
+        proba = jnp.zeros((len(predictions), 3))
+        for i, label in enumerate(predictions):
+            proba = proba.at[i, label].set(1)
+        return proba
+
+    def visualize_tree(self, tree=None, depth=0):
+        if tree is None:
+            tree = self.tree
+
+        if not isinstance(tree, tuple):
+            print(f"{'  ' * depth}Leaf: Class {tree}")
+            return
+
+        feature, threshold, left_subtree, right_subtree = tree
+        print(f"{'  ' * depth}Feature {feature} <= {threshold:.2f}")
+        self.visualize_tree(left_subtree, depth + 1)
+        print(f"{'  ' * depth}Feature {feature} > {threshold:.2f}")
+        self.visualize_tree(right_subtree, depth + 1)
+
+# 创建决策树分类器实例
+tree = DecisionTree(max_depth=3)
+
+# 训练模型
+tree.tree = tree.fit(train_data, train_labels)
+
+# 可视化决策
+print("Decision Tree structure:")
+tree.visualize_tree()
+
+# 对测试数据进行预测
+test_predictions = tree.predict(test_data)
+
+# 计算准确率
+accuracy = accuracy_score(test_labels, test_predictions)
+print(f'Accuracy: {accuracy * 100:.2f}%')
+
+# 计算混淆矩阵
+conf_matrix = confusion_matrix(test_labels, test_predictions)
+print('Confusion Matrix:')
+print(conf_matrix)
+
+# 获取预测概率
+test_proba = tree.predict_proba(test_data)
+
+# 对标签进行 one-hot 编码
+encoder = OneHotEncoder(sparse_output=False)
+test_labels_onehot = encoder.fit_transform(test_labels.reshape(-1, 1))
+
+# 计算每个类别的 ROC 曲线和 AUC
+fpr = {}
+tpr = {}
+roc_auc = {}
+
+for i in range(3):
+    fpr[i], tpr[i], _ = roc_curve(test_labels_onehot[:, i], test_proba[:, i])
+    roc_auc[i] = auc(fpr[i], tpr[i])
+
+# 绘制多类 ROC 曲线
+plt.figure()
+colors = ['blue', 'green', 'red']
+for i, color in zip(range(3), colors):
+    plt.plot(fpr[i], tpr[i], color=color, lw=2, label=f'Class {i} (AUC = {roc_auc[i]:.2f})')
+
+plt.plot([0, 1], [0, 1], 'k--', lw=2)
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve for Multi-Class')
+plt.legend(loc="lower right")
+plt.show()
+```
+
+我们来看下结果：
+
+```
+Decision Tree structure:
+Feature 2 <= 1.90
+  Leaf: Class 0
+Feature 2 > 1.90
+  Feature 2 <= 4.70
+    Feature 3 <= 1.60
+      Leaf: Class 1
+    Feature 3 > 1.60
+      Leaf: Class 2
+  Feature 2 > 4.70
+    Feature 3 <= 1.70
+      Leaf: Class 1
+    Feature 3 > 1.70
+      Leaf: Class 2
+Accuracy: 100.00%
+Confusion Matrix:
+[[10  0  0]
+ [ 0  9  0]
+ [ 0  0 11]]
+```
+
+我们把决策树输出格式化一下：
+
+```
+Feature 2 <= 1.90
+├── Leaf: Class 0
+└── Feature 2 > 1.90
+    ├── Feature 2 <= 4.70
+    │   ├── Feature 3 <= 1.60
+    │   │   └── Leaf: Class 1
+    │   └── Feature 3 > 1.60
+    │       └── Leaf: Class 2
+    └── Feature 2 > 4.70
+        ├── Feature 3 <= 1.70
+        │   └── Leaf: Class 1
+        └── Feature 3 > 1.70
+            └── Leaf: Class 2
+```
+
+分类过程跟前面DecisionTreeClassifier的结果基本一致，效果也很好。
+
+下面我们用我们手写的决策树讨论下糖尿病数据集：
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc, confusion_matrix, accuracy_score
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+import jax
+import jax.numpy as jnp
+from jax import vmap
+
+# 初始化 TPU
+import jax.tools.colab_tpu
+jax.tools.colab_tpu.setup_tpu()
+
+# 加载糖尿病数据集
+diabetes = load_diabetes()
+data = diabetes.data
+labels = (diabetes.target > diabetes.target.mean()).astype(int)  # 将目标值二值化
+
+# 将数据分为训练集和测试集
+train_data, test_data, train_labels, test_labels = train_test_split(data, labels, test_size=0.2, random_state=42)
+
+# 将数据转换为 JAX 数组
+train_data = jnp.array(train_data)
+test_data = jnp.array(test_data)
+train_labels = jnp.array(train_labels)
+test_labels = jnp.array(test_labels)
+
+def gini_impurity(labels):
+    _, counts = jnp.unique(labels, return_counts=True)
+    probabilities = counts / counts.sum()
+    return 1 - jnp.sum(probabilities ** 2)
+
+def split_dataset(dataset, labels, feature, threshold):
+    left_mask = dataset[:, feature] <= threshold
+    right_mask = ~left_mask
+    return dataset[left_mask], labels[left_mask], dataset[right_mask], labels[right_mask]
+
+def find_best_split(dataset, labels):
+    best_gini = float('inf')
+    best_feature = None
+    best_threshold = None
+
+    n_features = dataset.shape[1]
+    for feature in range(n_features):
+        thresholds = jnp.unique(dataset[:, feature])
+        for threshold in thresholds:
+            _, left_labels, _, right_labels = split_dataset(dataset, labels, feature, threshold)
+            if len(left_labels) == 0 or len(right_labels) == 0:
+                continue
+            gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
+            if gini < best_gini:
+                best_gini = gini
+                best_feature = feature
+                best_threshold = threshold
+
+    return best_feature, best_threshold
+
+class DecisionTree:
+    def __init__(self, max_depth=None):
+        self.max_depth = max_depth
+        self.tree = None
+
+    def fit(self, dataset, labels, depth=0):
+        if len(jnp.unique(labels)) == 1 or (self.max_depth is not None and depth >= self.max_depth):
+            return jnp.argmax(jnp.bincount(labels))
+
+        feature, threshold = find_best_split(dataset, labels)
+        if feature is None:
+            return jnp.argmax(jnp.bincount(labels))
+
+        left_dataset, left_labels, right_dataset, right_labels = split_dataset(dataset, labels, feature, threshold)
+        left_subtree = self.fit(left_dataset, left_labels, depth + 1)
+        right_subtree = self.fit(right_dataset, right_labels, depth + 1)
+
+        return (feature, threshold, left_subtree, right_subtree)
+
+    def predict_one(self, x, tree):
+        if not isinstance(tree, tuple):
+            return tree
+
+        feature, threshold, left_subtree, right_subtree = tree
+        return jax.lax.cond(
+            x[feature] <= threshold,
+            lambda _: self.predict_one(x, left_subtree),
+            lambda _: self.predict_one(x, right_subtree),
+            operand=None
+        )
+
+    def predict(self, dataset):
+        return vmap(lambda x: self.predict_one(x, self.tree))(dataset)
+
+    def predict_proba(self, dataset):
+        predictions = self.predict(dataset)
+        proba = jnp.zeros((len(predictions), 2))
+        for i, label in enumerate(predictions):
+            proba = proba.at[i, label].set(1)
+        return proba
+
+    def visualize_tree(self, tree=None, depth=0):
+        if tree is None:
+            tree = self.tree
+
+        if not isinstance(tree, tuple):
+            print(f"{'  ' * depth}Leaf: Class {tree}")
+            return
+
+        feature, threshold, left_subtree, right_subtree = tree
+        print(f"{'  ' * depth}Feature {feature} <= {threshold:.2f}")
+        self.visualize_tree(left_subtree, depth + 1)
+        print(f"{'  ' * depth}Feature {feature} > {threshold:.2f}")
+        self.visualize_tree(right_subtree, depth + 1)
+
+# 创建决策树分类器实例
+tree = DecisionTree(max_depth=5)
+
+# 训练模型
+tree.tree = tree.fit(train_data, train_labels)
+
+# 可视化决策树
+print("Decision Tree structure:")
+tree.visualize_tree()
+
+# 对测试数据进行预测
+test_predictions = tree.predict(test_data)
+
+# 计算准确率
+accuracy = accuracy_score(test_labels, test_predictions)
+print(f'Accuracy: {accuracy * 100:.2f}%')
+
+# 计算混淆矩阵
+conf_matrix = confusion_matrix(test_labels, test_predictions)
+print('Confusion Matrix:')
+print(conf_matrix)
+
+# 获取预测概率
+test_proba = tree.predict_proba(test_data)
+
+# 对标签进行 one-hot 编码
+encoder = OneHotEncoder(sparse_output=False)
+test_labels_onehot = encoder.fit_transform(test_labels.reshape(-1, 1))
+
+# 计算每个类别的 ROC 曲线和 AUC
+fpr = {}
+tpr = {}
+roc_auc = {}
+
+for i in range(2):
+    fpr[i], tpr[i], _ = roc_curve(test_labels_onehot[:, i], test_proba[:, i])
+    roc_auc[i] = auc(fpr[i], tpr[i])
+
+# 绘制多类 ROC 曲线
+plt.figure()
+colors = ['blue', 'red']
+for i, color in zip(range(2), colors):
+    plt.plot(fpr[i], tpr[i], color=color, lw=2, label=f'Class {i} (AUC = {roc_auc[i]:.2f})')
+
+plt.plot([0, 1], [0, 1], 'k--', lw=2)
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve for Binary Classification')
+plt.legend(loc="lower right")
+plt.show()
+```
+
+首先我们看下我们的成绩：
+
+```
+Accuracy: 74.16%
+Confusion Matrix:
+[[40 10]
+ [13 26]]
+```
+
+效果比官方库的还好！
+
+来看下我们70多分的ROC曲线：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/roc_dia_dt_jax.png)
+
+下面节选下我们的决策树结构的左子树：
+
+```
+Feature 2 <= 0.01
+├── Feature 8 <= 0.00
+│   ├── Feature 3 <= -0.01
+│   │   ├── Feature 2 <= 0.00
+│   │   │   ├── Feature 7 <= -0.01
+│   │   │   │   └── Leaf: Class 0
+│   │   │   └── Feature 7 > -0.01
+│   │   │       └── Leaf: Class 0
+│   │   └── Feature 2 > 0.00
+│   │       └── Leaf: Class 1
+│   └── Feature 3 > -0.01
+│       ├── Feature 5 <= -0.04
+│       │   ├── Feature 5 <= -0.07
+│       │   │   └── Leaf: Class 0
+│       │   └── Feature 5 > -0.07
+│       │       └── Leaf: Class 1
+│       └── Feature 5 > -0.04
+│           ├── Feature 4 <= 0.05
+│           │   └── Leaf: Class 0
+│           └── Feature 4 > 0.05
+│               └── Leaf: Class 1
+└── Feature 8 > 0.00
+    ├── Feature 5 <= -0.03
+    │   ├── Feature 2 <= -0.06
+    │   │   └── Leaf: Class 0
+    │   └── Feature 2 > -0.06
+    │       ├── Feature 4 <= -0.10
+    │       │   └── Leaf: Class 0
+    │       └── Feature 4 > -0.10
+    │           └── Leaf: Class 1
+    └── Feature 5 > -0.03
+        ├── Feature 6 <= 0.03
+        │   ├── Feature 4 <= -0.01
+        │   │   └── Leaf: Class 0
+        │   └── Feature 4 > -0.01
+        │       └── Leaf: Class 1
+        └── Feature 6 > 0.03
+            ├── Feature 5 <= -0.01
+            │   └── Leaf: Class 0
+            └── Feature 5 > -0.01
+                └── Leaf: Class 0
+```
 
 ### 4.4 支持向量机
 
@@ -16643,99 +17948,6 @@ for epoch in range(epochs):
 
 然后按照梯度下降算法的规则，使用学习率 learning_rate 更新权重 w 和偏置 b。具体来说，从当前的 w 和 b 中减去梯度乘以学习率。
 
-举一反三一下，大家练习写一下用JAX实现糖尿病预测。
-
-```python
-import jax
-import jax.numpy as jnp
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error
-import matplotlib.pyplot as plt
-
-import jax.tools.colab_tpu
-jax.tools.colab_tpu.setup_tpu()
-
-# 加载糖尿病数据集
-diabetes = datasets.load_diabetes()
-X = diabetes.data
-y = diabetes.target
-
-# 数据预处理
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
-
-# 分割数据集
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# 初始化参数
-key = jax.random.PRNGKey(0)
-w = jax.random.normal(key, (X_train.shape[1],))
-b = 0.0
-
-# 定义线性回归模型
-def predict(w, b, X):
-    return jnp.dot(X, w) + b
-
-# 定义损失函数
-def loss_fn(w, b, X, y):
-    preds = predict(w, b, X)
-    return jnp.mean((preds - y) ** 2)  # 均方误差 (MSE)
-
-# 梯度下降
-grad_fn = jax.jit(jax.grad(loss_fn, argnums=(0, 1)))
-
-# 训练模型
-learning_rate = 0.01
-epochs = 1000
-
-for epoch in range(epochs):
-    grads_w, grads_b = grad_fn(w, b, X_train, y_train)
-    w -= learning_rate * grads_w
-    b -= learning_rate * grads_b
-
-    if epoch % 100 == 0:
-        loss = loss_fn(w, b, X_train, y_train)
-        print(f"Epoch {epoch}, Loss: {loss}")
-
-# 测试模型
-y_pred_train = predict(w, b, X_train)
-y_pred_test = predict(w, b, X_test)
-
-# 计算训练和测试的均方误差
-train_mse = mean_squared_error(y_train, y_pred_train)
-test_mse = mean_squared_error(y_test, y_pred_test)
-
-print(f"Train MSE: {train_mse}")
-print(f"Test MSE: {test_mse}")
-
-# 可视化
-plt.scatter(y_test, y_pred_test)
-plt.xlabel("Actual Progression")
-plt.ylabel("Predicted Progression")
-plt.title("Actual vs Predicted Progression")
-plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)
-plt.show()
-```
-
-运行结果如下：
-```
-Epoch 0, Loss: 28351.634765625
-Epoch 100, Loss: 3299.47705078125
-Epoch 200, Loss: 2906.1142578125
-Epoch 300, Loss: 2896.913818359375
-Epoch 400, Loss: 2895.6103515625
-Epoch 500, Loss: 2894.594970703125
-Epoch 600, Loss: 2893.633544921875
-Epoch 700, Loss: 2892.711669921875
-Epoch 800, Loss: 2891.8271484375
-Epoch 900, Loss: 2890.977294921875
-Train MSE: 2890.165822611412
-Test MSE: 2884.9462571982144
-```
-
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/jax_diabetes.png)
 
 
 ### 13.3 JAX实现朴素贝叶斯算法
@@ -17008,226 +18220,6 @@ accuracy = jnp.mean(test_predictions == test_labels)
 print(f'Accuracy: {accuracy * 100:.2f}%')
 ```
 
-### 13.5 JAX实现简易决策树算法
-
-篇幅所限，我们只实现一个简单的决策树算法，对于剪枝高级功能，暂时不涉及。
-
-我们首先介绍下基尼不纯度（Gini Impurity）。基尼不纯度是一个用于衡量分类问题中数据集纯度的指标。它表示了一个数据集中随机选取两个样本，其类别不同的概率。基尼不纯度越低，数据集越纯净。
-
-基尼不纯度的公式
-对于一个包含$n$个类别的数据集，基尼不纯度 G 定义为：
-
-$G=1-\sum_{i=1}^n(p_i)^2$
-
-其中：$p_i$是第$i$类的概率(即第i类样本数占总样本数的比例)。
-
-我们将其翻译成代码：
-
-```python
-def gini_impurity(labels):
-    _, counts = jnp.unique(labels, return_counts=True)
-    probabilities = counts / counts.sum()
-    return 1 - jnp.sum(probabilities ** 2)
-```
-
-将左右树的基尼不纯度加权求和，得到当前划分的基尼系数：
-
-```python
-gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
-```
-
-以此为依据，我们就可以写一个完整的树的划分：
-
-```python
-def find_best_split(dataset, labels):
-    best_gini = float('inf')
-    best_feature = None
-    best_threshold = None
-
-    n_features = dataset.shape[1]
-    for feature in range(n_features):
-        thresholds = jnp.unique(dataset[:, feature])
-        for threshold in thresholds:
-            _, left_labels, _, right_labels = split_dataset(dataset, labels, feature, threshold)
-            if len(left_labels) == 0 or len(right_labels) == 0:
-                continue
-            gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
-            if gini < best_gini:
-                best_gini = gini
-                best_feature = feature
-                best_threshold = threshold
-
-    return best_feature, best_threshold
-```
-
-首先，初始化最佳基尼不纯度 `best_gini` 为无穷大，最佳特征 `best_feature` 和最佳阈值 `best_threshold` 为 None。
-
-然后，遍历每个特征，对于每个特征，找出所有可能的阈值。然后，对于每个阈值，使用 `split_dataset` 函数将数据集分割成左右两个子集，并获取对应的标签。
-
-如果所有的标签都相同，或者达到了最大深度限制，那么返回出现次数最多的标签。
-
-如果没有，则使用 find_best_split 函数找到最佳的分割特征和阈值。
-
-如果没有找到有效的分割特征，那么返回出现次数最多的标签。
-
-如果找到了，使用找到的最佳分割特征和阈值将数据集分割成左右两个子集，并获取对应的标签。
-
-我们再看一下如何划分左右数据集，解释我直接写在代码里了：
-
-```python
-def split_dataset(dataset, labels, feature, threshold):
-    # 创建一个布尔掩码 left_mask，其中的每个元素表示对应的数据点是否应该被分到左子集。如果数据点在指定特征上的值小于或等于阈值，那么这个元素就是 True。
-    left_mask = dataset[:, feature] <= threshold
-    # 创建另一个布尔掩码 right_mask，其中的每个元素表示对应的数据点是否应该被分到右子集。这是通过取 left_mask 的逻辑非来实现的。
-    right_mask = ~left_mask
-    return dataset[left_mask], labels[left_mask], dataset[right_mask], labels[right_mask]
-```
-
-以划分数据为基础，我们就可以写出决策树的训练函数，这是一个递归的过程：
-
-```python
-    def fit(self, dataset, labels, depth=0):
-        if len(jnp.unique(labels)) == 1 or (self.max_depth is not None and depth >= self.max_depth):
-            return jnp.argmax(jnp.bincount(labels))
-
-        feature, threshold = find_best_split(dataset, labels)
-        if feature is None:
-            return jnp.argmax(jnp.bincount(labels))
-
-        left_dataset, left_labels, right_dataset, right_labels = split_dataset(dataset, labels, feature, threshold)
-        left_subtree = self.fit(left_dataset, left_labels, depth + 1)
-        right_subtree = self.fit(right_dataset, right_labels, depth + 1)
-
-        return (feature, threshold, left_subtree, right_subtree)
-```
-
-训练之后，我们就可以用决策树进行单点预测：
-
-```python
-    def predict_one(self, x, tree):
-        if not isinstance(tree, tuple):
-            return tree
-
-        feature, threshold, left_subtree, right_subtree = tree
-        return jax.lax.cond(
-            x[feature] <= threshold,
-            lambda _: self.predict_one(x, left_subtree),
-            lambda _: self.predict_one(x, right_subtree),
-            operand=None
-        )
-```
-
-跟排序算法有点像，如果数据点在指定特征上的值小于或等于阈值，那么递归地对左子树进行预测；否则，递归地对右子树进行预测。operand=None 表示条件判断的结果不需要额外的操作数。
-
-最后，我们再来个vmap，对每个数据进行预测：
-
-```python
-    def predict(self, dataset):
-        return vmap(lambda x: self.predict_one(x, self.tree))(dataset)
-```
-
-最后我们把决策树串起来：
-
-```python
-import jax
-import jax.numpy as jnp
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
-
-import jax.tools.colab_tpu
-jax.tools.colab_tpu.setup_tpu()
-
-# 加载 Iris 数据集
-iris = datasets.load_iris()
-data = iris.data
-labels = iris.target
-
-# 将数据分为训练集和测试集
-train_data, test_data, train_labels, test_labels = train_test_split(data, labels, test_size=0.2, random_state=42)
-
-# 将数据转换为 JAX 数组
-train_data = jnp.array(train_data)
-test_data = jnp.array(test_data)
-train_labels = jnp.array(train_labels)
-test_labels = jnp.array(test_labels)
-
-def gini_impurity(labels):
-    _, counts = jnp.unique(labels, return_counts=True)
-    probabilities = counts / counts.sum()
-    return 1 - jnp.sum(probabilities ** 2)
-
-def split_dataset(dataset, labels, feature, threshold):
-    left_mask = dataset[:, feature] <= threshold
-    right_mask = ~left_mask
-    return dataset[left_mask], labels[left_mask], dataset[right_mask], labels[right_mask]
-
-def find_best_split(dataset, labels):
-    best_gini = float('inf')
-    best_feature = None
-    best_threshold = None
-
-    n_features = dataset.shape[1]
-    for feature in range(n_features):
-        thresholds = jnp.unique(dataset[:, feature])
-        for threshold in thresholds:
-            _, left_labels, _, right_labels = split_dataset(dataset, labels, feature, threshold)
-            if len(left_labels) == 0 or len(right_labels) == 0:
-                continue
-            gini = (len(left_labels) * gini_impurity(left_labels) + len(right_labels) * gini_impurity(right_labels)) / len(labels)
-            if gini < best_gini:
-                best_gini = gini
-                best_feature = feature
-                best_threshold = threshold
-
-    return best_feature, best_threshold
-
-class DecisionTree:
-    def __init__(self, max_depth=None):
-        self.max_depth = max_depth
-        self.tree = None
-
-    def fit(self, dataset, labels, depth=0):
-        if len(jnp.unique(labels)) == 1 or (self.max_depth is not None and depth >= self.max_depth):
-            return jnp.argmax(jnp.bincount(labels))
-
-        feature, threshold = find_best_split(dataset, labels)
-        if feature is None:
-            return jnp.argmax(jnp.bincount(labels))
-
-        left_dataset, left_labels, right_dataset, right_labels = split_dataset(dataset, labels, feature, threshold)
-        left_subtree = self.fit(left_dataset, left_labels, depth + 1)
-        right_subtree = self.fit(right_dataset, right_labels, depth + 1)
-
-        return (feature, threshold, left_subtree, right_subtree)
-
-    def predict_one(self, x, tree):
-        if not isinstance(tree, tuple):
-            return tree
-
-        feature, threshold, left_subtree, right_subtree = tree
-        return jax.lax.cond(
-            x[feature] <= threshold,
-            lambda _: self.predict_one(x, left_subtree),
-            lambda _: self.predict_one(x, right_subtree),
-            operand=None
-        )
-
-    def predict(self, dataset):
-        return vmap(lambda x: self.predict_one(x, self.tree))(dataset)
-
-# 创建决策树分类器实例
-tree = DecisionTree(max_depth=3)
-
-# 训练模型
-tree.tree = tree.fit(train_data, train_labels)
-
-# 对测试数据进行预测
-test_predictions = tree.predict(test_data)
-
-# 计算准确率
-accuracy = jnp.mean(test_predictions == test_labels)
-print(f'Accuracy: {accuracy * 100:.2f}%')
-```
 
 ### 13.6 用JAX实现高斯混合模型
 
