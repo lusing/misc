@@ -526,7 +526,73 @@ AGE	SEX	BMI	BP	S1	S2	S3	S4	S5	S6	Y
 50	1	23	101	192	125.4	52	4	4.2905	80	135
 ```
 
-#### 2.1.3 自己生成数据集
+#### 2.1.3 威斯康星乳腺癌数据集
+
+威斯康星乳腺癌(诊断)数据集是一个著名的机器学习数据集,用于乳腺癌诊断分类任务。基于您提供的信息,我可以总结一些关键点:
+
+数据集特征:
+
+- 多变量数据集
+- 569个样本
+- 30个特征
+- 二分类任务(良性或恶性)
+
+这个数据集特征是从乳房肿块的细针穿刺抽吸(FNA)的数字化图像中计算得出的。它们描述了图像中存在的细胞核的特征,包括:
+
+- 半径（到周边点的距离的平均值）
+- 纹理（灰度值的标准差）
+- 周长
+- 面积
+- 光滑度（半径长度的局部变化）
+- 紧凑度（$\frac{周长^2}{面积} - 1.0$）
+- 凹度（轮廓的凹陷部分的严重程度）
+- 凹点（轮廓的凹陷部分的数量）
+- 对称性
+- 分形维度（“海岸线近似”- 1）
+
+这些特征的均值、标准误差和“最差”或最大值（三个最差/最大值的均值）是针对每个图像计算的，共计30个特征。例如，字段0是平均半径，字段10是半径的标准误差，字段20是最差半径。
+
+我们来看下数据加载的代码：
+
+```python
+# 加载乳腺癌数据集
+breast_cancer = datasets.load_breast_cancer()
+
+# 选择特征和目标变量
+X = breast_cancer.data[0]
+y = breast_cancer.target
+
+print(X)
+print(y)
+```
+
+打印出来的结果如下：
+
+```
+[1.799e+01 1.038e+01 1.228e+02 1.001e+03 1.184e-01 2.776e-01 3.001e-01
+ 1.471e-01 2.419e-01 7.871e-02 1.095e+00 9.053e-01 8.589e+00 1.534e+02
+ 6.399e-03 4.904e-02 5.373e-02 1.587e-02 3.003e-02 6.193e-03 2.538e+01
+ 1.733e+01 1.846e+02 2.019e+03 1.622e-01 6.656e-01 7.119e-01 2.654e-01
+ 4.601e-01 1.189e-01]
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 1 0 0 0 0 0 0 0 0 1 0 1 1 1 1 1 0 0 1 0 0 1 1 1 1 0 1 0 0 1 1 1 1 0 1 0 0
+ 1 0 1 0 0 1 1 1 0 0 1 0 0 0 1 1 1 0 1 1 0 0 1 1 1 0 0 1 1 1 1 0 1 1 0 1 1
+ 1 1 1 1 1 1 0 0 0 1 0 0 1 1 1 0 0 1 0 1 0 0 1 0 0 1 1 0 1 1 0 1 1 1 1 0 1
+ 1 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 0 1 1 0 0 1 1 0 0 1 1 1 1 0 1 1 0 0 0 1 0
+ 1 0 1 1 1 0 1 1 0 0 1 0 0 0 0 1 0 0 0 1 0 1 0 1 1 0 1 0 0 0 0 1 1 0 0 1 1
+ 1 0 1 1 1 1 1 0 0 1 1 0 1 1 0 0 1 0 1 1 1 1 0 1 1 1 1 1 0 1 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 1 1 1 1 1 1 0 1 0 1 1 0 1 1 0 1 0 0 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 0 1 1 0 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 1 1 1 0 0 0 1 1
+ 1 1 0 1 0 1 0 1 1 1 0 1 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1 1 1 1 0 0 1 0 0
+ 0 1 0 0 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 0 1 1 0 0 1 1 1 1 1 1 0 1 1 1 1 1 1
+ 1 0 1 1 1 1 1 0 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 0 1 0 0 1 0 1 1 1 1 1 0 1 1
+ 0 1 0 1 1 0 1 0 1 1 1 1 1 1 1 1 0 0 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 0 1
+ 1 1 1 1 1 1 0 1 0 1 1 0 1 1 1 1 1 0 0 1 0 1 0 1 1 1 1 1 0 1 1 0 1 0 1 0 0
+ 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 0 0 0 0 0 0 1]
+```
+
+#### 2.1.4 自己生成数据集
 
 除了加载现成的数据集，我们还可以自己生成数据集。在机器学习中，我们经常需要生成一些模拟数据来测试算法的性能。比如，我们可以生成一些符合正态分布的数据，然后用机器学习算法来拟合这些数据。
 
@@ -655,7 +721,7 @@ for k, p, p_w in zip(["red", "blue", "yellow"], p_c, p_w_c.T):
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/n_labels.png)
 
-#### 2.1.4 训练集和测试集
+#### 2.1.5 训练集和测试集
 
 在机器学习中，我们通常将数据集分为训练集和测试集。训练集用于训练模型，测试集用于评估模型的性能。
 常用的划分方法有：
@@ -905,7 +971,6 @@ VC 维度定义如下：假设空间 $H$的 VC 维度 $d_{VC}$ 是能够被 $H$ 
 
 - 线性分类器（二维空间中的线性分割）：假设空间 $H$ 是二维平面上的所有直线。VC 维度为 3，因为最多可以找到三个点，使得通过不同直线能够对这三个点的所有可能的标记组合（即 $2^3 = 8$ 种组合）进行正确分类。但无法找到四个点使直线对其所有可能的标记组合进行正确分类。
 - 一维空间上的阈值：在一维空间中，假设空间 $H$ 是所有可能的阈值函数。VC 维度为 1，因为任意两个点的所有可能标记组合不能被一个阈值函数完全正确分类。
-
 
 
 ## 第三章 机器学习编程基础
@@ -1780,6 +1845,85 @@ def avg_information(p):
 p = jnp.array([0.01, 0.99])
 avg_info = avg_information(p)
 print(avg_info)
+```
+
+#### 3.2.6 JAX的计算图
+
+JAX 通过函数变换（function transformations）来构造计算图，而不是显式地构建计算图。这种方式使得计算图的构建过程更加灵活和动态。以下是 JAX 如何构造和处理计算图的详细解释。
+
+在 JAX 中，计算图的构造主要通过 jax.jit、jax.grad、jax.vmap 等函数变换来实现。这些函数变换会对输入的 Python 函数进行转换，生成对应的计算图。
+
+jax.jit（Just-In-Time compilation，即时编译）用于将 Python 函数编译为高效的 XLA（Accelerated Linear Algebra）代码。它会将函数的计算图编译成高效的机器代码。
+
+```python
+import jax
+import jax.numpy as jnp
+
+def f(x):
+    return jnp.sin(x) + jnp.cos(x)
+
+jit_f = jax.jit(f)
+
+x = jnp.array([1.0, 2.0, 3.0])
+y = jit_f(x)
+print(y)
+```
+
+在上面例子中，jax.jit 会将 f 的计算图编译为高效的机器代码。调用 jit_f 时，JAX 会使用这个编译好的计算图来进行计算。
+
+jax.grad 用于计算函数的梯度。它会根据输入函数自动生成对数值进行反向传播所需的计算图。
+
+```python
+def f(x):
+    return x**2 + 3 * x + 2
+
+dfdx = jax.grad(f)
+
+x = 3.0
+grad = dfdx(x)
+print(grad)
+```
+
+在上面例子中，jax.grad 会根据 f 构建一个计算其梯度的计算图。
+
+jax.vmap（vectorized map）用于将函数向量化，使其可以批量处理输入数据。它会生成一个新的函数，这个函数在批量数据上应用原始函数。
+
+```python
+def f(x):
+    return x ** 2
+
+vmap_f = jax.vmap(f)
+
+x = jnp.array([1.0, 2.0, 3.0])
+y = vmap_f(x)
+print(y)
+```
+
+在上面例子中，jax.vmap 会生成一个向量化的 f 函数，使其能够批量处理输入的数组。
+
+JAX 的计算图是动态构建的，这意味着计算图会在函数变换时被构建和优化。与 TensorFlow 或 PyTorch 的静态计算图不同，JAX 的这种动态方式使得它更接近于普通的 Python 编程体验。
+
+JAX 使用 XLA（Accelerated Linear Algebra）作为后端编译器。XLA 是一个用于加速线性代数计算的编译器框架，最初由 Google 开发。JAX 会将计算图转换为 XLA 操作，并利用 XLA 的优化和编译能力生成高效的机器代码。
+
+另外，JAX还支持jax.pmap函数，用于在多个设备上并行地执行函数。这使得 JAX 可以在多个设备上并行地执行函数，从而加速计算。
+
+```python
+import jax
+import jax.numpy as jnp
+
+# 定义一个简单的函数
+def f(x):
+    return jnp.sin(x) + jnp.cos(x)
+
+# 使用 jax.pmap 进行并行计算
+pmap_f = jax.pmap(f)
+
+# 创建输入数据
+x = jnp.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
+
+# 将计算分配到多个 TPU 核上执行
+y = pmap_f(x)
+print(y)
 ```
 
 ### 3.3 PyTorch框架基础
@@ -4472,11 +4616,36 @@ Validation Accuracy: 0.79
 
 准确率是79%，说明我们的决策树模型在糖尿病数据集上的泛化能力还不错。
 
+我们来看下ROC曲线：
+
+```python
+# 计算并绘制ROC曲线
+fpr, tpr, thresholds = roc_curve(val_labels, predictions)
+roc_auc = auc(fpr, tpr)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc='lower right')
+plt.show()
+```
+
+画出图下如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/roc_prune.png)
+
 而且从树结构上看，我们把上节密密麻麻的决策树剪成了一棵小树，而且准确率还有所提升。
 
 ### 4.4 支持向量机
 
 在深度学习流行之前，支持向量机曾经是最有前途的机器学习方向。支持向量机有良好的理论基础，可以解决线性和非线性分类问题，也可以用于回归问题。
+
+#### 4.4.1 支持向量机的基本原理
 
 我们先介绍三个基本概念：
 1. 超平面:
@@ -4484,28 +4653,138 @@ Validation Accuracy: 0.79
 2. 间隔:间隔（Margin）是指从超平面到最近的训练样本（支持向量）的最短距离。SVM 的目标是最大化这个间隔，从而提高分类器的泛化能力。
 3. 支持向量: 支持向量是指那些位于间隔边界上的训练样本。它们是决定最优超平面位置的关键点。
 
-数据可以分为线性可分和线性不可分两种情况。
-对于线性可分数据，SVM 找到一个能够将样本完全分开的超平面，同时最大化两类之间的间隔
-对于线性不可分的数据，SVM 允许一定程度的误分类，通过引入松弛变量（Slack Variables）来实现。
-SVM 还可以通过核函数（Kernel Function）将数据映射到更高维空间，在高维空间中实现线性可分。
+基本的SVM模型是一个线性分类器，其目的是找到一个超平面，将不同类别的数据点分开。在线性可分的情况下，SVM可以通过以下优化问题来找到最优超平面：
 
-常见的核函数包括：
-- 线性核函数：$K(x_i,x_j)=x_i . x_j$
-- 多项式核函数：$K(x_i,x_j)=(\gamma x_i . x_j + r)^d$
-- 高斯径向基核函数（RBF）：$K(x_i,x_j)=exp(-\gamma ||x_i-x_j||^2)$
-- Sigmoid核函数：$K(x_i,x_j)=tanh(\gamma x_i . x_j + r)$
+$$\min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2$$
+
+$$ \text{subject to } y_i (\mathbf{w}^\top \mathbf{x}_i + b) \geq 1, \quad \forall i $$
+
+其中，$\mathbf{w}$ 是超平面的法向量，$b$ 是偏置项，$\mathbf{x}_i$ 是训练样本，$y_i$是对应的标签。
+
+在实际应用中，许多数据集并不是线性可分的。例如，数据点可能分布在一个复杂的非线性边界上。这时，线性SVM无法有效地分类这些数据。
+
+这时候我们引入一个新概念：核技巧。
+
+核技巧的核心思想是将原始数据映射到一个高维特征空间，使得在这个高维空间中数据变得线性可分。具体来说，核函数$k(\mathbf{x}, \mathbf{z})$定义为在隐式映射 $\phi(\cdot)$ 下的内积：
+
+$$ k(\mathbf{x}, \mathbf{z}) = \langle \phi(\mathbf{x}), \phi(\mathbf{z}) \rangle $$
+
+通过使用核函数，我们可以在不显式计算高维映射 $\phi(\cdot)$ 的情况下，直接在原始空间中计算内积。这极大地简化了计算复杂度。
+
+不熟悉内积概念的同学，我们来复习一下。内积是向量空间中的一种运算，它将两个向量映射到一个标量。具体地，对于一个向量空间 $V$ 中的任意两个向量 $\mathbf{u}$ 和 $\mathbf{v}$，其内积记为 $\langle \mathbf{u}, \mathbf{v} \rangle$。
+
+在欧几里得空间 $\mathbb{R}^n$ 中，内积通常定义为两个向量的点积（也称标量积）。例如，对于向量 $\mathbf{u} = (u_1, u_2, \ldots, u_n)$和 $\mathbf{v} = (v_1, v_2, \ldots, v_n)$，其内积定义为：
+
+$$ \langle \mathbf{u}, \mathbf{v} \rangle = u_1 v_1 + u_2 v_2 + \cdots + u_n v_n $$
+
+将核函数引入支持向量机的优化问题，可以得到核化支持向量机。其优化问题变为：
+
+$$ \min_{\mathbf{\alpha}} \frac{1}{2} \sum_{i,j} \alpha_i \alpha_j y_i y_j k(\mathbf{x}_i, \mathbf{x}_j) - \sum_i \alpha_i $$
+
+$$ \text{subject to } 0 \leq \alpha_i \leq C, \quad \sum_i \alpha_i y_i = 0 $$
+
+其中，$\alpha_i$ 是拉格朗日乘子，$C$ 是正则化参数。决策函数为：
+
+$$ f(\mathbf{x}) = \sum_i \alpha_i y_i k(\mathbf{x}_i, \mathbf{x}) + b $$
+
+常见的核函数包括
+
+
+| 核函数类型               | 数学表达式                                            |
+|--------------------------|----------------------------------------------------|
+| 线性核函数               | $K(x_i, x_j) = x_i \cdot x_j$                       |
+| 多项式核函数             | $K(x_i, x_j) = (\gamma x_i \cdot x_j + r)^d$        |
+| 高斯径向基核函数（RBF）  | $K(x_i, x_j) = \exp(-\gamma \|x_i - x_j\|^2)$       |
+| Sigmoid核函数            | $K(x_i, x_j) = \tanh(\gamma x_i \cdot x_j + r)$     |
 
 SVM 的优缺点
-- 优点
-    - 高效：在高维空间中仍然有效。
-    - 鲁棒性：在样本数量远小于特征数量时仍然表现良好。
-    - 灵活性：通过自定义核函数，可以适应不同的分类任务。
-- 缺点
-    - 计算复杂度高：对大规模数据集的训练时间较长。
-    - 参数选择困难：核函数和正则化参数的选择对模型性能影响较大。
-    - 对噪声敏感：对噪声数据和重叠的类不太鲁棒。
 
-按照惯例，我们用线性核函数来实现鸢尾花的分类：
+
+| 优点             | 缺点                                                   |
+|------------------|--------------------------------------------------------|
+| 高效：在高维空间中仍然有效。         | 计算复杂度高：对大规模数据集的训练时间较长。               |
+| 鲁棒性：在样本数量远小于特征数量时仍然表现良好。 | 参数选择困难：核函数和正则化参数的选择对模型性能影响较大。 |
+| 灵活性：通过自定义核函数，可以适应不同的分类任务。 | 对噪声敏感：对噪声数据和重叠的类不太鲁棒。                |
+
+在支持向量机（SVM）中，核函数（Kernel Function）允许我们在高维特征空间中进行计算，而无需显式地转换数据。为了证明某个核函数是有效的，我们需要证明它是一个正定核（Positive Definite Kernel）。
+
+Mercer 定理为我们提供了一个判断核函数是否有效的标准。Mercer 定理指出：如果函数 $K(\mathbf{x}, \mathbf{y})$ 是对称的，并且对于任意的非零函数 $g(\mathbf{x})$，满足以下条件：
+
+$$ \int \int g(\mathbf{x}) K(\mathbf{x}, \mathbf{y}) g(\mathbf{y}) \, d\mathbf{x} \, d\mathbf{y} \geq 0 $$
+
+则 $K(\mathbf{x}, \mathbf{y})$ 是一个有效的核函数。换句话说，核函数 $K(\mathbf{x}, \mathbf{y})$ 必须生成一个对称的、正定的格拉姆矩阵。
+
+我们再补充介绍下什么是格拉姆矩阵。格拉姆矩阵是由一组向量两两之间的内积所构成的矩阵。
+
+格拉姆矩阵定义：给定一个向量集合 {x₁, x₂, ..., xₙ}，其中每个 xᵢ 都是一个 d 维向量，则该向量集合的 Gram 矩阵是一个 n × n 的对称矩阵 K，其元素 Kᵢⱼ 定义为：Kᵢⱼ = <xᵢ, xⱼ>
+
+其中 <·, ·> 表示向量之间的内积。
+
+例子：
+
+假设我们有三个二维向量：
+
+```
+x₁ = [1, 2]
+x₂ = [3, 0]
+x₃ = [-1, 1]
+```
+
+则它们的格拉姆矩阵为：
+
+```
+K = 
+| <x₁, x₁>  <x₁, x₂>  <x₁, x₃> |
+| <x₂, x₁>  <x₂, x₂>  <x₂, x₃> |
+| <x₃, x₁>  <x₃, x₂>  <x₃, x₃> |
+  =
+|  5   3   1 |
+|  3   9  -3 |
+|  1  -3   2 |
+```
+
+格拉姆矩阵性质：
+
+- 对称性: Gram 矩阵是对称的，即 Kᵢⱼ = Kⱼᵢ。
+- 半正定性: Gram 矩阵是半正定的，即对于任意非零向量 z，都有 zᵀKz ≥ 0。
+- 维数: Gram 矩阵的维数取决于向量个数，而与向量的维数无关。
+
+我们回到证明核函数存在性的步骤。需要证明对称性和正定性两步：
+
+首先，核函数 $K(\mathbf{x}, \mathbf{y})$ 必须满足对称性条件，即 $K(\mathbf{x}, \mathbf{y}) = K(\mathbf{y}, \mathbf{x})$。
+
+其次，对于任何有限集合的样本点 $\{\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n\}$，对应的 Gram 矩阵 $K$ 必须是正定的。即，对于任意的非零向量 $\mathbf{c} = (c_1, c_2, \ldots, c_n)^\top$，满足以下条件：
+$$ \sum_{i=1}^n \sum_{j=1}^n c_i c_j K(\mathbf{x}_i, \mathbf{x}_j) \geq 0 $$
+
+下面我们分别看一下主要的核函数是不是可以满足 Mercer 定理的要求。
+
+| 核函数类型 | 定义 | 对称性 | 正定性 |
+|------------|------|--------|--------|
+| 线性核     | $K(\mathbf{x}, \mathbf{y}) = \mathbf{x}^\top \mathbf{y}$ | 是 | 是 |
+| 多项式核   | $K(\mathbf{x}, \mathbf{y}) = (\mathbf{x}^\top \mathbf{y} + c)^d$ | 是 | 是 |
+| 高斯核（RBF核） | $K(\mathbf{x}, \mathbf{y}) = \exp\left(-\frac{\|\mathbf{x} - \mathbf{y}\|^2}{2\sigma^2}\right)$ | 是 | 是 |
+
+最后我们讲一个新概念，再生核希尔伯特空间（Reproducing Kernel Hilbert Space, RKHS）。
+
+再生核希尔伯特空间，如其名，首先是一个希尔伯特空间。希尔伯特空间是一个完备的内积空间。内积空间又是一个定义了内积运算的向量空间。
+
+我们得从向量空间说起了。
+
+一个向量空间（或线性空间）是一个集合$V$，它满足以下两个条件：
+
+1. 向量加法：在集合$V$中定义了一个二元运算$+$，称为向量加法。对于任意的$\mathbf{u}, \mathbf{v} \in V$，$\mathbf{u} + \mathbf{v} \in V$。
+2. 标量乘法：在集合$V$中定义了一个二元运算$\cdot$，称为标量乘法。对于任意的$\mathbf{v} \in V$和标量$a$（标量来自一个数域，如实数域 $\mathbb{R}$ 或复数域$\mathbb{C}$），$a \cdot \mathbf{v} \in V$。
+
+向量加法必须满足加法公理，也就是满足交换律、结合律、零向量和加法逆元这四个条件。
+
+1. **交换律**：$\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$ 对于所有 $\mathbf{u}, \mathbf{v} \in V$。
+2. **结合律**：$(\mathbf{u} + \mathbf{v}) + \mathbf{w} = \mathbf{u} + (\mathbf{v} + \mathbf{w})$ 对于所有 $\mathbf{u}, \mathbf{v}, \mathbf{w} \in V$。
+3. **零向量**：存在一个零向量$\mathbf{0} \in V$，使得$\mathbf{v} + \mathbf{0} = \mathbf{v}$对于所有$\mathbf{v} \in V$。
+4. **加法逆元**：对于每一个$\mathbf{v} \in V$，存在一个向量$-\mathbf{v} \in V$，使得$\mathbf{v} + (-\mathbf{v}) = \mathbf{0}$。
+
+#### 4.4.2 调用SVC进行分类
+
+我们先用线性核函数来实现鸢尾花的分类：
 
 ```python
 # 导入必要的库
@@ -4557,50 +4836,7 @@ print(classification_report(y_test, y_pred, target_names=iris.target_names))
 weighted avg       1.00      1.00      1.00        45
 ```
 
-我们来看一个分类生成的数据的例子：
-```python
-import matplotlib.pyplot as plt
 
-from sklearn import svm
-from sklearn.datasets import make_blobs
-from sklearn.inspection import DecisionBoundaryDisplay
-
-# we create 40 separable points
-X, y = make_blobs(n_samples=40, centers=2, random_state=6)
-
-# fit the model, don't regularize for illustration purposes
-clf = svm.SVC(kernel="linear", C=1000)
-clf.fit(X, y)
-
-plt.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
-
-# plot the decision function
-ax = plt.gca()
-DecisionBoundaryDisplay.from_estimator(
-    clf,
-    X,
-    plot_method="contour",
-    colors="k",
-    levels=[-1, 0, 1],
-    alpha=0.5,
-    linestyles=["--", "-", "--"],
-    ax=ax,
-)
-# plot support vectors
-ax.scatter(
-    clf.support_vectors_[:, 0],
-    clf.support_vectors_[:, 1],
-    s=100,
-    linewidth=1,
-    facecolors="none",
-    edgecolors="k",
-)
-plt.show()
-```
-
-运行结果如下：
-
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/svm_linear.png)
 
 下面我们再来看使用多项式核函数如何来实现鸢尾花的分类：
 
@@ -4888,6 +5124,7 @@ KNN的主要特点和步骤如下：
     - 对于回归任务，计算邻居的平均值或加权平均值作为预测结果。
 
 KNN算法的步骤：
+
 1. 选择参数 K：K 是一个超参数，代表选择的邻居数量。K 的值一般为正整数，且通常通过交叉验证来选择一个合适的值。
 2. 计算距离：使用距离度量（例如欧氏距离、曼哈顿距离或其他）计算待分类样本与每个训练样本之间的距离。
 3. 找出最近的 K 个邻居：根据距离从小到大排序，选取前 K 个样本。
@@ -5230,23 +5467,12 @@ plt.show()
 
 半监督学习的主要方法
 
-1. 自训练 (Self-training)：
-    - 在初始阶段，使用有标签的数据训练一个初始模型。
-    - 用该模型预测未标记数据中的标签，并将高置信度的预测结果加入有标签数据集中，重新训练模型。
-    - 反复迭代上述过程。
-
-2. 共训练 (Co-training)：
-    - 将特征分为两部分，分别训练两个模型。
-    - 每个模型用自己的预测结果去标记未标记数据，并将高置信度的预测结果提供给另一个模型。
-    - 两个模型相互合作，共同提高性能。
-
-3. 图半监督学习 (Graph-based Semi-supervised Learning)：
-    - 构建样本之间的图结构，用节点表示样本，用边表示样本之间的相似度。
-    - 利用图结构信息，通过传播标签来预测未标记数据的标签。
-
-4. 生成对抗网络 (GAN) 的半监督学习：
-    - 使用生成对抗网络中的生成器和判别器，其中判别器不仅预测真假样本，还预测样本的类别。
-    - 结合生成器生成的样本和部分有标签的数据来训练判别器。
+| 方法类型                             | 描述 |
+|--------------------------------------|------|
+| 自训练 (Self-training)               | 1. 在初始阶段，使用有标签的数据训练一个初始模型。<br>2. 用该模型预测未标记数据中的标签，并将高置信度的预测结果加入有标签数据集中，重新训练模型。<br>3. 反复迭代上述过程。 |
+| 共训练 (Co-training)                 | 1. 将特征分为两部分，分别训练两个模型。<br>2. 每个模型用自己的预测结果去标记未标记数据，并将高置信度的预测结果提供给另一个模型。<br>3. 两个模型相互合作，共同提高性能。 |
+| 图半监督学习 (Graph-based Semi-supervised Learning) | 1. 构建样本之间的图结构，用节点表示样本，用边表示样本之间的相似度。<br>2. 利用图结构信息，通过传播标签来预测未标记数据的标签。 |
+| 生成对抗网络 (GAN) 的半监督学习     | 1. 使用生成对抗网络中的生成器和判别器，其中判别器不仅预测真假样本，还预测样本的类别。<br>2. 结合生成器生成的样本和部分有标签的数据来训练判别器。 |
 
 我们来看一个例子感受下：
 
@@ -5686,17 +5912,21 @@ print(f'测试集均方误差: {test_mse}')
 LARS 算法的思想是逐步逼近最优解，每次迭代选择与当前残差最相关的特征，沿着该特征的方向移动，直到另一个特征与残差的相关性相同。具体步骤如下：
 
 1. 初始化：
+
     - 所有回归系数 $ \beta $ 初始化为零。
     - 计算所有特征与响应变量的相关性，选择与响应变量最相关的特征。
 
 2. 向前方向搜索：
+
     - 沿着选择的特征方向向前移动，即增加该特征的回归系数，直到另一个特征与当前残差的相关性相同。此步骤确保同时考虑多个特征对响应变量的贡献。
 
 3. 更新方向：
+
     - 选择新的方向，使得模型能够同时考虑当前选择的多个特征，并沿着这个新的方向继续移动。
     - 重复上述步骤，每次迭代引入一个新的特征，直到所有特征都被纳入模型或达到某个停止条件（如残差足够小）。
 
 4. 停止规则：
+
     - 当所有特征都已被纳入模型，或达到预设的停止条件时，算法停止。
 
 
@@ -5772,15 +6002,15 @@ print(f'测试集均方误差: {test_mse}')
 
 #### 5.2.3 LassoLarsCV
 
-我们继续5.2.1节讨论的Lasso回归的$\alpha$值的问题。LassoLarsCV是一种用于选择 Lasso 回归中最优正则化强度 $ \alpha $ 的方法，结合了上节介绍的LARS算法与交叉验证技术。它的全称是 Lasso Least Angle Regression with Cross-Validation。
+我们继续5.2.1节讨论的Lasso回归的$\alpha$值的问题。LassoLarsCV是一种用于选择 Lasso 回归中最优正则化强度 $\alpha$ 的方法，结合了上节介绍的LARS算法与交叉验证技术。它的全称是 Lasso Least Angle Regression with Cross-Validation。
 
-LassoLarsCV 结合了 LARS 算法和交叉验证技术，通过以下步骤找到最优的 $ \alpha $ 值：
+LassoLarsCV 结合了 LARS 算法和交叉验证技术，通过以下步骤找到最优的 $\alpha$ 值：
 
-1. 路径生成：使用 LARS 算法生成一条路径，即不同 $ \alpha $ 值下的模型解。这条路径对应于不同的正则化强度，从而得到不同的模型稀疏度。
+1. 路径生成：使用 LARS 算法生成一条路径，即不同 $\alpha$ 值下的模型解。这条路径对应于不同的正则化强度，从而得到不同的模型稀疏度。
 2. 交叉验证：
-    - 对每个 $ \alpha $ 值，使用交叉验证技术评估模型性能。具体来说，将数据集划分为 $ k $ 个子集，交替使用 $ k-1 $ 个子集进行训练，剩下的一个子集进行验证。
-    - 计算每个 $ \alpha $ 值下的交叉验证误差。
-3. 选择最优 $ \alpha $：选择交叉验证误差最小的 $ \alpha $ 值作为最优的正则化强度。
+    - 对每个 $\alpha$ 值，使用交叉验证技术评估模型性能。具体来说，将数据集划分为 $ k $ 个子集，交替使用 $ k-1 $ 个子集进行训练，剩下的一个子集进行验证。
+    - 计算每个 $\alpha$ 值下的交叉验证误差。
+3. 选择最优 $\alpha$：选择交叉验证误差最小的 $\alpha$ 值作为最优的正则化强度。
 
 我们来看如何用LassoLarsCV来预测波士顿房价时取最优的$\alpha$值：
 
@@ -5825,13 +6055,13 @@ print(f'测试集均方误差: {test_mse}')
 
 多任务Lasso是一种扩展的 Lasso 回归方法，用于同时处理多个相关回归任务。在这种方法中，我们假设不同的任务共享相似的稀疏模式，即它们具有相似的非零系数位置。通过引入这种假设，多任务Lasso 能够更有效地利用数据的结构信息，提升模型的预测性能。
 
-多任务Lasso 将 Lasso 的思想扩展到多任务场景。假设我们有 $ K $ 个回归任务，每个任务都有自己的响应变量，但它们共享相同的特征矩阵 $ X $。多任务Lasso 的目标函数可以表示为：
+多任务Lasso 将 Lasso 的思想扩展到多任务场景。假设我们有 $ K $ 个回归任务，每个任务都有自己的响应变量，但它们共享相同的特征矩阵 $X$。多任务Lasso 的目标函数可以表示为：
 
-$ \min_{W} \left( \frac{1}{2n} \sum_{k=1}^K \sum_{i=1}^n (y_{ik} - X_i w_k)^2 + \alpha \sum_{j=1}^p \|W_j\|_2 \right) $
+$\min_{W} \left( \frac{1}{2n} \sum_{k=1}^K \sum_{i=1}^n (y_{ik} - X_i w_k)^2 + \alpha \sum_{j=1}^p \|W_j\|_2 \right)$
 
 其中：
-- $ W $ 是回归系数矩阵，每列 $ w_k $ 对应一个任务的回归系数。
-- $ \|W_j\|_2 $ 是矩阵 $ W $ 的第 $ j $ 行的 $ L2 $ 范数，即 $ j $ 特征在所有任务中的系数的平方和的平方根。
+- $W$ 是回归系数矩阵，每列 $w_k$ 对应一个任务的回归系数。
+- $\|W_j\|_2$ 是矩阵 $W$ 的第 $j$ 行的 $L2$ 范数，即 $j$ 特征在所有任务中的系数的平方和的平方根。
 
 多任务Lasso 假设所有任务的稀疏模式是共享的，即如果某个特征对一个任务的重要性较大，那么它对其他任务也可能重要。
     
@@ -6006,7 +6236,7 @@ print(f'LOOCV 平均均方误差: {average_mse}')
 LOOCV 平均均方误差: 24.249383742216512
 ```
 
-同样，scikit-learn也提供了`RidgeCV`类，通过交叉验证自动选择最佳的正则化参数 $ \alpha $。用户可以提供一组候选的 $ \alpha $ 值，`RidgeCV` 会在这些值中选择一个使得交叉验证误差最小的 $ \alpha $。
+同样，scikit-learn也提供了`RidgeCV`类，通过交叉验证自动选择最佳的正则化参数 $\alpha$。用户可以提供一组候选的 $\alpha$ 值，`RidgeCV` 会在这些值中选择一个使得交叉验证误差最小的 $\alpha$。
 
 我们来看一个例子：
 
@@ -7165,19 +7395,19 @@ clust.fit(X)
 
 Affinity Propagation 算法通过在数据点之间传递两种类型的信息来确定簇：责任（Responsibility）和可用性（Availability）。具体步骤如下：
 
-1. 亲和度矩阵（Similarity Matrix）：首先，计算每对数据点之间的相似度（通常使用负欧氏距离）。相似度矩阵 $ S $ 的元素 $ S(i, j) $ 表示数据点 $ i $ 作为数据点 $ j $ 的代表点的适合程度（负距离越大，适合度越高）。
+1. 亲和度矩阵（Similarity Matrix）：首先，计算每对数据点之间的相似度（通常使用负欧氏距离）。相似度矩阵 $S$ 的元素 $S(i, j)$ 表示数据点 $i$ 作为数据点 $j$ 的代表点的适合程度（负距离越大，适合度越高）。
 2. 责任更新（Responsibility Update）：
-   - 责任 $ R(i, k) $ 表示数据点 $ k $ 作为数据点 $ i $ 的代表点的责任大小。更新公式为：
+   - 责任 $R(i, k)$ 表示数据点 $k$ 作为数据点 $i$ 的代表点的责任大小。更新公式为：
      $R(i, k) = S(i, k) - \max_{k' \neq k} \{ A(i, k') + S(i, k') \}$
-   - 这一步计算数据点 $ i $ 相对于其他所有可能的代表点 $ k $ 的偏好。
+   - 这一步计算数据点 $i$ 相对于其他所有可能的代表点 $ k $ 的偏好。
 3. 可用性更新（Availability Update）：
    - 可用性 $ A(i, k) $ 表示数据点 $ i $ 选择数据点 $ k $ 作为代表点的可行性大小。更新公式为：
      $A(i, k) = \min \left( 0, R(k, k) + \sum_{i' \notin \{i, k\}} \max(0, R(i', k)) \right) \quad \text{for } i \neq k$
      $A(k, k) = \sum_{i' \neq k} \max(0, R(i', k))$
-   - 这一步计算数据点 $ k $ 作为代表点的可行性。
+   - 这一步计算数据点 $k$ 作为代表点的可行性。
 4. 聚类决定：
-   - 经过多次迭代更新责任和可用性矩阵之后，综合考虑责任和可用性矩阵的值，选择 $ R(i, k) + A(i, k) $ 最大的 $ k $ 作为数据点 $ i $ 的代表点。
-   - 最终，数据点 $ k $ 作为代表点的那些点形成一个簇。
+   - 经过多次迭代更新责任和可用性矩阵之后，综合考虑责任和可用性矩阵的值，选择 $R(i, k) + A(i, k)$ 最大的 $k$ 作为数据点 $i$ 的代表点。
+   - 最终，数据点 $k$ 作为代表点的那些点形成一个簇。
 
 我们还是以上面的5堆数据为例：
 
@@ -7446,6 +7676,7 @@ plt.show()
 ```
 
 结果如下：
+
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/pca_iris.png)
 
 #### 6.3.2 独立成分分析
@@ -18539,84 +18770,7 @@ RLHF的工作流程为
 
 但是，如果我们想要更深入地了解机器学习的原理，或者想要实现一些新的机器学习算法，那么我们就需要了解一些更底层的知识。JAX是一个用于高性能机器学习的库，它没有提供过多的封装，只是提供了底层的一些工具。这就给我们加速实现算法的同时，可以学到更多的底层原理。
 
-### 13.1 JAX的计算图
 
-JAX 通过函数变换（function transformations）来构造计算图，而不是显式地构建计算图。这种方式使得计算图的构建过程更加灵活和动态。以下是 JAX 如何构造和处理计算图的详细解释。
-
-在 JAX 中，计算图的构造主要通过 jax.jit、jax.grad、jax.vmap 等函数变换来实现。这些函数变换会对输入的 Python 函数进行转换，生成对应的计算图。
-
-jax.jit（Just-In-Time compilation，即时编译）用于将 Python 函数编译为高效的 XLA（Accelerated Linear Algebra）代码。它会将函数的计算图编译成高效的机器代码。
-
-```python
-import jax
-import jax.numpy as jnp
-
-def f(x):
-    return jnp.sin(x) + jnp.cos(x)
-
-jit_f = jax.jit(f)
-
-x = jnp.array([1.0, 2.0, 3.0])
-y = jit_f(x)
-print(y)
-```
-
-在上面例子中，jax.jit 会将 f 的计算图编译为高效的机器代码。调用 jit_f 时，JAX 会使用这个编译好的计算图来进行计算。
-
-jax.grad 用于计算函数的梯度。它会根据输入函数自动生成对数值进行反向传播所需的计算图。
-
-```python
-def f(x):
-    return x**2 + 3 * x + 2
-
-dfdx = jax.grad(f)
-
-x = 3.0
-grad = dfdx(x)
-print(grad)
-```
-
-在上面例子中，jax.grad 会根据 f 构建一个计算其梯度的计算图。
-
-jax.vmap（vectorized map）用于将函数向量化，使其可以批量处理输入数据。它会生成一个新的函数，这个函数在批量数据上应用原始函数。
-
-```python
-def f(x):
-    return x ** 2
-
-vmap_f = jax.vmap(f)
-
-x = jnp.array([1.0, 2.0, 3.0])
-y = vmap_f(x)
-print(y)
-```
-
-在上面例子中，jax.vmap 会生成一个向量化的 f 函数，使其能够批量处理输入的数组。
-
-JAX 的计算图是动态构建的，这意味着计算图会在函数变换时被构建和优化。与 TensorFlow 或 PyTorch 的静态计算图不同，JAX 的这种动态方式使得它更接近于普通的 Python 编程体验。
-
-JAX 使用 XLA（Accelerated Linear Algebra）作为后端编译器。XLA 是一个用于加速线性代数计算的编译器框架，最初由 Google 开发。JAX 会将计算图转换为 XLA 操作，并利用 XLA 的优化和编译能力生成高效的机器代码。
-
-另外，JAX还支持jax.pmap函数，用于在多个设备上并行地执行函数。这使得 JAX 可以在多个设备上并行地执行函数，从而加速计算。
-
-```python
-import jax
-import jax.numpy as jnp
-
-# 定义一个简单的函数
-def f(x):
-    return jnp.sin(x) + jnp.cos(x)
-
-# 使用 jax.pmap 进行并行计算
-pmap_f = jax.pmap(f)
-
-# 创建输入数据
-x = jnp.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
-
-# 将计算分配到多个 TPU 核上执行
-y = pmap_f(x)
-print(y)
-```
 
 ### 13.2 JAX线性回归与逻辑回归
 
@@ -21362,3 +21516,4 @@ Best individual: [-1479201.2340890465], Fitness: 2188036290930.558
 8. Paul F. Christiano, Jan Leike, Tom B. Brown, Miljan Martic, Shane Legg, and Dario Amodei. Deep reinforcement learning from human preferences. In Advances in Neural Information Processing Systems 30: Annual Conference on Neural Information Processing Systems 2017, December 4-9, 2017, Long Beach, CA, USA, pages 4302-4310, 2017.
 9. Schulman J, Wolski F, Dhariwal P, Radford A, Klimov O. Proximal policy optimization algorithms. arXiv preprint arXiv:1707.06347. 2017
 10. Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., Graves, A., Riedmiller, M., Fidjeland, A. K., Ostrovski, G., Petersen, S., Beattie, C., Sadik, A., Antonoglou, I., King, H., Kumaran, D., Wierstra, D., Legg, S., and Hassabis, D. (2015). Human-level control through deep reinforcement learning. Nature, 518(7540):529–533.
+11. Mercer James 1909, XVI. Functions of positive and negative type, and their connection the theory of integral equationsPhilosophical Transactions of the Royal Society of London. Series A, Containing Papers of a Mathematical or Physical Character 209 415–446
