@@ -1313,7 +1313,7 @@ matrix([[ 0.8125 , -0.125  ,  0.     ],
 ```
 
 
-### 2.5 用JAX加速NumPy
+### 2.5 用JAX加速NumPy处理数据
 
 NumPy最为核心的功能就是多维矩阵的支持。但是，NumPy不能支持GPU和TPU加速，对于我们将来要处理的计算来说不太实用，所以我们这里引入JAX库。
 
@@ -1430,8 +1430,6 @@ print(a8)
 - 无穷范数：向量中各个元素绝对值的最大值。
 需要注意的是，L0范数并不是严格意义上的范数，因为它违反了齐次性。但是在机器学习中，L0范数常用于衡量向量中非零元素的个数，因此也被称为“伪范数”。
 
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/norm.png)
-
 我们先从计算一个一维向量的L1范数开始，不要L1范数这个名字给吓到，其实就是绝对值之和：
 
 ```python
@@ -1536,8 +1534,6 @@ print(inv1)
 导数是一个函数在某点处的变化率，用于描述函数在该点处的变化率。导数可以表示函数在该点处的斜率，即函数在该点处的陡峭程度。
 
 梯度(gradient)是一个向量，表示函数在该点处的方向导数沿着该方向取得最大值。梯度可以表示函数在该点处的变化最快和变化率最大的方向。在单变量的实值函数中，梯度可以简单理解为导数。
-
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/grad.png)
 
 JAX作为支持深度学习的框架，对于梯度的支持是被优先考虑的。我们可以使用jax.grad函数来计算梯度。针对一个一元函数，梯度就是导数。我们可以用下面的代码来计算sin函数在x=1.0处的梯度：
 
@@ -1661,8 +1657,6 @@ $$
 H(X) = - \sum_{x \in X} p(x) \log_2 p(x)
 $$
 
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/prop.png)
-
 ```python
 import jax.numpy as jnp
 
@@ -1776,9 +1770,17 @@ y = pmap_f(x)
 print(y)
 ```
 
-## 第三章 机器学习框架基础
+### 2.6 机器学习框架
 
-### 3.1 Scikit-Learn框架基础
+就像编程语言需要库一样，好用的机器学习框架也非常重要。在机器学习的发展过程中，类似于TensorFlow, PyTorch, Scikit-Learn, Baselines, HuggingFace Transformers等框架都极大促进了机器学习的发展与应用。
+
+它们的发展史也是千差万别。比如TensorFlow是Google大脑团队将自己的工具无偿开源出来。PyTorch是Facebook的研究团队基于一个使用Lua语言的框架Torch的基础上开发出来的。Scikit-Learn是一个学生项目。HuggingFace Transformers是一个初创公司开发的。而Baselines是OpenAI开发的，后来稳定后不维护了，由社区团队几次更替开发。
+
+数据处理框架Pandas，最早是对冲基金公司的人开发用来处理金融数据的。
+NumPy则是在原有的两个框架的基础上合并开发出来的。
+绘制图Matplotlib是一位神经科学家开发的。
+
+各种不同背景的人共同繁荣了生态，使我们现在有各种层出不穷的框架库可以用。在大家以后的工作学习中，也要多多关注这些框架的发展，不断学习新的库，以便适应新技术。
 
 Scikit-Learn是一个用于机器学习的Python库，它提供了大量的机器学习算法和工具，可以帮助我们快速构建和训练机器学习模型。Scikit-Learn的核心是估计器（Estimator）类，它封装了机器学习模型的训练和预测过程。Scikit-Learn还提供了大量的工具类和函数，用于数据预处理、特征工程、模型评估等任务。
 
@@ -1790,281 +1792,28 @@ Scikit-learn的开发始于2007年，最初是一个学生项目。
 
 2021年，sklearn正式发布1.0版本，正式官宣成熟。
 
-### 3.3 PyTorch框架基础
+Sklearn框架有非常好的封装，所以我们可以很方便的调用。我们来看下调用的流程。
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/sklearn.png)
 
 同JAX一样，PyTorch也是一个支持GPU加速的深度学习框架。PyTorch的核心是张量（Tensor）类，它是一个多维数组，类似于NumPy的ndarray。PyTorch的张量支持GPU加速，可以在GPU上进行张量运算，从而加速深度学习模型的训练和推理。
 
-#### 3.3.1 随机数生成
+PyTorch的GPU支持需要依赖于CUDA框架和cudnn等库，我们在后面介绍了CUDA编程之后再详细介绍。
 
-1. 生成均匀分布的随机数
+## 2.7 小结
 
-使用 torch.rand 可以生成在 [0, 1) 区间内均匀分布的随机数。
+这一节我们铺垫了NumPy和JAX库对于数据的处理。下一节，我们直接基于Sklearn框架和JAX框架进行机器学习的实战编程。
 
-```python
-import torch
-
-# 生成一个 3x3 的张量，元素在 [0, 1) 区间内
-random_tensor = torch.rand(3, 3)
-print(random_tensor)
-```
-
-运行结果如下：
-
-```
-tensor([[0.3687, 0.4345, 0.5181],
-        [0.0358, 0.5245, 0.1144],
-        [0.8433, 0.8607, 0.7082]])
-```
-
-2. 生成标准正态分布的随机数
-
-使用 torch.randn 可以生成服从标准正态分布（均值为 0，标准差为 1）的随机数。
-
-```python
-import torch
-
-# 生成一个 3x3 的张量，元素服从标准正态分布
-normal_tensor = torch.randn(3, 3)
-print(normal_tensor)
-```
-
-运行结果如下：
-
-```
-tensor([[ 1.1555e+00, -1.1852e+00, -1.0129e-03],
-        [-5.6360e-02, -1.3856e-01,  3.1301e-01],
-        [ 9.5240e-01,  6.7079e-01, -5.9284e-02]])
-```
-
-3. 生成指定范围内的均匀分布随机数
-使用 torch.randint 可以生成指定整型范围内的随机数。
-
-```python
-import torch
-
-# 生成一个 3x3 的张量，元素在 [0, 10) 区间内的随机整数
-int_tensor = torch.randint(0, 10, (3, 3))
-print(int_tensor)
-```
-
-结果都是整数：
-```
-tensor([[8, 7, 9],
-        [0, 1, 6],
-        [0, 2, 1]])
-```
-
-4. 生成指定均值和标准差的正态分布随机数
-
-使用 torch.normal 可以生成具有指定均值和标准差的正态分布随机数。
-
-```python
-import torch
-
-# 生成一个 3x3 的张量，元素服从均值为 2，标准差为 3 的正态分布
-mean = 2
-std = 3
-normal_tensor = torch.normal(mean, std, size=(3, 3))
-print(normal_tensor)
-```
-
-如果大家已经忘了什么是正态分布，我们可以一起画个图复习一下：
-```python
-import torch
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
-
-# 设置随机种子以保证可重复性
-torch.manual_seed(42)
-
-# 生成正态分布数据
-mean = 0.0  # 均值
-std = 1.0   # 标准差
-num_samples = 1000  # 样本数量
-
-# 使用 PyTorch 生成正态分布数据
-data = torch.normal(mean, std, size=(num_samples,))
-
-# 将数据转换为 numpy 数组以便使用 Matplotlib
-data_np = data.numpy()
-
-# 绘制直方图
-plt.hist(data_np, bins=30, density=True, alpha=0.6, color='g', label='Histogram')
-
-# 绘制正态分布的概率密度函数（PDF）曲线
-xmin, xmax = plt.xlim()
-x = np.linspace(xmin, xmax, 100)
-p = stats.norm.pdf(x, mean, std)
-plt.plot(x, p, 'k', linewidth=2, label='Normal PDF')
-
-# 添加标题和标签
-plt.title('Normal Distribution')
-plt.xlabel('Value')
-plt.ylabel('Density')
-plt.legend()
-
-# 显示图形
-plt.show()
-```
-
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/normal_distribution.png)
-
-5. 生成二项分布的随机数
-
-使用 torch.bernoulli 可以生成服从伯努利分布的随机数。
-
-```python
-import torch
-
-# 生成一个 3x3 的张量，元素服从伯努利分布（参数为 0.5）
-prob_tensor = torch.full((3, 3), 0.5)
-bernoulli_tensor = torch.bernoulli(prob_tensor)
-print(bernoulli_tensor)
-```
-
-输出如下：
-
-```
-tensor([[0., 0., 1.],
-        [1., 1., 1.],
-        [1., 0., 0.]])
-```
-
-6. 生成多项分布的随机数
-
-使用 torch.multinomial 可以生成服从多项分布的随机数。
-
-```python
-import torch
-
-# 定义概率分布
-probabilities = torch.tensor([0.1, 0.3, 0.6])
-
-# 从定义的概率分布中抽取 5 个样本
-multinomial_samples = torch.multinomial(probabilities, 5, replacement=True)
-print(multinomial_samples)
-```
-
-7. 设置随机种子
-为了确保随机数的可重复性，可以设置随机种子。
-
-```python
-import torch
-
-# 设置随机种子
-torch.manual_seed(42)
-
-# 生成随机数
-random_tensor = torch.rand(3, 3)
-print(random_tensor)
-```
-
-#### 3.3.2 导数与梯度
-
-在 PyTorch 中，计算导数和微分主要依赖于 torch.autograd 模块，它提供了自动微分功能。torch.autograd 可以对张量进行自动求导，是实现反向传播算法的基础。在这部分，我们将讨论如何使用 PyTorch 计算导数和微分，并提供一些示例代码。
-
-首先，需要创建一个启用了梯度计算的张量。可以通过设置 requires_grad=True 来实现。
-
-```python
-import torch
-
-# 创建一个张量并启用梯度计算
-x = torch.tensor([2.0], requires_grad=True)
-```
-定义一个函数，并通过前向传播计算其值。然后，通过调用 backward() 方法计算导数。
-
-```python
-# 定义一个简单的函数 y = x^2
-y = x ** 2
-
-# 计算导数 dy/dx
-y.backward()
-
-# 打印导数
-print(x.grad)  # 输出: tensor([4.])
-```
-
-在这个例子中，$y = x^2$ 的导数 $\frac{dy}{dx}$ 在 x = 2.0 处的值应该是 4.0。
-
-如果函数涉及多个变量，可以对每个变量分别计算导数。
-
-```python
-# 创建多个张量并启用梯度计算
-x = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)
-w = torch.tensor([0.1, 0.2, 0.3], requires_grad=True)
-b = torch.tensor([0.5], requires_grad=True)
-
-# 定义一个简单的线性函数 y = w * x + b
-y = x * w + b
-
-# 计算导数 dy/dx
-y.backward(torch.tensor([1.0, 1.0, 1.0]))
-
-# 打印导数
-print(x.grad)  # 输出: tensor([0.1000, 0.2000, 0.3000])
-print(w.grad)  # 输出: tensor([1., 2., 3.])
-print(b.grad)  # 输出: tensor([3.])
-```
-
-在这个例子中，我们对 y 的每个元素分别计算了导数，并使用 backward() 方法传入一个与 y 形状相同的张量，以指定每个元素的权重。
-
-PyTorch 也支持计算高阶导数。可以通过对第一次导数再次调用 backward() 来实现。
-
-```python
-import torch
-
-# 创建一个张量并启用梯度计算
-x = torch.tensor([2.0], requires_grad=True)
-
-# 定义一个函数 y = x^3
-y = x ** 3
-
-# 计算 dy/dx
-y.backward(retain_graph=True)
-
-# 打印第一次导数
-print(x.grad)  # 输出: tensor([12.])
-
-# 计算高阶导数 d^2y/dx^2
-x.grad.zero_()  # 在计算高阶导数前需要清除之前的梯度
-grad_y = x.grad.clone()
-grad_y.backward()
-
-# 打印第二次导数
-print(x.grad)  # 输出: tensor([6.])
-```
-
-在这个例子中，y = x^3 的第一次导数在 x = 2.0 处的值是 12.0，第二次导数的值是 6.0。
-
-除了使用 backward() 方法，PyTorch 还提供了 torch.autograd.grad 函数，可以更加灵活地计算导数。
-
-```python
-import torch
-
-# 创建一个张量并启用梯度计算
-x = torch.tensor([2.0], requires_grad=True)
-
-# 定义一个函数 y = x^2
-y = x ** 2
-
-# 使用 torch.autograd.grad 计算导数
-grad_x = torch.autograd.grad(outputs=y, inputs=x, grad_outputs=torch.ones_like(y))
-
-# 打印导数
-print(grad_x)  # 输出: (tensor([4.]),)
-```
-
-## 第四章 监督学习：分类预测
+## 第三章 监督学习：分类预测
 
 机器学习的主要问题包括两大类：数值预测和分类预测。按理说应该先从数值预测开始讲，但是，一些回归问题用到的工具在分类中先介绍会更容易理解。所以我们先从分类问题开始讲起。
 分类是机器学习中最大的一个分类。很多问题最终都归结到分类问题上。比如手写数字识别，并不是直接识别数字，而是判断这个符号跟哪个数字的分类最接近。
 
-### 4.1 逻辑回归
+### 3.1 逻辑回归
 
 逻辑回归（Logistic Regression）是一种用于处理分类问题的统计模型，尽管名字中带有“回归”，但实际上它是一种分类方法。逻辑回归模型通过学习输入特征与输出类别之间的关系，来预测数据点属于某个类别的概率。
 
-#### 4.1.1 逻辑回归的原理
+#### 3.1.1 逻辑回归的原理
 
 逻辑回归本质上是线性回归模型的扩展，但它使用 logistic (sigmoid) 函数 将预测结果映射到 (0, 1) 区间，从而表示概率。线性回归模型输出的值可以是任意实数，而逻辑回归通过 sigmoid 函数将输出值限制在 0 到 1 之间。具体来说，逻辑回归模型首先假设数据服从伯努利分布，然后通过极大似然估计的方法来求解模型参数，使得模型在当前数据集上的预测结果与实际结果尽可能一致。
 
@@ -2112,7 +1861,7 @@ $\sigma(z)=\frac{1}{1+e^{-z}}$​
 | 特征重要性：模型参数可以解释特征的重要性。                   |                                                                           |
 我们可以使用最小二乘法或者梯度下降等方法来求解逻辑回归模型的参数。
 
-#### 4.1.2 用SKlearn实现逻辑回归
+#### 3.1.2 用SKlearn实现逻辑回归
 
 通过sklearn库，我们可以很方便地使用逻辑回归模型。我们只需要调用sklearn.linear_model包中的LogisticRegression类，然后使用fit方法拟合数据，使用predict方法进行预测。
 
@@ -2281,7 +2030,7 @@ weighted avg       0.83      0.82      0.82        45
 
 通过这个图，我们可以看到模型如何依据特征进行分类，以及不同类别之间的分界线位置。这有助于我们理解模型的决策过程，以及哪些特征对分类起到了关键作用。虽然准确率变差了，但是有助于我们直观地了解模型的分类效果。
 
-#### 4.1.3 用逻辑回归来处理糖尿病数据集
+#### 3.1.3 用逻辑回归来处理糖尿病数据集
 
 再接再厉，我们用逻辑回归来处理糖尿病数据集：
 
@@ -2436,7 +2185,7 @@ plt.show()
 
 图中可以直观的感受到模型的性能，AUC值越接近1，模型性能越好。
 
-#### 4.1.4 用逻辑回归处理威斯康星乳腺癌数据集
+#### 3.1.4 用逻辑回归处理威斯康星乳腺癌数据集
 
 我们再巩固一下，用逻辑回归来处理威斯康星乳腺癌数据集：
 
@@ -2541,7 +2290,7 @@ plt.show()
 
 内容其实就是混淆矩阵，只不过用颜色表示了出来。
 
-### 4.2 随机梯度下降
+### 3.2 随机梯度下降
 
 在SKlearn库中的文档中也承认，随机梯度下降是一种优化算法，放在监督学习的算法中是不合适的。它是梯度下降的一种变体，通过随机选择样本来估计梯度，从而加快训练速度。与传统的梯度下降法不同，随机梯度下降每次迭代只使用一个样本来更新模型参数，而不是使用所有样本的平均梯度。这种随机性使得随机梯度下降具有更快的收敛速度和更低的计算复杂度。
 
@@ -2578,7 +2327,7 @@ $\theta = \theta - \eta \nabla_\theta J(\theta; x^{(i)}, y^{(i)})$
 
 为了在计算效率和收敛稳定性之间找到平衡，可以使用 Mini-batch 梯度下降。它在每次迭代时使用一小批量样本（mini-batch）来计算梯度。这种方法结合了标准梯度下降和 SGD 的优点，既提高了计算效率，又减少了梯度的波动。
 
-#### 4.2.1 用SGDClassifier进行分类
+#### 3.2.1 用SGDClassifier进行分类
 
 下面我们看一下使用随机梯度下降对鸢尾花数据集进行分类的例子：
 
@@ -2804,7 +2553,7 @@ Confusion Matrix:
 |逻辑回归	|0.96	|0.73|
 |随机梯度下降	|0.98	|0.74|
 
-#### 4.2.2 用JAX实现逻辑回归
+#### 3.2.2 用JAX实现逻辑回归
 
 SDGClassifier是sklearn库中的一个工具，我们可以直接使用，但是并不了解其原理。
 下面我们用JAX库来实现逻辑回归模型，这样我们就可以更深入地了解逻辑回归的原理。这部分跟后面要讲到的深度学习关系密切。
@@ -3038,7 +2787,7 @@ y_pred_test_class = (y_pred_test > 0.5).astype(int)
 
 到这一节为止，我们终于把逻辑回归的原理彻底讲明白了。
 
-### 4.3 决策树
+### 3.3 决策树
 
 决策树是一种用于分类和回归任务的监督学习算法。它通过一系列的二元（是/否）决策将数据划分为不同的类别或预测连续值。决策树模型通过递归地分割数据空间来构建树形结构，其中每个节点代表一个决策点或分裂点。
 
@@ -3085,7 +2834,7 @@ y_pred_test_class = (y_pred_test > 0.5).astype(int)
 
 通过这样的决策树的图，是不是对于鸢尾花的分类特征有了很直观的认识了？
 
-#### 4.3.1 用DecisionTreeClassifier调用决策树
+#### 3.3.1 用DecisionTreeClassifier调用决策树
 
 SKlearn库中的决策树分类器是DecisionTreeClassifier，我们可以直接调用这个分类器来训练数据。得到上面的结果非常容易，我们来看代码：
 
@@ -3379,7 +3128,7 @@ Sklearn库的强大并不仅仅在于它提供了许多机器学习算法，还�
 |随机梯度下降	|0.98	|0.74|
 |决策树	|0.95	|0.62|
 
-#### 4.3.2 JAX实现简易决策树算法
+#### 3.3.2 JAX实现简易决策树算法
 
 学会了如何调用库，我们下面学习算法的原理。原理部分我们还是使用JAX来实现。
 
@@ -3950,7 +3699,7 @@ Feature 2 <= 0.01
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/decision_tree_2.png)
 
-#### 4.3.3 ID3算法
+#### 3.3.3 ID3算法
 
 上节我们的决策树算法使用的是CART算法。CART（Classification and Regression Trees）算法是由Breiman等人在1984年提出的一种用于生成决策树的算法。CART算法基于基尼不纯度（Gini Impurity）来选择每个节点的特征。其目标是通过选择能够最小化基尼不纯度的特征，逐步构建决策树。本节和下节我们将介绍另外两种决策树算法：ID3算法和C4.5算法。
 
@@ -4198,7 +3947,7 @@ test_data包含两个样本：
 
 这两个结果都完全正确。
 
-#### 4.3.4 C4.5算法
+#### 3.3.4 C4.5算法
 
 C4.5算法是由Ross Quinlan在1993年提出的一种改进的决策树算法，它是ID3算法的扩展和改进版本。C4.5算法与ID3算法类似，也是一种用于分类的递归决策树生成算法。C4.5在选择特征进行数据分割时，使用了信息增益比（Gain Ratio）作为度量标准，而不是单纯的信息增益。
 
@@ -4336,7 +4085,7 @@ Predictions: [1 0]
 
 可见结果也是正确的。
 
-#### 4.3.5 剪枝
+#### 3.3.5 剪枝
 
 剪枝（Pruning）是决策树算法中防止过拟合的一种重要技术。过拟合是指模型在训练数据上表现很好，但在新数据上表现较差。剪枝通过减少决策树的复杂度来提高模型的泛化能力。决策树剪枝主要有两种方法：预剪枝（Pre-pruning）和后剪枝（Post-pruning）。
 
@@ -4772,11 +4521,11 @@ plt.show()
 
 而且从树结构上看，我们把上节密密麻麻的决策树剪成了一棵小树，而且准确率还有所提升。
 
-### 4.4 支持向量机
+### 3.4 支持向量机
 
 在深度学习流行之前，支持向量机曾经是最有前途的机器学习方向。支持向量机有良好的理论基础，可以解决线性和非线性分类问题，也可以用于回归问题。
 
-#### 4.4.1 支持向量机的基本原理
+#### 3.4.1 支持向量机的基本原理
 
 我们先介绍三个基本概念：
 
@@ -4968,7 +4717,7 @@ $h^*(x) = \sum_{i=1}^m \alpha_i k(x_i,x)$
 
 具体来说，对于任意的单调增函数和非负损失函数，优化问题的解总可以写为核函数的线性组合。这里的核函数是一个衡量两个向量相似度的函数，它在高维空间中对应着向量的内积。因此，通过选择合适的核函数，我们可以有效地在高维空间中找到最优的分类超平面，而无需直接处理高维空间的复杂性。
 
-#### 4.4.2 调用SVC进行分类
+#### 3.4.2 调用SVC进行分类
 
 我们先用线性核函数来实现鸢尾花的分类：
 
@@ -5399,7 +5148,7 @@ print(classification_report(y_test, y_pred, target_names=["Non-diabetic", "Diabe
 | 支持向量机高斯径向基核 | 0.98 | 0.76|
 | 支持向量机sigmoid核 | 0.96 | 0.71|
 
-#### 4.4.3 用JAX实现支持向量机
+#### 3.4.3 用JAX实现支持向量机
 
 虽然前面我们用了不少公式介绍支持向量机。但是Sklearn库封装的太好了，有一个重要细节仍然没有讲到。那就是支持向量机的损失函数。
 
@@ -5669,11 +5418,11 @@ def sigmoid_kernel(X1, X2, alpha=0.1, c=0.0):
 
 通过上面4个核函数的实现，相信大家对于核函数各个参数的意义有了更深的理解。支持向量机有很好的数学理论基础，所以希望大家就此对于机器学习的理论有更深的理解。
 
-### 4.5 k近邻算法
+### 3.5 k近邻算法
 
 最近邻方法（Nearest Neighbor）是一类用于模式识别和回归分析的非参数统计方法。它的基本思想是，通过在数据集中找到与目标样本最接近的一个或多个样本，并基于这些邻近样本的性质来进行预测或分类。
 
-#### 4.5.1 k近邻算法的基本原理
+#### 3.5.1 k近邻算法的基本原理
 
 是简单的最近邻方法是K最近邻算法（K-Nearest Neighbors, KNN）。
 
@@ -5761,7 +5510,7 @@ KNN算法的优缺点：
 | 4 |                                                              | 对噪声和不平衡数据敏感。                                     |
 
 
-#### 4.5.2 用KNeighborsClassifier实现K近邻算法
+#### 3.5.2 用KNeighborsClassifier实现K近邻算法
 
 KNeighborsClassifier的用法非常简单，只要指定K值即可。下面我们用鸢尾花数据集来演示：
 
@@ -6105,7 +5854,7 @@ Confusion Matrix:
 | 支持向量机sigmoid核 | 0.96 | 0.71 |
 | k近邻 | 0.96 | 0.74 |
 
-#### 4.5.3 JAX实现K近邻算法
+#### 3.5.3 JAX实现K近邻算法
 
 我们用JAX来实现K近邻算法。k近邻算法的核心是计算距离，我们可以用JAX的vmap来实现并行计算。
 
@@ -6205,7 +5954,7 @@ accuracy = jnp.mean(test_predictions == test_labels)
 print(f'Accuracy: {accuracy * 100:.2f}%')
 ```
 
-### 4.6 朴素贝叶斯方法
+### 3.6 朴素贝叶斯方法
 
 朴素贝叶斯（Naive Bayes）方法是一类基于贝叶斯定理的简单而强大的分类算法，特别适用于大规模数据集。尽管其假设特征之间相互独立（这在实际情况中很少成立，因此称为“朴素”），但它在许多实际应用中表现良好，特别是文本分类和垃圾邮件过滤。
 
@@ -6233,7 +5982,7 @@ $\hat{C}=argmax P(C) \prod_i^n P(x_i|C)$
 - 多项式朴素贝叶斯（Multinomial Naive Bayes）：适用于离散数据，常用于文本分类，假设特征值是文档中单词的出现次数。
 - 伯努利朴素贝叶斯（Bernoulli Naive Bayes）：适用于二元数据，假设特征值是布尔变量（例如，单词是否出现在文档中）。
 
-#### 4.6.1 高斯朴素贝叶斯分类器
+#### 3.6.1 高斯朴素贝叶斯分类器
 
 高斯朴素贝叶斯分类器是一种适用于连续数据的朴素贝叶斯分类器，假设特征值服从正态分布。我们用鸢尾花数据集来演示：
 
@@ -6439,7 +6188,7 @@ Confusion Matrix:
 | k近邻 | 0.96 | 0.74 |
 | 高斯朴素贝叶斯 | 0.94 | 0.79 |
 
-#### 4.6.2 JAX实现朴素贝叶斯算法
+#### 3.6.2 JAX实现朴素贝叶斯算法
 
 既然朴素贝叶斯的算法效果这么好，我们当然也要用JAX来实现一下。
 
@@ -6611,7 +6360,7 @@ Test Accuracy: 1.0
 
 测试准确率高达100%，说明我们手动实现的算法，效果也非常不错。
 
-### 4.7 高斯过程
+### 3.7 高斯过程
 
 高斯过程（Gaussian Process, GP）是概率论和数理统计中随机过程的一种，它是一系列服从正态分布的随机变量在一指数集（index set）内的组合。在高斯过程中，任意随机变量的线性组合都服从正态分布，每个有限维分布都是联合正态分布，且其本身在连续指数集上的概率密度函数即是所有随机变量的高斯测度，因此被视为联合正态分布的无限维广义延伸。高斯过程由其数学期望和协方差函数完全决定，并继承了正态分布的诸多性质。
 
@@ -6872,7 +6621,7 @@ Confusion matrix:
 | 高斯朴素贝叶斯 | 0.94 | 0.79 |
 | 高斯过程 | 0.98 | 0.75 |
 
-### 4.8 半监督学习
+### 3.8 半监督学习
 
 半监督学习 (Semi-supervised Learning) 结合了少量标记数据（有标签）和大量未标记数据（无标签）进行训练。此方法介于监督学习和无监督学习之间，旨在通过利用未标记数据来提高模型的性能。
 
@@ -6961,11 +6710,11 @@ Confusion matrix:
  [  0 107]]
 ```
 
-## 第五章 监督学习：数值预测
+## 第四章 监督学习：数值预测
 
 我们先来看数值预测，也就是根据已有的数据去预测未知的数据。被举烂了的例子就是预测房价。
 
-### 5.1 线性回归
+### 4.1 线性回归
 
 最简单的数值预测方法就是用一条直线来拟合现有的数据。
 
@@ -6984,7 +6733,7 @@ $
 \end{cases}
 $
 
-#### 5.1.1 用LinearRegression实现线性回归
+#### 4.1.1 用LinearRegression实现线性回归
 
 我们举个例子，预测2024年开年的上证指数收盘价。我们先把1月初几天的数据输入进来：
 
@@ -7137,7 +6886,7 @@ print(f'Model Intercept: {model.intercept_}')
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/boston_lr.png)
 
-### 5.1.2 JAX实现线性回归
+### 4.1.2 JAX实现线性回归
 
 我们先看来如何用JAX来实现波士顿房价预测。
 
@@ -7266,9 +7015,9 @@ for epoch in range(epochs):
 
 然后按照梯度下降算法的规则，使用学习率 learning_rate 更新权重 w 和偏置 b。具体来说，从当前的 w 和 b 中减去梯度乘以学习率。
 
-### 5.2 Lasso回归与最小角回归
+### 4.2 Lasso回归与最小角回归
 
-#### 5.2.1 Lasso回归
+#### 4.2.1 Lasso回归
 
 Lasso 回归（Least Absolute Shrinkage and Selection Operator）是一种线性回归方法，旨在通过对回归系数施加 $ L1 $ 正则化（即回归系数的绝对值之和）实现特征选择和模型稀疏化。Lasso 回归不仅可以用于预测，还能帮助我们理解哪些特征对目标变量最为重要。
 
@@ -7378,7 +7127,7 @@ print(f'测试集均方误差: {test_mse}')
 测试集均方误差: 23.277920133940906
 ```
 
-#### 5.2.2 最小角回归
+#### 4.2.2 最小角回归
 
 下面我们再介绍一下最小角回归Least Angle Regression (LARS)。LARS是一种用于高维数据的回归技术，特别适用于当特征数量大于样本数量时。LARS 在处理稀疏模型（即很多特征的回归系数为零）方面表现出色，并且计算效率高。它的主要优点是在模型构建过程中可以逐步引入和删除特征，从而找到最优的模型参数。
 
@@ -7469,7 +7218,7 @@ print(f'测试集均方误差: {test_mse}')
 测试集均方误差: 25.82293972655321
 ```
 
-#### 5.2.3 LassoLarsCV
+#### 4.2.3 LassoLarsCV
 
 我们继续5.2.1节讨论的Lasso回归的$\alpha$值的问题。LassoLarsCV是一种用于选择 Lasso 回归中最优正则化强度 $\alpha$ 的方法，结合了上节介绍的LARS算法与交叉验证技术。它的全称是 Lasso Least Angle Regression with Cross-Validation。
 
@@ -7520,7 +7269,7 @@ print(f'测试集均方误差: {test_mse}')
 测试集均方误差: 23.195599256423414
 ```
 
-#### 5.2.4 多任务Lasso
+#### 4.2.4 多任务Lasso
 
 多任务Lasso是一种扩展的 Lasso 回归方法，用于同时处理多个相关回归任务。在这种方法中，我们假设不同的任务共享相似的稀疏模式，即它们具有相似的非零系数位置。通过引入这种假设，多任务Lasso 能够更有效地利用数据的结构信息，提升模型的预测性能。
 
@@ -7578,7 +7327,7 @@ print(f'测试集均方误差: {test_mse}')
 测试集均方误差: 1.1121606407888283
 ```
 
-### 5.3 岭回归
+### 4.3 岭回归
 
 岭回归(Ridge Regression)，是一种在普通最小二乘法（Ordinary Least Squares, OLS）回归的基础上引入 $L2$ 正则化的线性回归方法。它通过对回归系数施加惩罚，控制模型复杂性，从而减小过拟合的风险，特别是在存在多重共线性的情况下。上节我们介绍的Lasso回归是$L1$正则化。
 
@@ -7748,7 +7497,7 @@ print(f'训练集均方误差: {train_mse}')
 print(f'测试集均方误差: {test_mse}')
 ```
 
-### 5.4 核岭回归
+### 4.4 核岭回归
 
 Kernel Ridge Regression（核岭回归）是一种结合了核方法和岭回归（Ridge Regression）的回归技术。它在处理非线性数据和高维数据时非常有效。
 
@@ -7884,7 +7633,7 @@ plt.show()
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/kernel_boston.png)
 
-### 5.5 决策树回归
+### 4.5 决策树回归
 
 决策树通过将特征空间划分为多个区域来拟合数据。决策树回归的目标是最小化每个区域内的平方误差。
 
@@ -8022,7 +7771,7 @@ plt.show()
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/decision_tree_boston.png)
 
 
-### 5.6 k近邻回归
+### 4.6 k近邻回归
 
 k近邻算法也同样可以用于回归。使用k近邻算法实现回归需要以下三个步骤：
 
@@ -8143,7 +7892,7 @@ plt.show()
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/knn_boston.png)
 
 
-### 5.7 高斯过程回归
+### 4.7 高斯过程回归
 
 高斯过程回归（GPR）是一种非参数的贝叶斯回归方法，其核心思想是利用高斯过程（Gaussian Process, GP）来进行函数拟合和预测。GP 是一个定义在输入空间上的随机过程，每个输入点对应一个高斯分布的输出。GPR 通过这种方式，可以在不明确假设函数形式的前提下，对数据进行回归分析。
 
@@ -8247,7 +7996,7 @@ plt.show()
 
 ![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/gaussian_process_boston.png)
 
-### 5.8 交叉分解
+### 4.8 交叉分解
 
 交叉分解(Cross Decomposition)是用于分析两组变量之间关系的一组技术。通过找到描述它们之间共享信息的潜在结构，这些技术在有两组数据矩阵并希望了解它们之间变量关系的场景中非常有用。
 
@@ -8413,7 +8162,7 @@ print(f'Y 潜在变量 (测试数据投影):\n{Y_test_scores}')
 - PLSSVD：结合了偏最小二乘和奇异值分解，最大化两个数据集之间的协方差。
 - CCA：用于寻找两个多维变量集合之间的最大相关性。
 
-### 5.9 学会使用高级工具
+### 4.9 学会使用高级工具
 
 在实际工作中，我们通常会使用一些高级工具来帮助我们更快地完成工作。比如，我们可以使用Pipeline来将多个步骤组合在一起，使用GridSearchCV来进行超参数搜索，使用RandomizedSearchCV来进行随机搜索等。
 
