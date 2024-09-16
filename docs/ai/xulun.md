@@ -18109,7 +18109,7 @@ OpenMP是一套支持跨平台共享内存方式的多线程并发的编程API�
 
 OpenMP最早是1997年发布的，当时只支持Fortran语言。1998年开始支持C/C++. 
 
-![fork join](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/fork_join.gif)
+![fork join](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/openmp3.png)
 
 
 我们来看看用OpenMP如何实现矩阵的并发计算：
@@ -18194,7 +18194,7 @@ endif()
 
 #### 12.1.3 SIMD
 
-![SIMD](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/simd.png)
+![SIMD基本原理](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/simd2.png)
 
 虽然多线程和OpenMP看起来都不错，都容易编程，但是，我们的优化并不是以简化编程为目的的。
 
@@ -19912,6 +19912,10 @@ int main(int argc, char **argv) {
 │         └──> 失败 -> 打印错误信息 -> 结束  
 └──> 失败 -> 打印错误信息 -> 结束  
 ```
+
+图片方式如下：
+
+![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/cublas.png)
 
 #### 12.3.5 一些更高级的特性
 
@@ -22094,6 +22098,3 @@ Best individual: [-1479201.2340890465], Fitness: 2188036290930.558
 9. Schulman J, Wolski F, Dhariwal P, Radford A, Klimov O. Proximal policy optimization algorithms. arXiv preprint arXiv:1707.06347. 2017
 10. Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M. G., Graves, A., Riedmiller, M., Fidjeland, A. K., Ostrovski, G., Petersen, S., Beattie, C., Sadik, A., Antonoglou, I., King, H., Kumaran, D., Wierstra, D., Legg, S., and Hassabis, D. (2015). Human-level control through deep reinforcement learning. Nature, 518(7540):529–533.
 11. Mercer James 1909, XVI. Functions of positive and negative type, and their connection the theory of integral equationsPhilosophical Transactions of the Royal Society of London. Series A, Containing Papers of a Mathematical or Physical Character 209 415–446
-
-===
-
