@@ -2,7 +2,7 @@
 
 ## 前言
 
-
+2024年的诺贝尔物理学奖授予了机器学习科学家约翰·霍普菲尔德和杰弗里·辛顿，而化学奖的一半也授予了使用机器学习研究蛋白质结构的德米斯·哈萨比斯和约翰·江珀。机器学习的学者获得诺奖轰动了世界，将机器学习的重要性推到一个前所未有的高度。
 
 习近平总书记于2018年10月31日在十九届中央政治局第九次集体学习时曾指出，人工智能是新一轮科技革命和产业变革的重要驱动力量，加快发展新一代人工智能是事关我国能否抓住新一轮科技革命和产业变革机遇的战略问题。他还指出，加快发展新一代人工智能是我们赢得全球科技竞争主动权的重要战略抓手，是推动我国科技跨越发展、产业优化升级、生产力整体跃升的重要战略资源。他还强调，人工智能是引领这一轮科技革命和产业变革的战略性技术，具有溢出带动性很强的“头雁”效应。
 
@@ -13982,8 +13982,6 @@ print(result)
 
 系统就默认给我们找了distilbert-base-uncased-finetuned-sst-2-english模型。
 
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/chat.png)
-
 同样，我们也可以搞一个对话的pipeline。唯一的区别是我们需要用Conversation把输入信息包装一下，获取的结果也从Conversation对象中读取。
 比如我们使用facebook的blenderbot模型：
 
@@ -16097,8 +16095,6 @@ for each iteration do
 
 初始化环境分为两步。
 第一步是创建gymnasium工厂中所支持的子环境，比如我们使用经典的让一个杆子不倒的CartPole环境：
-
-![](https://xulun-mooc.oss-cn-beijing.aliyuncs.com/CartPole1.png)
 
 ```python
 import gymnasium as gym
